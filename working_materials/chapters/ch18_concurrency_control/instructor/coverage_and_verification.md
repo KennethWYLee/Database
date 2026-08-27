@@ -15,19 +15,18 @@
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 18, printed pages 835-896, Sections 18.1-18.11. End-of-chapter material was
   inspected for context but was not copied.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch18.pdf`, slides
-  18.1-18.91.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch18.pdf`, all 90 PDF
+  pages.
 - Current governance, revised syllabus, chapter-material prompt, and completed Chapter
   17 material.
 
 ## Scope decision
 
 Required instruction covers S/X lock meaning and compatibility; grant versus wait;
-basic 2PL growing/shrinking phases and lock points; strict and rigorous 2PL release
-rules; the fact that 2PL can deadlock; wait-for graph cycles; prevention versus
-detection/recovery and timeout cautions; victim/starvation basics; version selection;
-snapshot isolation read behavior, write-write validation concept, and one write-skew
-counterexample.
+wait-for graph cycles; prevention versus detection/recovery and timeout cautions; and
+victim/starvation basics. Basic, strict, and rigorous 2PL; multiversion version
+selection; snapshot-isolation behavior; and the write-skew counterexample are
+source-checked after-class extensions.
 
 Lock-manager data structures, graph/tree protocols, timestamp ordering, validation
 algorithms, multiple granularity, insert/delete and predicate/index locking, complete
@@ -58,21 +57,22 @@ advanced concurrency topics are supplementary.
 |---|---|---|---|---|
 | C18.01 | S/X locks | 18.1.1, pp. 835-839; slides 18.3-18.8 | two readers plus writer | classify four requests by holders |
 | C18.02 | compatibility/grant/wait | 18.1.1-18.1.2, pp. 835-841; slides 18.3-18.8 | X waits for two S holders | cite exact matrix cell |
-| C18.03 | basic 2PL | 18.1.3, pp. 841-844; slides 18.9-18.15 | two valid/invalid sequences | identify first release and later request |
-| C18.04 | strict 2PL; rigorous 2PL as extension | 18.1.3, pp. 842-844; slide 18.10 | early X versus early S release | classify basic and strict; locate rigorous difference |
+| C18.03 | basic 2PL (supplementary) | 18.1.3, pp. 841-844; slides 18.9-18.15 | two valid/invalid sequences | identify first release and later request |
+| C18.04 | strict and rigorous 2PL (supplementary) | 18.1.3, pp. 842-844; slide 18.10 | early X versus early S release | classify basic and strict; locate rigorous difference |
 | C18.05 | deadlock/wait-for graph | 18.2, pp. 849-853; slides 18.21-18.26 | two-item cycle | locate cycle and reject irrelevant victim |
 | C18.06 | handling/starvation | 18.2, pp. 849-853; slides 18.22-18.26 | common item order | compare prevention/detection/timeout |
 | C18.07 | multiversion basics (supplementary) | 18.7, pp. 869-872; slides 18.53-18.60 | Q versions at 10/20/30 | compute four timestamp boundaries |
 | C18.08 | snapshot isolation (supplementary) | 18.8, pp. 872-879; slides 18.61-18.69 | distinct-account withdrawals | explain write skew and missing overlap |
 
-Every required teaching point has explanation, a complete example, student practice,
-and a stated checking or feedback criterion.
+Every classroom-core point and retained supplementary point in the table has an
+explanation, a complete example, student practice, and a stated checking or feedback
+criterion.
 
 ## Teaching summary
 
-Students complete the S/X compatibility matrix, simulate grant/wait decisions, mark
-the phases of basic and strict 2PL, and build a wait-for graph for a two-item deadlock.
-The shared Chapter 18-19 class then moves to failure and recovery. Multiversion and
+Students complete the S/X compatibility matrix, simulate grant/wait decisions, and
+build a wait-for graph for a two-item deadlock. The shared Chapter 18-19 class then moves
+to log evidence and recovery. Two-phase-locking variants, multiversion, and
 snapshot-isolation examples remain available for after-class reading.
 
 ## Verification command
@@ -83,7 +83,9 @@ py -3 working_materials/chapters/ch18_concurrency_control/instructor/verify_ch18
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  and reduced guide still requires final instructor content and language review before
+  publication.
 - SQLite 3 is the course DBMS. Product-specific server lock inspection, deadlock errors,
   isolation syntax, and retry behavior are outside the required course scope.
 - The program models rules rather than running true concurrent DBMS connections.

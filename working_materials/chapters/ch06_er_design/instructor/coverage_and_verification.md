@@ -18,8 +18,8 @@
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 6, printed pages 241-294, Sections 6.1-6.12. Exercises and tools were
   inspected for chapter context but not copied.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch6.pdf`, slides
-  6.1-6.83.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch6.pdf`, all 83 PDF
+  pages.
 - Current governance, revised syllabus, chapter-material prompt, existing university
   SQL data, and the completed Chapters 2-5 materials.
 
@@ -146,7 +146,8 @@ py -3 working_materials/chapters/ch06_er_design/instructor/verify_ch06.py
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
 - The course's diagram editor for student submissions is not fixed.
 - Classroom workload, projection readability, and accessibility have not been observed
   with actual students.
@@ -156,7 +157,8 @@ py -3 working_materials/chapters/ch06_er_design/instructor/verify_ch06.py
 
 - Files created: business rules, student guide, maintained SVG, rendered PNG, mapped
   SQL schema, renderer, instructor record, and verifier.
-- Source verification: complete for textbook printed pages 241-294 and slides 6.1-6.83.
+- Source verification: complete for textbook printed pages 241-294 and all 83 pages
+  of the local official slide PDF.
 - Executed content: the complete mapped schema and sample data; independent failures
   for candidate keys, parent references, multivalued duplicates, weak-entity ownership,
   registration references, grade domain, and direct prerequisite self-reference; the

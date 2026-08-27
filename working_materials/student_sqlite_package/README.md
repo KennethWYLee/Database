@@ -45,6 +45,8 @@ JSON, and a student analysis program. It excludes:
 - Ch18-Ch19 teaching models, because they are not SQLite labs and remain separate
   chapter materials.
 
-The instructor approved the generated package for course distribution on August 27,
-2026. It is not published externally by this build process; the actual LMS or internal
-download location remains a separate decision.
+The instructor approved the generated package for course use on August 27, 2026. The
+current course repository is private. Any future public GitHub distribution must use a
+separate public repository or an allow-listed release artifact because visibility applies
+to the complete repository. This build does not publish, upload, change visibility, or
+select the public allow-list.

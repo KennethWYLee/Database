@@ -16,8 +16,8 @@
   Chapter 17, printed pages 799-829, Sections 17.1-17.11. Practice exercises,
   exercises, review terms, and further reading were inspected for context but were not
   copied.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch17.pdf`, slides
-  17.1-17.39.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch17.pdf`, all 40 PDF
+  pages.
 - Current governance, revised syllabus, chapter-material prompt, completed Chapter 16
   material, and observed SQLite 3.45.3 transaction behavior.
 
@@ -27,8 +27,9 @@ Required instruction covers transaction concept; the simple read/write model;
 atomicity, consistency, isolation, and durability; transaction states; reasons for
 concurrent execution; schedules; operation conflicts; conflict serializability and
 small precedence graphs; recoverability and cascadelessness; SQL isolation levels;
-locking, timestamps, multiversion, and snapshot isolation at overview level; SQL
-transaction boundaries; and the phantom phenomenon.
+SQL transaction boundaries; and the phantom phenomenon. Locking, timestamps,
+multiversion, and snapshot isolation appear only as an implementation overview and
+bridge to Chapter 18.
 
 Storage hierarchy is mentioned only where it clarifies durability. View
 serializability, complete serializability-testing algorithms, predicate-locking
@@ -89,7 +90,8 @@ py -3 working_materials/chapters/ch17_transactions/instructor/verify_ch17.py
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
 - SQLite 3 is the course DBMS; these materials are verified with SQLite 3.45.3.
 - Concurrent visibility is explained but not demonstrated with two server DBMS
   connections; such a product-specific lab is outside the required course scope.

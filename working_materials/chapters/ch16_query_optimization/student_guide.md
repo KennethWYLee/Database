@@ -1,312 +1,250 @@
 # Chapter 16: Query Optimization
 
-Query optimizer要在保持SQL結果語意的前提下，從equivalent expressions、access paths、
-join orders及physical operators中選擇estimated cost較低的plan。本章不把heuristic當成
-永遠正確的口訣，也不要求手算完整cost model或dynamic-programming optimizer。
+## Core Question
 
-搭配檔案：`student_lab.sql`。
+How does a query optimizer use statistics to choose an estimated low-cost plan without
+changing the meaning of the SQL query?
 
-## 與前章的關係
+Use this guide with `student_lab.sql`.
 
-Ch15已區分logical expression與physical plan，並讀過scan、index search及join。Ch16進一步
-回答：哪些rewrites保持結果、optimizer以哪些catalog statistics估計rows，以及如何避免從
-compact `EXPLAIN QUERY PLAN`過度推論。
+Chapter 15 and Chapter 16 share one class meeting. The classroom core is limited to
+result equivalence, basic selectivity, catalog statistics, `ANALYZE`, and plan comparison.
+Formal rewrite systems, detailed join enumeration, skew analysis, and optimizer
+implementation are extensions.
 
-## 學習目標
+## Connection to Chapter 15
 
-完成本章後，你應能：
+Chapter 15 distinguished a logical expression from a physical plan and introduced scans,
+index searches, and join order. This chapter explains how statistics help an optimizer
+estimate alternatives. A cost estimate is a decision input, not a measurement of actual
+runtime.
 
-1. 定義expression equivalence，並以所有legal instances而非單一sample判斷。
-2. 正確使用selection cascade、selection pushdown、projection pushdown及inner-join reorder。
-3. 用outer-join counterexample拒絕不成立的rewrite。
-4. 說明tuple counts、distinct values、indexes及histograms在cost estimation的用途。
-5. 計算簡單equality selectivity estimate並指出uniform/independence assumptions。
-6. 比較estimated與actual cardinality，辨識skew及stale statistics風險。
-7. 執行`ANALYZE`與`EXPLAIN QUERY PLAN`，讀取join order及access paths。
-8. 比較equivalent SQL的results與plans，再提出有證據限制的結論。
+## Prerequisites
 
-## 1. What query optimization does
+- Confirm whether two queries return the same rows and duplicate counts on sample data.
+- Read selections and inner or outer joins.
+- Identify scans, index searches, and access order in a Chapter 15 query plan.
 
-Optimizer通常進行三類工作：產生logically equivalent expressions、為operators選擇physical
-algorithms/access paths，以及用statistics估計cost並選plan。Estimated lowest-cost plan不保證
-是actual fastest，因statistics與assumptions可能不準；但沒有估計就無法在大量alternatives
-中合理選擇。
+## Learning Objectives
 
-### Worked example
+After completing the classroom core, you should be able to:
 
-對student、enrollment及course的query，optimizer可考慮：
+1. Explain why result equivalence must be checked before performance comparison.
+2. Describe how row counts, distinct values, and indexes support cost estimation.
+3. Calculate a basic equality-selectivity estimate and state its assumptions.
+4. Run `ANALYZE` and interpret bounded evidence from `EXPLAIN QUERY PLAN`.
+5. Compare equivalent query results and plans without claiming more than the evidence
+   supports.
 
-```text
-(filtered Student join Enrollment) join filtered Course
-filtered Student join (Enrollment join filtered Course)
-```
+## Teaching Summary
 
-並為每個input選SCAN或SEARCH。只要inner joins的conditions及bag/set semantics被正確保留，
-兩個logical orders可得到相同結果，但intermediate rows及physical cost可能不同。
+| Classroom topic | Worked evidence | Evidence to retain |
+|---|---|---|
+| Equivalence before optimization | Base and rewritten query | Bidirectional difference check |
+| Statistics and selectivity | Event-type distribution | Estimated and actual row counts |
+| `ANALYZE` and plan choice | SQLite statistics and plans | Statistics snapshot and plan |
+| Evidence limits | Estimated versus actual behavior | One bounded conclusion |
 
-### 你來判斷
+## 1. What an Optimizer Does
 
-把一條三表join改寫成另一個join order時，至少要先確認哪些conditions與output properties？
+An optimizer may consider logically equivalent expressions, physical access paths, and
+join orders. It uses available statistics to estimate their cost and selects one plan.
+The estimated lowest-cost plan is not guaranteed to be the fastest in every execution,
+because statistics and modeling assumptions may be incomplete or stale.
 
-### 檢查方式
+### Worked Example
 
-至少包含join predicates、outer versus inner join、duplicates、NULL behavior及required output
-columns。只說「join有associativity」而忽略outer join不完整。
+For a query joining Student, Enrollment, and Course, the optimizer may consider different
+join orders and choose a scan or search for each input. These choices are acceptable only
+if the resulting query preserves join predicates, duplicate behavior, `NULL` behavior,
+and required output columns.
 
-## 2. Expression equivalence
+### Predict Before Checking
 
-兩個relational expressions equivalent，表示對每個legal database instance都產生相同
-relation；SQL通常使用multisets，所以duplicates count也必須相同。Sample data上的equal
-result是必要檢查，但不能證明所有future legal instances都equivalent；形式規則與constraints
-仍然需要。
+Before comparing plans for two SQL statements, list the properties that must remain the
+same. Include the result columns, row values, duplicate counts, join types, and filters.
 
-### Worked example: selection cascade
+### Interpretation
 
-```text
-sigma(dept_id=42 AND credits=5)(R)
-equivalent to
-sigma(dept_id=42)(sigma(credits=5)(R))
-```
+Formatting two statements differently does not establish a useful optimization. Equal
+results on one data set are necessary evidence, but they do not prove equivalence for all
+legal future data.
 
-兩個predicates都在R上時，先後順序不改變通過兩條件的tuples。這個分解讓optimizer有機會
-把每個selection推到只含相關attributes的input。
+## 2. Result Equivalence as a Guardrail
 
-### 你來操作
+Two relational expressions are equivalent when they produce the same result for every
+legal database instance. SQL usually preserves duplicates, so duplicate counts also
+matter. Constraints, `NULL`, and outer joins can make an apparently simple rewrite
+incorrect.
 
-在lab中比較`BASE QUERY`與`PUSHDOWN QUERY`：使用雙向`EXCEPT`及row count確認current
-instance結果相同，再比較兩份plan。
+### Lab Activity
 
-### 預期與回饋
+Compare the lab's `BASE QUERY` and `PUSHDOWN QUERY`:
 
-兩個difference counts都是0，row counts相同；SQLite可能把subqueries flatten後產生相同
-plan。不能因此聲稱所有任意SQL subqueries都可安全移除。
+1. Predict whether they should return the same result.
+2. Run both queries.
+3. Use bidirectional `EXCEPT` checks and row counts.
+4. Compare the two query plans only after the result checks pass.
 
-## 3. Selection pushdown
+### Expected Interpretation
 
-若predicate只引用join其中一側E1的attributes，inner join通常可改寫：
+In the supplied data, both difference counts are zero and the row counts match. SQLite
+may flatten the subqueries and show the same physical plan. This supports equality for
+the tested data and demonstrates the observed optimizer behavior. It does not prove that
+every arbitrary subquery can be removed safely.
 
-```text
-sigma(theta1)(E1 join E2)
-equivalent to
-sigma(theta1)(E1) join E2
-```
+SQLite's `EXCEPT` removes duplicate result rows. Therefore, bidirectional `EXCEPT` plus
+one total row count is not a general proof that duplicate multiplicities match. When
+duplicates are possible, compare grouped `COUNT(*)` values over all result columns or use
+another verified comparison that preserves multiplicity.
 
-早期filter可能減少intermediate rows，但equivalence rule只保證結果，不保證rewrite一定
-cheaper。若E1很大、filter沒有index，而另一側很小且join index有效，晚一點filter有時反而
-cost較低。
+## 3. Statistics and Selectivity
 
-### Worked example
-
-本章query把`student.dept_id=42`限制在Student，把`course.credits=5`限制在Course，再與
-Enrollment join。這兩個predicates只屬於各自input，因此pushdown保持inner-join語意，並讓
-student/course indexes成為optimizer可考慮的access paths。
-
-### 你來判斷
-
-若Student有一億rows、`status='ACTIVE'` match 95%且無status index，而Enrollment只含十筆
-目標資料，能否僅憑「selection要早做」宣稱先scan Student最佳？列出要比較的plans。
-
-### 回饋重點
-
-不能。需比較full Student filter scan與先從small Enrollment經join key lookup後再測status，
-並使用row estimates及access paths。
-
-## 4. Projection pushdown
-
-早期projection可減少intermediate tuple width，但必須保留final output、join、selection、
-grouping及ordering仍需要的attributes。漏掉join key會使後續operation無法執行；SQL
-multiset下也要注意是否引入或消除duplicates。
-
-### Worked example
-
-Final output只需`student_id, course_id`，Student側仍需保留`student_id`作join key與
-`dept_id`作filter；Course側需`course_id`作join key與`credits`作filter。Filter完成後可讓
-intermediate output省略names等未使用columns。
-
-### 你來操作
-
-為`Student JOIN Enrollment JOIN Course`列出每個leaf input在filter前後最少要保留的columns。
-故意移除`student_id`，說明哪個join立即失效。
-
-### 檢查方式
-
-Student至少先保留student ID與department ID；filter後仍需student ID。Course同理保留
-course ID與credits。答案不能只列final projection。
-
-## 5. Join reorder and Cartesian-product risk
-
-Inner natural/equi joins在正確conditions下可利用commutativity與associativity改變order。
-不同order產生的intermediate sizes可能差很多。若先join兩個沒有連接predicate的inputs，
-會形成Cartesian product，通常產生大量不必要pairs。
-
-### Worked example
-
-先取得Department 042的100 students，再由Enrollment primary-key prefix找每位student的
-5 enrollments，形成約500 rows；之後查Course並測credits。若先將10,000 students與500
-courses做沒有predicate的product，會先產生5,000,000 pairs，完全忽略Enrollment提供的
-relationships。
-
-### 你來判斷
-
-給定A-B及B-C有join predicates，但A-C沒有，列出兩個不先產生Cartesian product的join
-orders，以及一個會先產生product的order。
-
-### 檢查方式
-
-`(A join B) join C`及`A join (B join C)`可先用有效predicate；`(A cross C) join B`先產生
-product。仍需確認join type與conditions，不能只看table names。
-
-## 6. Outer join is a semantic boundary
-
-Outer join保留unmatched rows，NULL extension會使某些inner-join equivalences失效。把right
-side filter放在`WHERE`通常會移除NULL-extended rows；把它放進`ON`則仍保留left rows，只是
-右側不match。
-
-### Worked counterexample
-
-Lab加入Department 101，沒有任何Student：
-
-```sql
--- Query A: filter after left join
-FROM department d LEFT JOIN student s ON s.dept_id=d.dept_id
-WHERE s.student_id < 3
-
--- Query B: filter as part of ON
-FROM department d LEFT JOIN student s
-  ON s.dept_id=d.dept_id AND s.student_id < 3
-```
-
-Query A移除Department 101，因`NULL < 3`是UNKNOWN；Query B保留它並輸出NULL student。
-因此兩者不是equivalent。
-
-### 你來操作
-
-執行兩個queries及difference checks，指出只存在Query B的row。再把`LEFT JOIN`改成
-`INNER JOIN`，重新判斷filter位置。
-
-### 預期與回饋
-
-Department 101/NULL只在ON-filter版本。Inner join版本可安全把只引用Student的condition在
-`ON`與`WHERE`間移動，仍要保留相同predicate。
-
-## 7. Catalog statistics and ANALYZE
-
-Optimizer常使用relation tuple/page counts、tuple width、distinct-value counts、index
-properties及value-distribution histograms。為每次update同步精確statistics成本太高，因此
-statistics可能來自sampling、periodic `ANALYZE`或自動更新，也可能stale。
-
-SQLite的`ANALYZE`會在本lab建立`sqlite_stat1`。其內容比完整教科書catalog簡化，且build
-是否支援更細緻histograms依環境而異。不要把SQLite一個stat string當成所有DBMS共同格式。
-
-### Worked example
-
-```sql
-ANALYZE;
-SELECT tbl, idx, stat FROM sqlite_stat1 ORDER BY tbl, idx;
-```
-
-Course、Student及Enrollment index statistics讓planner估計不同access paths。執行大量
-insert/delete後若statistics未更新，optimizer可能仍依舊distribution估計。
-
-### 你來操作
-
-執行lab後，找出event-type index的stat。記錄total rows、distinct values及actual COMMON/
-RARE counts；說明哪些資訊沒有直接出現在average stat中。
-
-### 檢查方式
-
-Total 10,000、2個types；COMMON 9,900、RARE 100。Average rows per distinct value為5,000，
-無法單獨描述這個skew。
-
-## 8. Selectivity, skew, and estimation
-
-若沒有frequent-value或histogram資訊，equality predicate常以uniform assumption估計：
+Optimizers commonly use relation row or page counts, tuple width, distinct-value counts,
+index properties, and value-distribution information. Statistics may be sampled or
+periodically updated, so they can become stale.
+
+Without value-frequency information, a simple equality estimate may use a uniform
+distribution assumption:
 
 ```text
 estimated rows = total rows / number of distinct values
 selectivity = estimated rows / total rows
 ```
 
-多條件估計可能再假設conditions independent。這些是近似，不是data law。
+This is an approximation, not a law about the data.
 
-### Worked example
+### Worked Example
 
-Event有10,000 rows及2個distinct types，uniform estimate對任何type都是5,000 rows。Actual：
+An Event table has 10,000 rows and two distinct event types. A uniform estimate predicts
+5,000 rows for either type. The actual counts are:
 
 ```text
-COMMON: 9,900   estimation error: -4,900
-RARE:     100   estimation error: +4,900
+COMMON: 9,900
+RARE:      100
 ```
 
-同一average estimate對兩個values方向相反地失準。Frequent-value counts或histogram可改善，
-但SQLite lab不聲稱其build已保存這些細節。
+The estimate is wrong in opposite directions for the two values. The actual selectivity
+is 99% for `COMMON` and 1% for `RARE`.
 
-### 你來操作
+### Predict and Check
 
-計算COMMON與RARE的actual selectivity，並說明哪一個query較可能適合secondary index lookup。
-再寫出仍需看plan的理由。
+Before examining a plan, predict which value is more likely to benefit from a secondary
+index lookup. Then state why the selectivity percentage still does not guarantee the
+chosen plan.
 
-### 預期與回饋
+### Interpretation
 
-COMMON 99%，RARE 1%；RARE較可能受益於index。仍要看projection是否covering、record
-placement、cache及optimizer選擇，不能只用percentage保證。
+`RARE` is more likely to benefit because it returns fewer rows. The final choice may also
+depend on whether the index covers the query, row placement, cache state, and the
+optimizer's available statistics.
 
-## 9. Practical plan interpretation
+## 4. `ANALYZE` and Plan Evidence
 
-`EXPLAIN QUERY PLAN`顯示SQLite選擇的access order及index use；它不提供完整cost unit、
-actual rows、buffer hits或其他DBMS的operator details。實務流程：
+SQLite `ANALYZE` records planner statistics. In this lab, selected values can be viewed
+through `sqlite_stat1`:
 
-1. 保存SQL、schema、indexes、row counts及DBMS version。
-2. 確認rewrites的results相同。
-3. 執行`ANALYZE`並記錄statistics state。
-4. 比較plan order、SCAN/SEARCH、index names與temporary work。
-5. 把結論限制在目前workload及環境。
+```sql
+ANALYZE;
+SELECT tbl, idx, stat
+FROM sqlite_stat1
+ORDER BY tbl, idx;
+```
 
-### Worked example
+SQLite's statistics format is product-specific and more compact than a full textbook
+catalog. Do not treat one `stat` string as a standard format for every DBMS.
 
-Lab中base及pushdown SQL回相同rows。SQLite 3.45.3會flatten subqueries，因此兩份plans可
-相同；這是optimizer已辨識equivalence的可觀察結果。它不證明source SQL文字相同，也不
-證明其他DBMS一定採同一plan。
+### Lab Activity
 
-### 你來操作
+1. Record the DBMS version, schema, indexes, and row counts.
+2. Run `ANALYZE` and retain the relevant statistics rows.
+3. Run the base and rewritten queries.
+4. Confirm equal results.
+5. Explain the access order, `SCAN` or `SEARCH`, and index names shown by each plan.
+6. Identify one piece of actual execution information that the compact plan omits.
 
-逐行解釋base plan：第一個access是哪張table、使用哪個index、後續join如何找rows。再
-指出一項plan沒有提供的actual execution資訊。
+### Check Criteria
 
-### 回饋重點
+A complete answer separates observed facts from inference. Examples of omitted data
+include actual rows per operator, elapsed time, buffer reads, and memory use.
 
-答案依實際plan，不以預先背的join order代替。缺少資訊可列actual rows per operator、
-elapsed time、buffer reads或memory。
+## 5. A Practical Optimization Record
 
-## 課堂比較與個人學習證據
+For a defensible comparison, retain this sequence:
 
-各組比較一對看似較快的SQL rewrite。共同回答必須先證明或反駁equivalence，再看statistics
-與plan；不能先用style偏好選winner。教師依duplicates、NULL、outer join、row counts及
-plan evidence回饋，學生修正。
+1. SQL, schema, indexes, row counts, and DBMS version.
+2. Evidence that the query results are equal.
+3. Statistics state, including whether `ANALYZE` was run.
+4. Both query plans.
+5. A conclusion limited to the tested data and environment.
 
-個人保存：original/rewrite SQL、雙向difference check、statistics snapshot、兩份plans、
-actual counts，以及一個不成立rewrite的counterexample。
+An optimizer estimate can guide a plan choice, but it is not an actual measurement. If
+elapsed time matters, repeat the measurement under controlled conditions and keep the
+plans and results with the timings.
 
-## 常見錯誤
+## Extensions: Rewrite Rules and Optimizer Internals
 
-1. Sample result相同就宣稱所有instances equivalent。
-2. 對outer join無條件push down right-side predicate。
-3. Projection pushdown漏掉join key。
-4. 把「selection early」當成永遠最低cost的定理。
-5. 把estimated rows當成actual rows。
-6. Statistics更新後未重新取得plan。
-7. 只改寫SQL排版，卻聲稱改變algorithm。
-8. 使用`EXPLAIN`但沒有確認result equivalence。
+The following topics remain available for after-class reading but are not part of the
+Exam 3 classroom core:
 
-## 本章總結
+- selection and projection pushdown rules;
+- detailed join reordering and Cartesian-product avoidance;
+- outer-join rewrite counterexamples;
+- histogram and frequent-value handling for skew;
+- complete cost formulas and dynamic-programming plan enumeration;
+- optimizer implementation details.
 
-Query optimization先守住equivalence，再利用statistics估計alternatives。Selection/
-projection pushdown及join reorder常能降低intermediate work，但適用條件與cost evidence
-不可省略。Outer join、duplicates、NULL與skew是最容易讓直覺失效的地方。Ch17將從單一
-query plan轉向transaction execution及concurrent schedules。
+One important warning is still required: moving a right-side condition between `ON` and
+`WHERE` in a left outer join can change unmatched rows because `NULL` comparisons become
+`UNKNOWN`. Never apply an inner-join rewrite rule to an outer join without checking its
+semantics.
 
-## 課後接續
+### Extension Counterexample
 
-- 為一條真實query建立「equivalence -> statistics -> plan -> limits」四段紀錄。
-- 完整cost formulas、dynamic programming、optimizer implementation、materialized views及
-  advanced optimizations作補充，不列入本課selected Ch16操作考題。
+```sql
+-- Filter after the left join
+FROM department AS d
+LEFT JOIN student AS s ON s.dept_id = d.dept_id
+WHERE s.student_id < 3
+
+-- Filter as part of the join condition
+FROM department AS d
+LEFT JOIN student AS s
+  ON s.dept_id = d.dept_id AND s.student_id < 3
+```
+
+A department with no student is removed by the first form and retained with a `NULL`
+student by the second. This is a semantic difference, not a performance detail.
+
+## Common Errors
+
+1. Declaring universal equivalence from one sample result.
+2. Comparing plans before checking result equality.
+3. Treating estimated rows as actual rows.
+4. Assuming statistics remain current after major data changes.
+5. Treating low selectivity as a guarantee that an index will be used.
+6. Claiming that SQL formatting changes the physical algorithm.
+7. Applying an inner-join rewrite to an outer join without a counterexample check.
+
+## Discussion and Individual Evidence
+
+Compare a base query and a proposed rewrite. First support or reject result equivalence.
+Then inspect statistics and plans. Finish with one conclusion the evidence supports and
+one conclusion it does not support.
+
+Retain the original and rewritten SQL, bidirectional difference check, statistics
+snapshot, both plans, actual counts, and one unsafe-rewrite counterexample.
+
+## Chapter Summary
+
+Query optimization begins with meaning, then uses statistics to estimate alternatives.
+The classroom core is to verify equal results, calculate simple selectivity, inspect
+statistics, and interpret plans conservatively. Formal rewrite systems, skew handling,
+and optimizer implementation remain extensions. Chapter 17 moves from one query plan to
+transactions and concurrent schedules.
+
+## After-Class Continuation
+
+Create a four-part record for one query: equivalence, statistics, plan, and limitations.
+Read the detailed rewrite and optimizer topics as extensions; they are not required
+derivations for the selected Chapter 16 assessment.

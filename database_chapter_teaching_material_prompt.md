@@ -20,10 +20,10 @@ Ch18、Ch19。只有下列明定內容屬於正式教學範圍，不得因教科
 | Ch7 Normalization | good relational design、update/insertion/deletion anomalies、functional dependencies與counterexamples、足以判斷key的attribute closure、binary lossless decomposition與spurious tuples、3NF及BCNF的基本判斷 | dependency preservation只說明取捨；完整functional-dependency theory、canonical cover、分解演算法、multivalued dependencies、更高normal forms及temporal data不列入主要教學 |
 | Ch14 Indexing | index使用時機、B+-Tree equality/range lookup概念、composite index欄位順序、covering index、`CREATE INDEX`/`DROP INDEX`及query-plan證據 | dense/sparse、clustering/secondary、B+-Tree split及hashing作概念延伸；完整insertion/deletion、cost derivation、B-Tree、write-optimized、bitmap及spatio-temporal indices不列入主要教學 |
 | Ch15 Query Processing | logical/physical plan、file/index scans、join order、nested與indexed nested-loop概念及query-plan evidence；parsing/translation只作銜接 | materialization、pipelining、merge/hash細節、完整sorting/selection/join algorithms、成本公式、I/O推導、iterator與in-memory processing作課後延伸 |
-| Ch16 Query Optimization | safe selection/projection pushdown、inner-join reorder與outer-join反例、catalog statistics、selectivity/skew、`ANALYZE`及practical `EXPLAIN QUERY PLAN` interpretation | 完整cost formula、dynamic programming、optimizer algorithms、nested-query decorrelation、materialized views及advanced optimization不列入主要教學 |
+| Ch16 Query Optimization | result equivalence作為performance comparison前提、catalog row/distinct statistics、basic equality selectivity、`ANALYZE`及practical `EXPLAIN QUERY PLAN` interpretation | selection/projection pushdown、join reorder、outer-join反例、skew細節、完整cost formula、dynamic programming、optimizer algorithms、nested-query decorrelation、materialized views及advanced optimization作課後延伸 |
 | Ch17 Transactions | SQL transaction boundaries、Transaction Concept與State、ACID、Concurrent Schedules、operation conflicts、small precedence graphs、conflict serializability、basic recoverability及isolation phenomena | 完整serializability-testing algorithm、predicate-locking protocol、locking/timestamp/multiversion實作及Ch18/Ch19細節不列入主要教學 |
-| Ch18 Concurrency Control | S/X locks與compatibility、grant/wait、basic/strict 2PL、wait-for graph、deadlock detection與處理原則 | rigorous 2PL細節、timestamp protocol、MVCC、snapshot isolation、write skew、lock-manager實作及advanced topics作課後延伸 |
-| Ch19 Recovery System | failure classes、basic log records與old/new values、WAL、redo/undo、basic checkpoint、archival backup加post-backup log | ARIES、fuzzy checkpoint、force/steal implementation、stable-storage/OS buffer實作、remote failover、logical undo及production recovery administration不列入主要教學 |
+| Ch18 Concurrency Control | S/X locks與compatibility、grant/wait、wait-for graph、deadlock detection及victim/retry注意事項 | basic/strict/rigorous 2PL、timestamp protocol、MVCC、snapshot isolation、write skew、lock-manager實作及advanced topics作課後延伸 |
+| Ch19 Recovery System | transaction/system/storage failure基本區分、basic log records與old/new values、WAL ordering、committed/incomplete判斷及單一簡化redo/undo案例 | checkpoint、archival backup加post-backup log、ARIES、fuzzy checkpoint、force/steal implementation、stable-storage/OS buffer實作、remote failover、logical undo及production recovery administration作課後延伸 |
 
 教材份量必須符合正式課綱與 `COURSE_PLAN.md` 的授課摘要：
 
@@ -33,6 +33,8 @@ Ch18、Ch19。只有下列明定內容屬於正式教學範圍，不得因教科
 - Ch18、Ch19與整合複習共用一個教學週次。
 - 不得為了追求完整而把明列略過的內容重新塞入正式進度。
 - 學生教材以「課堂核心」與「課後延伸」標示閱讀及練習順序，不寫分鐘配置。
+- 所有學生可見教材使用English-only prose及教科書/資料庫領域的標準英文術語；
+  教師端coverage、verification及治理紀錄可使用繁體中文。
 
 ## 二、開始工作前必讀
 

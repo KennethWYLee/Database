@@ -1,13 +1,16 @@
 # 115-1 資料庫管理課程計畫
 
 更新日期：2026-08-27
-狀態：現行備課依據；學生版教材發布前仍須完成可見性與答案隔離檢查
+狀態：現行備課依據；2026-08-27客觀檢查及教師範圍/語言決策已套用，仍待教師
+審閱英文學生教材後才能把全部逐章教材標示為student-ready
 
 ## 一、課程定位
 
 - 對象：四技資訊管理系二年級必修課程學生。
 - 學分：3 學分。
 - 上課時間：星期四第 5-7 節，13:30-16:15。
+- 任課教師官方英文姓名：WenYi Lee。
+- 正式學生教材語言：English-only prose。
 - 主要教科書：Silberschatz, Korth, and Sudarshan, *Database System Concepts*,
   7th Edition。
 - 正式上機環境：SQLite 3。現有教材以 SQLite 3.45.3 驗證；學生可使用能執行
@@ -48,10 +51,10 @@ recovery internals，以概念說明、圖解、schedule、log 或已驗證的�
 | Ch6 | design process、entities、attributes、relationships、cardinalities、participation、keys、design decisions、ER-to-relational mapping | extended E-R features、alternative notations |
 | Ch7 | anomalies、functional dependencies、attribute closure、binary lossless decomposition、spurious tuples、3NF 與 BCNF 的基本判斷 | dependency preservation 的取捨、完整 theory、canonical cover 與分解演算法 |
 | Ch14 | index 使用時機、B+ tree lookup/range 概念、複合索引欄位順序、covering index、`CREATE INDEX` 與 query-plan evidence | dense/sparse、clustering/secondary 的概念比較、B+ tree split、完整 insertion/deletion 與 cost derivation |
-| Ch15-16 | scan 與 index search、logical/physical plan、join order、selectivity、statistics、skew、safe inner-query rewrite、outer-join counterexample、`ANALYZE` 與 `EXPLAIN QUERY PLAN` | materialization、pipelining、完整 join algorithms、cost formulas、dynamic programming 與 optimizer internals |
+| Ch15-16 | scan 與 index search、logical/physical plan基本區分、plan access order、result-equivalence check、basic equality selectivity、catalog statistics、`ANALYZE` 與 `EXPLAIN QUERY PLAN` | materialization、pipelining、完整 join algorithms、selection/projection pushdown、join reorder、outer-join反例、skew細節、cost formulas、dynamic programming與optimizer internals |
 | Ch17 | transaction boundaries、ACID、states、schedules、conflicts、small precedence graphs、conflict serializability、basic recoverability、isolation phenomena | 完整 serializability-testing algorithm、各類實作 protocol |
-| Ch18 | S/X locks、compatibility、grant/wait、2PL、strict 2PL、wait-for graph、deadlock detection 與處理原則 | rigorous 2PL 細節、timestamp protocol、MVCC、snapshot isolation 與 write skew |
-| Ch19 | failure classes、log records、WAL、redo/undo、basic checkpoint、backup 加後續 log | ARIES、fuzzy checkpoint、force/steal implementation、remote failover 與 production recovery administration |
+| Ch18 | S/X locks、compatibility、grant/wait、wait-for graph、deadlock detection及victim/retry注意事項 | basic/strict/rigorous 2PL、timestamp protocol、MVCC、snapshot isolation與write skew |
+| Ch19 | transaction/system/storage failure基本區分、log old/new values、WAL ordering、committed/incomplete判斷及單一簡化redo/undo案例 | checkpoint、backup加後續log、ARIES、fuzzy checkpoint、force/steal、remote failover與production recovery administration |
 
 課後延伸內容只有在教師另行講解、示範及安排練習後，才能列入正式評量。
 
@@ -85,14 +88,14 @@ recovery internals，以概念說明、圖解、schedule、log 或已驗證的�
 | 6 | 2026-10-15 | Ch2-4 | Written Exam 1；考後依公布標準分析並修正代表性錯誤 | 個人考試；以新資料修改一題錯誤解法 | Exam 1 and correction sheet |
 | 7 | 2026-10-22 | Ch5 | window ranking、recursive CTE、row-level audit trigger；stored routines 作概念介紹 | 以 prerequisite graph、ranked scores 與 grade-change audit 示範各功能解決的問題 | Advanced SQL exercise and execution evidence |
 | 8 | 2026-10-29 | Ch6 | entities、attributes、relationships、cardinality、participation 與 keys | 從選課案例的 business rules 建立初版 E-R diagram，逐項標示判斷依據 | E-R diagram draft |
-| 9 | 2026-11-05 | Ch2-6 review | 教師參加 INFORMS；不安排實體課、考試或新內容 | 非同步概念檢核，重做一題 SQL 與一題 E-R 判斷 | Asynchronous review record |
+| 9 | 2026-11-05 | Ch2-5 review | 教師參加 INFORMS；不安排實體課、考試或新內容 | 非同步概念檢核，重做一題 SQL 並檢查一項Ch2-Ch5核心判斷 | Asynchronous review record |
 | 10 | 2026-11-12 | Ch6 | design decisions、redundancy、E-R model 到 relational schema 的 mapping | 檢查 AI 生成 E-R diagram 是否符合 business rules，再完成 schema、keys 與 foreign keys | Revised E-R diagram, schema, and individual revision |
 | 11 | 2026-11-19 | Ch7 | anomalies、functional dependencies、attribute closure、lossless decomposition、3NF 與 BCNF | 從含重複資料的 relation 找出 anomalies，以 FD 與 sample rows 比較 decomposition | FD table, decomposition, and individual revision |
 | 12 | 2026-11-26 | Ch5-7 | Written Exam 2；考後修正一題 advanced SQL、E-R mapping 或 normalization 題 | 個人考試；使用新的 business rule 或 relation instance 完成修正 | Exam 2 and correction sheet |
 | 13 | 2026-12-03 | Ch14 | index 使用時機、B+ tree equality/range lookup、複合與 covering index、query-plan evidence | 對 deterministic order workload 建立 index，比較建立前後的 access path | Index design and query-plan evidence |
-| 14 | 2026-12-10 | Ch15-16 | scan/index search、logical/physical plan、join order、selectivity、statistics、skew 與安全的 query rewrite | 比較實際 plans；用 outer join 反例說明不能任意 push down；驗證 AI 的 index 建議 | Query-plan interpretation and individual revision |
+| 14 | 2026-12-10 | Ch15-16 | scan/index search、plan access order、result-equivalence check、basic selectivity、catalog statistics與`ANALYZE` | 比較等價query的results與plans，讀取SCAN/SEARCH及statistics，再驗證AI的index建議 | Query-plan interpretation and individual revision |
 | 15 | 2026-12-17 | Ch17 | transaction boundaries、ACID、schedules、conflicts、small precedence graphs、recoverability 與 isolation phenomena | 逐步分析 transfer schedules、conflict edges、commit order、dirty read 與 phantom | Transaction and isolation analysis |
-| 16 | 2026-12-24 | Ch18-19 | S/X locks、2PL、wait-for graph、deadlocks；failure classes、WAL、redo/undo、backup 與整合複習 | 以 lock requests 判斷 grant/wait，以 log records 判斷 redo/undo，最後連結 index、plan、transaction 與 recovery | Concurrency and recovery analysis; review record |
+| 16 | 2026-12-24 | Ch18-19 | S/X compatibility、grant/wait、wait-for graph與deadlock；log records、WAL及單一簡化redo/undo案例；整合複習 | 判斷lock requests及cycle，依transaction status與log old/new values完成redo/undo，再連結index、plan、transaction與recovery | Concurrency and recovery analysis; review record |
 | 17 | 2026-12-31 | - | 校慶補假，不排課 | 無 | None |
 | 18 | 2027-01-07 | Ch14-19 | Written Exam 3 / Final Examination；累積應用已教 SQL 與 database design concepts | 個人考試 | Exam 3 |
 
@@ -149,8 +152,8 @@ AI 只在教師指定的活動中使用。正式安排三次：
 
 ## 九、仍待執行的工作
 
-1. 教師已核准經clean verification的SQLite學生套件；尚待指定LMS或校內系統的
-   固定下載位置並上傳。
+1. 現行GitHub course repository維持private；尚待教師建立第一批公開allow-list、
+   決定公開時機，並另建public repository或allow-listed release artifact。
 2. 將三次考試的實際題型、allowed resources、版本、答案與評分規準分開保存。
 3. 決定課堂匿名展示與完整排序使用的系統，並先測試 30 人、6 組及資料匯出。
-4. 由教師審閱逐章教材語言、課後延伸標示及學生可見性後再發布。
+4. 由教師審閱English-only逐章教材、課堂核心/延伸標示及學生可見性後再發布。

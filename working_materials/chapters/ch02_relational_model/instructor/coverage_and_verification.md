@@ -14,8 +14,8 @@
 
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 2, printed pages 37-58, including Sections 2.1-2.7 and Note 2.1.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch2.pdf`, slides
-  2.1-2.29.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch2.pdf`, all 29 PDF
+  pages.
 - Current course governance: `AGENTS.md`, `PROJECT.md`,
   `1151_database_management_revised_syllabus.md`, and
   `database_chapter_teaching_material_prompt.md`.
@@ -137,10 +137,10 @@ Expected checks:
 
 ## Remaining limits before student release
 
-- The instructor must confirm whether student-facing terminology should remain bilingual
-  or become English-only.
-- The final classroom SQLite tool has not been selected; the SQL is verified through
-  Python's SQLite library but student installation instructions are not final.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
+- The approved SQLite student package supplies the runner and SQL files. The instructor
+  may still choose a classroom user interface, but students do not need a server DBMS.
 - `COURSE_PLAN.md`, the current syllabus, and project decisions govern this chapter.
 - The official slide PDF metadata incorrectly identifies another chapter even though the
   visible deck content is Chapter 2. Source use is based on visible content.
@@ -149,8 +149,8 @@ Expected checks:
 
 - Files created: student guide, original setup data, executable student lab, instructor
   coverage and guidance, and automated verifier.
-- Source verification: complete for the textbook's printed pages 37-58 and slides
-  2.1-2.29.
+- Source verification: complete for the textbook's printed pages 37-58 and all 29
+  pages of the local official slide PDF.
 - Executed content: all schema constraints and all executable chapter examples.
 - Unexecuted content: paper-based schema-diagram and relational-algebra exercises; these
   were independently worked in the student-practice guidance but require classroom use

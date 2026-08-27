@@ -15,8 +15,8 @@
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 7, printed pages 303-352, Sections 7.1-7.11. Exercises were inspected for
   chapter context but not copied.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch7.pdf`, slides
-  7.1-7.93.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch7.pdf`, all 93 PDF
+  pages.
 - Current governance, revised syllabus, chapter-material prompt, completed Chapters
   2-6 materials, and existing SQLite lab conventions.
 
@@ -54,7 +54,7 @@ They are not valid Exam 2 operations unless separately taught and practiced.
 
 | ID | Teaching point | Primary source | Worked example | Student action and feedback |
 |---|---|---|---|---|
-| C7.01 | good relational design | 7.1, pp. 303-307; slides 7.3-7.8 | flattened enrollment facts | classify employee/project facts |
+| C7.01 | good relational design | 7.1, pp. 303-307 | flattened enrollment facts | classify employee/project facts |
 | C7.02 | update/insertion/deletion anomalies | 7.1.1, pp. 305-306 | department, new course, last enrollment | execute reversible anomaly and explain limits |
 | C7.03 | functional dependency | 7.2.2, pp. 309-312; slides 7.17-7.24 | student ID rule and course counterexample | test title-to-ID claim using requirements |
 | C7.04 | closure, superkey, candidate key | 7.2.2 and 7.4.2, pp. 309-312, 322-324 | enrollment pair closure | compute employee-project closure |
@@ -102,7 +102,8 @@ py -3 working_materials/chapters/ch07_normalization/instructor/verify_ch07.py
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
 - Classroom workload and the amount of closure practice have not been observed with
   actual students.
 - The formal notation may need a one-page handwritten worksheet for in-class use.
@@ -112,7 +113,8 @@ py -3 working_materials/chapters/ch07_normalization/instructor/verify_ch07.py
 
 - Files created: student guide, executable SQL lab, instructor source/alignment record,
   and verifier.
-- Source verification: complete for textbook printed pages 303-352 and slides 7.1-7.93.
+- Source verification: complete for textbook printed pages 303-352 and all 93 pages
+  of the local official slide PDF.
 - Executed content: the complete lab; reversible anomaly transaction; independent
   course insertion; normalized reconstruction; deliberately lossy natural join;
   candidate-key closures; the 3NF-but-not-BCNF classification inputs; and all foreign

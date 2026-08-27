@@ -1,229 +1,119 @@
 # Chapter 14: Indexing
 
-Logical design回答facts及constraints如何表示；index屬於physical design，讓DBMS在不
-改變query result的前提下，用不同access path尋找資料。本章不以「每個column都加
-index」為目標，而是根據query、data distribution與update workload提出可驗證的選擇。
+## Core Question
 
-搭配檔案：`student_lab.sql`及`bplus_tree_example.png`。
+How can an index provide a different access path without changing query results, and what
+evidence is needed before recommending one for a workload?
 
-課堂核心是index使用時機、B+ tree equality/range lookup、複合索引欄位順序、
-covering index，以及建立index前後的query-plan evidence。Dense/sparse、
-clustering/secondary、leaf split及hashing用來建立概念，不列為完整操作要求。
+Use this guide with `student_lab.sql` and `bplus_tree_example.png`.
 
-## 與前章的關係
+## Scope and Connection
 
-Ch7先消除不必要的redundancy。Index通常不修正update、insertion或deletion anomaly；
-它加速對既有schema的特定access patterns。Ch15-Ch16會再把index放進query plan及
-optimizer選擇中判讀。
+Chapter 7 improved logical design. An index is a physical structure; it does not repair
+update, insertion, or deletion anomalies. Chapters 15 and 16 place indexes inside query
+plans and optimizer decisions.
 
-## 先備知識
+The classroom core is index purpose, B+ tree equality and range access, composite-column
+order, covering indexes, and before-and-after query-plan evidence. Dense and sparse
+indexes, clustering, splits, and hashing are conceptual extensions.
 
-- primary/candidate/foreign key與Ch7的logical design；
-- selection、range condition、join及`ORDER BY`；
-- `CREATE TABLE`、`CREATE INDEX`及basic aggregate queries。
+## Teaching Summary
 
-## 學習目標
+| Topic | Worked example and practice | Evidence to retain |
+|---|---|---|
+| Search keys and workload evidence | Customer and date predicates | Query-to-index reason |
+| B+ tree access | Equality and range traversal | Visited path and boundary decision |
+| Composite and covering indexes | Leading-column and selected-column cases | Supported and unsupported queries |
+| Plan verification | Before-and-after SQLite plans | Plan output and bounded conclusion |
 
-完成本章後，你應能：
+## Prerequisites
 
-1. 區分search key與primary/candidate key。
-2. 以access type、access/update cost及space比較index選擇。
-3. 以概念圖解釋ordered index中的clustering/secondary及dense/sparse差異。
-4. 逐步追蹤B+ tree的equality lookup與range scan。
-5. 說明B+ tree為何保持balanced，以及linked leaves如何支援range query。
-6. 概念比較ordered index與hash index適用的query。
-7. 依lexicographic order判斷composite index可支援的leading predicates。
-8. 解釋covering index及額外storage/update cost。
-9. 使用`CREATE INDEX`、`DROP INDEX`與`EXPLAIN QUERY PLAN`檢查實際access path。
-10. 根據workload提出index，並清楚限制證據能支持的結論。
+- Primary, candidate, and foreign keys.
+- Selection, range predicates, joins, and `ORDER BY`.
+- `CREATE TABLE`, `CREATE INDEX`, and basic aggregate queries.
 
-## 1. Index與search key
+## Learning Objectives
 
-Index是額外的data structure，保存search-key values與records或record locations之間的
-連結。Search key是用來lookup的一個或多個attributes，不必unique，也不等於primary
-key。Primary key是logical constraint；index是physical access structure。多數DBMS會
-為primary key建立index，但兩個概念仍不能互換。
+After completing this chapter, you should be able to:
 
-### Worked example
+1. Distinguish a search key from a primary or candidate key.
+2. Evaluate an index through access type, expected matches, updates, and storage cost.
+3. Trace equality and range access in a simplified B+ tree.
+4. Explain the leading-column effect in a composite index.
+5. Explain a covering index and its maintenance cost.
+6. Use `EXPLAIN QUERY PLAN` to verify an access-path hypothesis.
+7. State what the observed plan does and does not prove.
 
-`Enrollment(student_id, course_id, grade)`的primary key是
-`(student_id, course_id)`。若常查「某個grade的所有enrollments」，可以建立以grade為
-search key的index；grade顯然不是candidate key，因多列可以同為A。
+## 1. Index and Search Key
 
-查`student_id='S101'`可能只回少量rows；index可先定位對應entries，不必逐列檢查整張
-table。但每次insert、delete或修改indexed value時，也要維護index。
+An index is an additional data structure connecting search-key values to records or
+record locations. A search key may contain one or more attributes and need not be unique.
+A primary key is a logical uniqueness constraint. An index is a physical access path.
 
-### 你來判斷
+For `Enrollment(student_id, course_id, grade)`, the primary key may be
+`(student_id, course_id)`. An index on grade supports grade lookup even though many rows
+may share the same grade.
 
-對`Course(course_id, title, dept_code)`，分別說明`course_id`作primary key及
-`dept_code`作index search key代表什麼。哪一項允許duplicates？
+### Practice
 
-### 檢查方式
+For `Course(course_id, title, dept_code)`, explain the roles of `course_id` as a primary
+key and `dept_code` as an index search key. Department code permits duplicates.
 
-Course ID負責uniqueness及row identity；department code index負責lookup，允許同系多門
-課。若答案說「有index所以dept_code一定unique」，混淆了constraint與access path。
+## 2. Workload Evidence
 
-## 2. Index evaluation與workload
+Index evaluation should consider:
 
-沒有一種index對所有工作都最好。至少要比較：
+- equality, range, prefix, ordering, and join access;
+- expected matching rows and access frequency;
+- insertion, deletion, and indexed-value update cost;
+- index storage;
+- the complete workload rather than one isolated query.
 
-- access types：equality、range、prefix、ordering或join；
-- access time及預期rows；
-- insertion、deletion及indexed-value update成本；
-- index的space overhead；
-- query與update的頻率，而不只看一條query。
+### Worked Example
 
-### Worked example
+Suppose a registration system performs hundreds of daily lookups for one student's
+enrollments and one batch insertion. An index beginning with `student_id` has a plausible
+benefit because the frequent equality query retrieves few rows. The claim still requires
+row-count and plan evidence.
 
-選課系統每分鐘有數百次「查一位student的所有選課」，每天批次匯入一次新選課。對
-`Enrollment(student_id, course_id, grade)`建立`student_id` index有明確理由：高頻
-equality lookup通常只取少量rows，而index maintenance相對低頻。
+Compare that workload with one dominated by grade updates and very few grade lookups.
+The second case may not justify a grade index because maintenance is frequent and lookup
+benefit is rare.
 
-若另一個report每學期只執行一次、會讀取全體學生，專為它增加多個index可能得不償失。
-這不是以「一天一次」直接判定，而是要求測量query benefit、storage與持續update cost。
+## 3. B+ Tree Access
 
-### 你來操作
+A B+ tree is a balanced ordered index. Internal nodes contain separator keys and child
+pointers. Leaves contain search-key entries and record references, and adjacent leaves
+are linked in order. Every root-to-leaf path has the same length.
 
-比較兩個workloads：(A) 95% lookup by student ID、5% inserts；(B) 5% lookup、95%
-grade updates。提出是否建立grade index，並列出仍需取得的data distribution或plan證據。
+![B+ tree example](bplus_tree_example.png)
 
-### 回饋重點
+The figure is a teaching abstraction, not a claim about SQLite's private page format.
 
-答案必須同時提到matching row數、query frequency及maintenance；不能只說「index會快」。
+### Equality Lookup
 
-## 3. Ordered indices: clustering, secondary, dense, sparse（概念延伸）
+To find 50:
 
-Ordered index把search-key values依序保存。若資料records本身也按相同search key順序存放，
-它是clustering index；不同順序的index是secondary/nonclustering index。一個file無法同時
-按多個互不相同的orders實體排列。
+1. Compare 50 with root separators 40 and 70.
+2. Follow the middle child for `40 <= key < 70`.
+3. Find 50 in the leaf and follow its record reference.
 
-Dense index對每個search-key value有entry。Sparse index只為部分values設entry，必須在
-records按相同search key排列時才能由最近的entry接續sequential scan；因此secondary
-index必須dense，否則未列出的value可能散落在file任何位置。
+### Range Lookup
 
-### Worked example
+For `45 <= key <= 80`, descend once to the first qualifying leaf, output 50 and 60, follow
+the leaf link to 70 and 80, and stop at 90. Linked ordered leaves avoid restarting from
+the root for every value.
 
-資料依ID分成三個blocks：
+### Predict and Check
 
-```text
-B1: 101, 105       B2: 110, 120       B3: 130, 145
-```
+Trace keys 25, 65, and 100. For range `[25,75]`, the output is 30, 40, 50, 60, and 70;
+encountering 80 establishes the stop condition.
 
-Dense index有`101,105,110,120,130,145`六個entries。每block一個entry的sparse index有
-`101->B1, 110->B2, 130->B3`。找120時，dense index直接定位120；sparse index先找不大於
-120的最大entry 110，再掃描B2找到120。Sparse版本較小、更新較少，但需要block內掃描。
+## 4. Composite Indexes
 
-若records實際按ID排列，對department建立sparse secondary index便不可靠：沒有entry的
-department records不一定緊接在某個已知位置之後。
-
-### 你來操作
-
-使用上述blocks找125。分別寫出dense與sparse查找何時知道「不存在」。再回答若B2插入
-最小值108，哪個sparse entry必須更新。
-
-### 預期與回饋
-
-Sparse查找從110進入B2，掃到下一個130或block界線後判定不存在；B2 entry由110改為108。
-答案須包含entry選擇及後續scan，不只寫binary search。
-
-## 4. B+ tree structure
-
-B+ tree是balanced multilevel ordered index。Internal nodes保存separator keys與child
-pointers；leaf nodes保存search-key entries與record references，並依key order連接到下一個
-leaf。所有root-to-leaf paths長度相同。DBMS通常讓一個node接近storage page大小，因此
-fanout高、tree相對矮。
-
-![Original B+ tree example](bplus_tree_example.png)
-
-圖中每個leaf最多3個keys。Root的40、70把搜尋範圍分成三個children；leaf arrows保存
-排序後的sequential path。圖是教學簡化，不代表SQLite公開其內部page layout。
-
-### Worked example: equality lookup
-
-找50時：
-
-1. Root比較50與40、70，選擇`40 <= key < 70`的middle child。
-2. Middle leaf依序比較40、50、60。
-3. 找到50的entry，再依record reference取得row。
-
-不需要掃描左、右leaves。Tree的實際I/O仍受cache、page size與DBMS implementation影響。
-
-### Worked example: range scan
-
-找`45 <= key <= 80`時，先以45下降到middle leaf，從50開始輸出；接著沿leaf links讀取
-60、70、80，遇到90停止。Ordered leaves使range不必對每個可能值重新從root搜尋。
-
-### 你來操作
-
-在圖上追蹤key 25、65及100的search path；再列出range `[25,75]`實際輸出的keys及停止
-條件。
-
-### 檢查方式
-
-25走left leaf並找到30之前的位置；65走middle leaf但不存在；100走right leaf後超過最後
-key。Range輸出30、40、50、60、70，讀到80時停止。
-
-## 5. B+ tree updates（概念延伸）
-
-Insertion先找到leaf並按序放入entry。若node超過capacity，split成兩個nodes並把新的
-separator送到parent；split可能向上propagate。Deletion若造成underflow，可向sibling
-redistribute或merge，必要時更新parent。無論如何，leaves仍在同一depth。
-
-### Worked example: leaf split
-
-在圖的middle leaf `[40,50,60]`插入65：
-
-1. 找到middle leaf並形成暫時序列`[40,50,60,65]`。
-2. 因capacity是3，split成`[40,50]`與`[60,65]`。
-3. 把new right leaf的first key 60作separator加入root。
-4. Root由`[40|70]`成為`[40|60|70]`，leaf links改為left -> `[40,50]` ->
-   `[60,65]` -> right。
-
-此例root仍有空間；若parent也full，還會繼續split。教材不要求背完整insert/delete
-pseudocode，但必須能保持ordering、capacity、links與balanced property。
-
-### 你來操作
-
-假設root最多3個separator keys，接著在right leaf `[70,80,90]`插入85。畫出leaf split，
-說明為何root也必須split，以及所有leaves的depth最後是否相同。
-
-### 回饋重點
-
-Right leaf應分為兩個ordered leaves並送出separator；root overflow後建立new root。完成後
-所有leaves仍同depth。只把85擠進full leaf而不處理capacity不正確。
-
-## 6. Ordered index and hash index（概念延伸）
-
-Hash index以hash function把search-key value映射到bucket，適合equality lookup。不同keys
-可能collision到同一bucket，仍需在bucket內比較。因bucket addresses不保存key order，
-一般hash index不能有效支援range query。SQLite lab不建立hash index，因目前SQLite
-環境的普通user-created indexes是B-tree family；hash只作概念比較。
-
-### Worked example
-
-假設`h(k)=k mod 4`：keys 10、14都到bucket 2。找14時先算bucket 2，再比較其中entries；
-找`10 <= k <= 14`則不能只算一個bucket，因11、12、13分散在其他buckets。Ordered B+
-tree可先找10，再沿leaves到14。
-
-### 你來判斷
-
-在「依exact session token查一列」與「依order date查一週」兩個需求中，各選ordered或
-hash index並解釋。若還需`ORDER BY token`，選擇是否改變？
-
-### 檢查方式
-
-Exact equality可考慮hash；date range及ordered traversal需要ordered index。若同時需要
-token order，ordered index的用途增加。這是概念比較，實際仍依DBMS支援與plan決定。
-
-## 7. Composite index and lexicographic order
-
-Composite index `(A,B)`先依A排序；A相同時再依B排序，類似字典先比較第一個字。它通常
-有效支援`A = value`及`A = value AND B range`。只限制B時，不能假設DBMS一定能直接
-使用完整ordered range；某些optimizer可能採skip-scan等技術，所以要看實際plan。
-
-### Worked example
-
-常見query：
+A composite index `(A, B)` is ordered first by A and then by B within equal A values. It
+normally supports `A = value` and `A = value AND B range` efficiently. A predicate on B
+alone does not provide the same leading ordered range.
 
 ```sql
 SELECT ordered_at, amount
@@ -233,13 +123,12 @@ WHERE customer_id = 'C0042'
 ORDER BY ordered_at;
 ```
 
-`(customer_id, ordered_at)`把同一customer的rows放在連續key range內，且其內再按date
-排序。反過來的`(ordered_at, customer_id)`主要先按date排列，不符合這個query的leading
-equality pattern。
+`(customer_id, ordered_at)` groups one customer's rows and orders them by date. Reversing
+the columns primarily groups all rows by date.
 
-### 你來操作
+### Practice
 
-對index `(dept_code, salary)`判斷下列predicates，並說明可用的leading部分：
+For `(dept_code, salary)`, reason about:
 
 ```text
 A. dept_code = 'IM'
@@ -248,43 +137,32 @@ C. salary = 60000
 D. dept_code < 'IM' AND salary = 60000
 ```
 
-### 預期與回饋
+A uses the first component. B uses equality on the first and a range on the second. C
+lacks the leading component. In D, the first component is already a range, so the second
+does not form one simple continuous search interval. An actual DBMS may have additional
+techniques, so inspect the plan.
 
-A使用first component；B使用department equality後的salary range；C缺少leading
-department；D在first component已是range，不能推定second component能形成單一連續
-range。實際DBMS可能另選plan，但不能從index名稱直接宣稱四者都同樣有效。
+## 5. Covering Index
 
-## 8. Covering index
+An index covers a query when it contains every column required for filtering and output,
+allowing the DBMS to avoid a separate table lookup.
 
-若index包含query需要輸出的所有columns，DBMS可能只讀index而不回table取row，這稱為
-covering index。多放columns會增加index size、降低fanout並增加write cost，因此covering
-不是免費的。
+The lab first uses `(customer_id, ordered_at)`. The query also returns amount, so a table
+lookup may remain. After adding amount, SQLite 3.45.3 reports a covering index for the
+supplied query.
 
-### Worked example
+Adding columns increases index size, reduces fanout, and increases write cost. If the
+report also returns status, the existing index no longer covers it. Do not add status
+before considering report frequency and update workload.
 
-`(customer_id, ordered_at)`可找出目標entries，但query還要`amount`時可能需要回table。
-新增`(customer_id, ordered_at, amount)`後，SQLite 3.45.3在本lab顯示`USING COVERING
-INDEX`。這個觀察只支持lab的query及環境，不代表所有DBMS使用相同術語或選擇。
+## 6. Query-Plan Lab
 
-### 你來判斷
+The lab creates 20,000 reproducible rows and observes:
 
-若report還要輸出`status`，現有covering index是否仍cover？提出一個新index後，再說明
-為什麼不應在知道report頻率與update workload前立即建立。
-
-### 檢查方式
-
-現有index不含status；加入status可cover該projection，但會加大每個entry並提高維護成本。
-
-## 9. SQL and query-plan lab
-
-`student_lab.sql`建立20,000列可重現資料，依序觀察：
-
-1. 無secondary index時的table scan；
-2. 建立`(customer_id, ordered_at)`後的index search；
-3. 建立包含amount的index後的covering search；
-4. 缺少leading customer predicate及低-selectivity status predicate時的plan。
-
-主要語法：
+1. a scan without a secondary index;
+2. an index search using `(customer_id, ordered_at)`;
+3. a covering search after amount is included;
+4. plans for a missing leading predicate and a low-selectivity status predicate.
 
 ```sql
 CREATE INDEX idx_name ON table_name (column1, column2);
@@ -292,56 +170,62 @@ DROP INDEX idx_name;
 EXPLAIN QUERY PLAN SELECT ...;
 ```
 
-DBMS自行選access path；`CREATE INDEX`不保證每一條query都使用它。Plan中主要找：
+Before each phase, predict `SCAN` or `SEARCH`, the useful predicate, and whether the index
+covers the output. Then retain:
 
-- `SCAN`或`SEARCH`；
-- index name；
-- covered predicates，例如`customer_id=?`與date bounds；
-- `COVERING INDEX`；
-- 額外sort或temporary structure訊息。
+- the complete plan;
+- the index name;
+- displayed predicate bounds;
+- the query result;
+- SQLite version and statistics state.
 
-### 你來操作
+In the verified environment, the first phase scans, the composite-index phase searches
+by customer and date, and the final phase reports a covering index. A plan difference in
+another version is evidence to investigate, not text to overwrite.
 
-完整執行lab，為三個階段保留plan文字。回答：哪個predicate讓planner定位到連續index
-range？哪一版不需另取amount？status query為何即使有index也未必值得使用？
+The high-frequency status `COMPLETE` matches most rows. Even if a status index exists, the
+optimizer may reasonably prefer a scan.
 
-### 預期與回饋
+## Conceptual Extensions
 
-在已驗證SQLite 3.45.3環境，第一階段為table scan；composite index階段以customer及date
-bounds進行search；covering階段出現covering index。Status中`COMPLETE`佔大多數，取得
-大量rows時index benefit可能小，仍需實際statistics及plan。
+- **Clustering index:** record order follows the search-key order.
+- **Secondary index:** index order differs from record order.
+- **Dense index:** has an entry for every search-key value.
+- **Sparse index:** has entries for selected values and requires compatible record order.
+- **B+ tree split:** an overflowing node divides and sends a separator upward while all
+  leaves remain at one depth.
+- **Hash index:** can support equality lookup but does not retain key order for a range.
 
-若你的版本出現不同plan，先記錄SQLite version、完整DDL、row counts及`ANALYZE`狀態，
-不要把不同輸出直接當作錯誤。
+Complete B+ tree insertion/deletion algorithms and cost derivations are not classroom
+core requirements.
 
-## 課堂比較與個人學習證據
+## Common Errors
 
-各組為同一組三條queries提出最多兩個indexes。共同回答必須列出query-to-index理由、
-不被支援的query及write/storage cost。回答鎖定後比較plan；教師依predicates、selectivity、
-ordering、covering及maintenance回饋，學生再修改。
+1. Assuming that a search key is unique.
+2. Claiming that an index changes query results or repairs normalization.
+3. Indexing every column without considering writes and storage.
+4. Ignoring composite-column order.
+5. Comparing one timing without checking plans and cache conditions.
+6. Treating successful `CREATE INDEX` as proof that a query used the index.
+7. Treating the textbook B+ tree drawing as a DBMS page-layout specification.
 
-個人保存：初始proposal、三份plan、revised proposal，以及一句明確限制「目前證據不能
-支持什麼」。同儕排名不用來直接計算正式成績。
+## Classroom and Individual Evidence
 
-## 常見錯誤
+Propose at most two indexes for three supplied queries. State the query-to-index reason,
+unsupported query, and write/storage cost. Compare plans after the proposal is fixed.
 
-1. 把search key誤認為一定unique。
-2. 認為index會改變query結果或修復normalization問題。
-3. 每個column都加index，沒有計算writes及space。
-4. 認為composite index的column order不重要。
-5. 只看一次elapsed time，不看plan、rows及cache狀態。
-6. 看到`CREATE INDEX`成功就宣稱query已使用index。
-7. 把textbook B+ tree抽象圖當成特定DBMS公開的physical page格式。
+Retain the original proposal, three plans, revised proposal, and one statement that the
+current evidence cannot support. Peer ranking does not directly determine the grade.
 
-## 本章總結
+## Chapter Summary
 
-Index選擇從workload開始，以search key、ordered/hash properties、composite ordering與
-covering需求形成假設，再由實際plan驗證。B+ tree以balanced high-fanout structure支援
-equality與range access，同時付出space及update maintenance。Ch15將把table scan、index
-scan與join operator放入完整query processing流程。
+Index selection starts from workload evidence. B+ trees support ordered equality and
+range access, composite order controls useful leading predicates, and covering can avoid
+a table lookup at additional maintenance cost. Chapter 15 places these access paths in a
+complete query-processing plan.
 
-## 課後接續
+## After-Class Continuation
 
-- 為自己的一張table列出top three queries及update pattern，再提出不超過兩個indexes。
-- 補充閱讀complete B+ tree insertion/deletion pseudocode、B-tree、LSM、bitmap、spatial
-  及temporal indices；這些不是本課selected Ch14考試操作範圍。
+Inspect one additional query plan before and after creating a justified index. Retain the
+query, index definition, both plans, and a brief statement about the write or storage cost
+that the plan output does not measure.

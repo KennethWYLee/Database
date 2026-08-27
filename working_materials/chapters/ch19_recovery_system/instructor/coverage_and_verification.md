@@ -14,20 +14,21 @@
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 19, printed pages 907-950, Sections 19.1-19.11. Review terms and exercises
   were inspected for context but were not copied.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch19.pdf`, slides
-  19.1-19.101.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch19.pdf`, all 101 PDF
+  pages.
 - Current governance, revised syllabus, chapter-material prompt, and completed Chapter
   17-18 material.
 
 ## Scope decision
 
-Required instruction covers logical/system transaction errors, system crash, disk
-failure, and the fail-stop assumption; volatile/non-volatile/stable storage distinctions;
-buffer write versus disk output; basic log records and old/new values; immediate versus
-deferred modification; WAL data-flush and commit ordering; stable commit criterion;
-redo, undo, compensation/abort records at concept level; simplified repeating-history
-restart recovery; checkpoint purpose and active list; and archival backup plus
-post-backup log recovery.
+Required instruction covers basic transaction/system/storage failure distinctions and
+the fail-stop assumption; basic log records and old/new values; WAL data-flush and commit
+ordering; stable commit evidence; committed versus incomplete status; and one simplified
+redo/undo case.
+
+Storage-model details, immediate/deferred modification, compensation records, complete
+repeating-history recovery, checkpoint purpose and active lists, and archival backup plus
+post-backup log recovery remain source-checked after-class extensions.
 
 Stable-storage implementation, operating-system buffer details, force/steal policy
 design, group commit, fuzzy checkpoint algorithms, remote failover protocols, logical
@@ -61,22 +62,22 @@ undo, ARIES, and main-memory recovery are supplementary.
 | C19.01 | failure classification | 19.1, pp. 907-908; slides 19.3-19.4 | constraint/deadlock/crash/disk | classify four scenarios and lost storage |
 | C19.02 | storage roles/data access | 19.2, pp. 908-912; slides 19.5-19.10 | mixed A/B disk state | distinguish buffer write and output |
 | C19.03 | log records/old-new values | 19.3.1, pp. 913-915; slides 19.11-19.12 | T1 C:700->600 | select undo/redo value by status |
-| C19.04 | immediate/deferred modification (concept bridge) | 19.3.2, pp. 915-916; slides 19.12-19.13 | buffer/disk write order | explain why immediate needs undo/redo |
+| C19.04 | immediate/deferred modification (supplementary) | 19.3.2, pp. 915-916; slides 19.12-19.13 | buffer/disk write order | explain why immediate needs undo/redo |
 | C19.05 | commit/WAL | 19.3.4, p. 917; 19.5.1-19.5.2, pp. 926-928; slides 19.14, 19.30-19.32 | six-event valid timeline | repair two invalid timelines |
 | C19.06 | redo/undo/repeating history | 19.3.5, pp. 917-920; 19.4, pp. 922-925; slides 19.16-19.29 | committed T0/incomplete T1 | hand-calculate final A/B/C |
-| C19.07 | checkpoint | 19.3.6, pp. 920-922; slides 19.20-19.23 | L={T8} | reject checkpoint-without-log claim |
-| C19.08 | backup plus log | 19.6, pp. 930-931; 19.7, pp. 931-935 at overview level; slides 19.37-19.40 | restore base then redo T0 | identify required noon recovery inputs |
+| C19.07 | checkpoint (supplementary) | 19.3.6, pp. 920-922; slides 19.20-19.23 | L={T8} | reject checkpoint-without-log claim |
+| C19.08 | backup plus log (supplementary) | 19.6, pp. 930-931; 19.7, pp. 931-935 at overview level; slides 19.37-19.39 | restore base then redo T0 | identify required noon recovery inputs |
 
-Every required teaching point has explanation, a complete example, student practice,
-and a stated checking or feedback criterion.
+Every classroom-core point and retained supplementary point in the table has an
+explanation, a complete example, student practice, and a stated checking or feedback
+criterion.
 
 ## Teaching summary
 
-Students classify failures, identify surviving storage, and map old/new log values to
-undo and redo. They repair WAL timelines, hand-run one mixed committed/incomplete crash
-case, distinguish a basic checkpoint from archival backup, and identify the log required
-after a backup. Full recovery algorithms and production administration remain after-class
-extensions.
+Students classify the supplied failures, map old/new log values to undo and redo, repair
+WAL timelines, and hand-run one mixed committed/incomplete crash case. Checkpoint,
+backup-plus-log, full recovery algorithms, and production administration remain
+after-class extensions.
 
 ## Verification command
 
@@ -86,7 +87,9 @@ py -3 working_materials/chapters/ch19_recovery_system/instructor/verify_ch19.py
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  and reduced guide still requires final instructor content and language review before
+  publication.
 - SQLite 3 is the course DBMS. Product-specific server WAL naming, backup formats,
   restore commands, and point-in-time recovery are outside the required course scope.
 - No real crash, corrupted data file, or restore operation is performed by the teaching

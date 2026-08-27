@@ -4,13 +4,15 @@
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
 - 最後更新日期：2026-08-27
-- 課程狀態：115-1 課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；逐章教材初稿與自動驗證完成，尚待發布決策
-- Repository：本資料夾是獨立 Git repository；目前尚無 commit 或 remote
+- 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
+  教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材
+- Repository：本資料夾是獨立 Git repository；`main`追蹤GitHub的`origin/main`，已推送的基準commit為`b204458`
 - 文件可見性：混合；歷屆考題、答案、評分資料及教師手冊不得直接發布
 
 ## 課程定位與對象
 
 - 課程名稱：資料庫管理（Database Management）
+- 任課教師官方英文姓名：WenYi Lee。
 - 對象：四技資訊管理系二年級必修課程學生。
 - 學分與時數：3 學分，每週 3 小時。
 - 上課時間：星期四第 5-7 節，13:30-16:15。
@@ -23,6 +25,8 @@
 
 ## 用語與學生可見內容
 
+- 所有正式學生教材使用English-only prose；technical terms使用教科書與資料庫領域
+  的標準英文用語。教師端治理、查核與備課文件可使用繁體中文。
 - 學生可見文件直接描述概念講解、完整範例、個人練習、小組比較、教師回饋
   與個人修正，不使用學生無法從課程內容理解的教學設計分類名稱。
 - 課程計畫與逐章教材不寫分鐘配置；需要控制份量時，以授課摘要、課堂核心
@@ -33,6 +37,8 @@
 
 - 現行主要教科書與投影片來源：Silberschatz, Korth, and Sudarshan,
   *Database System Concepts*, 7th Edition。
+- 2026-08-27重新確認的本機私人教科書PDF標題、作者與版本均符合上述資料；該
+  PDF只作教師端來源查核，不納入Git或學生套件。
 - 已完整查核本課正式範圍的教科書Ch2-Ch7、Ch14-Ch19正文及對應官方
   slides；Ch8-Ch9另核對封面與章節綱要並決定不列入必修進度。不得再把
   舊課綱使用的 *Fundamentals of Database Systems, 7/e* 當成本學期現行教材。
@@ -49,10 +55,10 @@
 | 9 | Application Development | 不列入必修進度；可作補充閱讀 |
 | 14 | Indexing | 選講：index使用時機、B+ tree equality/range lookup概念、composite index欄位順序、covering index、`CREATE INDEX`/`DROP INDEX`及`EXPLAIN QUERY PLAN`證據；dense/sparse、clustering/secondary與split作概念延伸，不教完整insertion/deletion及cost derivation |
 | 15 | Query Processing | 選講：logical/physical plan、file/index scans、join order、nested與indexed nested-loop概念及query-plan證據；parsing/translation只作銜接，materialization/pipelining、merge/hash細節、完整演算法與成本推導作課後延伸 |
-| 16 | Query Optimization | 選講：safe selection/projection pushdown、inner-join reorder與outer-join反例、catalog statistics、selectivity/skew、`ANALYZE`及實務判讀`EXPLAIN QUERY PLAN`；不深入cost formula、dynamic programming與optimizer algorithms |
+| 16 | Query Optimization | 選講：result equivalence作為performance comparison前提、catalog row/distinct statistics、basic equality selectivity、`ANALYZE`及實務判讀`EXPLAIN QUERY PLAN`；selection/projection pushdown、join reorder、outer-join反例、skew細節、cost formula、dynamic programming與optimizer algorithms作課後延伸 |
 | 17 | Transactions | 選講：SQL transaction boundaries、transaction concept與states、ACID、concurrent schedules、operation conflicts、small precedence graphs、conflict serializability、basic recoverability及isolation phenomena；不教完整serializability-testing algorithm與各類實作protocol |
-| 18 | Concurrency Control | 選講：S/X locks與compatibility、grant/wait、basic/strict 2PL、wait-for graph、deadlock detection與處理原則；rigorous 2PL、timestamp protocol、MVCC、snapshot isolation與write skew作課後延伸 |
-| 19 | Recovery System | 選講：failure classes、basic log records、WAL、redo/undo、basic checkpoint及archival backup加post-backup log；不教ARIES、fuzzy checkpoint、force/steal implementation、remote failover及production recovery administration |
+| 18 | Concurrency Control | 選講：S/X locks與compatibility、grant/wait、wait-for graph、deadlock detection及victim/retry注意事項；basic/strict/rigorous 2PL、timestamp protocol、MVCC、snapshot isolation與write skew作課後延伸 |
+| 19 | Recovery System | 選講：transaction/system/storage failure的基本區分、log old/new values、WAL ordering、committed/incomplete判斷及單一簡化redo/undo案例；checkpoint、backup加post-backup log、ARIES、fuzzy checkpoint、force/steal、remote failover及production administration作課後延伸 |
 
 - ch14-ch19以就業實用性為取捨依據列入正式進度與Exam 3，但只教授上述選定
   內容，不要求完整涵蓋各章理論與演算法。
@@ -135,13 +141,18 @@
 
 ## Repository與發布狀態
 
-- 本資料夾已初始化獨立 Git repository，但目前沒有 commit 或 remote。
-- 目前 `.gitignore` 只允許根層治理文件；教材、歷史來源、考題、答案與大型
-  檔案尚未完成逐項 GitHub 發布檢查。
-- 在建立第一個教材 commit 前，必須以 allow-list 檢查版權、答案、教師手冊、
-  個資、憑證與大型檔案；不得因檔案已存在就推定可上傳。
-- Git 尚未成為跨電腦共同紀錄，直到 repository 有明確 remote、已提交版本且
-  完成 push。
+- 本資料夾已初始化獨立 Git repository；`main`追蹤
+  `https://github.com/KennethWYLee/Database.git`的`origin/main`。
+- 現行`KennethWYLee/Database` repository已確認為private。GitHub visibility是
+  repository層級，不能在同一private repository內把個別檔案單獨設為public。
+  未來應建立另一個public repository或只發布allow-listed release artifact，僅放入
+  教師逐項核准的檔案；未核准內容維持在現行private repository。
+- 基準commit `b204458`已推送，內容是經allow-list檢查的治理文件、課綱、課程
+  計畫、Ch2-Ch7與Ch14-Ch19教材、驗證程式及核准的SQLite學生套件。
+- `.gitignore`維持private-by-default。歷史來源、教科書、考題、答案、評分資料、
+  暫存檔、prebuilt databases及發布來源未確認的資料不在Git追蹤範圍。
+- 新增檔案仍須逐項檢查版權、答案、教師手冊、個資、憑證、檔案大小及發布
+  邊界；既有baseline不構成未來檔案的自動核准。
 
 ## 目前不一致與未解問題
 
@@ -152,21 +163,30 @@
   ch2-ch7與selected ch14-ch19的正式進度及評量。
 - [x] `COURSE_PLAN.md` 已依新版英文課綱改為三次考試、Ch2-Ch7與selected
   Ch14-Ch19，並移除學生不需要的教學設計分類名稱與分鐘配置。
-- [ ] 確認任課教師姓名的官方英文拼法。
+- [x] 任課教師官方英文姓名確認為`WenYi Lee`。
 - [x] 正式DBMS定為SQLite 3；現有教材以SQLite 3.45.3驗證，允許相容SQLite介面。
 - [x] 已建立學生SQLite操作說明、package allow-list、build script、逐檔hash
   manifest及ZIP；2026-08-27由乾淨臨時目錄執行Ch2-Ch7與Ch14-Ch17全部通過。
 - [x] `package_files.json`已指定SQL labs、schema、sample data、diagrams及Ch17
   schedule files的權威發布清單；chapter source仍是內容維護來源。
 - [x] 教師於2026-08-27核准目前SQLite ZIP與student README供本課程發布使用。
-- [ ] 決定學生套件在LMS或校內系統的實際發布位置並上傳。
+- [x] 已建立GitHub remote並將基準commit `b204458`推送至`origin/main`。
+- [x] 已建立`working_materials/pre_instructor_review_audit.md`，記錄全課程來源、
+  一致性、執行、套件與發布安全檢查。
+- [x] 教師已決定Week 9複習Ch2-Ch5、English-only學生教材、縮減Ch15-Ch16與
+  Ch18-Ch19課堂核心、官方英文姓名及GitHub選擇性公開方向；決定已套用。
+- [x] Ch2-Ch7與Ch14-Ch19的`student_guide.md`已改寫為English-only prose。
+- [ ] 教師完成英文學生教材的內容與語言審閱；在此之前不得把全部逐章教材標示為
+  student-ready。
+- [ ] 逐項建立GitHub公開allow-list並決定公開時機；之後另建public repository或
+  allow-listed release artifact，未核准檔案不得移出現行private repository。
 - [ ] 完成三次考試藍圖、題型、允許資源、AI規則與評分方式。
 - [ ] 決定課堂排序使用既有平台或自建系統，並測試30人、6組、匿名展示、
   排除自己組及原始資料匯出。
 
 ## Primary next action
 
-下一步是決定SQLite學生套件在LMS或校內系統的固定下載位置並上傳已核准ZIP，因為
-內容審閱、操作說明與clean verification均已完成，但學生尚無固定取得位置。預期
-成果是可供本課學生下載的連結；完成條件是下載所得ZIP hash與manifest一致，並能
-依README在乾淨環境通過Ch2-Ch7與Ch14-Ch17全部活動。
+下一步是由教師優先審閱縮減後的Ch15-Ch16與Ch18-Ch19英文學生教材，再抽查Ch2、
+Ch3及Ch17的英文技術表述。這些檔案最直接影響Exam 3範圍與學生自行閱讀，應先於
+GitHub公開。預期成果是教師留下可執行的修正或明確核准；完成條件是課堂核心與延伸
+界線、英文術語及範例均獲確認，並建立第一批GitHub公開allow-list及獨立公開位置。

@@ -18,18 +18,18 @@
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 14, printed pages 623-678, Sections 14.1-14.11. Exercises and further reading
   were inspected for context but not copied.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch14.pdf`, slides
-  14.1-14.82.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch14.pdf`, all 81 PDF
+  pages.
 - Current governance, revised syllabus, chapter-material prompt, completed Chapters
   2-7 materials, and SQLite 3.45.3 behavior.
 
 ## Scope decision
 
-Required instruction covers index purpose and search keys; evaluation criteria;
-ordered indices; clustering/secondary and dense/sparse distinctions; B+ tree structure,
-equality lookup, range traversal, and conceptual split/merge behavior; a short ordered-
-versus-hash comparison; composite key order; covering indices; index selection;
-`CREATE INDEX`/`DROP INDEX`; and evidence-based `EXPLAIN QUERY PLAN` interpretation.
+Required instruction covers index purpose and search keys; workload-based evaluation;
+B+ tree structure, equality lookup, and range traversal; composite key order; covering
+indices; index selection; `CREATE INDEX`/`DROP INDEX`; and evidence-based
+`EXPLAIN QUERY PLAN` interpretation. Clustering/secondary and dense/sparse distinctions,
+conceptual split/merge behavior, and the ordered-versus-hash comparison are extensions.
 
 Complete B+ tree insertion/deletion pseudocode and complexity derivations, B-tree
 details, file organization, string compression, bulk loading, flash/main-memory
@@ -66,7 +66,7 @@ are supplementary. Hashing is a short comparison only.
 | C14.04 | dense/sparse | 14.2.1, pp. 626-628; slides 14.6-14.10 | three data blocks | find missing key and update block entry |
 | C14.05 | B+ tree structure/balance | 14.3.1, pp. 634-637; slides 14.18-14.22 | original three-leaf diagram | trace three keys |
 | C14.06 | equality/range lookup | 14.3.2, pp. 637-640; slides 14.23-14.29 | key 50 and range 45-80 | produce range 25-75 and stop condition |
-| C14.07 | split/merge concept | 14.3.3-14.3.4, pp. 641-649; slides 14.30-14.46 | insert 65 and promote 60 | propagate split to a new root |
+| C14.07 | split/merge concept | 14.3.3-14.3.4, pp. 641-649; slides 14.30-14.45 | insert 65 and promote 60 | propagate split to a new root |
 | C14.08 | ordered/hash comparison | 14.1 and 14.5, pp. 624, 658-661; slides 14.52-14.59 | modulo buckets versus range | choose for token/date queries |
 | C14.09 | composite index order | 14.2.5 and 14.6.2, pp. 633-634, 662-663; slides 14.16, 14.61-14.62 | customer/date query | classify four dept/salary predicates |
 | C14.10 | covering index | 14.6.3, p. 663; slide 14.63 | add amount to index | evaluate adding status |
@@ -97,7 +97,8 @@ py -3 working_materials/chapters/ch14_indexing/instructor/verify_ch14.py
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
 - SQLite 3 is the course DBMS; these materials are verified with SQLite 3.45.3.
 - Classroom workload and students' prior tree knowledge have not been observed.
 - `COURSE_PLAN.md` governs Chapter 14 scope and assessment boundaries.
@@ -106,8 +107,8 @@ py -3 working_materials/chapters/ch14_indexing/instructor/verify_ch14.py
 
 - Files created: student guide, SQL lab, maintained SVG, PNG renderer, instructor
   source/alignment record, and verifier.
-- Source verification: complete for textbook printed pages 623-678 and slides
-  14.1-14.82.
+- Source verification: complete for textbook printed pages 623-678 and all 81 pages
+  of the local official slide PDF.
 - Executed content: deterministic data generation; no-index scan; composite
   customer/date index search; ordered result; covering-index plan; low-selectivity
   status scan; SVG parsing; PNG rendering; and visual inspection.

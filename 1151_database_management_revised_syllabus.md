@@ -10,7 +10,7 @@ Revised: August 27, 2026
 | Course Title | Database Management |
 | Target Students | Second-year undergraduate students in Information Management |
 | Credits and Contact Hours | 3 credits; 3 contact hours per week |
-| Instructor | Wen-Yi Lee (official English spelling to be confirmed) |
+| Instructor | WenYi Lee |
 | Class Time | Thursdays, Periods 5-7, 1:30-4:15 p.m. |
 | Primary Text | *Database System Concepts*, 7th Edition |
 | Lab Environment | SQLite 3; course materials have been verified with SQLite 3.45.3, and students may use a compatible SQLite interface |
@@ -31,6 +31,8 @@ Comparisons are used to develop judgment and explanation skills. A group's avera
 
 SQLite is the required lab environment. Topics that SQLite does not implement or expose fully, including stored routines, server-side isolation behavior, deadlock inspection, and recovery internals, will be taught through conceptual examples, schedules, logs, or verified instructional programs. Students are not required to install a server DBMS.
 
+All official student-facing course materials use English prose and standard database terminology.
+
 ## Weekly Schedule
 
 | Week | Date | Topics and Activities | Primary Learning Evidence |
@@ -43,14 +45,14 @@ SQLite is the required lab environment. Topics that SQLite does not implement or
 | 6 | October 15, 2026 | Written Exam 1: Chapters 2-4; error analysis and correction | Written Exam 1 and correction sheet |
 | 7 | October 22, 2026 | Selected Chapter 5 topics: window ranking, recursive CTEs, one row-level audit trigger, and the purposes of stored routines | Advanced SQL exercise and execution evidence |
 | 8 | October 29, 2026 | Entities, attributes, relationships, cardinality, participation, and keys in the E-R model | E-R diagram draft |
-| 9 | November 5, 2026 | Instructor travel, November 1-7; no in-person class, examination, or new content. Asynchronous review of Chapters 2-6 and an individual concept check | Asynchronous review record |
+| 9 | November 5, 2026 | Instructor travel, November 1-7; no in-person class, examination, or new content. Asynchronous review of Chapters 2-5 and an individual SQL and concept check | Asynchronous review record |
 | 10 | November 12, 2026 | E-R design decisions, redundancy, E-R-to-relational mapping, and verification of an AI-generated E-R diagram | Revised E-R diagram, relational schema, and individual revision |
 | 11 | November 19, 2026 | Design anomalies, functional dependencies, attribute closure, binary lossless decomposition, and introductory 3NF/BCNF decisions | Functional-dependency table, decomposition exercise, and individual revision |
 | 12 | November 26, 2026 | Written Exam 2: selected topics from Chapters 5-7; error analysis and correction | Written Exam 2 and correction sheet |
 | 13 | December 3, 2026 | Index use, B+ tree equality and range access, composite-column order, covering indexes, and query-plan evidence | Index design and before/after query-plan evidence |
-| 14 | December 10, 2026 | Scans and index searches, logical and physical plans, join order, selectivity, statistics, skew, safe query rewrites, and verification of an AI index recommendation | Query-plan interpretation and individual revision |
+| 14 | December 10, 2026 | Scans and index searches, query-plan access order, result-equivalence checks, basic selectivity, catalog statistics, `ANALYZE`, and verification of an AI index recommendation | Query-plan interpretation and individual revision |
 | 15 | December 17, 2026 | Transaction boundaries, ACID properties, schedules, conflicts, small precedence graphs, basic recoverability, and isolation phenomena | Transaction and isolation analysis |
-| 16 | December 24, 2026 | S/X locks, two-phase locking, wait-for graphs and deadlocks; failure classification, write-ahead logging, redo/undo, backup, and comprehensive review | Concurrency and recovery analysis; final review record |
+| 16 | December 24, 2026 | S/X lock compatibility, grant-or-wait decisions, wait-for graphs and deadlocks; log records, write-ahead logging, one simplified redo/undo case, and comprehensive review | Concurrency and recovery analysis; final review record |
 | 17 | December 31, 2026 | University anniversary make-up holiday; no class | None |
 | 18 | January 7, 2027 | Written Exam 3 and course final examination: selected topics from Chapters 14-19, with cumulative application of SQL and database design concepts | Written Exam 3 |
 

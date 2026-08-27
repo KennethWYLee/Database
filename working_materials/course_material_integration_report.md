@@ -1,7 +1,8 @@
 # 資料庫管理逐章教材整合報告
 
 日期：2026-08-27
-狀態：Ch2-Ch7、Ch14-Ch19初稿及自動驗證完成；尚未核准發布
+狀態：Ch2-Ch7、Ch14-Ch19已改寫為English-only學生教材，仍待教師內容審閱；
+SQLite學生套件已核准供本課發布
 
 ## 1. 完成範圍
 
@@ -15,10 +16,10 @@
 | 7 | `chapters/ch07_normalization/` | anomalies、FDs、lossless decomposition、3NF/BCNF | Pass |
 | 14 | `chapters/ch14_indexing/` | index use、B+ tree access、composite/covering index、plan evidence | Pass |
 | 15 | `chapters/ch15_query_processing/` | logical/physical plan、scans、index searches與join order | Pass |
-| 16 | `chapters/ch16_query_optimization/` | safe rewrites、outer-join counterexample、statistics與skew | Pass |
+| 16 | `chapters/ch16_query_optimization/` | equivalence、basic selectivity、statistics、`ANALYZE`與plan evidence | Pass |
 | 17 | `chapters/ch17_transactions/` | boundaries、ACID、schedules、small precedence graphs、isolation | Pass |
-| 18 | `chapters/ch18_concurrency_control/` | S/X locks、2PL、wait-for graph與deadlock | Pass |
-| 19 | `chapters/ch19_recovery_system/` | failures、WAL、redo/undo、basic checkpoint與backup+log | Pass |
+| 18 | `chapters/ch18_concurrency_control/` | S/X locks、grant/wait、wait-for graph與deadlock | Pass |
+| 19 | `chapters/ch19_recovery_system/` | failure distinction、log records、WAL與simplified redo/undo | Pass |
 
 每個目錄均有 `README.md`、`student_guide.md`、instructor-only
 `coverage_and_verification.md`、至少一項可執行活動，以及獨立 verifier。Ch6與Ch14
@@ -82,26 +83,27 @@ restore、remote failover及ARIES。
 - 生成內容：18個核准chapter assets，加上README、runner及manifest，共21個files。
 - 生成ZIP：`working_materials/student_sqlite_package/output/sqlite_course_package.zip`。
 - 2026-08-27驗證ZIP SHA-256：
-  `256d97bd2c93e62cb08ec898531c42739d93c1a1acb73c8efa93caa2afe2296a`。
+  `52f8749d9a7b2a72c16c83488c930e52c1a85b68430144da390692ea7730e577`。
 - Manifest逐檔bytes與SHA-256檢查通過；ZIP未包含instructor、answer、solution、
   assessment、`__pycache__`或prebuilt database files。
 - ZIP已解壓至乾淨臨時目錄，使用Python 3.12.9及SQLite 3.45.3重建並通過
   Ch2-Ch7、Ch14-Ch17共10組activities；Ch17 schedule analyzer亦執行通過。
-- 教師於2026-08-27核准目前ZIP與student README供本課程發布使用；尚未上傳LMS
-  或其他校內系統。
+- 教師於2026-08-27核准目前ZIP與student README供本課程使用；現行GitHub course
+  repository已確認為private。未來只在另一個public repository或allow-listed release
+  artifact放入核准檔案；本次未公開、上傳或push。
 
-## 6. 仍待決定
+## 6. 仍待執行
 
-1. Student-facing prose維持「繁體中文說明加English technical terms」，或改成
-   English-only。
-2. SQLite學生套件在LMS或校內系統的實際發布位置。
-3. 從實際下載位置重新核對ZIP hash與manifest。
-4. 三次考試藍圖、允許資源、AI規則與rubric。
-5. Instructor official English name spelling。
-6. 逐章student guides的課堂核心與課後延伸標示仍需教師做最後語言審閱。
+1. 教師審閱English-only逐章student guides的內容、術語及核心/延伸標示。
+2. 建立第一批GitHub公開allow-list、獨立public repository或release artifact，並決定
+   公開時機；未核准檔案維持在現行private repository。
+3. 從未來實際GitHub下載位置重新核對ZIP hash與manifest。
+4. 完成三次考試藍圖、允許資源、AI規則與rubric。
+5. 選擇並測試課堂匿名展示及排序平台。
 
 ## 7. Primary Next Action
 
-依 `PROJECT.md`，下一步是決定SQLite學生套件在LMS或校內系統的固定下載位置並
-上傳已核准ZIP。預期成果是可供本課學生下載的連結；完成條件是從該位置取得的
-ZIP hash與manifest一致，並能依README在乾淨環境通過全部10組activities。
+依 `PROJECT.md`與`pre_instructor_review_audit.md`，下一步是教師優先審閱縮減後的
+Ch15-Ch16與Ch18-Ch19英文學生教材，再抽查Ch2、Ch3及Ch17。預期成果是明確修正或
+核准；完成條件是核心/延伸界線、英文術語及範例均確認，並建立第一批GitHub公開
+allow-list及獨立公開位置。

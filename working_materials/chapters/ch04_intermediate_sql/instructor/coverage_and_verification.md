@@ -14,8 +14,8 @@
 
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 4, printed pages 125-174, including Sections 4.1-4.7 and the summary.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch4.pdf`, slides
-  4.1-4.61.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch4.pdf`, all 58 PDF
+  pages.
 - Current `AGENTS.md`, `PROJECT.md`, revised syllabus, `COURSE_PLAN.md`, chapter-material
   prompt, Chapter 2 setup, Chapter 3 lab, existing SQL labs, and historical plan.
 
@@ -24,7 +24,7 @@
 Required instruction includes explicit inner joins; `ON` and `USING`; the risk of
 `NATURAL JOIN`; left outer joins; `ON` versus `WHERE` with outer joins; view definition
 and querying; live base-data reflection; basic transaction boundaries;
-basic transaction boundaries and atomicity; `NOT NULL`, `UNIQUE`, `CHECK`, foreign
+atomicity; `NOT NULL`, `UNIQUE`, `CHECK`, foreign
 keys, and referential actions.
 
 Materialized views, deferred constraints, assertions, and authorization are conceptual
@@ -68,7 +68,7 @@ taught and practiced.
 | C4.02 | `USING` | 4.1.1, pp. 129-130; slides 4.4-4.5 | course-department query | Rewrite with `ON`; compare four rows |
 | C4.03 | `NATURAL JOIN` risk | 4.1.1, pp. 128-130; slides 4.5-4.7 | cross-department enrollment disappears | Explain five versus six rows |
 | C4.04 | inner versus outer join | 4.1.3-4.1.4, pp. 131-136; slides 4.8-4.17 | unmatched IS250 | Add unmatched student; expect count zero |
-| C4.05 | right and full outer join | 4.1.3, pp. 132-135; slides 4.10-4.12 | planned-student tables | Identify matched, left-only, and right-only rows |
+| C4.05 | right and full outer join | 4.1.3, pp. 132-135; slide 4.9 | planned-student tables | Identify matched, left-only, and right-only rows |
 | C4.06 | outer join `ON` versus `WHERE` | 4.1.3, pp. 134-135 | A/A- courses | Explain five versus four rows using `NULL` |
 | C4.07 | view definition and use | 4.2.1-4.2.2, pp. 137-140; slides 4.18-4.24 | course summary view | Create and query `im_course` |
 | C4.08 | view reflects base data | 4.2.2, pp. 139-140 | DB201 count 2, then 3, then 2 | Add and roll back base row |
@@ -122,8 +122,9 @@ py -3 working_materials/chapters/ch04_intermediate_sql/instructor/verify_ch04.py
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
-- Student SQLite distribution and interface instructions are not yet fixed. Executed
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
+- The approved SQLite student package supplies the runner and SQL files. Executed
   right/full join examples require SQLite 3.39 or later but are supplementary.
 - Classroom workload and accessibility have not yet been observed with actual students.
 - `COURSE_PLAN.md` governs Chapter 4 scope and assessment dates.
@@ -132,8 +133,8 @@ py -3 working_materials/chapters/ch04_intermediate_sql/instructor/verify_ch04.py
 
 - Files created: student guide, executable lab, instructor coverage and guidance, and
   automated verifier.
-- Source verification: complete for the textbook's printed pages 125-174 and slides
-  4.1-4.61.
+- Source verification: complete for the textbook's printed pages 125-174 and all 58
+  pages of the local official slide PDF.
 - Executed content: the complete student lab; explicit, `USING`, and natural joins;
   left, right, and full outer joins; `ON` versus `WHERE`; view re-evaluation and the
   failed aggregate-view update; explicit transaction rollback; independent constraint

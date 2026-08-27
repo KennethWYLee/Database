@@ -14,6 +14,7 @@
 /working_materials/*
 !/working_materials/README.md
 !/working_materials/course_material_integration_report.md
+!/working_materials/pre_instructor_review_audit.md
 
 !/working_materials/chapters/
 /working_materials/chapters/*

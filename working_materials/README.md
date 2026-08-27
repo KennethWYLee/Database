@@ -6,9 +6,11 @@
 
 | 位置 | 內容 |
 |---|---|
+| `chapters/` | Ch2-Ch7與Ch14-Ch19的學生教材、活動及教師驗證紀錄 |
 | `sql_labs/university_db` | `smallRelationsInsertFile.sql`, `largeRelationsInsertFile.sql`, `univdb-sqlite.db` |
 | `assessments/reference_midterm` | 舊期中考題、答案、公版 PDF/DOC |
 | `student_sqlite_package` | 學生SQLite套件allow-list、操作說明、build script、output資料夾與ZIP |
+| `pre_instructor_review_audit.md` | 教師審閱前的一致性、完整性、執行與發布邊界檢查 |
 
 ## 使用原則
 

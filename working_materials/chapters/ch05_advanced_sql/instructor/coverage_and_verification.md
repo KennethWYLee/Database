@@ -16,8 +16,8 @@
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 5, printed pages 183-232, Sections 5.1-5.6, plus the chapter examples and
   implementation notes needed to interpret portability limits.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch5.pdf`, slides
-  5.1-5.54. The local deck ends after recursive-query material and does not contain
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch5.pdf`, all 47 PDF
+  pages. The local deck ends after recursive-query material and does not contain
   the Chapter 5 advanced-aggregation slides promised by its outline.
 - Current governance, revised syllabus, `COURSE_PLAN.md`, chapter-material prompt,
   Chapter 2 setup, Chapters 3-4 materials, existing SQL labs, and the historical plan.
@@ -122,7 +122,8 @@ py -3 working_materials/chapters/ch05_advanced_sql/instructor/verify_ch05.py
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
 - SQLite 3 is the course DBMS and does not install stored routines through SQL; routine
   reference code is conceptual and is not a required executable activity.
 - Classroom workload and accessibility have not yet been observed with actual students.
@@ -132,8 +133,8 @@ py -3 working_materials/chapters/ch05_advanced_sql/instructor/verify_ch05.py
 
 - Files created: student guide, executable lab, non-executable SQL/PSM routine
   reference, instructor coverage record, and automated verifier.
-- Source verification: complete for textbook printed pages 183-232 and slides
-  5.1-5.54.
+- Source verification: complete for textbook printed pages 183-232 and all 47 pages
+  of the local official slide PDF.
 - Executed content: the complete student lab; equivalent routine-body results;
   reversible procedure-body modification; audit trigger including null-safe/no-op and
   rollback behavior; recursive closure and depth; tie-aware ranking; partitioned running

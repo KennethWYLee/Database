@@ -14,8 +14,8 @@
 
 - Silberschatz, Korth, and Sudarshan, *Database System Concepts*, 7th Edition,
   Chapter 3, printed pages 65-114, including Sections 3.1-3.10 and Notes 3.1-3.3.
-- Official slide deck `from_11001_DB/PowerPoint Presentations/ch3.pdf`, slides
-  3.1-3.62.
+- Official slide deck `from_11001_DB/PowerPoint Presentations/ch3.pdf`, all 62 PDF
+  pages.
 - Current course governance, revised syllabus, `COURSE_PLAN.md`, chapter-material
   prompt, Chapter 2 dataset, and historical Week 3-4 activity descriptions.
 
@@ -134,8 +134,10 @@ py -3 working_materials/chapters/ch03_introduction_to_sql/instructor/verify_ch03
 
 ## Remaining limits before student release
 
-- Instructor must confirm bilingual versus English-only student prose.
-- Student SQLite distribution and interface instructions are not yet fixed.
+- The instructor selected English-only student prose on August 27, 2026. The rewritten
+  guide still requires final instructor content and language review before publication.
+- The approved SQLite student package supplies the runner and SQL files; compatible
+  SQLite interfaces remain acceptable as stated in the syllabus.
 - Classroom workload and accessibility have not yet been observed with actual students.
 - `COURSE_PLAN.md` governs Chapter 3 dates, required scope, and assessment boundaries.
 
@@ -143,8 +145,8 @@ py -3 working_materials/chapters/ch03_introduction_to_sql/instructor/verify_ch03
 
 - Files created: student guide, executable lab, instructor coverage and guidance, and
   automated verifier.
-- Source verification: complete for the textbook's printed pages 65-114 and slides
-  3.1-3.62.
+- Source verification: complete for the textbook's printed pages 65-114 and all 62
+  pages of the local official slide PDF.
 - Executed content: the complete student lab plus independent checks for all documented
   query results, `NULL` behavior, constraints, and reversible modifications.
 - Unexecuted content: supplementary `SOME`/`ALL`, `UNIQUE`, `LATERAL`, scalar-without-
