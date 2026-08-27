@@ -1,0 +1,22 @@
+{
+  "valid": [
+    {"action": "CREATE_UPDATE_LOG", "lsn": 1, "transaction": "T0", "item": "A"},
+    {"action": "FORCE_LOG", "through_lsn": 1},
+    {"action": "FLUSH_DATA", "item": "A"},
+    {"action": "CREATE_COMMIT_LOG", "lsn": 2, "transaction": "T0"},
+    {"action": "FORCE_LOG", "through_lsn": 2},
+    {"action": "ACK_COMMIT", "transaction": "T0"}
+  ],
+  "invalid_data_before_log": [
+    {"action": "CREATE_UPDATE_LOG", "lsn": 1, "transaction": "T0", "item": "A"},
+    {"action": "FLUSH_DATA", "item": "A"},
+    {"action": "FORCE_LOG", "through_lsn": 1}
+  ],
+  "invalid_commit_before_force": [
+    {"action": "CREATE_UPDATE_LOG", "lsn": 1, "transaction": "T0", "item": "A"},
+    {"action": "FORCE_LOG", "through_lsn": 1},
+    {"action": "CREATE_COMMIT_LOG", "lsn": 2, "transaction": "T0"},
+    {"action": "ACK_COMMIT", "transaction": "T0"},
+    {"action": "FORCE_LOG", "through_lsn": 2}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "compatible_reads": [
+    {"transaction": "T1", "action": "LOCK", "mode": "S", "item": "A"},
+    {"transaction": "T2", "action": "LOCK", "mode": "S", "item": "A"},
+    {"transaction": "T1", "action": "COMMIT"},
+    {"transaction": "T2", "action": "COMMIT"}
+  ],
+  "writer_waits": [
+    {"transaction": "T1", "action": "LOCK", "mode": "S", "item": "A"},
+    {"transaction": "T2", "action": "LOCK", "mode": "X", "item": "A"},
+    {"transaction": "T1", "action": "COMMIT"},
+    {"transaction": "T2", "action": "COMMIT"}
+  ],
+  "deadlock": [
+    {"transaction": "T1", "action": "LOCK", "mode": "X", "item": "A"},
+    {"transaction": "T2", "action": "LOCK", "mode": "X", "item": "B"},
+    {"transaction": "T1", "action": "LOCK", "mode": "X", "item": "B"},
+    {"transaction": "T2", "action": "LOCK", "mode": "X", "item": "A"}
+  ],
+  "violates_two_phase": [
+    {"transaction": "T1", "action": "LOCK", "mode": "S", "item": "A"},
+    {"transaction": "T1", "action": "UNLOCK", "item": "A"},
+    {"transaction": "T1", "action": "LOCK", "mode": "X", "item": "B"},
+    {"transaction": "T1", "action": "COMMIT"}
+  ],
+  "basic_two_phase_not_strict": [
+    {"transaction": "T1", "action": "LOCK", "mode": "X", "item": "A"},
+    {"transaction": "T1", "action": "LOCK", "mode": "S", "item": "B"},
+    {"transaction": "T1", "action": "UNLOCK", "item": "A"},
+    {"transaction": "T1", "action": "UNLOCK", "item": "B"},
+    {"transaction": "T1", "action": "COMMIT"}
+  ]
+}

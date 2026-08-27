@@ -1,0 +1,28 @@
+{
+  "checkpoint_lsn": 1,
+  "disk_at_crash": {
+    "A": 950,
+    "B": 2000,
+    "C": 600
+  },
+  "log": [
+    {"lsn": 1, "type": "CHECKPOINT", "active": []},
+    {"lsn": 2, "type": "START", "transaction": "T0"},
+    {"lsn": 3, "type": "UPDATE", "transaction": "T0", "item": "A", "old": 1000, "new": 950},
+    {"lsn": 4, "type": "UPDATE", "transaction": "T0", "item": "B", "old": 2000, "new": 2050},
+    {"lsn": 5, "type": "COMMIT", "transaction": "T0"},
+    {"lsn": 6, "type": "START", "transaction": "T1"},
+    {"lsn": 7, "type": "UPDATE", "transaction": "T1", "item": "C", "old": 700, "new": 600}
+  ],
+  "archival_backup": {
+    "A": 1000,
+    "B": 2000,
+    "C": 700
+  },
+  "committed_log_after_backup": [
+    {"lsn": 2, "type": "START", "transaction": "T0"},
+    {"lsn": 3, "type": "UPDATE", "transaction": "T0", "item": "A", "old": 1000, "new": 950},
+    {"lsn": 4, "type": "UPDATE", "transaction": "T0", "item": "B", "old": 2000, "new": 2050},
+    {"lsn": 5, "type": "COMMIT", "transaction": "T0"}
+  ]
+}
