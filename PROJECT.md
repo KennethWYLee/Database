@@ -6,9 +6,9 @@
 - 最後更新日期：2026-08-28
 - 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
   教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材；
-  2026-08-28完成並驗證依18週導覽的本機學生repository預覽
+  2026-08-28完成並驗證一章一份教材、由單一schedule導覽的本機學生repository預覽
 - Repository：本資料夾是獨立 Git repository；`main`追蹤GitHub的`origin/main`，
-  目前已推送的基準commit為`2f3a307`
+  最新commit以Git history為準
 - 文件可見性：混合；歷屆考題、答案、評分資料及教師手冊不得直接發布
 
 ## 課程定位與對象
@@ -152,12 +152,16 @@
   repository層級，不能在同一private repository內把個別檔案單獨設為public。
   未來應建立另一個public repository或只發布allow-listed release artifact，僅放入
   教師逐項核准的檔案；未核准內容維持在現行private repository。
-- 基準commit `2f3a307`已推送，內容是經allow-list檢查的治理文件、課綱、課程
-  計畫、Ch2-Ch7與Ch14-Ch19教材、驗證程式、核准的SQLite學生套件及教師審閱前
-  audit。
-- 2026-08-28依教師決定參考FinTech課程的週次入口，新增可重複建置的本機學生
-  repository預覽。預覽只有簡短首頁、英文課綱、18週索引、每週頁面及`resources/`；
-  chapter guides與SQLite labs由現有維護來源及allow-list複製，不自動發布。
+- `main`已推送，內容是經allow-list檢查的治理文件、課綱、課程
+  計畫、Ch2-Ch7與Ch14-Ch19教材、驗證程式、核准的SQLite學生套件、教師審閱前
+  audit及第一版學生repository builder。
+- 2026-08-28依教師後續決定，學生repository改採「一章一份教材」而非每週一份
+  文件。預覽只有簡短首頁、英文課綱、單一`SCHEDULE.md`、`run_labs.py`及12個
+  chapter directories；每章只有一份`README.md`主教材及核准的支援檔案。同一份
+  章節教材可以供一週或兩週使用，schedule只指定各週範圍，不自動發布。
+- Private GitHub的`student-preview` branch只保存builder產生的學生檔案，供教師在
+  GitHub檢查最終導覽與樹狀結構；它是derived review copy，不是維護來源、public
+  release或授權全部內容公開。修改仍須在`main`的maintained source完成後重新生成。
 - `.gitignore`維持private-by-default。歷史來源、教科書、考題、答案、評分資料、
   暫存檔、prebuilt databases及發布來源未確認的資料不在Git追蹤範圍。
 - 新增檔案仍須逐項檢查版權、答案、教師手冊、個資、憑證、檔案大小及發布
@@ -179,19 +183,21 @@
 - [x] `package_files.json`已指定SQL labs、schema、sample data、diagrams及Ch17
   schedule files的權威發布清單；chapter source仍是內容維護來源。
 - [x] 教師於2026-08-27核准目前SQLite ZIP與student README供本課程發布使用。
-- [x] 已建立GitHub remote並將基準commit `b204458`推送至`origin/main`。
+- [x] 已建立GitHub remote，`main`已追蹤`origin/main`。
 - [x] 已建立`working_materials/pre_instructor_review_audit.md`，記錄全課程來源、
   一致性、執行、套件與發布安全檢查。
 - [x] 教師已決定Week 9複習Ch2-Ch5、English-only學生教材、縮減Ch15-Ch16與
   Ch18-Ch19課堂核心、官方英文姓名及GitHub選擇性公開方向；決定已套用。
 - [x] Ch2-Ch7與Ch14-Ch19的`student_guide.md`已改寫為English-only prose。
-- [x] 已建立簡化學生repository的本機預覽builder；54個檔案、35個Markdown、
-  18個週次頁面、學生可見英文與本地連結檢查通過，10組SQLite activities在乾淨
-  暫存複本全部通過。
+- [x] 已將學生repository預覽改為一章一份教材；目前生成36個檔案、17個
+  Markdown、1份`SCHEDULE.md`及12份chapter `README.md`，學生可見英文、檔案與
+  heading links檢查通過，10組SQLite activities在`chapters/`乾淨暫存複本全部通過。
+- [x] 共用`run_labs.py`已驗證同時支援學生repository的`chapters/`及SQLite ZIP的
+  `materials/`；2026-08-28重建ZIP後10組activities通過。
 - [ ] 教師完成英文學生教材的內容與語言審閱；在此之前不得把全部逐章教材標示為
   student-ready。
-- [ ] 教師審閱學生repository首頁、18週索引與代表週次頁面，確認後再決定public
-  repository名稱、建立時間及GitHub Release方式。
+- [ ] 教師審閱學生repository首頁、`SCHEDULE.md`與代表章節教材，確認後再決定
+  public repository名稱、建立時間及GitHub Release方式。
 - [ ] 逐項建立GitHub公開allow-list並決定公開時機；之後另建public repository或
   allow-listed release artifact，未核准檔案不得移出現行private repository。
 - [ ] 完成三次考試藍圖、題型、允許資源、AI規則與評分方式。
@@ -200,8 +206,8 @@
 
 ## Primary next action
 
-教師已明確要求先簡化學生使用路徑，因此下一步改為審閱生成後的學生repository首頁、
-18週索引、Week 1、Week 9、Week 14及Week 17頁面，再抽查Ch15-Ch16與Ch18-Ch19
-英文閱讀。預期成果是核准或修正學生導覽及高負荷週次；完成條件是學生能從首頁兩次
-點擊內找到本週reading、practice或lab、evidence要求，且教師核准第一批public
-allow-list與獨立repository名稱。
+教師已明確要求學生版維持一章一份教材，因此下一步是審閱生成後的首頁、
+`SCHEDULE.md`，再抽查Ch2、Ch3、Ch6、Ch15-Ch16與Ch18-Ch19。預期成果是核准或
+修正章節份量、兩週分界與高負荷週次；完成條件是學生能從首頁經schedule直接找到
+本週章節、範圍、lab及教材內的evidence要求，且教師核准第一批public allow-list與
+獨立repository名稱。

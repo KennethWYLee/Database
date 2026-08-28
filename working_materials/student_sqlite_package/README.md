@@ -52,5 +52,6 @@ to the complete repository. This build does not publish, upload, change visibili
 select the public allow-list.
 
 The student repository builder in `../student_repository/` reuses this allow-list and
-places the runner and materials under its generated `resources/` directory. It does not
-change this package or its approval boundary.
+places each guide and its approved files under a generated `chapters/` directory. The
+shared runner supports both that layout and this package's `materials/` layout. This does
+not change the package's approval boundary.

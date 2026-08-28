@@ -108,92 +108,66 @@ def validate_config(config: dict) -> None:
     numbers = [week["week"] for week in weeks]
     if numbers != list(range(1, 19)):
         raise ValueError(f"Weeks must be ordered 1 through 18; received {numbers}")
+
+    chapter_targets = {item["target"] for item in config["chapter_readings"]}
+    if len(chapter_targets) != len(config["chapter_readings"]):
+        raise ValueError("Chapter reading targets must be unique")
+    for target in chapter_targets:
+        parts = PurePosixPath(target).parts
+        if len(parts) != 3 or parts[0] != "chapters" or parts[2] != "README.md":
+            raise ValueError(f"Chapter guide must target chapters/<chapter>/README.md: {target}")
+
     for week in weeks:
-        for key in ("date", "title", "summary", "readings", "activities", "commands", "evidence", "next"):
+        for key in ("date", "title", "materials", "coverage"):
             if key not in week:
                 raise KeyError(f"Week {week['week']} is missing {key}")
-    targets = [item["target"] for item in config["chapter_readings"]]
-    if len(targets) != len(set(targets)):
-        raise ValueError("Chapter reading targets must be unique")
+        for material in week["materials"]:
+            if material["path"] not in chapter_targets:
+                raise ValueError(
+                    f"Week {week['week']} links an unknown chapter guide: {material['path']}"
+                )
 
 
-def render_course_index(config: dict) -> str:
+def render_schedule(config: dict) -> str:
     lines = [
-        "# Database Management Course",
+        "# Course Schedule",
         "",
-        "Select the current week. Each page identifies the required reading, practice or lab,",
-        "evidence to retain, and connection to the next week.",
+        "The schedule identifies the chapter and coverage for each week. A chapter guide may",
+        "be used for more than one week; continue with the coverage listed in the table instead",
+        "of looking for a separate weekly document.",
         "",
-        "## Weekly Materials",
-        "",
-        "| Week | Date | Topic |",
+        "| Week | Date | Topic, material, and coverage |",
         "|---:|---|---|",
     ]
     for week in config["weeks"]:
-        folder = f"{week['week']:02d}"
+        if week["materials"]:
+            materials = ", ".join(
+                f"[{item['label']}]({item['path']})" for item in week["materials"]
+            )
+        else:
+            materials = "None"
         lines.append(
-            f"| [{week['week']}]({folder}/README.md) | {week['date']} | {week['title']} |"
+            f"| {week['week']} | {week['date']} | **{week['title']}**<br>"
+            f"Material: {materials}<br>Coverage: {week['coverage']} |"
         )
     lines.extend(
         [
             "",
-            "The [course syllabus](../SYLLABUS.md) governs assessment, attendance, and course",
-            "requirements. The [resources guide](../resources/README.md) explains the shared",
-            "SQLite environment and chapter files.",
+            "The [course syllabus](SYLLABUS.md) governs assessment, attendance, and course",
+            "requirements. The [chapter index](chapters/README.md) explains the shared SQLite",
+            "environment and links every selected chapter.",
             "",
-            "[Back to the repository home](../README.md)",
+            "[Back to the repository home](README.md)",
         ]
     )
     return "\n".join(lines)
 
 
-def render_week(week: dict) -> str:
-    lines = [
-        f"# Week {week['week']} - {week['title']}",
-        "",
-        f"**Date:** {week['date']}",
-        "",
-        "## This Week",
-        "",
-        week["summary"],
-        "",
-        "## Read",
-        "",
-    ]
-    if week["readings"]:
-        for reading in week["readings"]:
-            lines.append(f"- [{reading['label']}]({reading['path']})")
-    else:
-        lines.append("No required reading is assigned.")
-
-    lines.extend(["", "## Practice and Run", ""])
-    for activity in week["activities"]:
-        lines.append(f"- {activity}")
-    if week["commands"]:
-        lines.extend(["", "Run the following command or commands from the repository root:", "", "```powershell"])
-        lines.extend(week["commands"])
-        lines.append("```")
-    else:
-        lines.extend(["", "No automated SQLite command is required this week."])
-
-    lines.extend(["", "## Evidence to Retain", ""])
-    if week["evidence"]:
-        for item in week["evidence"]:
-            lines.append(f"- {item}")
-    else:
-        lines.append("No course evidence is required this week.")
-
-    lines.extend(
-        [
-            "",
-            "## Next Week",
-            "",
-            week["next"],
-            "",
-            "[Back to the 18-week course index](../README.md)",
-        ]
-    )
-    return "\n".join(lines)
+def package_target_to_chapter(target: str) -> str:
+    parts = PurePosixPath(target).parts
+    if len(parts) < 3 or parts[0] != "materials":
+        raise ValueError(f"SQLite package target does not begin with materials/: {target}")
+    return PurePosixPath("chapters", *parts[1:]).as_posix()
 
 
 def build_preview(config: dict, sqlite_config: dict) -> None:
@@ -204,20 +178,21 @@ def build_preview(config: dict, sqlite_config: dict) -> None:
 
     copy_file(SOURCE_DIR / "student_home.md", "README.md", seen)
     copy_file(safe_source(config["syllabus_source"]), "SYLLABUS.md", seen)
-    copy_file(SOURCE_DIR / "resources_README.md", "resources/README.md", seen)
-    copy_file(SQLITE_RUNNER_PATH.resolve(), "resources/run_labs.py", seen)
+    copy_file(SOURCE_DIR / "chapters_README.md", "chapters/README.md", seen)
+    copy_file(SQLITE_RUNNER_PATH.resolve(), "run_labs.py", seen)
 
     for item in config["chapter_readings"]:
         copy_file(safe_source(item["source"]), item["target"], seen)
     for item in sqlite_config["files"]:
-        target = f"resources/{PurePosixPath(item['target']).as_posix()}"
-        copy_file(safe_source(item["source"]), target, seen)
+        copy_file(
+            safe_source(item["source"]),
+            package_target_to_chapter(item["target"]),
+            seen,
+        )
 
-    write_text("course/README.md", render_course_index(config), seen)
-    for week in config["weeks"]:
-        write_text(f"course/{week['week']:02d}/README.md", render_week(week), seen)
+    write_text("SCHEDULE.md", render_schedule(config), seen)
 
-    public_gitignore = """resources/databases/
+    public_gitignore = """databases/
 **/__pycache__/
 **/*.pyc
 **/*.db
@@ -339,17 +314,16 @@ def verify_student_content(config: dict, sqlite_config: dict) -> None:
         PurePosixPath(item["target"]).suffix.lower() == ".md"
         for item in sqlite_config["files"]
     )
-    expected_markdown_count = (
-        4
-        + len(config["weeks"])
-        + len(config["chapter_readings"])
-        + package_markdown_count
-    )
+    expected_markdown_count = 4 + len(config["chapter_readings"]) + package_markdown_count
     if markdown_count != expected_markdown_count:
         errors.append(f"Expected {expected_markdown_count} Markdown files, found {markdown_count}")
-    for week in range(1, 19):
-        if not (PREVIEW_DIR / "course" / f"{week:02d}" / "README.md").is_file():
-            errors.append(f"Missing weekly page: {week:02d}")
+    if (PREVIEW_DIR / "course").exists() or (PREVIEW_DIR / "resources").exists():
+        errors.append("Obsolete weekly or resources directory remains in the preview")
+    if not (PREVIEW_DIR / "SCHEDULE.md").is_file():
+        errors.append("Missing SCHEDULE.md")
+    for item in config["chapter_readings"]:
+        if not safe_target(PREVIEW_DIR, item["target"]).is_file():
+            errors.append(f"Missing chapter guide: {item['target']}")
     if errors:
         raise RuntimeError("Student-content verification failed:\n- " + "\n- ".join(errors))
     print(f"STUDENT_TEXT_VERIFICATION=PASS MARKDOWN_FILES={markdown_count}")
@@ -359,7 +333,7 @@ def verify_labs() -> None:
     with tempfile.TemporaryDirectory(prefix="database_student_repository_") as temp:
         temp_root = Path(temp) / "database_student_repository"
         shutil.copytree(PREVIEW_DIR, temp_root)
-        runner = temp_root / "resources" / "run_labs.py"
+        runner = temp_root / "run_labs.py"
         result = subprocess.run(
             [sys.executable, str(runner), "all"],
             cwd=temp_root,

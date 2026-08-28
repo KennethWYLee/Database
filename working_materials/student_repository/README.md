@@ -6,15 +6,19 @@ published automatically.
 
 ## Maintained files
 
-- `repository_config.json`: weekly schedule, reading links, activities, evidence, and
-  chapter-guide allow-list.
+- `repository_config.json`: compact week-to-chapter schedule and chapter-guide
+  allow-list.
 - `student_home.md`: source for the generated root `README.md`.
-- `resources_README.md`: source for the generated `resources/README.md`.
-- `build_student_repository.py`: validates sources, generates weekly pages, copies
-  approved materials, and verifies the complete preview.
+- `chapters_README.md`: source for the generated `chapters/README.md`.
+- `build_student_repository.py`: validates sources, generates `SCHEDULE.md`, copies one
+  guide and its approved supporting files into each chapter directory, and verifies the
+  complete preview.
 
 The existing SQLite package allow-list remains authoritative for executable lab files.
 The chapter `student_guide.md` files remain authoritative for chapter readings.
+
+The generated repository does not create separate weekly documents. A chapter may be
+used for one or more weeks, and `SCHEDULE.md` states the coverage for each week.
 
 ## Build and verify
 
@@ -33,4 +37,6 @@ working_materials/student_repository/output/database_student_repository/
 ```
 
 The `output/` directory is ignored by Git. Publishing, creating a remote repository, or
-changing repository visibility requires a separate instructor decision.
+changing repository visibility requires a separate instructor decision. The private
+course repository may use a `student-preview` branch containing only the generated files
+for GitHub review; that branch is derived and must not be edited as the maintained source.

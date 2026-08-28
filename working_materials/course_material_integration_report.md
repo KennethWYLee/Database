@@ -82,8 +82,8 @@ restore、remote failover及ARIES。
 - 維護來源：`working_materials/student_sqlite_package/package_files.json`。
 - 生成內容：18個核准chapter assets，加上README、runner及manifest，共21個files。
 - 生成ZIP：`working_materials/student_sqlite_package/output/sqlite_course_package.zip`。
-- 2026-08-27驗證ZIP SHA-256：
-  `52f8749d9a7b2a72c16c83488c930e52c1a85b68430144da390692ea7730e577`。
+- 2026-08-28重建並驗證的ZIP SHA-256：
+  `15f6847ad7163db552536231427010f68ef1731606726ba05bf298ce40001e05`。
 - Manifest逐檔bytes與SHA-256檢查通過；ZIP未包含instructor、answer、solution、
   assessment、`__pycache__`或prebuilt database files。
 - ZIP已解壓至乾淨臨時目錄，使用Python 3.12.9及SQLite 3.45.3重建並通過

@@ -9,7 +9,8 @@ from typing import Callable
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parent
-MATERIALS = PACKAGE_ROOT / "materials"
+CHAPTER_DIRECTORY_NAME = "chapters" if (PACKAGE_ROOT / "chapters").is_dir() else "materials"
+MATERIALS = PACKAGE_ROOT / CHAPTER_DIRECTORY_NAME
 DATABASES = PACKAGE_ROOT / "databases"
 MIN_SQLITE = (3, 39, 0)
 CHAPTERS = ("ch02", "ch03", "ch04", "ch05", "ch06", "ch07", "ch14", "ch15", "ch16", "ch17")
@@ -53,6 +54,10 @@ def execute_file(connection: sqlite3.Connection, relative_path: str) -> None:
     connection.executescript(load_sql(path))
 
 
+def chapter_file(chapter: str, filename: str) -> str:
+    return f"{CHAPTER_DIRECTORY_NAME}/{chapter}/{filename}"
+
+
 def fresh_connection(database_name: str) -> sqlite3.Connection:
     DATABASES.mkdir(exist_ok=True)
     database_path = DATABASES / database_name
@@ -79,10 +84,10 @@ def check_shared(connection: sqlite3.Connection) -> None:
 def run_shared(selected: list[str]) -> None:
     connection = fresh_connection("course_registration.db")
     try:
-        execute_file(connection, "materials/ch02/course_registration_setup.sql")
+        execute_file(connection, chapter_file("ch02", "course_registration_setup.sql"))
         for chapter in ("ch02", "ch03", "ch04", "ch05"):
             if chapter in selected:
-                execute_file(connection, f"materials/{chapter}/student_lab.sql")
+                execute_file(connection, chapter_file(chapter, "student_lab.sql"))
                 check_shared(connection)
                 print(f"PASS {chapter}")
     finally:
@@ -175,20 +180,20 @@ def run_ch17_schedule_analyzer() -> None:
 
 
 SEPARATE_LABS: dict[str, tuple[str, str, Callable[[sqlite3.Connection], None]]] = {
-    "ch06": ("ch06_er_design.db", "materials/ch06/mapped_schema.sql", check_ch06),
-    "ch07": ("ch07_normalization.db", "materials/ch07/student_lab.sql", check_ch07),
-    "ch14": ("ch14_indexing.db", "materials/ch14/student_lab.sql", check_ch14),
-    "ch15": ("ch15_query_processing.db", "materials/ch15/student_lab.sql", check_ch15),
-    "ch16": ("ch16_query_optimization.db", "materials/ch16/student_lab.sql", check_ch16),
-    "ch17": ("ch17_transactions.db", "materials/ch17/student_lab.sql", check_ch17),
+    "ch06": ("ch06_er_design.db", "mapped_schema.sql", check_ch06),
+    "ch07": ("ch07_normalization.db", "student_lab.sql", check_ch07),
+    "ch14": ("ch14_indexing.db", "student_lab.sql", check_ch14),
+    "ch15": ("ch15_query_processing.db", "student_lab.sql", check_ch15),
+    "ch16": ("ch16_query_optimization.db", "student_lab.sql", check_ch16),
+    "ch17": ("ch17_transactions.db", "student_lab.sql", check_ch17),
 }
 
 
 def run_separate(chapter: str) -> None:
-    database_name, script, checker = SEPARATE_LABS[chapter]
+    database_name, script_name, checker = SEPARATE_LABS[chapter]
     connection = fresh_connection(database_name)
     try:
-        execute_file(connection, script)
+        execute_file(connection, chapter_file(chapter, script_name))
         checker(connection)
         if chapter == "ch17":
             run_ch17_schedule_analyzer()

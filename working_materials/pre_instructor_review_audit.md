@@ -147,7 +147,10 @@
 
 ### 5.3 套件完整性
 
-- ZIP SHA-256：`52f8749d9a7b2a72c16c83488c930e52c1a85b68430144da390692ea7730e577`
+- 原始audit版本ZIP SHA-256：`52f8749d9a7b2a72c16c83488c930e52c1a85b68430144da390692ea7730e577`
+- 2026-08-28為同時支援學生版`chapters/`與原套件`materials/`更新runner後，重建
+  ZIP SHA-256：`15f6847ad7163db552536231427010f68ef1731606726ba05bf298ce40001e05`；
+  manifest及10組packaged activities重新驗證通過。
 - manifest逐檔hash與解壓檔案相符；兩次完整建置的ZIP hash相同。
 - ZIP共21個檔案；blocked entry count為0。
 - 未包含`instructor`、answer/solution、assessment、`__pycache__`、`.pyc`、預建`.db`、
