@@ -6,7 +6,8 @@
 - 最後更新日期：2026-08-28
 - 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
   教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材；
-  2026-08-28完成並驗證一章一份教材、由單一schedule導覽的本機學生repository預覽
+  2026-08-28依教師最新決定改為不區分教師與學生導覽，每個選定章節只有一份
+  自包含`chXX.ipynb`，並已完成12份notebook的本機建置與逐cell執行驗證
 - Repository：本資料夾是獨立 Git repository；`main`追蹤GitHub的`origin/main`，
   最新commit以Git history為準
 - 文件可見性：混合；歷屆考題、答案、評分資料及教師手冊不得直接發布
@@ -111,8 +112,10 @@
 - 學生SQLite套件的維護來源為
   `working_materials/student_sqlite_package/package_files.json`；build script依
   allow-list產生自包含資料夾及ZIP，不把教師檔案或歷史來源帶入。
-- 現行套件包含Ch2-Ch7、Ch14-Ch17的synthetic SQL/schema/sample data、Ch6/Ch14
-  diagrams及Ch17 schedule analyzer。學生可用`run_labs.py`重建各章database。
+- 現行SQLite ZIP包含Ch2-Ch7、Ch14-Ch17的synthetic SQL/schema/sample data、
+  Ch6/Ch14 diagrams及Ch17 schedule analyzer，仍可用`run_labs.py`重建各章database。
+  統一notebook repository則把SQL、Python、data及圖片直接內嵌在對應`chXX.ipynb`，
+  不要求另用ZIP、runner或外部asset。
 - `working_materials/sql_labs/university_db/`的發布來源與授權尚未確認，不列入
   學生套件，也不作為115-1權威sample database。
 - SQLite無法完整示範的stored routines、server-side isolation、deadlock inspection
@@ -135,9 +138,9 @@
 6. `COURSE_PLAN.md`：詳細週次、授課摘要、活動、評量與備課依據。
 7. `working_materials/student_sqlite_package/package_files.json`：學生SQLite套件的
    發布allow-list；個別檔案內容仍以對應chapter source為維護來源。
-8. `working_materials/student_repository/repository_config.json`：學生GitHub版的18週
-   入口、閱讀連結、activities及evidence清單；內容仍受課綱、課程計畫與chapter
-   source控制。
+8. `working_materials/course_repository/repository_config.json`：統一notebook
+   repository的18週對應、chapter source、SQL、Python、data及image整合清單；內容
+   仍受課綱、課程計畫與chapter source控制。
 9. `1151_course_analysis.md`：課程分析。
 10. `1151_database_management_workplan.md`：早期草案，只保留歷史脈絡。
 11. `past_syllabi/` 與 `from_11001_DB/`：歷史與來源材料，不直接控制115-1。
@@ -155,13 +158,19 @@
 - `main`已推送，內容是經allow-list檢查的治理文件、課綱、課程
   計畫、Ch2-Ch7與Ch14-Ch19教材、驗證程式、核准的SQLite學生套件、教師審閱前
   audit及第一版學生repository builder。
-- 2026-08-28依教師後續決定，學生repository改採「一章一份教材」而非每週一份
-  文件。預覽只有簡短首頁、英文課綱、單一`SCHEDULE.md`、`run_labs.py`及12個
-  chapter directories；每章只有一份`README.md`主教材及核准的支援檔案。同一份
-  章節教材可以供一週或兩週使用，schedule只指定各週範圍，不自動發布。
-- Private GitHub的`student-preview` branch只保存builder產生的學生檔案，供教師在
-  GitHub檢查最終導覽與樹狀結構；它是derived review copy，不是維護來源、public
-  release或授權全部內容公開。修改仍須在`main`的maintained source完成後重新生成。
+- 2026-08-28依教師最新決定，發布用course repository不區分教師與學生目錄，也不
+  建立weekly或chapter subdirectories。預覽根目錄只有首頁、英文課綱、單一
+  `SCHEDULE.md`及12份`chXX.ipynb`；每份notebook整合reading、teaching examples、
+  executable SQL/Python、practice、outputs及checks，同一份可供一週或兩週使用。
+- Ch6與Ch14圖片使用notebook attachments；SQL、JSON及Python examples均內嵌於
+  notebook並於執行時使用in-memory database或自動清除的temporary directory，
+  因此目前沒有`assets/`、lab runner或外部data dependency。
+- Private GitHub的`course-materials` branch只保存builder產生的16個統一course
+  files，供教師直接檢查GitHub notebook rendering；它是derived review copy，修改
+  仍須在`main`的maintained source完成後重新生成。
+- Private GitHub既有`student-preview` branch是前一版chapter-directory預覽，已不
+  代表教師最新決定；在教師另行授權commit/push或刪除前保留，不視為維護來源或
+  current course release。
 - `.gitignore`維持private-by-default。歷史來源、教科書、考題、答案、評分資料、
   暫存檔、prebuilt databases及發布來源未確認的資料不在Git追蹤範圍。
 - 新增檔案仍須逐項檢查版權、答案、教師手冊、個資、憑證、檔案大小及發布
@@ -189,14 +198,15 @@
 - [x] 教師已決定Week 9複習Ch2-Ch5、English-only學生教材、縮減Ch15-Ch16與
   Ch18-Ch19課堂核心、官方英文姓名及GitHub選擇性公開方向；決定已套用。
 - [x] Ch2-Ch7與Ch14-Ch19的`student_guide.md`已改寫為English-only prose。
-- [x] 已將學生repository預覽改為一章一份教材；目前生成36個檔案、17個
-  Markdown、1份`SCHEDULE.md`及12份chapter `README.md`，學生可見英文、檔案與
-  heading links檢查通過，10組SQLite activities在`chapters/`乾淨暫存複本全部通過。
-- [x] 共用`run_labs.py`已驗證同時支援學生repository的`chapters/`及SQLite ZIP的
-  `materials/`；2026-08-28重建ZIP後10組activities通過。
+- [x] 已將course repository改為12份根目錄`chXX.ipynb`；目前生成16個檔案，包含
+  12份notebook、首頁、課綱、進度表與`.gitignore`，沒有額外asset。全部notebook
+  已逐cell執行，English-only、internal path、external dependency、attachment、
+  manifest及預期檔案集合檢查通過。
+- [x] SQLite ZIP的`run_labs.py`仍支援原有`materials/`package，2026-08-28重建ZIP後
+  10組activities通過；統一notebook repository不再依賴runner或ZIP。
 - [ ] 教師完成英文學生教材的內容與語言審閱；在此之前不得把全部逐章教材標示為
   student-ready。
-- [ ] 教師審閱學生repository首頁、`SCHEDULE.md`與代表章節教材，確認後再決定
+- [ ] 教師審閱course repository首頁、`SCHEDULE.md`與代表`chXX.ipynb`，確認後再決定
   public repository名稱、建立時間及GitHub Release方式。
 - [ ] 逐項建立GitHub公開allow-list並決定公開時機；之後另建public repository或
   allow-listed release artifact，未核准檔案不得移出現行private repository。
@@ -206,8 +216,8 @@
 
 ## Primary next action
 
-教師已明確要求學生版維持一章一份教材，因此下一步是審閱生成後的首頁、
-`SCHEDULE.md`，再抽查Ch2、Ch3、Ch6、Ch15-Ch16與Ch18-Ch19。預期成果是核准或
-修正章節份量、兩週分界與高負荷週次；完成條件是學生能從首頁經schedule直接找到
-本週章節、範圍、lab及教材內的evidence要求，且教師核准第一批public allow-list與
-獨立repository名稱。
+教師已明確要求每章只保留一份notebook，因此下一步是審閱生成後的首頁、
+`SCHEDULE.md`，再抽查`ch02.ipynb`、`ch06.ipynb`、`ch15.ipynb`、`ch18.ipynb`及
+`ch19.ipynb`。預期成果是核准或修正notebook閱讀順序、章節份量與高負荷週次；
+完成條件是可從首頁經schedule直接找到本週notebook，且每份notebook從概念、範例、
+預測、執行、判讀到practice形成完整順序，教師再決定何時取代遠端舊預覽。

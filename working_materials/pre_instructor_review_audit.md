@@ -165,20 +165,32 @@
 - 未審閱或建立三次考試的正式題目、答案、允許資源、AI規則與rubric，因這些屬教師
   評量政策決定。
 
-## 6. 學生版安全、格式與發布檢查
+### 5.5 2026-08-28統一notebook附加驗證
+
+- 教師後續決定不再分教師/學生導覽，每章只保留一份自包含`chXX.ipynb`；此變更
+  發生在原始audit之後，不改寫上述原始驗證證據。
+- 新build生成12份notebook及4個root files，共16個files；沒有chapter directory、
+  lab runner、外部data或asset directory。
+- Ch2-Ch17 SQL以in-memory SQLite依序執行；Ch17-Ch19 Python/JSON demonstrations以
+  內嵌內容在自動清除的temporary directory執行。12份notebook全部逐cell通過。
+- Ch6與Ch14 PNG已保存為notebook attachment；attachment集合與config逐章相符。
+- Manifest hash、English-only、internal path、external local-file dependency、預期
+  root file集合及所有code cell execution count檢查通過。
+
+## 6. Course repository安全、格式與發布檢查
 
 | 檢查 | 結果 |
 |---|---|
 | UTF-8與replacement character | 通過；未發現解碼錯誤或U+FFFD |
-| Markdown fences與本地連結 | 通過；未發現不平衡code fence或broken local link |
-| 英文限定 | 課綱、12份學生指南及解壓套件共32個學生可見文字檔，CJK字元數為0 |
-| 標題、表格、閱讀順序 | 12/12指南具備指定的教學結構；55個Markdown未發現阻擋性結構錯誤 |
+| Markdown與notebook links | 通過；統一repository未發現外部local-file dependency |
+| 英文限定 | 首頁、課綱、進度表及12份notebook的CJK字元數為0 |
+| 標題、表格、閱讀順序 | 12/12 notebook保留逐章教學結構並可由schedule直接開啟 |
 | 分鐘或時間配置 | 未發現課堂分鐘配置 |
 | 內部製作分類名稱 | 學生可見檔案未發現 |
 | 教師備註、答案、考題、評分與個資 | 學生教材及ZIP未發現 |
 | 憑證或secret pattern | 未發現 |
-| 本機內部路徑 | Ch4一處已改成學生套件相對操作方式；複查未再發現 |
-| Python危險執行模式 | 未發現`eval`、`exec`或`shell=True`；package runner使用list arguments |
+| 本機內部路徑 | 統一repository複查未發現；模擬程式只使用自動清除的temporary directory |
+| Python危險執行模式 | 生成notebook未使用`eval`或`shell=True`；subprocess使用list arguments |
 | 教科書、改寫、執行與推論 | coverage record已區分來源範圍、教學改寫、執行證據與限制 |
 
 ## 7. 已修改檔案與理由

@@ -51,7 +51,7 @@ separate public repository or an allow-listed release artifact because visibilit
 to the complete repository. This build does not publish, upload, change visibility, or
 select the public allow-list.
 
-The student repository builder in `../student_repository/` reuses this allow-list and
-places each guide and its approved files under a generated `chapters/` directory. The
-shared runner supports both that layout and this package's `materials/` layout. This does
-not change the package's approval boundary.
+The unified notebook builder in `../course_repository/` uses the maintained chapter
+sources directly and embeds the required examples. The SQLite package remains a separately
+verified distribution artifact with its original `materials/` layout and runner. The
+notebook build does not change the package's approval boundary.

@@ -10,7 +10,7 @@
 | `sql_labs/university_db` | `smallRelationsInsertFile.sql`, `largeRelationsInsertFile.sql`, `univdb-sqlite.db` |
 | `assessments/reference_midterm` | 舊期中考題、答案、公版 PDF/DOC |
 | `student_sqlite_package` | 學生SQLite套件allow-list、操作說明、build script、output資料夾與ZIP |
-| `student_repository` | 產生一章一份教材、單一課程進度表的學生GitHub預覽 |
+| `course_repository` | 將各章來源整合為12份自包含`chXX.ipynb`及單一課程進度表 |
 | `pre_instructor_review_audit.md` | 教師審閱前的一致性、完整性、執行與發布邊界檢查 |
 
 ## 使用原則
@@ -21,7 +21,8 @@
   DBMS，SQLite未完整呈現的功能以概念、schedule、log或教學程式說明。
 - `student_sqlite_package/package_files.json`是學生套件的發布allow-list；個別
   SQL、schema、data、diagram及program仍以chapter目錄中的檔案為維護來源。
-- `student_repository/repository_config.json`定義學生版週次到章節的對應；其build
-  script沿用SQLite allow-list，每章只產生一份`README.md`教材及支援檔案，生成的
-  `output/`不加入Git或自動發布。
+- `course_repository/repository_config.json`定義週次、章節與來源對應；build script
+  將reading、SQL、Python、data及圖片整合成根目錄的一份`chXX.ipynb`。圖片以
+  notebook attachment保存，其他範例以cell內嵌，目前不需要`assets/`、lab runner或
+  chapter subdirectories；生成的`output/`不加入Git或自動發布。
 - `sql_labs/university_db`的發布來源與授權尚未確認，不放入學生套件。

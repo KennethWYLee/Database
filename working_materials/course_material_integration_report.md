@@ -92,9 +92,22 @@ restore、remote failover及ARIES。
   repository已確認為private。未來只在另一個public repository或allow-listed release
   artifact放入核准檔案；本次未公開、上傳或push。
 
+### 統一notebook repository
+
+- 2026-08-28依教師最新決定，course repository不再分教師/學生或weekly/chapter
+  directories；根目錄直接提供`ch02.ipynb`至`ch19.ipynb`共12份章節notebook。
+- 每份notebook整合既有English chapter reading、teaching examples、SQL或Python
+  demonstrations、practice及reproducibility checks；Ch6與Ch14圖片以attachment內嵌。
+- SQL使用Python標準庫`sqlite3`與in-memory database；Ch17-Ch19模擬程式及JSON data
+  於cell內嵌，執行時只建立會自動清除的temporary directory。
+- 生成結果共16個files：12份notebook、`README.md`、`SYLLABUS.md`、`SCHEDULE.md`及
+  `.gitignore`；`ASSET_FILES=0`，沒有lab runner、chapter subdirectory或外部data。
+- 12份notebook全部逐cell執行通過；manifest、English-only、internal path、external
+  dependency、attachment及精確檔案集合檢查均通過。
+
 ## 6. 仍待執行
 
-1. 教師審閱English-only逐章student guides的內容、術語及核心/延伸標示。
+1. 教師審閱English-only逐章notebook的內容、術語、閱讀順序及核心/延伸標示。
 2. 建立第一批GitHub公開allow-list、獨立public repository或release artifact，並決定
    公開時機；未核准檔案維持在現行private repository。
 3. 從未來實際GitHub下載位置重新核對ZIP hash與manifest。
@@ -103,7 +116,7 @@ restore、remote failover及ARIES。
 
 ## 7. Primary Next Action
 
-依 `PROJECT.md`與`pre_instructor_review_audit.md`，下一步是教師優先審閱縮減後的
-Ch15-Ch16與Ch18-Ch19英文學生教材，再抽查Ch2、Ch3及Ch17。預期成果是明確修正或
-核准；完成條件是核心/延伸界線、英文術語及範例均確認，並建立第一批GitHub公開
-allow-list及獨立公開位置。
+依 `PROJECT.md`與`pre_instructor_review_audit.md`，下一步是教師審閱生成後的首頁、
+`SCHEDULE.md`及代表性的`ch02.ipynb`、`ch06.ipynb`、`ch15.ipynb`、`ch18.ipynb`、
+`ch19.ipynb`。預期成果是明確修正或核准notebook閱讀順序與份量；完成條件是概念、
+範例、預測、執行、判讀及practice的順序獲確認，再決定何時更新GitHub預覽。
