@@ -1,0 +1,496 @@
+{
+  "repository_name": "Database Management",
+  "repository_version": "2026.08.28",
+  "instructor": "WenYi Lee",
+  "syllabus_source": "1151_database_management_revised_syllabus.md",
+  "chapter_readings": [
+    {
+      "source": "working_materials/chapters/ch02_relational_model/student_guide.md",
+      "target": "resources/materials/ch02/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch03_introduction_to_sql/student_guide.md",
+      "target": "resources/materials/ch03/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch04_intermediate_sql/student_guide.md",
+      "target": "resources/materials/ch04/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch05_advanced_sql/student_guide.md",
+      "target": "resources/materials/ch05/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch06_er_design/student_guide.md",
+      "target": "resources/materials/ch06/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch07_normalization/student_guide.md",
+      "target": "resources/materials/ch07/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch14_indexing/student_guide.md",
+      "target": "resources/materials/ch14/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch15_query_processing/student_guide.md",
+      "target": "resources/materials/ch15/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch16_query_optimization/student_guide.md",
+      "target": "resources/materials/ch16/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch17_transactions/student_guide.md",
+      "target": "resources/materials/ch17/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch18_concurrency_control/student_guide.md",
+      "target": "resources/materials/ch18/README.md"
+    },
+    {
+      "source": "working_materials/chapters/ch19_recovery_system/student_guide.md",
+      "target": "resources/materials/ch19/README.md"
+    }
+  ],
+  "weeks": [
+    {
+      "week": 1,
+      "date": "2026-09-10",
+      "title": "Course Introduction and Relational Structure",
+      "summary": "Course expectations; relations, tuples, attributes, domains, schemas, and relation instances.",
+      "readings": [
+        {
+          "label": "Chapter 2, Core Question through Section 4",
+          "path": "../../resources/materials/ch02/README.md#1-relations-tuples-attributes-and-domains"
+        },
+        {
+          "label": "Course syllabus",
+          "path": "../../SYLLABUS.md"
+        }
+      ],
+      "activities": [
+        "Identify relations, attributes, tuples, domains, schemas, and instances in the course-registration example.",
+        "Confirm that the lab runner can list the available chapters."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py --list"
+      ],
+      "evidence": [
+        "A schema identification sheet.",
+        "A key map with reasons based on stated business rules."
+      ],
+      "next": "Week 2 applies keys, schema diagrams, and relational-algebra operations."
+    },
+    {
+      "week": 2,
+      "date": "2026-09-17",
+      "title": "Keys and Relational Algebra",
+      "summary": "Primary, candidate, composite, and foreign keys; schema diagrams; selection, projection, product, join, and set operations.",
+      "readings": [
+        {
+          "label": "Chapter 2, Sections 5-6, Common Errors, and Summary",
+          "path": "../../resources/materials/ch02/README.md#5-relational-algebra-operations"
+        }
+      ],
+      "activities": [
+        "Predict each small relation before executing the corresponding SQL example.",
+        "Compare the predicted and observed results and correct one misconception."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch02"
+      ],
+      "evidence": [
+        "Key and foreign-key decisions with reasons.",
+        "Intermediate and final relational-algebra results.",
+        "One corrected misconception."
+      ],
+      "next": "Week 3 expresses relational operations with introductory SQL."
+    },
+    {
+      "week": 3,
+      "date": "2026-09-24",
+      "title": "Basic SQL",
+      "summary": "DDL basics; SELECT, FROM, WHERE, aliases, expressions, duplicates, patterns, ordering, and SQL set operations.",
+      "readings": [
+        {
+          "label": "Chapter 3, Sections 1-4",
+          "path": "../../resources/materials/ch03/README.md#1-defining-structure"
+        }
+      ],
+      "activities": [
+        "Use the Chapter 3 SQL file through Example 8 and predict rows, columns, duplicates, and order before execution.",
+        "Keep the complete automated chapter run for Week 4 after the remaining Chapter 3 topics are introduced."
+      ],
+      "commands": [],
+      "evidence": [
+        "SQL statements and predictions for selected basic queries.",
+        "Checked rows, columns, duplicates, and display order."
+      ],
+      "next": "Week 4 adds NULL, grouping, selected subqueries, and reversible modifications."
+    },
+    {
+      "week": 4,
+      "date": "2026-10-01",
+      "title": "NULL, Aggregation, and Selected Subqueries",
+      "summary": "Three-valued logic, aggregation, GROUP BY, HAVING, selected subqueries, common table expressions, and reversible data modification.",
+      "readings": [
+        {
+          "label": "Chapter 3, Sections 5-8, Common Errors, and Summary",
+          "path": "../../resources/materials/ch03/README.md#5-null-and-three-valued-logic"
+        }
+      ],
+      "activities": [
+        "Predict the effect of NULL before running each relevant query.",
+        "Verify grouped and nested queries from the inside out.",
+        "Run the complete Chapter 3 lab after studying all selected sections."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch03"
+      ],
+      "evidence": [
+        "One NULL prediction and correction.",
+        "One grouped query with each filtering stage identified.",
+        "One subquery with checked intermediate and final results."
+      ],
+      "next": "Week 5 uses explicit joins, views, constraints, and transaction boundaries."
+    },
+    {
+      "week": 5,
+      "date": "2026-10-08",
+      "title": "Intermediate SQL",
+      "summary": "Explicit joins, outer joins, ON and WHERE, views, integrity constraints, reference actions, and basic transactions.",
+      "readings": [
+        {
+          "label": "Chapter 4 student guide",
+          "path": "../../resources/materials/ch04/README.md"
+        }
+      ],
+      "activities": [
+        "Compare inner- and outer-join results before moving a predicate.",
+        "Test one valid and one invalid constraint case.",
+        "Verify rollback and commit behavior."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch04"
+      ],
+      "evidence": [
+        "Join predictions and checked results.",
+        "Constraint success and failure evidence.",
+        "Transaction states before and after rollback."
+      ],
+      "next": "Week 6 is Written Exam 1 on the selected Chapter 2-4 material."
+    },
+    {
+      "week": 6,
+      "date": "2026-10-15",
+      "title": "Written Exam 1",
+      "summary": "Written Exam 1 covers the selected classroom material from Chapters 2-4.",
+      "readings": [
+        {
+          "label": "Course syllabus and assessment rules",
+          "path": "../../SYLLABUS.md#assessment"
+        }
+      ],
+      "activities": [
+        "Complete the individual examination under the announced rules.",
+        "After feedback is released, correct one representative error using new data."
+      ],
+      "commands": [],
+      "evidence": [
+        "The submitted examination.",
+        "The assigned correction record after feedback."
+      ],
+      "next": "Week 7 introduces selected advanced SQL features."
+    },
+    {
+      "week": 7,
+      "date": "2026-10-22",
+      "title": "Selected Advanced SQL",
+      "summary": "Ranking and window functions, recursive CTEs, one row-level audit trigger, and the purpose and interface of stored routines.",
+      "readings": [
+        {
+          "label": "Chapter 5 student guide",
+          "path": "../../resources/materials/ch05/README.md"
+        }
+      ],
+      "activities": [
+        "Trace recursion by round and explain its termination condition.",
+        "Predict ranking results when ties occur.",
+        "Check the trigger event, condition, action, and audit result."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch05"
+      ],
+      "evidence": [
+        "Recursive rounds and termination explanation.",
+        "Predicted and observed ranking results.",
+        "Trigger before-and-after evidence."
+      ],
+      "next": "Week 8 begins conceptual database design with the E-R model."
+    },
+    {
+      "week": 8,
+      "date": "2026-10-29",
+      "title": "E-R Design Foundations",
+      "summary": "Requirements, entities, attributes, relationships, roles, cardinality, participation, keys, and weak entities.",
+      "readings": [
+        {
+          "label": "Chapter 6, Sections 1-6",
+          "path": "../../resources/materials/ch06/README.md#1-design-stages"
+        }
+      ],
+      "activities": [
+        "Derive an initial E-R diagram from the supplied course-registration rules.",
+        "Annotate each cardinality, participation, and key decision with requirement evidence."
+      ],
+      "commands": [],
+      "evidence": [
+        "An initial E-R diagram.",
+        "Requirement-based reasons for the main design decisions."
+      ],
+      "next": "Week 9 contains asynchronous review while the instructor attends INFORMS."
+    },
+    {
+      "week": 9,
+      "date": "2026-11-05",
+      "title": "Asynchronous Review",
+      "summary": "No class, examination, or new material is scheduled because the instructor is attending INFORMS.",
+      "readings": [
+        {
+          "label": "Review Chapters 2-5 as needed",
+          "path": "../../resources/README.md#chapter-readings-and-files"
+        }
+      ],
+      "activities": [
+        "Rework one SQL question and check one core Chapter 2-5 judgment.",
+        "Record the original answer, checking evidence, and correction."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch02 ch03 ch04 ch05"
+      ],
+      "evidence": [
+        "One asynchronous review record containing a prediction, check, and correction."
+      ],
+      "next": "Week 10 completes E-R design and maps the design to relations."
+    },
+    {
+      "week": 10,
+      "date": "2026-11-12",
+      "title": "E-R Design and Relational Mapping",
+      "summary": "Redundancy, design choices, E-R-to-relational mapping, keys, foreign keys, and mapped-schema verification.",
+      "readings": [
+        {
+          "label": "Chapter 6, Sections 7-10, Common Errors, and Summary",
+          "path": "../../resources/materials/ch06/README.md#7-removing-conceptual-redundancy"
+        }
+      ],
+      "activities": [
+        "Check an E-R diagram against the stated business rules.",
+        "Map the revised design to relations and test the mapped schema."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch06"
+      ],
+      "evidence": [
+        "A revised E-R diagram.",
+        "Mapped relations, primary keys, and foreign keys.",
+        "Predicted and observed schema tests."
+      ],
+      "next": "Week 11 evaluates relational designs with normalization concepts."
+    },
+    {
+      "week": 11,
+      "date": "2026-11-19",
+      "title": "Normalization",
+      "summary": "Anomalies, functional dependencies, attribute closure, lossless decomposition, spurious tuples, and introductory 3NF and BCNF decisions.",
+      "readings": [
+        {
+          "label": "Chapter 7 student guide",
+          "path": "../../resources/materials/ch07/README.md"
+        }
+      ],
+      "activities": [
+        "Identify repeated facts and modification anomalies.",
+        "Calculate one attribute closure and test one decomposition.",
+        "Compare predicted and observed reconstruction results."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch07"
+      ],
+      "evidence": [
+        "A functional-dependency table with business-rule support.",
+        "Closure steps and candidate-key reasoning.",
+        "Lossless and deliberately lossy reconstruction evidence."
+      ],
+      "next": "Week 12 is Written Exam 2 on the selected Chapter 5-7 material."
+    },
+    {
+      "week": 12,
+      "date": "2026-11-26",
+      "title": "Written Exam 2",
+      "summary": "Written Exam 2 covers the selected classroom material from Chapters 5-7.",
+      "readings": [
+        {
+          "label": "Course syllabus and assessment rules",
+          "path": "../../SYLLABUS.md#assessment"
+        }
+      ],
+      "activities": [
+        "Complete the individual examination under the announced rules.",
+        "After feedback is released, correct one assigned SQL, mapping, or normalization error."
+      ],
+      "commands": [],
+      "evidence": [
+        "The submitted examination.",
+        "The assigned correction record after feedback."
+      ],
+      "next": "Week 13 begins physical database topics with indexing."
+    },
+    {
+      "week": 13,
+      "date": "2026-12-03",
+      "title": "Indexing",
+      "summary": "Index purpose, B+ tree equality and range access, composite-column order, covering indexes, and query-plan evidence.",
+      "readings": [
+        {
+          "label": "Chapter 14 student guide",
+          "path": "../../resources/materials/ch14/README.md"
+        }
+      ],
+      "activities": [
+        "Predict an access path before creating an index.",
+        "Compare the plans before and after the index and state a bounded conclusion."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch14"
+      ],
+      "evidence": [
+        "A query-to-index reason.",
+        "Before-and-after plans.",
+        "One write or storage cost not measured by the plan output."
+      ],
+      "next": "Week 14 places index access inside query processing and optimization."
+    },
+    {
+      "week": 14,
+      "date": "2026-12-10",
+      "title": "Query Processing and Optimization",
+      "summary": "Scans and searches, join access order, result-equivalence checks, basic selectivity, catalog statistics, ANALYZE, and conservative plan interpretation.",
+      "readings": [
+        {
+          "label": "Chapter 15 student guide",
+          "path": "../../resources/materials/ch15/README.md"
+        },
+        {
+          "label": "Chapter 16 student guide",
+          "path": "../../resources/materials/ch16/README.md"
+        }
+      ],
+      "activities": [
+        "Check result equivalence before comparing plans.",
+        "Inspect SCAN, SEARCH, access order, statistics, and omitted execution evidence.",
+        "Evaluate one proposed index or rewrite without overclaiming."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch15 ch16"
+      ],
+      "evidence": [
+        "Original and comparison SQL with equivalence evidence.",
+        "Statistics and both query plans.",
+        "One supported conclusion and one unsupported conclusion."
+      ],
+      "next": "Week 15 moves from individual query plans to transactions and schedules."
+    },
+    {
+      "week": 15,
+      "date": "2026-12-17",
+      "title": "Transactions",
+      "summary": "Transaction boundaries, ACID, transaction states, schedules, conflicts, precedence graphs, recoverability, and isolation phenomena.",
+      "readings": [
+        {
+          "label": "Chapter 17 student guide",
+          "path": "../../resources/materials/ch17/README.md"
+        }
+      ],
+      "activities": [
+        "Predict rollback and commit results before running the SQL activity.",
+        "Build a precedence graph and evaluate serializability and recoverability separately."
+      ],
+      "commands": [
+        "py -3 resources/run_labs.py ch17"
+      ],
+      "evidence": [
+        "Before-and-after transaction states.",
+        "One acyclic and one cyclic precedence graph.",
+        "Separate recoverability and isolation decisions with model limitations."
+      ],
+      "next": "Week 16 connects transaction requirements to locks, deadlock, logs, and recovery."
+    },
+    {
+      "week": 16,
+      "date": "2026-12-24",
+      "title": "Concurrency Control, Recovery, and Review",
+      "summary": "S/X lock compatibility, grant and wait decisions, wait-for graphs, deadlock, log old and new values, write-ahead logging, and one simplified redo and undo case.",
+      "readings": [
+        {
+          "label": "Chapter 18 student guide",
+          "path": "../../resources/materials/ch18/README.md"
+        },
+        {
+          "label": "Chapter 19 student guide",
+          "path": "../../resources/materials/ch19/README.md"
+        }
+      ],
+      "activities": [
+        "Complete S/X compatibility and grant-or-wait decisions.",
+        "Build a wait-for graph and identify a cycle.",
+        "Use transaction status and log values to complete one redo and undo analysis."
+      ],
+      "commands": [],
+      "evidence": [
+        "Lock decisions and a wait-for graph.",
+        "A simplified recovery table with redo and undo reasons.",
+        "A review record connecting indexes, plans, transactions, and recovery."
+      ],
+      "next": "Week 17 is the university anniversary make-up holiday with no scheduled class."
+    },
+    {
+      "week": 17,
+      "date": "2026-12-31",
+      "title": "University Anniversary Make-Up Holiday",
+      "summary": "No class, examination, assignment, or new material is scheduled because of the university anniversary make-up holiday.",
+      "readings": [],
+      "activities": [
+        "No required course activity is scheduled."
+      ],
+      "commands": [],
+      "evidence": [],
+      "next": "Week 18 is Written Exam 3 during the official final-examination week."
+    },
+    {
+      "week": 18,
+      "date": "2027-01-07",
+      "title": "Written Exam 3",
+      "summary": "Written Exam 3 covers the selected Chapter 14-19 material and cumulative application of previously taught SQL and database-design concepts.",
+      "readings": [
+        {
+          "label": "Course syllabus and assessment rules",
+          "path": "../../SYLLABUS.md#assessment"
+        },
+        {
+          "label": "Chapter 14-19 readings",
+          "path": "../../resources/README.md#chapter-readings-and-files"
+        }
+      ],
+      "activities": [
+        "Complete the individual final examination under the announced rules."
+      ],
+      "commands": [],
+      "evidence": [
+        "The submitted examination."
+      ],
+      "next": "The course concludes after the final examination and any officially arranged make-up assessment."
+    }
+  ]
+}

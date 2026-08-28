@@ -10,6 +10,7 @@
 | `sql_labs/university_db` | `smallRelationsInsertFile.sql`, `largeRelationsInsertFile.sql`, `univdb-sqlite.db` |
 | `assessments/reference_midterm` | 舊期中考題、答案、公版 PDF/DOC |
 | `student_sqlite_package` | 學生SQLite套件allow-list、操作說明、build script、output資料夾與ZIP |
+| `student_repository` | 依18週產生乾淨學生GitHub預覽的設定、英文入口與build script |
 | `pre_instructor_review_audit.md` | 教師審閱前的一致性、完整性、執行與發布邊界檢查 |
 
 ## 使用原則
@@ -20,4 +21,6 @@
   DBMS，SQLite未完整呈現的功能以概念、schedule、log或教學程式說明。
 - `student_sqlite_package/package_files.json`是學生套件的發布allow-list；個別
   SQL、schema、data、diagram及program仍以chapter目錄中的檔案為維護來源。
+- `student_repository/repository_config.json`定義學生版18週入口與章節閱讀清單；
+  其build script沿用SQLite allow-list，生成的`output/`不加入Git或自動發布。
 - `sql_labs/university_db`的發布來源與授權尚未確認，不放入學生套件。

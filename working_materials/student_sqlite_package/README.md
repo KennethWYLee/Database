@@ -50,3 +50,7 @@ current course repository is private. Any future public GitHub distribution must
 separate public repository or an allow-listed release artifact because visibility applies
 to the complete repository. This build does not publish, upload, change visibility, or
 select the public allow-list.
+
+The student repository builder in `../student_repository/` reuses this allow-list and
+places the runner and materials under its generated `resources/` directory. It does not
+change this package or its approval boundary.

@@ -3,10 +3,12 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-08-27
+- 最後更新日期：2026-08-28
 - 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
-  教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材
-- Repository：本資料夾是獨立 Git repository；`main`追蹤GitHub的`origin/main`，已推送的基準commit為`b204458`
+  教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材；
+  2026-08-28完成並驗證依18週導覽的本機學生repository預覽
+- Repository：本資料夾是獨立 Git repository；`main`追蹤GitHub的`origin/main`，
+  目前已推送的基準commit為`2f3a307`
 - 文件可見性：混合；歷屆考題、答案、評分資料及教師手冊不得直接發布
 
 ## 課程定位與對象
@@ -133,9 +135,12 @@
 6. `COURSE_PLAN.md`：詳細週次、授課摘要、活動、評量與備課依據。
 7. `working_materials/student_sqlite_package/package_files.json`：學生SQLite套件的
    發布allow-list；個別檔案內容仍以對應chapter source為維護來源。
-8. `1151_course_analysis.md`：課程分析。
-9. `1151_database_management_workplan.md`：早期草案，只保留歷史脈絡。
-10. `past_syllabi/` 與 `from_11001_DB/`：歷史與來源材料，不直接控制115-1。
+8. `working_materials/student_repository/repository_config.json`：學生GitHub版的18週
+   入口、閱讀連結、activities及evidence清單；內容仍受課綱、課程計畫與chapter
+   source控制。
+9. `1151_course_analysis.md`：課程分析。
+10. `1151_database_management_workplan.md`：早期草案，只保留歷史脈絡。
+11. `past_syllabi/` 與 `from_11001_DB/`：歷史與來源材料，不直接控制115-1。
 
 文件若衝突，不得混合內容。先依上述順序判斷，並在修改前指出差異。
 
@@ -147,8 +152,12 @@
   repository層級，不能在同一private repository內把個別檔案單獨設為public。
   未來應建立另一個public repository或只發布allow-listed release artifact，僅放入
   教師逐項核准的檔案；未核准內容維持在現行private repository。
-- 基準commit `b204458`已推送，內容是經allow-list檢查的治理文件、課綱、課程
-  計畫、Ch2-Ch7與Ch14-Ch19教材、驗證程式及核准的SQLite學生套件。
+- 基準commit `2f3a307`已推送，內容是經allow-list檢查的治理文件、課綱、課程
+  計畫、Ch2-Ch7與Ch14-Ch19教材、驗證程式、核准的SQLite學生套件及教師審閱前
+  audit。
+- 2026-08-28依教師決定參考FinTech課程的週次入口，新增可重複建置的本機學生
+  repository預覽。預覽只有簡短首頁、英文課綱、18週索引、每週頁面及`resources/`；
+  chapter guides與SQLite labs由現有維護來源及allow-list複製，不自動發布。
 - `.gitignore`維持private-by-default。歷史來源、教科書、考題、答案、評分資料、
   暫存檔、prebuilt databases及發布來源未確認的資料不在Git追蹤範圍。
 - 新增檔案仍須逐項檢查版權、答案、教師手冊、個資、憑證、檔案大小及發布
@@ -176,8 +185,13 @@
 - [x] 教師已決定Week 9複習Ch2-Ch5、English-only學生教材、縮減Ch15-Ch16與
   Ch18-Ch19課堂核心、官方英文姓名及GitHub選擇性公開方向；決定已套用。
 - [x] Ch2-Ch7與Ch14-Ch19的`student_guide.md`已改寫為English-only prose。
+- [x] 已建立簡化學生repository的本機預覽builder；54個檔案、35個Markdown、
+  18個週次頁面、學生可見英文與本地連結檢查通過，10組SQLite activities在乾淨
+  暫存複本全部通過。
 - [ ] 教師完成英文學生教材的內容與語言審閱；在此之前不得把全部逐章教材標示為
   student-ready。
+- [ ] 教師審閱學生repository首頁、18週索引與代表週次頁面，確認後再決定public
+  repository名稱、建立時間及GitHub Release方式。
 - [ ] 逐項建立GitHub公開allow-list並決定公開時機；之後另建public repository或
   allow-listed release artifact，未核准檔案不得移出現行private repository。
 - [ ] 完成三次考試藍圖、題型、允許資源、AI規則與評分方式。
@@ -186,7 +200,8 @@
 
 ## Primary next action
 
-下一步是由教師優先審閱縮減後的Ch15-Ch16與Ch18-Ch19英文學生教材，再抽查Ch2、
-Ch3及Ch17的英文技術表述。這些檔案最直接影響Exam 3範圍與學生自行閱讀，應先於
-GitHub公開。預期成果是教師留下可執行的修正或明確核准；完成條件是課堂核心與延伸
-界線、英文術語及範例均獲確認，並建立第一批GitHub公開allow-list及獨立公開位置。
+教師已明確要求先簡化學生使用路徑，因此下一步改為審閱生成後的學生repository首頁、
+18週索引、Week 1、Week 9、Week 14及Week 17頁面，再抽查Ch15-Ch16與Ch18-Ch19
+英文閱讀。預期成果是核准或修正學生導覽及高負荷週次；完成條件是學生能從首頁兩次
+點擊內找到本週reading、practice或lab、evidence要求，且教師核准第一批public
+allow-list與獨立repository名稱。

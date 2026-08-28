@@ -54,6 +54,15 @@
 /working_materials/student_sqlite_package/output/*
 !/working_materials/student_sqlite_package/output/sqlite_course_package.zip
 
+!/working_materials/student_repository/
+/working_materials/student_repository/*
+!/working_materials/student_repository/README.md
+!/working_materials/student_repository/build_student_repository.py
+!/working_materials/student_repository/repository_config.json
+!/working_materials/student_repository/resources_README.md
+!/working_materials/student_repository/student_home.md
+/working_materials/student_repository/output/
+
 **/__pycache__/
 **/*.pyc
 **/*.db
