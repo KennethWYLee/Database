@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Course registration entity-relationship diagram</title>
+  <desc id="desc">Department, Student, Course, and weak Section entities connected by majors in, offers, identifies, and registers relationships with minimum and maximum cardinalities.</desc>
+  <rect width="1400" height="900" fill="#ffffff"/>
+  <style>
+    text { font-family: Arial, sans-serif; fill: #17202a; letter-spacing: 0; }
+    .title { font-size: 28px; font-weight: 700; }
+    .subtitle { font-size: 16px; fill: #46515c; }
+    .entity-name { font-size: 20px; font-weight: 700; }
+    .attribute { font-size: 16px; }
+    .key { font-size: 16px; font-weight: 700; text-decoration: underline; }
+    .relationship { font-size: 17px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+    .cardinality { font-size: 16px; font-weight: 700; fill: #7d2c2c; }
+    .line { stroke: #35424e; stroke-width: 3; fill: none; }
+    .double-line { stroke: #35424e; stroke-width: 2; fill: none; }
+  </style>
+
+  <text x="700" y="45" class="title" text-anchor="middle">Course Registration E-R Design</text>
+  <text x="700" y="72" class="subtitle" text-anchor="middle">Conceptual schema: relationship keys are not repeated as entity attributes</text>
+
+  <!-- Department entity -->
+  <rect x="70" y="110" width="280" height="180" rx="4" fill="#d9eef7" stroke="#24647a" stroke-width="3"/>
+  <line x1="70" y1="150" x2="350" y2="150" class="line"/>
+  <text x="210" y="137" class="entity-name" text-anchor="middle">Department</text>
+  <text x="92" y="183" class="key">dept_code</text>
+  <text x="92" y="216" class="attribute">dept_name</text>
+  <text x="92" y="249" class="attribute">building</text>
+
+  <!-- Student entity -->
+  <rect x="1030" y="95" width="300" height="260" rx="4" fill="#dff3df" stroke="#39764a" stroke-width="3"/>
+  <line x1="1030" y1="135" x2="1330" y2="135" class="line"/>
+  <text x="1180" y="122" class="entity-name" text-anchor="middle">Student</text>
+  <text x="1052" y="168" class="key">student_id</text>
+  <text x="1052" y="199" class="attribute">email [candidate key]</text>
+  <text x="1052" y="230" class="attribute">name</text>
+  <text x="1080" y="259" class="attribute">first_name</text>
+  <text x="1080" y="288" class="attribute">last_name</text>
+  <text x="1052" y="319" class="attribute">{phone_number}</text>
+  <text x="1052" y="346" class="attribute">completed_credits (derived)</text>
+
+  <!-- Course entity -->
+  <rect x="70" y="590" width="280" height="190" rx="4" fill="#f9ded8" stroke="#994d3d" stroke-width="3"/>
+  <line x1="70" y1="630" x2="350" y2="630" class="line"/>
+  <text x="210" y="617" class="entity-name" text-anchor="middle">Course</text>
+  <text x="92" y="663" class="key">course_id</text>
+  <text x="92" y="696" class="attribute">title</text>
+  <text x="92" y="729" class="attribute">credits</text>
+
+  <!-- Weak Section entity: double rectangle -->
+  <rect x="1030" y="575" width="300" height="215" rx="4" fill="#fff1c7" stroke="#8a6d1d" stroke-width="3"/>
+  <rect x="1038" y="583" width="284" height="199" rx="2" fill="none" stroke="#8a6d1d" stroke-width="2"/>
+  <line x1="1038" y1="623" x2="1322" y2="623" class="line"/>
+  <text x="1180" y="610" class="entity-name" text-anchor="middle">Section [weak]</text>
+  <text x="1060" y="657" class="attribute">section_no [discriminator]</text>
+  <text x="1060" y="690" class="attribute">term [discriminator]</text>
+  <text x="1060" y="723" class="attribute">room</text>
+  <text x="1060" y="756" class="attribute">capacity</text>
+
+  <!-- majors_in relationship -->
+  <line x1="350" y1="205" x2="610" y2="205" class="line"/>
+  <polygon points="610,205 700,155 790,205 700,255" fill="#eceff1" stroke="#35424e" stroke-width="3"/>
+  <line x1="790" y1="205" x2="1030" y2="205" class="line"/>
+  <text x="700" y="205" class="relationship">majors_in</text>
+  <text x="380" y="191" class="cardinality">0..*</text>
+  <text x="960" y="191" class="cardinality">1..1</text>
+
+  <!-- offers relationship -->
+  <line x1="210" y1="290" x2="210" y2="390" class="line"/>
+  <polygon points="210,390 280,435 210,480 140,435" fill="#eceff1" stroke="#35424e" stroke-width="3"/>
+  <line x1="210" y1="480" x2="210" y2="590" class="line"/>
+  <text x="210" y="435" class="relationship">offers</text>
+  <text x="228" y="330" class="cardinality">0..*</text>
+  <text x="228" y="550" class="cardinality">1..1</text>
+
+  <!-- registers relationship and grade attribute -->
+  <line x1="1180" y1="355" x2="1180" y2="405" class="line"/>
+  <polygon points="1180,405 1260,450 1180,495 1100,450" fill="#eceff1" stroke="#35424e" stroke-width="3"/>
+  <line x1="1180" y1="495" x2="1180" y2="575" class="line"/>
+  <text x="1180" y="450" class="relationship">registers</text>
+  <text x="1198" y="390" class="cardinality">0..*</text>
+  <text x="1198" y="550" class="cardinality">0..*</text>
+  <line x1="1260" y1="450" x2="1300" y2="450" class="line"/>
+  <ellipse cx="1340" cy="450" rx="45" ry="26" fill="#ffffff" stroke="#35424e" stroke-width="2"/>
+  <text x="1340" y="455" class="attribute" text-anchor="middle">grade</text>
+
+  <!-- identifying relationship: double diamond -->
+  <line x1="350" y1="685" x2="610" y2="685" class="line"/>
+  <polygon points="610,685 700,635 790,685 700,735" fill="#eceff1" stroke="#35424e" stroke-width="3"/>
+  <polygon points="622,685 700,642 778,685 700,728" fill="none" stroke="#35424e" stroke-width="2"/>
+  <line x1="790" y1="681" x2="1030" y2="681" class="double-line"/>
+  <line x1="790" y1="689" x2="1030" y2="689" class="double-line"/>
+  <text x="700" y="685" class="relationship">identifies</text>
+  <text x="380" y="669" class="cardinality">0..*</text>
+  <text x="960" y="669" class="cardinality">1..1</text>
+
+  <rect x="400" y="825" width="600" height="46" rx="4" fill="#f7f8f9" stroke="#9aa4ad" stroke-width="1"/>
+  <text x="700" y="854" class="subtitle" text-anchor="middle">Double rectangle: weak entity · double diamond/line: identifying relationship and total participation</text>
+</svg>

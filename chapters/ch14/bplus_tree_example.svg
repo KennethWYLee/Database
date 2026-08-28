@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">B plus tree equality lookup, range scan, and leaf split</title>
+  <desc id="desc">A root with separator keys 40 and 70 points to three linked leaves. An inset shows insertion of 65 splitting the middle leaf and promoting separator 60.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f4858"/>
+    </marker>
+    <style>
+      text { font-family: Arial, sans-serif; fill: #17242c; letter-spacing: 0; }
+      .title { font-size: 26px; font-weight: 700; }
+      .label { font-size: 17px; font-weight: 700; }
+      .key { font-size: 20px; font-weight: 700; text-anchor: middle; }
+      .note { font-size: 15px; }
+      .node { fill: #ffffff; stroke: #2f4858; stroke-width: 3; }
+      .leaf { fill: #eaf5ef; stroke: #26734d; stroke-width: 3; }
+      .split { fill: #fff3d6; stroke: #b36b00; stroke-width: 3; }
+      .line { fill: none; stroke: #2f4858; stroke-width: 3; marker-end: url(#arrow); }
+      .leaflink { fill: none; stroke: #26734d; stroke-width: 3; marker-end: url(#arrow); }
+      .range { fill: none; stroke: #b23a48; stroke-width: 5; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="#f7f9fa"/>
+  <text x="48" y="48" class="title">B+ tree: lookup, range scan, and split</text>
+  <text x="48" y="82" class="note">Each leaf holds at most three keys in this teaching example.</text>
+
+  <text x="84" y="133" class="label">Before insertion</text>
+  <rect x="450" y="105" width="300" height="70" rx="4" class="node"/>
+  <line x1="600" y1="105" x2="600" y2="175" stroke="#2f4858" stroke-width="2"/>
+  <text x="525" y="149" class="key">40</text>
+  <text x="675" y="149" class="key">70</text>
+
+  <path d="M500 175 L260 250" class="line"/>
+  <path d="M600 175 L600 250" class="line"/>
+  <path d="M700 175 L940 250" class="line"/>
+
+  <rect x="130" y="255" width="260" height="76" rx="4" class="leaf"/>
+  <rect x="470" y="255" width="260" height="76" rx="4" class="leaf"/>
+  <rect x="810" y="255" width="260" height="76" rx="4" class="leaf"/>
+  <text x="260" y="303" class="key">10 | 20 | 30</text>
+  <text x="600" y="303" class="key">40 | 50 | 60</text>
+  <text x="940" y="303" class="key">70 | 80 | 90</text>
+  <path d="M390 293 L468 293" class="leaflink"/>
+  <path d="M730 293 L808 293" class="leaflink"/>
+  <path d="M520 341 L680 341" class="range"/>
+  <text x="600" y="371" class="note" text-anchor="middle">Range [45, 80] starts at 50 and follows leaf links through 80.</text>
+
+  <line x1="48" y1="405" x2="1152" y2="405" stroke="#c5cdd2" stroke-width="2"/>
+  <text x="84" y="451" class="label">Insert 65 into the full middle leaf</text>
+  <rect x="360" y="475" width="210" height="72" rx="4" class="split"/>
+  <rect x="630" y="475" width="210" height="72" rx="4" class="split"/>
+  <text x="465" y="519" class="key">40 | 50</text>
+  <text x="735" y="519" class="key">60 | 65</text>
+  <path d="M570 511 L628 511" class="leaflink"/>
+  <path d="M735 475 L735 441 L875 441" class="line"/>
+  <text x="905" y="447" class="note">Promote separator 60 to the parent.</text>
+  <text x="84" y="585" class="note">The root becomes [40 | 60 | 70]; every leaf remains at the same depth.</text>
+</svg>
