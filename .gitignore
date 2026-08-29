@@ -60,6 +60,7 @@
 !/working_materials/course_repository/build_course_repository.py
 !/working_materials/course_repository/repository_config.json
 !/working_materials/course_repository/course_home.md
+!/working_materials/course_repository/notebook_figures.py
 /working_materials/course_repository/output/
 
 **/__pycache__/

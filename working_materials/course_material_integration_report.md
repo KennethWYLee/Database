@@ -98,8 +98,13 @@ restore、remote failover及ARIES。
   directories；根目錄直接提供`ch02.ipynb`至`ch19.ipynb`共12份章節notebook。
 - 每份notebook整合既有English chapter reading、teaching examples、SQL或Python
   demonstrations、practice及reproducibility checks；Ch6與Ch14圖片以attachment內嵌。
+- Ch2新增兩張由Python標準庫產生的原創SVG：course-registration relational schema及
+  selection/projection pipeline；XML parse與PNG visual QA通過，未複製教科書圖。
 - SQL使用Python標準庫`sqlite3`與in-memory database；Ch17-Ch19模擬程式及JSON data
   於cell內嵌，執行時只建立會自動清除的temporary directory。
+- Ch2-Ch7與Ch14-Ch17加入一致的database build順序，實際列出tables、columns、
+  primary keys、unique constraints、foreign keys及`PRAGMA foreign_key_check`結果；
+  Ch18-Ch19說明改用simulation的SQLite能力邊界。
 - 生成結果共16個files：12份notebook、`README.md`、`SYLLABUS.md`、`SCHEDULE.md`及
   `.gitignore`；`ASSET_FILES=0`，沒有lab runner、chapter subdirectory或外部data。
 - 12份notebook全部逐cell執行通過；manifest、English-only、internal path、external

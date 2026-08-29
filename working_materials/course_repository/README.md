@@ -9,6 +9,8 @@ weekly or chapter subdirectories.
 - `repository_config.json`: chapter sources and the 18-week schedule.
 - `course_home.md`: source for the generated root `README.md`.
 - `build_course_repository.py`: builds, executes, and verifies every notebook.
+- `notebook_figures.py`: generates original SVG teaching diagrams with the Python
+  standard library.
 
 The chapter guides, SQL, diagrams, data, and simulation programs remain the maintained
 content sources. The builder combines them into one self-contained notebook per selected
@@ -25,9 +27,11 @@ ch02.ipynb
 ch19.ipynb
 ```
 
-SQL and Python examples are embedded in the notebook that uses them. PNG diagrams are
-stored as notebook attachments. The current build therefore needs no `assets/` directory,
-separate lab runner, or external data file.
+SQL and Python examples are embedded in the notebook that uses them. Existing PNG
+diagrams and Python-generated SVG figures are stored as notebook attachments. SQL
+notebooks guide the reader through connection, table creation, data loading, schema
+inspection, integrity checks, and chapter queries. The current build therefore needs no
+`assets/` directory, separate lab runner, or external data file.
 
 ## Build and Verify
 

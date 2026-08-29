@@ -177,6 +177,13 @@
 - Manifest hash、English-only、internal path、external local-file dependency、預期
   root file集合及所有code cell execution count檢查通過。
 
+### 5.6 2026-08-29圖解與database guidance附加驗證
+
+- Ch2新增兩張Python-generated SVG attachment；XML parse與PNG visual QA通過，修正
+  第一版arrow label重疊後未見裁切或文字重疊。
+- 10份SQL notebook均加入並執行database connection、DDL/data、schema inspection與
+  foreign-key check；Ch18-Ch19加入simulation boundary說明。
+
 ## 6. Course repository安全、格式與發布檢查
 
 | 檢查 | 結果 |

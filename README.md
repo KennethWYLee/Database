@@ -25,10 +25,10 @@ SCHEDULE.md
 ch02.ipynb ... ch19.ipynb
 ```
 
-Each `chXX.ipynb` combines the chapter reading, teaching examples, executable SQL or
-Python demonstrations, practice, and checks. Required images and example data are
-embedded directly in the notebook, so the current build has no separate `assets/`, lab
-runner, or chapter directory.
+Each `chXX.ipynb` combines the chapter reading, original teaching diagrams, executable
+SQL or Python demonstrations, database-creation guidance, practice, and checks. Required
+images and example data are embedded directly in the notebook, so the current build has
+no separate `assets/`, lab runner, or chapter directory.
 
 Build and verify all 12 notebooks from the repository root:
 

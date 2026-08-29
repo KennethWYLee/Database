@@ -10,7 +10,10 @@ import re
 import shutil
 import sys
 import tempfile
+import xml.etree.ElementTree as ET
 from pathlib import Path, PurePosixPath
+
+from notebook_figures import generate_figure
 
 
 SOURCE_DIR = Path(__file__).resolve().parent
@@ -59,7 +62,8 @@ EXPECTED_CHAPTERS = (
 SQL_HELPERS = '''import sqlite3
 
 print(f"Python {__import__('sys').version.split()[0]}; SQLite {sqlite3.sqlite_version}")
-connection = sqlite3.connect(":memory:", isolation_level=None)
+DATABASE_NAME = ":memory:"  # Change to "chapter_database.db" to keep a database file.
+connection = sqlite3.connect(DATABASE_NAME, isolation_level=None)
 connection.execute("PRAGMA foreign_keys = ON")
 
 
@@ -93,7 +97,55 @@ def run_sql_script(connection, script, max_rows=20):
     ).strip()
     if remaining:
         raise ValueError("The embedded SQL ends with an incomplete statement.")
+
+
+def inspect_database(connection):
+    """Display tables, columns, primary keys, foreign keys, and integrity status."""
+    tables = [
+        row[0]
+        for row in connection.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
+        )
+    ]
+    print("Tables:", ", ".join(tables) if tables else "none")
+    for table in tables:
+        columns = connection.execute(f'PRAGMA table_info("{table}")').fetchall()
+        primary_key = [row[1] for row in sorted(columns, key=lambda row: row[5]) if row[5]]
+        print(f"\\n{table}")
+        print("  columns:", ", ".join(f"{row[1]} {row[2]}" for row in columns))
+        print("  primary key:", ", ".join(primary_key) if primary_key else "none")
+        for index_row in connection.execute(f'PRAGMA index_list("{table}")').fetchall():
+            if index_row[2] and index_row[3] == "u":
+                unique_columns = [
+                    row[2]
+                    for row in connection.execute(
+                        f'PRAGMA index_info("{index_row[1]}")'
+                    ).fetchall()
+                ]
+                print("  unique constraint:", ", ".join(unique_columns))
+        foreign_keys = connection.execute(f'PRAGMA foreign_key_list("{table}")').fetchall()
+        for foreign_key in foreign_keys:
+            print(f"  foreign key: {foreign_key[3]} -> {foreign_key[2]}.{foreign_key[4]}")
+    violations = connection.execute("PRAGMA foreign_key_check").fetchall()
+    print("\\nForeign-key check:", "PASS" if not violations else violations)
 '''
+
+SQL_BUILD_GUIDE = '''## Build and Inspect the Chapter Database
+
+The executable cells use SQLite through Python's standard `sqlite3` module. Follow the
+cells in order:
+
+1. Open a database connection and enable foreign-key enforcement.
+2. Execute the chapter's `CREATE TABLE` statements before inserting rows.
+3. Load the synthetic example data.
+4. Inspect the resulting tables, columns, primary keys, and foreign keys.
+5. Check referential integrity before running the chapter queries.
+6. Predict each query result, execute it, and explain any difference.
+
+`DATABASE_NAME` is initially `:memory:`, so closing the notebook removes the database.
+Change it to a filename such as `chapter_database.db` when you want SQLite to create a
+persistent database in the notebook's working directory. Do not switch to a persistent
+file until the in-memory version runs successfully from top to bottom.'''
 
 SQL_CHECKS = {
     "ch02": '''assert connection.execute("SELECT COUNT(*) FROM department").fetchone()[0] == 3
@@ -222,6 +274,15 @@ def validate_config(config: dict) -> None:
         raise ValueError("Chapter identifiers must be unique")
     for chapter in chapters:
         safe_source(chapter["guide_source"])
+        figure_names: set[str] = set()
+        for figure in chapter.get("generated_figures", []):
+            for key in ("generator", "filename", "title", "alt", "after_heading"):
+                if not figure.get(key):
+                    raise ValueError(f"{chapter['id']} figure is missing {key}")
+            if figure["filename"] in figure_names or not figure["filename"].endswith(".svg"):
+                raise ValueError(f"Invalid or duplicate generated figure in {chapter['id']}")
+            figure_names.add(figure["filename"])
+            ET.fromstring(generate_figure(figure["generator"]))
         for group in ("markdown_sources", "image_sources", "sql_sources"):
             for item in chapter.get(group, []):
                 safe_source(item["source"])
@@ -316,6 +377,29 @@ def image_attachments(chapter: dict) -> dict[str, dict]:
     return attachments
 
 
+def generated_figure_cells(chapter: dict, heading: str) -> list[dict]:
+    cells: list[dict] = []
+    for figure in chapter.get("generated_figures", []):
+        if figure["after_heading"] != heading:
+            continue
+        svg = generate_figure(figure["generator"])
+        ET.fromstring(svg)
+        encoded = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+        markdown = (
+            f"### {figure['title']}\n\n"
+            f"![{figure['alt']}](attachment:{figure['filename']})\n\n"
+            "This original diagram applies the chapter concepts to the synthetic "
+            "course-registration example used throughout the notebooks."
+        )
+        cells.append(
+            markdown_cell(
+                markdown,
+                {figure["filename"]: {"image/svg+xml": encoded}},
+            )
+        )
+    return cells
+
+
 def embedded_text_assignment(variable: str, text: str) -> str:
     escaped = text.replace("\\", "\\\\")
     if '"""' not in text:
@@ -329,10 +413,11 @@ def sql_cells(chapter: dict) -> list[dict]:
     sources = chapter.get("sql_sources", [])
     if not sources:
         return []
-    cells = [markdown_cell("## Executable Notebook Lab\n\nPredict before running each cell, then compare the output with your explanation.")]
+    cells = [markdown_cell(SQL_BUILD_GUIDE)]
     executable = [item for item in sources if item["execute"]]
     if executable:
         cells.append(code_cell(SQL_HELPERS))
+    inspection_added = False
     for index, item in enumerate(sources, start=1):
         sql = safe_source(item["source"]).read_text(encoding="utf-8")
         if item["execute"]:
@@ -340,6 +425,16 @@ def sql_cells(chapter: dict) -> list[dict]:
             cells.append(markdown_cell(f"### {item['title']}"))
             cells.append(code_cell(embedded_text_assignment(variable, sql)))
             cells.append(code_cell(f"run_sql_script(connection, {variable})"))
+            if not inspection_added:
+                cells.append(
+                    markdown_cell(
+                        "### Inspect the Database You Created\n\n"
+                        "Read the output as a schema check: confirm the table names, column "
+                        "types, primary-key order, foreign-key direction, and integrity result."
+                    )
+                )
+                cells.append(code_cell("inspect_database(connection)"))
+                inspection_added = True
         else:
             cells.append(
                 markdown_cell(
@@ -410,6 +505,8 @@ def build_notebook(chapter: dict) -> dict:
             if f"attachment:{filename}" in section
         }
         cells.append(markdown_cell(section, section_attachments))
+        heading = section.splitlines()[0].strip()
+        cells.extend(generated_figure_cells(chapter, heading))
 
     for item in chapter.get("markdown_sources", []):
         text = normalize_guide(safe_source(item["source"]).read_text(encoding="utf-8"))
@@ -417,6 +514,17 @@ def build_notebook(chapter: dict) -> dict:
 
     cells.extend(sql_cells(chapter))
     if chapter.get("programs"):
+        if not chapter.get("sql_sources"):
+            cells.append(
+                markdown_cell(
+                    "## Why This Chapter Uses a Simulation\n\n"
+                    "SQLite can create tables and execute transactions, but it does not expose "
+                    "a server lock manager, wait-for graph, write-ahead log, or restart-recovery "
+                    "procedure for direct classroom inspection. This notebook therefore uses a "
+                    "small verified Python simulation for the chapter mechanism. Treat the "
+                    "result as an instructional model, not as observed SQLite server behavior."
+                )
+            )
         cells.append(
             markdown_cell(
                 "## Executable Notebook Demonstrations\n\nThe source code and data are embedded in this notebook. Each cell creates a temporary directory, runs the demonstration, and removes the temporary files automatically."
@@ -606,6 +714,9 @@ def verify_content(config: dict) -> None:
     for chapter in config["chapters"]:
         notebook = json.loads(safe_target(f"{chapter['id']}.ipynb").read_text(encoding="utf-8"))
         expected_attachments = {item["filename"] for item in chapter.get("image_sources", [])}
+        expected_attachments.update(
+            item["filename"] for item in chapter.get("generated_figures", [])
+        )
         actual_attachments = {
             filename
             for cell in notebook["cells"]

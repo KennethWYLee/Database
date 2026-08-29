@@ -3,11 +3,13 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-08-28
+- 最後更新日期：2026-08-29
 - 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
   教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材；
   2026-08-28依教師最新決定改為不區分教師與學生導覽，每個選定章節只有一份
-  自包含`chXX.ipynb`，並已完成12份notebook的本機建置與逐cell執行驗證
+  自包含`chXX.ipynb`，並已完成12份notebook的本機建置與逐cell執行驗證；Ch2
+  加入原創Python-generated schema/algebra figures，SQL chapters加入database build
+  與schema inspection guidance
 - Repository：本資料夾是獨立 Git repository；`main`追蹤GitHub的`origin/main`，
   最新commit以Git history為準
 - 文件可見性：混合；歷屆考題、答案、評分資料及教師手冊不得直接發布
@@ -165,6 +167,10 @@
 - Ch6與Ch14圖片使用notebook attachments；SQL、JSON及Python examples均內嵌於
   notebook並於執行時使用in-memory database或自動清除的temporary directory，
   因此目前沒有`assets/`、lab runner或外部data dependency。
+- Ch2另以`notebook_figures.py`產生原創course-registration relational schema及
+  selection/projection pipeline SVG，不複製教科書圖；SVG直接作為notebook
+  attachment。Ch2-Ch7與Ch14-Ch17均引導建立SQLite connection、執行DDL、載入
+  synthetic data、檢查tables/columns/keys/foreign keys及執行chapter queries。
 - Private GitHub的`course-materials` branch只保存builder產生的16個統一course
   files，供教師直接檢查GitHub notebook rendering；它是derived review copy，修改
   仍須在`main`的maintained source完成後重新生成。
@@ -202,6 +208,9 @@
   12份notebook、首頁、課綱、進度表與`.gitignore`，沒有額外asset。全部notebook
   已逐cell執行，English-only、internal path、external dependency、attachment、
   manifest及預期檔案集合檢查通過。
+- [x] Ch2兩張Python-generated SVG已完成XML parse與PNG render visual QA；修正arrow
+  label重疊後未見裁切。10份SQL notebooks均實際輸出table、column、primary key、
+  unique constraint、foreign key及foreign-key check，Ch18-Ch19明列simulation boundary。
 - [x] SQLite ZIP的`run_labs.py`仍支援原有`materials/`package，2026-08-28重建ZIP後
   10組activities通過；統一notebook repository不再依賴runner或ZIP。
 - [ ] 教師完成英文學生教材的內容與語言審閱；在此之前不得把全部逐章教材標示為
@@ -217,7 +226,8 @@
 ## Primary next action
 
 教師已明確要求每章只保留一份notebook，因此下一步是審閱生成後的首頁、
-`SCHEDULE.md`，再抽查`ch02.ipynb`、`ch06.ipynb`、`ch15.ipynb`、`ch18.ipynb`及
-`ch19.ipynb`。預期成果是核准或修正notebook閱讀順序、章節份量與高負荷週次；
+`SCHEDULE.md`，再抽查`ch02.ipynb`的兩張圖與database setup，以及`ch06.ipynb`、
+`ch15.ipynb`、`ch18.ipynb`、`ch19.ipynb`。預期成果是核准或修正notebook閱讀順序、
+圖解清晰度、database build guidance、章節份量與高負荷週次；
 完成條件是可從首頁經schedule直接找到本週notebook，且每份notebook從概念、範例、
 預測、執行、判讀到practice形成完整順序，教師再決定何時取代遠端舊預覽。

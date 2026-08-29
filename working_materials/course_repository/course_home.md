@@ -30,9 +30,10 @@ Unified course materials for **Database Management** at National Taipei Universi
 | [ch18.ipynb](ch18.ipynb) | Concurrency Control |
 | [ch19.ipynb](ch19.ipynb) | Recovery |
 
-Each notebook contains its reading, examples, executable SQL or Python demonstrations,
-practice, and reproducibility checks. Images and example data are embedded, so there is
-no separate lab runner or required data directory.
+Each notebook contains its reading, original diagrams, executable SQL or Python
+demonstrations, database-creation guidance where applicable, practice, and reproducibility
+checks. Images and example data are embedded, so there is no separate lab runner or
+required data directory.
 
 ## Requirements
 

@@ -1,6 +1,6 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.08.28-unified-notebook",
+  "repository_version": "2026.08.29-diagrams-and-database-guidance",
   "instructor": "WenYi Lee",
   "syllabus_source": "1151_database_management_revised_syllabus.md",
   "chapters": [
@@ -8,6 +8,22 @@
       "id": "ch02",
       "title": "Relational Model",
       "guide_source": "working_materials/chapters/ch02_relational_model/student_guide.md",
+      "generated_figures": [
+        {
+          "generator": "ch02_relational_schema",
+          "filename": "ch02_relational_schema.svg",
+          "title": "Relational schema diagram",
+          "alt": "Course-registration tables with primary, candidate, and foreign keys",
+          "after_heading": "## 4. Foreign Keys and Schema Diagrams"
+        },
+        {
+          "generator": "ch02_algebra_pipeline",
+          "filename": "ch02_algebra_pipeline.svg",
+          "title": "Selection and projection pipeline",
+          "alt": "Student relation filtered to Information Management and projected to student names",
+          "after_heading": "## 5. Relational-Algebra Operations"
+        }
+      ],
       "sql_sources": [
         {"title": "Course-registration setup", "source": "working_materials/chapters/ch02_relational_model/course_registration_setup.sql", "execute": true},
         {"title": "Relational-model lab", "source": "working_materials/chapters/ch02_relational_model/student_lab.sql", "execute": true}
