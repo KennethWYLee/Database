@@ -105,8 +105,9 @@ restore、remote failover及ARIES。
 - Ch2-Ch7與Ch14-Ch17加入一致的database build順序，實際列出tables、columns、
   primary keys、unique constraints、foreign keys及`PRAGMA foreign_key_check`結果；
   Ch18-Ch19說明改用simulation的SQLite能力邊界。
-- 生成結果共16個files：12份notebook、`README.md`、`SYLLABUS.md`、`SCHEDULE.md`及
-  `.gitignore`；`ASSET_FILES=0`，沒有lab runner、chapter subdirectory或外部data。
+- 生成結果共14個files：12份notebook、唯一Markdown檔`README.md`及`.gitignore`；
+  README整合導覽、18週進度、課綱與課程政策，且`ASSET_FILES=0`，沒有lab runner、
+  chapter subdirectory或外部data。
 - 12份notebook全部逐cell執行通過；manifest、English-only、internal path、external
   dependency、attachment及精確檔案集合檢查均通過。
 
@@ -121,7 +122,7 @@ restore、remote failover及ARIES。
 
 ## 7. Primary Next Action
 
-依 `PROJECT.md`與`pre_instructor_review_audit.md`，下一步是教師審閱生成後的首頁、
-`SCHEDULE.md`及代表性的`ch02.ipynb`、`ch06.ipynb`、`ch15.ipynb`、`ch18.ipynb`、
+依 `PROJECT.md`與`pre_instructor_review_audit.md`，下一步是教師審閱生成後的
+`README.md`及代表性的`ch02.ipynb`、`ch06.ipynb`、`ch15.ipynb`、`ch18.ipynb`、
 `ch19.ipynb`。預期成果是明確修正或核准notebook閱讀順序與份量；完成條件是概念、
 範例、預測、執行、判讀及practice的順序獲確認，再決定何時更新GitHub預覽。

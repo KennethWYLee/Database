@@ -20,10 +20,11 @@ The generated course repository contains only:
 
 ```text
 README.md
-SYLLABUS.md
-SCHEDULE.md
 ch02.ipynb ... ch19.ipynb
 ```
+
+The generated `README.md` includes repository navigation, the 18-week schedule, course
+information, assessment rules, and policies. It is the only Markdown file in that root.
 
 Each `chXX.ipynb` combines the chapter reading, original teaching diagrams, executable
 SQL or Python demonstrations, database-creation guidance, practice, and checks. Required

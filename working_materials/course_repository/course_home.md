@@ -4,16 +4,16 @@ Unified course materials for **Database Management** at National Taipei Universi
 
 ## Start Here
 
-1. Open the [course schedule](SCHEDULE.md).
+1. Review the [course schedule](#course-schedule) below.
 2. Find the current week and open the linked chapter notebook.
 3. Follow the coverage listed for that week. One notebook may continue for two weeks.
 4. Run the notebook from top to bottom, recording each prediction before execution.
 5. Retain the evidence requested in the notebook.
 
-## Course Files
+The schedule, course information, assessment rules, and policies are all included in this
+README. The remaining course files are the chapter notebooks.
 
-- [Course syllabus](SYLLABUS.md)
-- [Course schedule](SCHEDULE.md)
+## Chapter Notebooks
 
 | Notebook | Chapter |
 |---|---|

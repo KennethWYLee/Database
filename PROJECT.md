@@ -3,7 +3,7 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-08-29
+- 最後更新日期：2026-08-31
 - 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
   教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材；
   2026-08-28依教師最新決定改為不區分教師與學生導覽，每個選定章節只有一份
@@ -160,9 +160,9 @@
 - `main`已推送，內容是經allow-list檢查的治理文件、課綱、課程
   計畫、Ch2-Ch7與Ch14-Ch19教材、驗證程式、核准的SQLite學生套件、教師審閱前
   audit及第一版學生repository builder。
-- 2026-08-28依教師最新決定，發布用course repository不區分教師與學生目錄，也不
-  建立weekly或chapter subdirectories。預覽根目錄只有首頁、英文課綱、單一
-  `SCHEDULE.md`及12份`chXX.ipynb`；每份notebook整合reading、teaching examples、
+- 2026-08-31依教師最新決定，發布用course repository不區分教師與學生目錄，也不
+  建立weekly或chapter subdirectories。預覽根目錄只有整合導覽、18週進度、課綱與
+  課程政策的`README.md`及12份`chXX.ipynb`；每份notebook整合reading、teaching examples、
   executable SQL/Python、practice、outputs及checks，同一份可供一週或兩週使用。
 - Ch6與Ch14圖片使用notebook attachments；SQL、JSON及Python examples均內嵌於
   notebook並於執行時使用in-memory database或自動清除的temporary directory，
@@ -171,9 +171,10 @@
   selection/projection pipeline SVG，不複製教科書圖；SVG直接作為notebook
   attachment。Ch2-Ch7與Ch14-Ch17均引導建立SQLite connection、執行DDL、載入
   synthetic data、檢查tables/columns/keys/foreign keys及執行chapter queries。
-- Private GitHub的`course-materials` branch只保存builder產生的16個統一course
+- Private GitHub的`course-materials` branch目前保存上一版builder產生的16個統一course
   files，供教師直接檢查GitHub notebook rendering；它是derived review copy，修改
-  仍須在`main`的maintained source完成後重新生成。
+  仍須在`main`的maintained source完成後重新生成。2026-08-31的maintained source已
+  改為14個files，尚未經教師授權commit或push到該branch。
 - Private GitHub既有`student-preview` branch是前一版chapter-directory預覽，已不
   代表教師最新決定；在教師另行授權commit/push或刪除前保留，不視為維護來源或
   current course release。
@@ -204,8 +205,9 @@
 - [x] 教師已決定Week 9複習Ch2-Ch5、English-only學生教材、縮減Ch15-Ch16與
   Ch18-Ch19課堂核心、官方英文姓名及GitHub選擇性公開方向；決定已套用。
 - [x] Ch2-Ch7與Ch14-Ch19的`student_guide.md`已改寫為English-only prose。
-- [x] 已將course repository改為12份根目錄`chXX.ipynb`；目前生成16個檔案，包含
-  12份notebook、首頁、課綱、進度表與`.gitignore`，沒有額外asset。全部notebook
+- [x] 已將course repository改為12份根目錄`chXX.ipynb`；目前生成14個檔案，包含
+  12份notebook、唯一Markdown檔`README.md`與`.gitignore`，沒有額外asset。README
+  內含導覽、18週進度、課綱與課程政策。全部notebook
   已逐cell執行，English-only、internal path、external dependency、attachment、
   manifest及預期檔案集合檢查通過。
 - [x] Ch2兩張Python-generated SVG已完成XML parse與PNG render visual QA；修正arrow
@@ -215,7 +217,7 @@
   10組activities通過；統一notebook repository不再依賴runner或ZIP。
 - [ ] 教師完成英文學生教材的內容與語言審閱；在此之前不得把全部逐章教材標示為
   student-ready。
-- [ ] 教師審閱course repository首頁、`SCHEDULE.md`與代表`chXX.ipynb`，確認後再決定
+- [ ] 教師審閱course repository的`README.md`與代表`chXX.ipynb`，確認後再決定
   public repository名稱、建立時間及GitHub Release方式。
 - [ ] 逐項建立GitHub公開allow-list並決定公開時機；之後另建public repository或
   allow-listed release artifact，未核准檔案不得移出現行private repository。
@@ -225,8 +227,8 @@
 
 ## Primary next action
 
-教師已明確要求每章只保留一份notebook，因此下一步是審閱生成後的首頁、
-`SCHEDULE.md`，再抽查`ch02.ipynb`的兩張圖與database setup，以及`ch06.ipynb`、
+教師已明確要求每章只保留一份notebook，且根目錄只保留一份Markdown，因此下一步
+是審閱生成後的`README.md`，再抽查`ch02.ipynb`的兩張圖與database setup，以及`ch06.ipynb`、
 `ch15.ipynb`、`ch18.ipynb`、`ch19.ipynb`。預期成果是核准或修正notebook閱讀順序、
 圖解清晰度、database build guidance、章節份量與高負荷週次；
 完成條件是可從首頁經schedule直接找到本週notebook，且每份notebook從概念、範例、

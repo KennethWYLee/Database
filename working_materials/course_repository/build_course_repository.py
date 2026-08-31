@@ -304,7 +304,7 @@ def validate_config(config: dict) -> None:
 def render_schedule(config: dict) -> str:
     titles = {chapter["id"]: chapter["title"] for chapter in config["chapters"]}
     lines = [
-        "# Course Schedule",
+        "## Course Schedule",
         "",
         "Each chapter has one self-contained notebook. A notebook may be used for more than",
         "one week; follow the coverage in this table rather than looking for a weekly file.",
@@ -324,16 +324,32 @@ def render_schedule(config: dict) -> str:
             f"| {week['week']} | {week['date']} | **{week['title']}**<br>"
             f"Notebook: {materials}<br>Coverage: {week['coverage']} |"
         )
-    lines.extend(
-        [
-            "",
-            "The [course syllabus](SYLLABUS.md) governs assessment, attendance, and course",
-            "requirements.",
-            "",
-            "[Back to the repository home](README.md)",
-        ]
-    )
     return "\n".join(lines)
+
+
+def render_syllabus_for_readme(config: dict) -> str:
+    syllabus = safe_source(config["syllabus_source"]).read_text(encoding="utf-8")
+    syllabus = re.sub(r"\A# .+?\n+", "", syllabus, count=1)
+    syllabus = re.sub(
+        r"\n## Weekly Schedule\n.*?(?=\n## Assessment\n)",
+        "\n",
+        syllabus,
+        count=1,
+        flags=re.DOTALL,
+    )
+    syllabus = re.sub(
+        r"^(#{2,5}) ",
+        lambda match: "#" + match.group(1) + " ",
+        syllabus,
+        flags=re.MULTILINE,
+    )
+    return "## Course Syllabus\n\n" + syllabus.strip()
+
+
+def render_readme(config: dict) -> str:
+    home = (SOURCE_DIR / "course_home.md").read_text(encoding="utf-8").strip()
+    sections = [home, render_schedule(config).strip(), render_syllabus_for_readme(config)]
+    return "\n\n".join(sections)
 
 
 def normalize_guide(text: str) -> str:
@@ -583,9 +599,7 @@ def build_preview(config: dict) -> None:
         safe_remove_generated(generated)
     PREVIEW_DIR.mkdir(parents=True)
 
-    write_text("README.md", (SOURCE_DIR / "course_home.md").read_text(encoding="utf-8"))
-    write_text("SYLLABUS.md", safe_source(config["syllabus_source"]).read_text(encoding="utf-8"))
-    write_text("SCHEDULE.md", render_schedule(config))
+    write_text("README.md", render_readme(config))
     write_text(".gitignore", ".ipynb_checkpoints/\n__pycache__/\n*.pyc\n.DS_Store")
 
     for chapter in config["chapters"]:
@@ -649,7 +663,7 @@ def notebook_markdown(notebook: dict) -> str:
 
 def verify_content(config: dict) -> None:
     errors: list[str] = []
-    expected_files = {".gitignore", "README.md", "SCHEDULE.md", "SYLLABUS.md"}
+    expected_files = {".gitignore", "README.md"}
     expected_files.update(f"{chapter_id}.ipynb" for chapter_id in EXPECTED_CHAPTERS)
     actual_files = {
         path.relative_to(PREVIEW_DIR).as_posix()

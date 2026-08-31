@@ -184,13 +184,23 @@
 - 10份SQL notebook均加入並執行database connection、DDL/data、schema inspection與
   foreign-key check；Ch18-Ch19加入simulation boundary說明。
 
+### 5.7 2026-08-31單一root README附加驗證
+
+- 教師決定course-materials根目錄只保留一個Markdown檔；builder不再輸出獨立
+  `SYLLABUS.md`或`SCHEDULE.md`，並把導覽、18週進度、課綱與課程政策整合至
+  `README.md`。
+- 新build精確生成14個files：`README.md`、`.gitignore`及12份`chXX.ipynb`；根目錄
+  的Markdown檔只有`README.md`。
+- 12份notebook重新逐cell執行通過；manifest、English-only、internal path、broken
+  link、attachment及精確檔案集合檢查通過。
+
 ## 6. Course repository安全、格式與發布檢查
 
 | 檢查 | 結果 |
 |---|---|
 | UTF-8與replacement character | 通過；未發現解碼錯誤或U+FFFD |
 | Markdown與notebook links | 通過；統一repository未發現外部local-file dependency |
-| 英文限定 | 首頁、課綱、進度表及12份notebook的CJK字元數為0 |
+| 英文限定 | 整合後的`README.md`及12份notebook的CJK字元數為0 |
 | 標題、表格、閱讀順序 | 12/12 notebook保留逐章教學結構並可由schedule直接開啟 |
 | 分鐘或時間配置 | 未發現課堂分鐘配置 |
 | 內部製作分類名稱 | 學生可見檔案未發現 |

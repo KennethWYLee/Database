@@ -7,7 +7,7 @@ weekly or chapter subdirectories.
 ## Maintained Files
 
 - `repository_config.json`: chapter sources and the 18-week schedule.
-- `course_home.md`: source for the generated root `README.md`.
+- `course_home.md`: source for the navigation section of the generated root `README.md`.
 - `build_course_repository.py`: builds, executes, and verifies every notebook.
 - `notebook_figures.py`: generates original SVG teaching diagrams with the Python
   standard library.
@@ -20,12 +20,13 @@ chapter.
 
 ```text
 README.md
-SYLLABUS.md
-SCHEDULE.md
 ch02.ipynb
 ...
 ch19.ipynb
 ```
+
+`README.md` contains the repository navigation, 18-week schedule, course information,
+assessment rules, and policies. It is the only Markdown file in the generated root.
 
 SQL and Python examples are embedded in the notebook that uses them. Existing PNG
 diagrams and Python-generated SVG figures are stored as notebook attachments. SQL
