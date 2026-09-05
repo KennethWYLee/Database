@@ -156,6 +156,43 @@ def ch02_relational_schema() -> str:
     return _svg("Course-registration relational schema", 650, content)
 
 
+def ch02_table_anatomy() -> str:
+    headers = ["student_id", "email", "student_name", "dept_code"]
+    rows = [
+        ["S101", "an.chen@example.edu", "An Chen", "IM"],
+        ["S102", "bea.lin@example.edu", "Bea Lin", "FIN"],
+        ["S103", "kai.wu@example.edu", "Kai Wu", "IM"],
+        ["S104", "mira.ho@example.edu", "Mira Ho", "DES"],
+    ]
+    xs = [60, 230, 620, 900, 1140]
+    parts = [
+        _text(60, 48, "Read One Student Table", size=32, weight=700),
+        _text(60, 82, "Synthetic student instance: one row per student; four tuples and four attributes.", size=21),
+        _text(60, 122, "Relation name: student", size=22, weight=600),
+        '<rect x="60" y="150" width="1080" height="274" fill="white" stroke="#52606d" stroke-width="2"/>',
+        '<rect x="60" y="150" width="1080" height="50" fill="#e5edf5"/>',
+        '<rect x="900" y="200" width="240" height="224" fill="#f3eef7"/>',
+        '<rect x="60" y="312" width="1080" height="56" fill="#e0f2ee"/>',
+    ]
+    for x in xs[1:-1]:
+        parts.append(f'<line x1="{x}" y1="150" x2="{x}" y2="424" stroke="#bec8d1"/>')
+    for y in [200, 256, 312, 368]:
+        parts.append(f'<line x1="60" y1="{y}" x2="1140" y2="{y}" stroke="#bec8d1"/>')
+    for x, header in zip(xs, headers):
+        parts.append(_text(x + 16, 183, header, size=23, weight=600))
+    for index, row in enumerate(rows):
+        for x, value in zip(xs, row):
+            parts.append(_text(x + 16, 235 + 56 * index, value, size=22))
+    parts.extend([
+        '<rect x="55" y="308" width="1090" height="64" fill="none" stroke="#11685a" stroke-width="4"/>',
+        '<rect x="896" y="145" width="248" height="284" fill="none" stroke="#75468f" stroke-width="4" stroke-dasharray="10 6"/>',
+        _text(60, 478, "Solid outline: one tuple, including all four values for S103.", size=23, weight=600),
+        _text(60, 518, "Dashed outline: the dept_code attribute. Their intersection contains IM.", size=23),
+        _text(60, 558, "IM is one attribute value; it does not describe the complete student.", size=22),
+    ])
+    return _svg("Student table: tuple, attribute, and value", 590, "\n".join(parts))
+
+
 def _mini_relation(
     x: int,
     y: int,
@@ -246,6 +283,7 @@ def ch02_algebra_pipeline() -> str:
 
 
 FIGURE_GENERATORS = {
+    "ch02_table_anatomy": ch02_table_anatomy,
     "ch02_relational_schema": ch02_relational_schema,
     "ch02_algebra_pipeline": ch02_algebra_pipeline,
 }

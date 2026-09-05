@@ -1,6 +1,6 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.08.31-single-root-readme",
+  "repository_version": "2026.09.05-week1-github-png",
   "instructor": "WenYi Lee",
   "syllabus_source": "1151_database_management_revised_syllabus.md",
   "chapters": [
@@ -8,17 +8,25 @@
       "id": "ch02",
       "title": "Relational Model",
       "guide_source": "working_materials/chapters/ch02_relational_model/student_guide.md",
+      "executable_guide": true,
       "generated_figures": [
         {
+          "generator": "ch02_table_anatomy",
+          "filename": "ch02_table_anatomy.png",
+          "title": "Reading the student relation",
+          "alt": "Four synthetic student tuples and four attributes. A solid outline marks the complete S103 tuple; a dashed outline marks dept_code; their intersection contains IM.",
+          "after_heading": "## A Row, a Column, and a Value"
+        },
+        {
           "generator": "ch02_relational_schema",
-          "filename": "ch02_relational_schema.svg",
+          "filename": "ch02_relational_schema.png",
           "title": "Relational schema diagram",
           "alt": "Course-registration tables with primary, candidate, and foreign keys",
           "after_heading": "## 4. Foreign Keys and Schema Diagrams"
         },
         {
           "generator": "ch02_algebra_pipeline",
-          "filename": "ch02_algebra_pipeline.svg",
+          "filename": "ch02_algebra_pipeline.png",
           "title": "Selection and projection pipeline",
           "alt": "Student relation filtered to Information Management and projected to student names",
           "after_heading": "## 5. Relational-Algebra Operations"
@@ -137,8 +145,8 @@
     }
   ],
   "weeks": [
-    {"week": 1, "date": "2026-09-10", "title": "Course Introduction and Relational Structure", "materials": ["ch02"], "coverage": "Course expectations; relations, tuples, attributes, domains, schemas, instances, and keys."},
-    {"week": 2, "date": "2026-09-17", "title": "Keys and Relational Algebra", "materials": ["ch02"], "coverage": "Foreign keys, schema diagrams, selection, projection, product, join, and set operations."},
+    {"week": 1, "date": "2026-09-10", "title": "Course Introduction and Relational Structure", "materials": ["ch02"], "coverage": "Read through End of Week 1: database purpose, one relation, tuples, attributes, domains, schema/instance changes, and why identifiers are needed. Complete the Week 1 response table."},
+    {"week": 2, "date": "2026-09-17", "title": "Keys and Relational Algebra", "materials": ["ch02"], "coverage": "Begin at Week 2: Keys and Relational Algebra. Superkeys, candidate/primary/composite/foreign keys, schema diagrams, selection, projection, product, join, and set operations; four-table database demonstration."},
     {"week": 3, "date": "2026-09-24", "title": "Basic SQL", "materials": ["ch03"], "coverage": "DDL basics; SELECT, FROM, WHERE, aliases, expressions, duplicates, patterns, ordering, and set operations."},
     {"week": 4, "date": "2026-10-01", "title": "NULL, Aggregation, and Selected Subqueries", "materials": ["ch03"], "coverage": "Three-valued logic, aggregation, GROUP BY, HAVING, selected subqueries, CTEs, and reversible modifications."},
     {"week": 5, "date": "2026-10-08", "title": "Intermediate SQL", "materials": ["ch04"], "coverage": "Explicit and outer joins, ON and WHERE, views, constraints, reference actions, and basic transactions."},

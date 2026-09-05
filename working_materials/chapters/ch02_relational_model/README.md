@@ -5,7 +5,9 @@ Chapter 2.
 
 ## Student-facing files
 
-- `student_guide.md`: self-contained reading, worked examples, activities, and review.
+- `student_guide.md`: reading, interleaved Week 1 Python examples, checked outputs,
+  practice responses, a stopping point, and Week 2 concepts. The builder turns the
+  Python fences into executable cells inside the single `ch02.ipynb`.
 - `course_registration_setup.sql`: original SQLite schema and sample data used by the
   chapter.
 - `student_lab.sql`: executable examples and prompts for recording predictions.
@@ -16,6 +18,8 @@ Chapter 2.
   exercise guidance, and verification record.
 - `instructor/verify_ch02.py`: automated checks for the sample database and all
   executable examples.
+- `instructor/verify_week1.py`: checks the generated Week 1 outputs, meeting boundaries,
+  and independent Week 2 execution after building the notebook.
 
 ## Status
 

@@ -7,8 +7,11 @@ Unified course materials for **Database Management** at National Taipei Universi
 1. Review the [course schedule](#course-schedule) below.
 2. Find the current week and open the linked chapter notebook.
 3. Follow the coverage listed for that week. One notebook may continue for two weeks.
-4. Run the notebook from top to bottom, recording each prediction before execution.
+4. Run the cells in the order given for that meeting, recording predictions before execution.
 5. Retain the evidence requested in the notebook.
+
+For the first meeting, open `ch02.ipynb` and stop at **End of Week 1**. Use the same
+notebook for Week 2, starting at **Week 2: Keys and Relational Algebra**.
 
 The schedule, course information, assessment rules, and policies are all included in this
 README. The remaining course files are the chapter notebooks.

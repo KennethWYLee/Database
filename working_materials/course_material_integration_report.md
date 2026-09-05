@@ -111,9 +111,46 @@ restore、remote failover及ARIES。
 - 12份notebook全部逐cell執行通過；manifest、English-only、internal path、external
   dependency、attachment及精確檔案集合檢查均通過。
 
-## 6. 仍待執行
+## 6. 最新修訂與後續事項
 
-1. 教師審閱English-only逐章notebook的內容、術語、閱讀順序及核心/延伸標示。
+### 2026-09-05 Week 1更新
+
+- 教師核准優先修改Week 1；同一份ch02.ipynb加入兩週範圍、第一週停止點、
+  單一student relation圖、七段就地執行範例及具體練習表。
+- 正式keys分類、schema diagrams、algebra與完整四表SQL setup保留在Week 2；
+  Week 1僅引入識別欄位用途。兩週使用獨立資料庫，第一週的修改不會流入後續章節。
+- 課綱、計畫與README週次對齊；未改考試日期、配分、原有SQL套件或其他章節範圍。
+- 全部12份notebook重新建置通過；Ch2三種fresh-kernel執行與畫面檢查的詳細證據
+  見Ch2 coverage record。此更新的早期階段尚未重新定位完整教科書PDF，當時使用
+  官方slides與執行證據查核；後續原文查核與修正如下。
+
+### 2026-09-05 教科書查核後的局部修正
+
+- 已找到並私下保存第7版PDF，閱讀完整Ch2及Week 1需要的Ch1/Ch3相關段落。
+- 依教師核准，區分查詢結果去重與原表資料、把course的room練習改為description，
+  並新增atomic values的前後電話表格與完整查找步驟；學生程式仍是七段。
+- `2026.09.05-week1-textbook-review`重建及全部12份notebook執行通過；Ch2兩支
+  verifier與三組fresh-kernel執行通過，桌面及手機顯示已檢查。
+- 與三處修正前相比，生成預覽僅ch02.ipynb改變，其餘13個檔案hash相同。
+  未改課綱、週次、配分或SQLite ZIP，未commit/push；教師內容與份量審閱仍待完成。
+
+### 2026-09-05 Week 1完成
+
+- 依教師進一步要求，已直接完成Week 1，不把教師逐份審閱列為本次完成條件。
+  版本為`2026.09.05-week1-complete`；沒有新增課堂主題、學生程式、週次或配分。
+- 六項原有目標均有解釋、具體範例、預測、操作或判斷、結果判讀及練習。補上
+  email檔案衝突、完整重複tuple比較、連續修改摘要及DB205/WD120具體練習。
+  教材明確供教師講解與示範，保留輸出讓學生課後複習，不改為純自學課程。
+- 嚴格原始JSON檢查發現缺少cell ID，已修正維護中的生成器；12份notebook的
+  原始schema驗證與全數程式執行通過。其他11章只補格式欄位，教學內容未變。
+- Ch2兩支verifier與三組fresh-kernel執行通過，桌面及手機的範例、練習、停止點
+  已檢查。連續兩次重建的14個預覽檔案與manifest雜湊完全一致。
+- Week 1編寫、來源查核、執行與本機顯示檢查完成，沒有尚待教師處理的客觀
+  阻擋項目。未宣稱教師親自審閱或實際學生測試；未commit/push。
+
+### 後續事項
+
+1. 其餘週次的內容審閱與教學份量確認仍屬後續全課程工作，不阻擋Week 1完成。
 2. 建立第一批GitHub公開allow-list、獨立public repository或release artifact，並決定
    公開時機；未核准檔案維持在現行private repository。
 3. 從未來實際GitHub下載位置重新核對ZIP hash與manifest。
@@ -122,7 +159,9 @@ restore、remote failover及ARIES。
 
 ## 7. Primary Next Action
 
-依 `PROJECT.md`與`pre_instructor_review_audit.md`，下一步是教師審閱生成後的
-`README.md`及代表性的`ch02.ipynb`、`ch06.ipynb`、`ch15.ipynb`、`ch18.ipynb`、
-`ch19.ipynb`。預期成果是明確修正或核准notebook閱讀順序與份量；完成條件是概念、
-範例、預測、執行、判讀及practice的順序獲確認，再決定何時更新GitHub預覽。
+教師要求直接完成Week 1的新指示取代先請教師審閱的原建議；編寫與驗證已完成。
+教師隨後另行授權commit/push，`course-materials`已更新至`5391b52`。發布時發現
+GitHub不顯示SVG attachment，已從維護中的SVG產生PNG內嵌圖片，並確認Week 1
+圖解在線上正常顯示。版本為`2026.09.05-week1-github-png`；前述未發布紀錄是
+編寫階段的歷史狀態。`main`來源與本紀錄同批提交，實際同步以Git遠端為準。
+本次不自動擴寫Week 2，不把其餘週次的待辦轉作Week 1完成的前置條件。

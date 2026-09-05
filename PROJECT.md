@@ -3,13 +3,23 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-08-31
+- 最後更新日期：2026-09-05
 - 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
   教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材；
   2026-08-28依教師最新決定改為不區分教師與學生導覽，每個選定章節只有一份
   自包含`chXX.ipynb`，並已完成12份notebook的本機建置與逐cell執行驗證；Ch2
   加入原創Python-generated schema/algebra figures，SQL chapters加入database build
   與schema inspection guidance
+- 2026-09-05依教師核准重整Ch2的Week 1：同一份notebook內新增七段就地執行範例、
+  tuple/attribute/value圖、具體練習與End of Week 1停止點；完整keys分類與四表操作
+  自Week 2開始。編寫完成時尚未commit/push；後續同步紀錄見Repository與發布狀態。
+- 同日取得教科書後，依教師核准修正三處Week 1內容：查詢去重不改動原表、
+  course練習改用description，以及補上atomic values的前後電話表格與查找步驟。
+  學生程式仍為七段，未增加SQL語法要求、章節、週次或配分。
+- 同日依教師「先把Week 1完成」的最新指示，完成現有範圍的講解、具體範例、
+  練習及客觀檢查，不再把教師逐份審閱列為Week 1編寫完成的前置條件。
+  版本`2026.09.05-week1-complete`已完成來源查核、執行與本機畫面驗證；
+  不宣稱教師已親自審閱或學生已實際使用；後續已授權GitHub同步。
 - Repository：本資料夾是獨立 Git repository；`main`追蹤GitHub的`origin/main`，
   最新commit以Git history為準
 - 文件可見性：混合；歷屆考題、答案、評分資料及教師手冊不得直接發布
@@ -37,6 +47,11 @@
 - 課程計畫與逐章教材不寫分鐘配置；需要控制份量時，以授課摘要、課堂核心
   內容及課後延伸內容區分。
 - 不把課堂流程、評量方式或 AI 使用方式另取未經教師核准的名稱。
+- Week 1只介紹識別欄位的用途，以同名學生說明；superkey、candidate/primary/
+  composite/foreign key的正式分類留在Week 2。課綱、課程計畫與首頁對齊此決定。
+- Week 1使用獨立的synthetic student table，Python/SQL為已提供的觀察工具，
+  不要求掌握語法。七段示範依概念、可檢查預測、程式與實際輸出、具體判讀排列；
+  練習直接寫在同一notebook，只在教師指定時繳交，未新增配分或作業平台。
 
 ## 教科書與已驗證章節
 
@@ -44,6 +59,16 @@
   *Database System Concepts*, 7th Edition。
 - 2026-08-27重新確認的本機私人教科書PDF標題、作者與版本均符合上述資料；該
   PDF只作教師端來源查核，不納入Git或學生套件。
+- 2026-09-05依教師提供的目錄找到並複製教科書至
+  `private_references/Database System Concepts 7th.pdf`；原檔為
+  `C:/Users/User/Documents/GoogleDrive/無筆記論文&書pdf/book_Database System Concepts 7th.pdf`，
+  保留不動。封面、版權頁與metadata確認為上述第7版，PDF共1519頁、11,403,145 bytes；
+  複製前後SHA-256一致：`6759169c44277578465d0aeebd50be0e70e832076a7e7a7a45b4e98ce4151d8c`。
+  `private_references/`已受現行`.gitignore`排除。複製步驟只確認書籍身分與複本一致性。
+- 同日後續已完整閱讀Ch2文字、練習與附註（印刷pp.37-64、PDF pp.62-89），
+  視覺檢查pp.40、42的相關圖表，並讀取Ch1 pp.1、5-8、11-14與Ch3 pp.72-73，
+  重新核對新版Week 1。
+  正式原文範圍、三處修正與驗證見Ch2 coverage record；不宣稱同時重審其餘章節。
 - 已完整查核本課正式範圍的教科書Ch2-Ch7、Ch14-Ch19正文及對應官方
   slides；Ch8-Ch9另核對封面與章節綱要並決定不列入必修進度。不得再把
   舊課綱使用的 *Fundamentals of Database Systems, 7/e* 當成本學期現行教材。
@@ -169,12 +194,19 @@
   因此目前沒有`assets/`、lab runner或外部data dependency。
 - Ch2另以`notebook_figures.py`產生原創course-registration relational schema及
   selection/projection pipeline SVG，不複製教科書圖；SVG直接作為notebook
-  attachment。Ch2-Ch7與Ch14-Ch17均引導建立SQLite connection、執行DDL、載入
+  attachment的維護來源。2026-09-05改為在build時轉成PNG attachment，以符合
+  GitHub預覽的顯示方式。Ch2-Ch7與Ch14-Ch17均引導建立SQLite connection、執行DDL、載入
   synthetic data、檢查tables/columns/keys/foreign keys及執行chapter queries。
-- Private GitHub的`course-materials` branch目前保存上一版builder產生的16個統一course
-  files，供教師直接檢查GitHub notebook rendering；它是derived review copy，修改
-  仍須在`main`的maintained source完成後重新生成。2026-08-31的maintained source已
-  改為14個files，尚未經教師授權commit或push到該branch。
+- 2026-08-31已推送`main` commit `63555f2`與`course-materials` commit `7bd6481`，
+  後者保存14個統一course files，根目錄唯一Markdown為README。它是derived review
+  copy，修改仍須在`main`的maintained source完成後重新生成。
+- 2026-09-05教師另行授權commit/push；`course-materials`已推送`aa06046`的Week 1
+  完成稿及`5391b52`的GitHub圖片相容性修正，遠端14個檔案與建置結果比對。
+  最新build為`2026.09.05-week1-github-png`。GitHub實際預覽曾無法顯示SVG，改為
+  PNG後已確認Week 1表格圖正常顯示；三張圖仍內嵌於同一ch02.ipynb。
+  轉圖使用build-only的`resvg-py==0.5.0`，保留箭頭與虛線，不增加學生安裝需求。
+  `main`維護來源與本紀錄同批提交；完整commit與同步狀態以Git history及遠端為準。
+  repository維持private，未上傳教科書PDF、QA暫存資料或私人舊教材。
 - Private GitHub既有`student-preview` branch是前一版chapter-directory預覽，已不
   代表教師最新決定；在教師另行授權commit/push或刪除前保留，不視為維護來源或
   current course release。
@@ -216,7 +248,18 @@
 - [x] SQLite ZIP的`run_labs.py`仍支援原有`materials/`package，2026-08-28重建ZIP後
   10組activities通過；統一notebook repository不再依賴runner或ZIP。
 - [ ] 教師完成英文學生教材的內容與語言審閱；在此之前不得把全部逐章教材標示為
-  student-ready。
+  student-ready。這是全課程的人工審閱紀錄，不阻擋已委託完成的Week 1編寫與驗證。
+- [x] Week 1七段範例輸出與預期一致；Week 1、Week 2與完整Ch2均已用fresh Jupyter
+  kernel執行，前後週資料互不依賴；新增圖與Week 1的HTML顯示已檢查。
+- [x] 已重新定位教科書PDF並複製至本課私人參考資料夾，確認版本、檔案雜湊與Git排除。
+- [x] 已依重新定位的教科書及全部29頁官方Ch2投影片核對Week 1，並修正三處
+  說明與範例。Ch2 coverage record區分早期未找到PDF的紀錄與本次原文查核；
+  原文查核不代表教師已核准教學份量或其餘章節已重新審閱。
+- [x] Week 1六項目標均已有解釋、具體範例、預測、結果判讀及可檢查的練習。
+  補齊不同檔案email衝突、重複值與完整重複tuple比較、連續修改摘要，以及具體的
+  DB205新增與WD120更新練習；七段學生程式與Week 2界線不變。
+- [x] 修正notebook生成器缺少cell ID的格式問題；12份原始JSON通過nbformat schema
+  檢查。其餘11章只新增格式欄位，內容未變；重建14個預覽檔案及manifest的hash一致。
 - [ ] 教師審閱course repository的`README.md`與代表`chXX.ipynb`，確認後再決定
   public repository名稱、建立時間及GitHub Release方式。
 - [ ] 逐項建立GitHub公開allow-list並決定公開時機；之後另建public repository或
@@ -227,9 +270,10 @@
 
 ## Primary next action
 
-教師已明確要求每章只保留一份notebook，且根目錄只保留一份Markdown，因此下一步
-是審閱生成後的`README.md`，再抽查`ch02.ipynb`的兩張圖與database setup，以及`ch06.ipynb`、
-`ch15.ipynb`、`ch18.ipynb`、`ch19.ipynb`。預期成果是核准或修正notebook閱讀順序、
-圖解清晰度、database build guidance、章節份量與高負荷週次；
-完成條件是可從首頁經schedule直接找到本週notebook，且每份notebook從概念、範例、
-預測、執行、判讀到practice形成完整順序，教師再決定何時取代遠端舊預覽。
+教師於2026-09-05進一步要求直接完成Week 1，因此原先「先由教師審閱Week 1」
+的下一步已由這項新指示取代。Week 1的編寫、來源查核、程式與顯示驗證已完成，
+目前沒有需要轉交教師處理的Week 1客觀檢查或內容阻擋問題。
+
+後續commit/push已獲明確授權，本次交付為`main`維護來源及相符的`course-materials`
+生成教材。線上檢查揭露的圖片問題已在維護來源修正並重建，不以發布成功代替
+顯示驗證。Week 1不再有需教師接手的客觀檢查；本次不自動擴寫Week 2。

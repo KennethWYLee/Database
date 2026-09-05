@@ -2,48 +2,526 @@
 
 ## Core Question
 
-A table is more than a grid. To query and connect tables correctly, we must know what a
-row represents, which attributes identify it, how tables refer to one another, and how a
-small set of relational operations describes a query.
+What does one row represent, and how can we change the data without confusing it with
+the structure of the table? Week 1 answers this question using one student table.
+Week 2 connects several tables through keys and describes queries with relational algebra.
 
 ## Teaching Summary
 
-| Topic | Worked example and practice | Evidence to retain |
+| Meeting | Reading and demonstrations | Practice |
 |---|---|---|
-| Relation, tuple, attribute, domain, schema, and instance | Identify parts of course-registration relations | Schema identification sheet |
-| Primary, candidate, and foreign keys | Compare candidate keys and follow references | Key map with reasons |
-| Core relational algebra | Apply selection, projection, product, join, and set operations | Result after each operation |
+| Week 1, September 10 | From **Week 1: Reading and Changing One Table** through **End of Week 1** | Complete the Week 1 response table in this notebook |
+| Week 2, September 17 | From **Week 2: Keys and Relational Algebra** onward | Key map, schema diagram, and intermediate algebra results |
+
+Stop at **End of Week 1** during the first meeting. The four-table database setup and
+algebra lab belong to Week 2. Assignment, rename, and formal equivalence are optional
+extensions. One notebook contains both meetings.
+
+In class, the instructor explains each idea and demonstrates the supplied examples.
+Pause at the prediction and practice questions to record your own reasoning. The
+explanations and preserved outputs also support review after class.
+
+Week 1 draws on Chapter 2, Sections 2.1-2.2, and the reason for identifying tuples at
+the start of Section 2.3. Formal key definitions belong to Week 2.
 
 Chapter 3 expresses these query ideas in SQL. This chapter focuses on structure and query
 logic rather than SQL syntax. Assignment, rename, and formal equivalence proofs are
 extensions and are not major Exam 1 operations.
 
-## Connection to Chapter 3
-
-The relational model supplies the vocabulary and operations that SQL implements. The
-keys and foreign-key paths in this chapter become join conditions, while selection and
-projection become common parts of a `SELECT` query.
-
 ## Prerequisites
 
-- Read a two-dimensional table.
-- Understand that a mathematical set contains one copy of each element.
-- Apply equality, inequality, `AND`, and `OR` conditions.
-- Follow an explicit sequence of filtering and column-selection steps.
+- For Week 1, read a row and a column and compare two values.
+- For Week 2, recall that a set contains one copy of each element and use equality,
+  inequality, `AND`, and `OR` conditions.
+- Python and SQL syntax are not prerequisites for Week 1. Use the supplied code to
+  observe the tables; writing SQL begins in Chapter 3.
 
 ## Learning Objectives
 
-After completing this chapter, you should be able to:
+By the end of Week 1, you should be able to:
 
-1. Identify a relation, tuple, attribute, domain, schema, and relation instance.
-2. Explain the difference between a schema and an instance.
-3. Classify superkeys, candidate keys, primary keys, and composite keys from business
-   rules.
-4. Identify referencing and referenced relations for a foreign key.
-5. Read a schema diagram and follow foreign-key connections.
-6. Apply selection, projection, Cartesian product, theta join, union, intersection, and
-   set difference to small relation instances.
-7. Compare the purpose of two simple relational-algebra expressions.
+1. Distinguish the stored data from the DBMS that manages it.
+2. Identify a relation, tuple, attribute, and value; distinguish repeated values from
+   duplicate tuples and row display order from the facts represented.
+3. Check a proposed value against a stated domain, including a value absent from the sample.
+4. Show how one phone number per row supports finding an individual number.
+5. Explain which instance or schema changes when a row, value, or attribute changes.
+6. Use two same-name students to explain why an identifying attribute is needed.
+
+By the end of Week 2, you should also be able to classify keys from business rules,
+follow foreign-key arrows, and calculate selection, projection, product, join, and set
+operations on small relations.
+
+## Week 1: Reading and Changing One Table
+
+### Why Keep a Database?
+
+A registration office needs to record students, courses, and enrollments. To contact a
+student, it needs an email address. To check a registration, it needs to identify the
+student and the course. These questions require agreed meanings for the stored values.
+
+A **database** is an organized collection of related data. A **database management
+system (DBMS)** is software used to define, store, retrieve, and update that data.
+Here, SQLite is the DBMS, and Python sends it commands. A displayed table is one view
+of the stored data, not the DBMS itself.
+
+### Worked Example: Two Copies Disagree
+
+Two offices keep separate files containing the same student's email. In this synthetic
+example, their entries disagree:
+
+| File | student_id | email |
+|---|---|---|
+| Registration file | S101 | an.chen@example.edu |
+| Contact file | S101 | an.old@example.edu |
+
+Before continuing, identify the conflicting value. Can either file alone establish
+which address is current?
+
+Both entries identify S101, but they give different email addresses. Neither file has
+evidence of which address the student currently uses. For this worked example, assume
+the office verifies S101's identity and the student confirms `an.chen@example.edu`.
+The office can then record that confirmed address in the shared database. Both offices
+can retrieve the same stored record instead of maintaining independent copies.
+
+The email is data; SQLite is the software that stores and retrieves it. Verification
+of the address came from the stated confirmation, not from SQLite. A shared database
+still needs rules for identifying students and accepting updates. It does not make
+an unverified email factually correct just because it can store it.
+
+Practice: in that example, identify the fact being stored, the software managing it, and
+the disagreement that must be resolved before contacting the student. Record your answer
+in the Week 1 response table.
+
+## 1. Reading a Relation
+
+Every row below describes **one student**, not one course enrollment. This is an original,
+synthetic teaching dataset, not a university student record. Department abbreviations are
+DES (Digital Design), FIN (Finance), and IM (Information Management).
+
+| student_id | email | student_name | dept_code |
+|---|---|---|---|
+| S101 | an.chen@example.edu | An Chen | IM |
+| S102 | bea.lin@example.edu | Bea Lin | FIN |
+| S103 | kai.wu@example.edu | Kai Wu | IM |
+| S104 | mira.ho@example.edu | Mira Ho | DES |
+
+A table representing a set of rows is a **relation**. Each complete row is a **tuple**,
+and each named column is an **attribute**. `student_name` is an attribute name; `Kai Wu`
+is a value of that attribute. The S103 tuple includes all four values, not just its ID.
+
+### Predict Before Running
+
+Write the number of tuples and attributes that the output should contain. Then write
+the complete S103 tuple, including its email address. Do not count the header as a tuple.
+
+The next cell creates a small SQLite table and inserts the four synthetic students.
+`show_students()` displays its current columns, rows, and counts. Treat the setup as
+supplied code; the lesson is how to read its output. This Week 1 table deliberately
+omits key and foreign-key enforcement, which is introduced in the Week 2 database.
+
+Run the Week 1 cells in order. To repeat the changes, restart the kernel and begin here
+again. The examples use memory only and never open or modify a database file.
+
+```python
+import sqlite3
+import sys
+
+print(f"Python {sys.version.split()[0]}; SQLite {sqlite3.sqlite_version}")
+week1_db = sqlite3.connect(":memory:", isolation_level=None)
+week1_db.execute("""CREATE TABLE student (
+    student_id TEXT, email TEXT, student_name TEXT, dept_code TEXT
+)""")
+week1_db.executemany("INSERT INTO student VALUES (?, ?, ?, ?)", [
+    ("S101", "an.chen@example.edu", "An Chen", "IM"),
+    ("S102", "bea.lin@example.edu", "Bea Lin", "FIN"),
+    ("S103", "kai.wu@example.edu", "Kai Wu", "IM"),
+    ("S104", "mira.ho@example.edu", "Mira Ho", "DES"),
+])
+
+def show_students():
+    result = week1_db.execute("SELECT * FROM student ORDER BY student_id")
+    columns = [column[0] for column in result.description]
+    rows = result.fetchall()
+    print(" | ".join(columns))
+    for row in rows:
+        print(" | ".join(str(value) for value in row))
+    print(f"Tuples: {len(rows)}; attributes: {len(columns)}")
+
+show_students()
+```
+
+### Read the Output
+
+The output contains four tuples and four attributes. Its S103 tuple is
+`(S103, kai.wu@example.edu, Kai Wu, IM)`. These four complete tuples form the current
+**relation instance**, the data at this point in the example. The display contains 16
+attribute values; it does not describe 16 students.
+
+Practice: identify the attribute whose S102 value is `FIN`, and write the complete S104
+tuple. Check your tuple against all four column headings before continuing.
+
+## A Row, a Column, and a Value
+
+Read the annotated student table below. The solid rectangle surrounds one complete
+tuple. The dashed rectangle surrounds the `dept_code` attribute, including its heading.
+Their intersection contains S103's `IM` value. The outlines identify different parts of
+the table; they do not add attributes or change any stored data.
+
+Practice: name a different tuple and a different attribute, then state the value at their
+intersection. Explain why one value does not describe the whole student.
+
+## 1.1 Domains and Atomic Values
+
+Which values would be allowed even if they do not appear in the sample? A **domain** is
+the set of values allowed for an attribute. For a course's `credits` attribute, this
+teaching design allows whole numbers from 1 through 6. A sample containing only 2 and 3
+does not limit the domain to those two observed values.
+
+Under that rule, 5 is allowed even though it is absent from the sample. Zero and 7 are
+outside the range, and 2.5 is not a whole number. A storage type such as a number or text
+does not, by itself, describe every application rule.
+
+### Predict Before Running
+
+For the candidate values `1`, `4`, `6`, `0`, `7`, and `2.5`, predict the printed decision.
+The rule and checking procedure stay fixed; only the candidate value changes.
+
+```python
+for value in [1, 4, 6, 0, 7, 2.5]:
+    allowed = type(value) is int and 1 <= value <= 6
+    print(f"{value}: {'allowed' if allowed else 'outside the stated domain'}")
+```
+
+```output
+1: allowed
+4: allowed
+6: allowed
+0: outside the stated domain
+7: outside the stated domain
+2.5: outside the stated domain
+```
+
+### Read the Output
+
+The check accepts 1, 4, and 6 and rejects 0, 7, and 2.5 under the declared rule. It is a
+Python check of the teaching rule, not evidence that a SQLite column automatically
+enforces it. Database constraints are taught later. This check does not attempt to
+convert text such as `"4"` into a number.
+
+Practice: propose one allowed value absent from the original sample and one disallowed
+value. Explain each decision using the rule, not the frequency of values in the sample.
+
+An **atomic value** is treated as one indivisible value for the operations we need.
+Whether a value is treated as atomic depends on its intended use, not its punctuation.
+A name containing a space is not automatically non-atomic.
+
+### Worked Example: One Phone Number per Row
+
+An office must find the student associated with the individual phone number `555-0102`.
+These fictional contact values form a separate paper example; they are not inserted
+into the Week 1 database. A student may have more than one phone number.
+
+In the first table, each row describes one student's list of phone numbers. A semicolon
+separates numbers within the list.
+
+| student_id | phone_numbers |
+|---|---|
+| S101 | 555-0101;555-0102 |
+| S102 | 555-0103 |
+
+**Predict before reading the result:** how many complete `phone_numbers` cells equal
+`555-0102`? If we place one student-phone pair in each row, how many rows and distinct
+students will the new table contain?
+
+1. Compare each complete cell with `555-0102`. Neither complete cell equals that value:
+   S101's cell contains a two-number list, and S102's cell contains a different number.
+   Zero exact matches does not mean that the requested number is absent from the list.
+2. Read the two numbers separated by the semicolon for S101. Keep `555-0101` and
+   `555-0102` associated with S101; keep `555-0103` associated with S102.
+3. Write one student-phone pair per row. Each `phone_number` value now holds one number
+   that this application treats as an indivisible contact value.
+
+| student_id | phone_number |
+|---|---|
+| S101 | 555-0101 |
+| S101 | 555-0102 |
+| S102 | 555-0103 |
+
+The second table has three tuples but still describes two students. Exactly one row has
+`phone_number` equal to `555-0102`, and its student is S101. Repeating S101 preserves
+the two phone associations; it does not describe an extra student or an identical tuple.
+The original list could also be searched by parsing its entries, but whole-cell equality
+alone does not search inside that list. We have changed how the same contact facts are
+represented, not discovered new contact information. No SQL is needed for this example.
+
+Practice: if an application must message each address separately, explain the difficulty
+with storing `a@example.edu;b@example.edu` for S103 in one email cell. Draw the alternative
+two-row table and state what each row represents. Check that both addresses remain
+associated with S103 and that a complete email cell can be compared with either address.
+
+## 1.2 Row Order and Repeated Values
+
+Does rearranging rows change the facts? A formal relation is a set of tuples, so row
+display order is not part of the relation. Repeated values in a single column, such as
+`IM`, are allowed. Identical complete tuples are not repeated in a formal set. SQL tables
+can store identical rows when no relevant constraint forbids them. Removing duplicates
+from a query result does not remove rows from the stored table. Chapter 3 examines this
+distinction and the SQL syntax for producing distinct results.
+
+### Predict Before Running
+
+Predict the first and last IDs when the original students are displayed in reverse ID
+order. Predict whether any complete tuple is added or removed. Only display order changes.
+
+```python
+ascending = week1_db.execute("SELECT * FROM student ORDER BY student_id").fetchall()
+descending = week1_db.execute("SELECT * FROM student ORDER BY student_id DESC").fetchall()
+print("Displayed IDs:", ", ".join(row[0] for row in descending))
+print("Same complete tuples:", set(ascending) == set(descending))
+print("Tuples:", len(descending))
+```
+
+```output
+Displayed IDs: S104, S103, S102, S101
+Same complete tuples: True
+Tuples: 4
+```
+
+### Read the Output
+
+S104 is now first and S101 is last, but all four complete tuples are unchanged. `True`
+confirms equality of the two sets for this example. The formal set definition, rather
+than one successful experiment, explains why display order is irrelevant.
+
+Practice: S101 and S103 both have department `IM`. Identify the values that distinguish
+their complete tuples. Explain why a repeated department value is not a duplicate tuple.
+
+### Worked Comparison: Repeated Value or Repeated Tuple?
+
+Compare these two cases with the original four-student table. Before reading the
+explanation, decide whether the complete row is repeated in each case.
+
+- S101 and S103 both have `IM`. Their IDs, emails, and names differ, so they are two
+  distinct tuples even though one attribute value repeats.
+- A second copy of `(S101, an.chen@example.edu, An Chen, IM)` repeats all four values
+  of the original S101 row. It contributes no new tuple to a formal set. A SQL table
+  without a constraint prohibiting that duplicate could nevertheless store the copy.
+
+This comparison does not insert another row into the Week 1 database. The original
+table still has four students; the example separates two different meanings of repetition.
+
+## 2. Schema and Instance
+
+A **relation schema** specifies the structure: the relation name and its attributes,
+with their domains and applicable constraints. The short notation below lists the name
+and attributes; domain and constraint details need additional rules. A database schema
+describes the collection of relations. An **instance** contains the current data.
+
+```text
+student(student_id, email, student_name, dept_code)
+```
+
+Our three demonstrations change the same student table in sequence. Track both the
+stored values and the definition: unchanged row counts alone cannot establish that the
+instance is unchanged.
+
+### Add a Student
+
+S105 joins the university with email `an.second@example.edu`, name `An Chen`, and
+department `FIN`. This is a fifth synthetic student, different from S101. Predict the
+new number of tuples and attributes before running the insertion.
+
+```python
+week1_db.execute("INSERT INTO student VALUES (?, ?, ?, ?)",
+                 ("S105", "an.second@example.edu", "An Chen", "FIN"))
+show_students()
+```
+
+```output
+student_id | email | student_name | dept_code
+S101 | an.chen@example.edu | An Chen | IM
+S102 | bea.lin@example.edu | Bea Lin | FIN
+S103 | kai.wu@example.edu | Kai Wu | IM
+S104 | mira.ho@example.edu | Mira Ho | DES
+S105 | an.second@example.edu | An Chen | FIN
+Tuples: 5; attributes: 4
+```
+
+The output has five tuples and the original four attributes. Adding S105 changes the
+instance, while the definition of each attribute stays fixed.
+
+Practice: if a sixth student is recorded with those same four attributes, what changes?
+State both counts and identify whether a new attribute is needed.
+
+### Change One Attribute Value
+
+S102 moves from Finance to Information Management. Predict S102's new `dept_code`, the
+tuple count, and the attribute count. The other students and all column definitions stay fixed.
+
+```python
+week1_db.execute("UPDATE student SET dept_code = 'IM' WHERE student_id = 'S102'")
+show_students()
+```
+
+```output
+student_id | email | student_name | dept_code
+S101 | an.chen@example.edu | An Chen | IM
+S102 | bea.lin@example.edu | Bea Lin | IM
+S103 | kai.wu@example.edu | Kai Wu | IM
+S104 | mira.ho@example.edu | Mira Ho | DES
+S105 | an.second@example.edu | An Chen | FIN
+Tuples: 5; attributes: 4
+```
+
+S102 now has `IM`, while the table still contains five tuples and four attributes. The
+instance changed because one tuple has a different value. The schema did not change.
+
+Practice: explain why correcting an existing student's email address can change the
+instance without changing either count. Identify the two snapshots you would compare.
+
+### Add an Attribute
+
+The office now wants a `status` attribute. For this demonstration, it explicitly assigns
+the text `active` to all five existing students. This is an assumption of the example,
+not information inferred from their other values. Predict the two counts and the value
+of the new attribute for S103.
+
+```python
+week1_db.execute("ALTER TABLE student ADD COLUMN status TEXT NOT NULL DEFAULT 'active'")
+show_students()
+```
+
+```output
+student_id | email | student_name | dept_code | status
+S101 | an.chen@example.edu | An Chen | IM | active
+S102 | bea.lin@example.edu | Bea Lin | IM | active
+S103 | kai.wu@example.edu | Kai Wu | IM | active
+S104 | mira.ho@example.edu | Mira Ho | DES | active
+S105 | an.second@example.edu | An Chen | FIN | active
+Tuples: 5; attributes: 5
+```
+
+There are still five students, but each tuple now has a fifth value. The schema changed
+by adding `status`, and the existing tuples are represented using the extended schema.
+Do not conclude that adding an attribute leaves every aspect of the instance unchanged.
+Choosing a default is a separate decision from choosing the attribute name.
+
+Practice: an office proposes an `admission_year` attribute but has no verified years for
+the existing students. Explain why assigning one guessed year to everyone is not a
+valid way to establish those facts. Identify the information the office must obtain.
+
+### Comparing the Three Changes
+
+These are consecutive states from the examples above, not three independent databases.
+
+| State | Tuples | Attributes | What changed from the preceding state? |
+|---|---:|---:|---|
+| Original student table | 4 | 4 | Starting instance and schema |
+| After adding S105 | 5 | 4 | The instance gains one tuple; the schema stays the same |
+| After changing S102 from FIN to IM | 5 | 4 | The instance changes one value; the schema stays the same |
+| After adding status | 5 | 5 | The schema gains an attribute; every existing tuple includes its assigned active value |
+
+Compare actual values as well as counts. The two middle states have the same counts but
+different data. Adding `status` changes the definition, even though no student is added.
+
+## 2.1 Why Do Students Need Identifiers?
+
+Which An Chen should receive a correction? The original four names happened to differ.
+After the insertion, S101 and S105 are both named An Chen. Our business rule allows
+shared names but gives each student a unique, stable ID. A current sample alone cannot
+establish that a name will always identify a student.
+
+Predict how many rows the name `An Chen` matches and which IDs appear.
+
+```python
+matches = week1_db.execute(
+    "SELECT student_id, student_name, dept_code FROM student "
+    "WHERE student_name = 'An Chen' ORDER BY student_id"
+).fetchall()
+print("student_id | student_name | dept_code")
+for row in matches:
+    print(" | ".join(row))
+print("Rows matching the name:", len(matches))
+week1_db.close()
+```
+
+```output
+student_id | student_name | dept_code
+S101 | An Chen | IM
+S105 | An Chen | FIN
+Rows matching the name: 2
+```
+
+The query matches two students. A request naming only An Chen does not say which record
+to correct. Ask for the student ID before applying the change. IDs resolve this request
+under the stated uniqueness rule; the minimal Week 1 table has not yet enforced that
+rule as a constraint. Week 2 introduces primary and candidate keys and their enforcement.
+
+Practice: write a request that unambiguously changes S105's email, and explain why using
+S101 instead would modify another student's record. No update is required here.
+
+## Week 1 Practice
+
+Use this separate synthetic course instance for the final practice. Each row describes
+one course, `course_id` is unique by rule, and titles are allowed to repeat. Credits are
+whole numbers from 1 through 6. This instance has not been inserted into the Week 1 database.
+If a `description` attribute is added, it will hold one catalog description per course.
+
+| course_id | title | credits |
+|---|---|---:|
+| DB201 | Database Management | 3 |
+| ML230 | Machine Learning | 3 |
+| WD120 | Web Design | 2 |
+
+For the change questions, use `(DB205, Database Management, 5)` as the new course, and
+change WD120's credits from 2 to 3. Start from the original three-row table for each
+change, not from the result of the preceding question. For the new description attribute,
+assume verified catalog text will be supplied for each course; do not invent its content.
+
+Add a Markdown response below this table in your notebook. Include your earlier
+predictions and one correction you made after inspecting an output. These are practice
+responses; submit them only when the instructor designates them for Class Performance.
+
+| Prompt | Your response | What to inspect |
+|---|---|---|
+| Explain the role of the DBMS in the conflicting-email example. | ... | Separate the stored fact, software, and unresolved disagreement. |
+| State the tuple and attribute counts of the course instance. Copy one complete tuple and name one attribute value. | ... | Match each value to a heading; exclude the header from the tuple count. |
+| Evaluate proposed credits 5, 0, and 3.5. | ... | Apply both the whole-number and range rules. |
+| Starting from this course instance each time: add DB205; change WD120's credits from 2 to 3; add a description attribute. What changes in each case? | ... | Compare values, column definitions, and both counts. Explain why descriptions require catalog information rather than guessed text. |
+| After adding DB205, which two courses are titled Database Management? What information is needed before changing one of them? | ... | Use the declared rule and identify both possible records. |
+| Give one example of a repeated column value that does not make two complete tuples duplicates. | ... | Compare every attribute of the two rows. |
+| What would reverse row display order change? | ... | Distinguish display position from stored facts. |
+| Show the two-row email alternative from Section 1.1 and explain the original cell's limitation. | ... | Preserve both S103-address pairs; explain which complete cell can match an individual address. |
+| Record one prediction, its observed result, and your correction or reason for agreement. | ... | Cite a particular row, column, count, or printed decision. |
+
+Before finishing, check that every conclusion names a rule or a displayed value. A
+statement such as "the schema changes" needs the name of the definition that changed.
+Compare your reasoning with the worked examples; the final practice uses a different table.
+
+## End of Week 1
+
+The DBMS manages stored data, but storing a value does not establish that it is true.
+Read each tuple as a complete row of attribute values, and use the stated domain to
+judge proposed values. Reordering the display does not change the relation; changing
+S102's department changes the instance even when the counts stay the same. Adding
+`status` changes the schema. The two An Chen records show why an identifier must follow
+a declared rule rather than the names that happen to occur in one sample.
+
+Keep your practice responses and your comparison between a prediction and an observed
+result in this notebook. Week 2 builds on these distinctions to define keys and connect
+several relations.
+
+**Stop here for Week 1.** The Week 1 database connection is closed. Week 2 creates a
+separate four-table database from the original data: S105 and the extra `status` column
+do not carry over. Begin the next meeting at the following heading.
+
+## Week 2: Keys and Relational Algebra
+
+Recall why two same-name students cannot be distinguished by name alone. We now use
+formal key definitions and connect students to departments, courses, and enrollments.
+The tables below use the original synthetic data. Assignment, rename, and formal
+equivalence remain optional extensions.
 
 ## Course-Registration Data
 
@@ -87,58 +565,14 @@ After completing this chapter, you should be able to:
 The design uses these business rules:
 
 - Each student has one unique, stable `student_id`.
-- Each email belongs to at most one student; names may repeat.
+- Every student has an email; each email belongs to at most one student. Names may repeat.
 - Each department and course has a unique code.
 - A student has at most one enrollment in the same course and term.
 - Student and course department codes must reference an existing department.
 - Enrollment student and course identifiers must reference existing rows.
 
-## 1. Relations, Tuples, Attributes, and Domains
-
-- A **relation** corresponds to a table.
-- A **tuple** corresponds to one row.
-- An **attribute** corresponds to one column.
-- A **relation instance** is the set of tuples stored at a particular time.
-- A **domain** is the set of values allowed for an attribute.
-
-For `student`, `student_id` is an attribute and
-`(S101, an.chen@example.edu, An Chen, IM)` is a tuple. The four current rows form the
-current relation instance.
-
-### Worked Example
-
-`course` has four attributes and four current tuples. Adding a course changes the
-instance. Adding an `admission_year` attribute changes the schema.
-
-### Predict and Check
-
-In `enrollment`, identify the relation name, all attributes, and the tuple representing
-S103 taking ML230. Separate attribute names from attribute values.
-
-### Atomic Values, Order, and Duplicates
-
-A value is atomic when the design treats it as one indivisible value. Storing several
-phone numbers in one cell makes independent phone operations difficult. A clearer design
-is `student_phone(student_id, phone_number)` with one phone number per row.
-
-In the formal relational model, a relation is a set. Tuple display order is not part of
-the relation, and identical duplicate tuples are not retained. SQL tables may permit
-duplicates; Chapter 3 revisits this difference with `DISTINCT`.
-
-Predict whether rearranging the four `student` rows changes the formal relation. It does
-not. Required display order must be expressed by a query.
-
-## 2. Schema and Instance
-
-A **relation schema** describes a relation's name, attributes, domains, and constraints.
-An **instance** is the current data.
-
-```text
-student(student_id, email, student_name, dept_code)
-```
-
-Changing S102 from department FIN to IM changes the instance. Adding a new attribute
-changes the schema and requires a decision about values for existing rows.
+Before studying keys, identify all attributes of `enrollment` and copy the tuple for
+S103 taking ML230. Apply the Week 1 distinction between an attribute name and its value.
 
 ## 3. Keys
 

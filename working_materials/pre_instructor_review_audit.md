@@ -196,6 +196,54 @@
 
 ## 6. Course repository安全、格式與發布檢查
 
+### 2026-09-05 Week 1修訂驗證
+
+- 本次修訂以main `63555f2`為基礎；Ch2 maintained guide改為兩週共用但明列停止點，
+  Week 1範例改在概念旁執行並接續具體輸出判讀。新增完整練習表與原創表格圖。
+- `build_course_repository.py --verify`重建12份notebook通過，輸出仍是14個files，
+  根目錄只有README一個Markdown。新增expected-output檢查不進入學生notebook。
+- `verify_ch02.py`與`verify_week1.py`檢查schema/algebra與Week 1結果；後者驗證
+  第一週七段示範、停止點、資料庫關閉及第二週從原始資料獨立執行。
+- Python 3.12.9 / SQLite 3.45.3；另以nbclient在fresh kernels分別執行Week 1、
+  Week 2及完整Ch2，輸出一致。第一次kernel測試的Windows目錄清理失敗，已修正
+  測試程式的kernel關閉流程並通過重跑。
+- 已用nbconvert與Chrome檢查Week 1圖表、示範與練習表，以及1440/390寬度的
+  顯示；GitHub新版顯示尚未檢查。本次未commit/push。
+- 早期來源限制：當時重新閱讀本地官方Ch2全29頁及Ch1相關頁，但未能重新定位
+  完整教科書，未以舊coverage宣稱全文查核完成。該限制已在下列後續查核中解除。
+
+### 2026-09-05 取得教科書後的修正驗證
+
+- 已閱讀第7版Ch2全章（印刷pp.37-64），以及Week 1相關的Ch1 pp.1、5-8、11-14
+  與Ch3 pp.72-73；來源定位與查核範圍見Ch2 coverage record。
+- 三處核准修正均在maintained guide完成：查詢去重不改原表、course description
+  練習，以及atomic values的前後電話表格。未新增學生程式cell或SQL語法要求。
+- 新版`2026.09.05-week1-textbook-review`通過12份notebook重建與執行、manifest、
+  發布內容及14-file集合檢查；`verify_week1.py`與`verify_ch02.py`通過。
+- Week 1、Week 2及完整Ch2在三個fresh kernels執行通過；新版電話表格及練習表
+  已檢查顯示，1440/390寬度無整頁溢出。前次審閱的ZeroMQ訊息在最終重跑未再出現。
+- 與本次局部修正前的預覽比對，只有ch02.ipynb的hash改變，其餘13個檔案不變。
+  私人教科書受Git排除且未加入預覽；本次未commit/push。新版英文內容、實際教學
+  負荷與GitHub新版呈現仍待教師審閱或發布後驗證。
+
+### 2026-09-05 Week 1完成驗證
+
+- 教師最新要求為直接完成Week 1；版本`2026.09.05-week1-complete`的編寫與客觀
+  檢查已完成，不再以教師逐份審閱作為本次交付的前置條件。
+- 補上DBMS與資料的email衝突例子、重複值/重複tuple比較、三種修改的狀態摘要，
+  以及獨立從原表開始的DB205新增、WD120更新與description練習。六項目標均有
+  講解、範例、預測、結果判讀、練習與檢查依據；沒有新增配分或SQL語法要求。
+- 嚴格檢查原始notebook JSON時發現Ch2缺少55個cell ID；先前讀取工具會自動
+  補齊，造成格式驗證不足。已修正維護中的生成器並加入ID檢查；12份原始JSON
+  schema驗證通過。其他11章只有格式欄位變更，沒有教學內容變更。
+- 12份notebook重新建置與執行通過；Ch2兩支verifier及Week 1、Week 2、完整Ch2
+  三組fresh-kernel執行通過。保留輸出與實際結果一致；最終無程式或連線錯誤。
+- 1440及390寬度無整頁溢出，範例、表格、圖解、練習與停止點已視覺檢查；
+  14個預覽檔案及manifest連續兩次重建的hash一致。細節與測試工具中途修正
+  記錄見Ch2 coverage record。私人PDF未納入預覽或Git。
+- 本機Week 1無已知編寫或驗證阻擋問題。未進行實際學生測試、新版GitHub
+  顯示測試、commit或push；不因此宣稱其餘週次已完成相同深度的教學重審。
+
 | 檢查 | 結果 |
 |---|---|
 | UTF-8與replacement character | 通過；未發現解碼錯誤或U+FFFD |
@@ -233,9 +281,10 @@
 
 ## 8. 仍存在的限制與風險
 
-1. English-only學生教材已完成系統化改寫，但尚未由教師逐份核准技術表述與語氣。
+1. English-only學生教材尚未由教師逐份親自審閱。Week 1已依最新委託完成編寫與
+   客觀查核；人工審閱紀錄的缺少不是該週完成的阻擋問題。
 2. Ch15-Ch16及Ch18-Ch19已大幅縮減，實際課堂負荷仍需第一次授課觀察。
-3. Ch2-Ch3的學生版自我檢核提示少於後續章節；增加提示時必須避免答案洩漏。
+3. Week 1已補齊具體練習與檢查依據；Week 2及Ch3的提示未在本次重新設計。
 4. Ch17-Ch19只完成SQLite可執行部分與teaching models，沒有真實server DBMS或crash
    recovery證據。
 5. 三次考試藍圖、允許資源、AI規則、rubric及版本尚未建立。
@@ -253,14 +302,17 @@
 
 ## 10. 主要下一步
 
-主要下一步是教師優先審閱縮減後的Ch15-Ch16與Ch18-Ch19英文學生教材，再抽查
-Ch2、Ch3及Ch17。這些檔案直接影響Exam 3與英文技術表述，應先於GitHub公開。
-
-預期成果是教師留下具體修正或明確核准。完成條件是核心/延伸界線、英文術語、
-examples及evidence instructions均獲確認，並建立第一批GitHub公開allow-list及獨立
-公開位置。
+2026-08-27原建議優先審閱Ch15-Ch16與Ch18-Ch19。教師於2026-09-05指定先處理
+Week 1，並進一步要求直接完成，不把檢查轉交教師。本次Week 1已完成；教師隨後
+另行授權commit/push。`course-materials`已推送至`5391b52`，包含完成稿及線上
+發現的SVG圖片相容性修正；PNG仍內嵌於notebook，Week 1圖解已在線上確認顯示。
+維護來源及此紀錄同批提交至`main`，同步以Git遠端為準。本次不自動擴寫Week 2，
+也不將全課程公開allow-list、評量及平台待辦視為已完成。
 
 ## 11. Git與發布狀態
+
+以下未commit/push的項目記錄原始審閱階段。2026-09-05另獲授權後已發布Week 1；
+最新狀態見上一節及`PROJECT.md`。公開權限未改變，私人PDF與QA暫存資料未加入Git。
 
 - 本次未commit、未push、未建立remote、未改寫歷史。
 - 工作樹保留本次客觀修正、重新產生的PNG/ZIP及本報告，供教師審閱。

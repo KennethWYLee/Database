@@ -1,6 +1,6 @@
 # Database Management Course Syllabus, Fall 2026
 
-Revised: August 27, 2026
+Revised: September 5, 2026
 
 ## Course Information
 
@@ -37,7 +37,7 @@ All official student-facing course materials use English prose and standard data
 
 | Week | Date | Topics and Activities | Primary Learning Evidence |
 |---:|---|---|---|
-| 1 | September 10, 2026 | Course introduction; database systems, relations, tuples, attributes, schemas, and domains | Schema and key identification sheet |
+| 1 | September 10, 2026 | Course introduction; database purpose; one relation, tuples, attributes, and domains; changes to schemas and instances; why identifiers are needed. Read through End of Week 1 in Chapter 2. Formal key classification begins in Week 2. | Week 1 notebook responses: table identification, domain decisions, schema/instance comparisons, and individual correction |
 | 2 | September 17, 2026 | Primary, candidate, and foreign keys; schema diagrams; core relational-algebra operations using small relation instances | Key map, relational-algebra results, and individual revision |
 | 3 | September 24, 2026 | SQL DDL basics; `SELECT`, `FROM`, `WHERE`, expressions, duplicates, string patterns, and ordering | SQL file and verified query results |
 | 4 | October 1, 2026 | `NULL`, three-valued logic, aggregation, `GROUP BY`, `HAVING`, `IN`, `EXISTS`, and selected subqueries; verification of AI-generated SQL | SQL verification table and individual revision |

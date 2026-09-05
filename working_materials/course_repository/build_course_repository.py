@@ -142,7 +142,8 @@ cells in order:
 5. Check referential integrity before running the chapter queries.
 6. Predict each query result, execute it, and explain any difference.
 
-`DATABASE_NAME` is initially `:memory:`, so closing the notebook removes the database.
+`DATABASE_NAME` is initially `:memory:`. The database disappears when its connection
+closes; closing a browser tab alone may leave the kernel and connection running.
 Change it to a filename such as `chapter_database.db` when you want SQLite to create a
 persistent database in the notebook's working directory. Do not switch to a persistent
 file until the in-memory version runs successfully from top to bottom.'''
@@ -279,7 +280,7 @@ def validate_config(config: dict) -> None:
             for key in ("generator", "filename", "title", "alt", "after_heading"):
                 if not figure.get(key):
                     raise ValueError(f"{chapter['id']} figure is missing {key}")
-            if figure["filename"] in figure_names or not figure["filename"].endswith(".svg"):
+            if figure["filename"] in figure_names or not figure["filename"].endswith(".png"):
                 raise ValueError(f"Invalid or duplicate generated figure in {chapter['id']}")
             figure_names.add(figure["filename"])
             ET.fromstring(generate_figure(figure["generator"]))
@@ -385,6 +386,36 @@ def split_guide(text: str) -> list[str]:
     return [section.strip() for section in re.split(r"(?=^##\s)", text, flags=re.MULTILINE) if section.strip()]
 
 
+def guide_section_cells(section: str, attachments: dict, executable: bool) -> list[dict]:
+    if not executable:
+        return [markdown_cell(section, attachments)]
+    cells: list[dict] = []
+    position = 0
+    # Only opted-in guides turn fenced examples into cells. Output fences verify
+    # the adjacent example; the notebook displays its actual executed output.
+    for match in re.finditer(r"^```(python|output)\n(.*?)^```[ \t]*$", section, re.MULTILINE | re.DOTALL):
+        prose = section[position:match.start()].strip()
+        if prose:
+            cells.append(markdown_cell(prose))
+        if match.group(1) == "python":
+            cells.append(code_cell(match.group(2)))
+        else:
+            if not cells or cells[-1]["cell_type"] != "code":
+                raise ValueError("An output fence must immediately follow its Python example")
+            cells[-1]["_expected_stdout"] = match.group(2).rstrip()
+        position = match.end()
+    tail = section[position:].strip()
+    if tail:
+        cells.append(markdown_cell(tail))
+    for cell in cells:
+        if cell["cell_type"] == "markdown":
+            used = {name: value for name, value in attachments.items()
+                    if f"attachment:{name}" in "".join(cell["source"])}
+            if used:
+                cell["attachments"] = used
+    return cells
+
+
 def image_attachments(chapter: dict) -> dict[str, dict]:
     attachments: dict[str, dict] = {}
     for item in chapter.get("image_sources", []):
@@ -400,7 +431,14 @@ def generated_figure_cells(chapter: dict, heading: str) -> list[dict]:
             continue
         svg = generate_figure(figure["generator"])
         ET.fromstring(svg)
-        encoded = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+        # GitHub's notebook preview does not display the SVG attachments used here.
+        # Rasterize the maintained vector source without losing markers or dashes.
+        try:
+            import resvg_py
+        except ImportError as error:
+            raise RuntimeError("Building diagrams requires resvg-py==0.5.0; see the build README") from error
+        png = resvg_py.svg_to_bytes(svg_string=svg)
+        encoded = base64.b64encode(png).decode("ascii")
         markdown = (
             f"### {figure['title']}\n\n"
             f"![{figure['alt']}](attachment:{figure['filename']})\n\n"
@@ -410,7 +448,7 @@ def generated_figure_cells(chapter: dict, heading: str) -> list[dict]:
         cells.append(
             markdown_cell(
                 markdown,
-                {figure["filename"]: {"image/svg+xml": encoded}},
+                {figure["filename"]: {"image/png": encoded}},
             )
         )
     return cells
@@ -462,7 +500,7 @@ def sql_cells(chapter: dict) -> list[dict]:
         cells.append(markdown_cell("### Reproducibility Check"))
         cells.append(code_cell(check))
     if executable:
-        cells.append(code_cell('connection.close()\nprint("In-memory database closed.")'))
+        cells.append(code_cell('connection.close()\nprint("Database connection closed.")'))
     return cells
 
 
@@ -520,7 +558,7 @@ def build_notebook(chapter: dict) -> dict:
             for filename, value in attachments.items()
             if f"attachment:{filename}" in section
         }
-        cells.append(markdown_cell(section, section_attachments))
+        cells.extend(guide_section_cells(section, section_attachments, chapter.get("executable_guide", False)))
         heading = section.splitlines()[0].strip()
         cells.extend(generated_figure_cells(chapter, heading))
 
@@ -550,6 +588,9 @@ def build_notebook(chapter: dict) -> dict:
             cells.append(markdown_cell(f"### {program['title']}"))
             cells.append(program_cell(program))
 
+    for index, cell in enumerate(cells, start=1):
+        cell["id"] = f"{chapter['id']}-{index:04d}"
+
     return {
         "cells": cells,
         "metadata": {
@@ -578,6 +619,9 @@ def execute_notebook(notebook: dict, notebook_name: str) -> None:
             raise RuntimeError(
                 f"Notebook execution failed in {notebook_name}, cell {cell_index}: {error}"
             ) from error
+        expected = cell.pop("_expected_stdout", None)
+        if expected is not None and stdout.getvalue().rstrip() != expected:
+            raise RuntimeError(f"Worked-example output mismatch in {notebook_name}, cell {cell_index}")
         outputs = []
         if stdout.getvalue():
             outputs.append({"name": "stdout", "output_type": "stream", "text": source_lines(stdout.getvalue())})
@@ -687,6 +731,12 @@ def verify_content(config: dict) -> None:
                 continue
             if notebook.get("nbformat") != 4:
                 errors.append(f"Unsupported notebook format in {relative}")
+            cell_ids = [cell.get("id") for cell in notebook.get("cells", [])]
+            if any(not isinstance(cell_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", cell_id)
+                   for cell_id in cell_ids):
+                errors.append(f"Missing or invalid cell ID in {relative}")
+            elif len(cell_ids) != len(set(cell_ids)):
+                errors.append(f"Duplicate cell ID in {relative}")
             code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
             if any(cell.get("execution_count") is None for cell in code_cells):
                 errors.append(f"Unexecuted code cell in {relative}")
