@@ -7,8 +7,11 @@ Unified course materials for **Database Management** at National Taipei Universi
 1. Review the [course schedule](#course-schedule) below.
 2. Find the current week and open the linked chapter notebook.
 3. Follow the coverage listed for that week. One notebook may continue for two weeks.
-4. Run the notebook from top to bottom, recording each prediction before execution.
+4. Run the cells in the order given for that meeting, recording predictions before execution.
 5. Retain the evidence requested in the notebook.
+
+For the first meeting, open `ch02.ipynb` and stop at **End of Week 1**. Use the same
+notebook for Week 2, starting at **Week 2: Keys and Relational Algebra**.
 
 The schedule, course information, assessment rules, and policies are all included in this
 README. The remaining course files are the chapter notebooks.
@@ -49,8 +52,8 @@ one week; follow the coverage in this table rather than looking for a weekly fil
 
 | Week | Date | Topic, notebook, and coverage |
 |---:|---|---|
-| 1 | 2026-09-10 | **Course Introduction and Relational Structure**<br>Notebook: [CH02 Relational Model](ch02.ipynb)<br>Coverage: Course expectations; relations, tuples, attributes, domains, schemas, instances, and keys. |
-| 2 | 2026-09-17 | **Keys and Relational Algebra**<br>Notebook: [CH02 Relational Model](ch02.ipynb)<br>Coverage: Foreign keys, schema diagrams, selection, projection, product, join, and set operations. |
+| 1 | 2026-09-10 | **Course Introduction and Relational Structure**<br>Notebook: [CH02 Relational Model](ch02.ipynb)<br>Coverage: Read through End of Week 1: database purpose, one relation, tuples, attributes, domains, schema/instance changes, and why identifiers are needed. Complete the Week 1 response table. |
+| 2 | 2026-09-17 | **Keys and Relational Algebra**<br>Notebook: [CH02 Relational Model](ch02.ipynb)<br>Coverage: Begin at Week 2: Keys and Relational Algebra. Superkeys, candidate/primary/composite/foreign keys, schema diagrams, selection, projection, product, join, and set operations; four-table database demonstration. |
 | 3 | 2026-09-24 | **Basic SQL**<br>Notebook: [CH03 Introduction to SQL](ch03.ipynb)<br>Coverage: DDL basics; SELECT, FROM, WHERE, aliases, expressions, duplicates, patterns, ordering, and set operations. |
 | 4 | 2026-10-01 | **NULL, Aggregation, and Selected Subqueries**<br>Notebook: [CH03 Introduction to SQL](ch03.ipynb)<br>Coverage: Three-valued logic, aggregation, GROUP BY, HAVING, selected subqueries, CTEs, and reversible modifications. |
 | 5 | 2026-10-08 | **Intermediate SQL**<br>Notebook: [CH04 Intermediate SQL](ch04.ipynb)<br>Coverage: Explicit and outer joins, ON and WHERE, views, constraints, reference actions, and basic transactions. |
@@ -70,7 +73,7 @@ one week; follow the coverage in this table rather than looking for a weekly fil
 
 ## Course Syllabus
 
-Revised: August 27, 2026
+Revised: September 5, 2026
 
 ### Course Information
 
