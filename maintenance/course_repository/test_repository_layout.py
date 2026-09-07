@@ -4,6 +4,7 @@ import contextlib
 import copy
 import io
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -16,6 +17,21 @@ import build_course_repository as builder
 
 
 class RepositoryLayoutTests(unittest.TestCase):
+    def test_syllabus_weekly_chapter_labels_match_plan(self):
+        syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
+        schedule = syllabus.split("## Weekly Schedule\n", 1)[1].split("\n## Assessment", 1)[0]
+        rows = [line.split("|")[1:-1] for line in schedule.splitlines()
+                if re.match(r"\| \d+ \|", line)]
+        weeks = builder.load_json(builder.CONFIG_PATH)["weeks"]
+        self.assertEqual(len(rows), len(weeks))
+        for row, week in zip(rows, weeks):
+            self.assertEqual(len(row), 5)
+            self.assertEqual(int(row[0]), week["week"])
+            match = re.search(r"Chapters? (\d+)(?:-(\d+))?", row[2])
+            expected = [int(chapter[2:]) for chapter in week["materials"]]
+            actual = list(range(int(match[1]), int(match[2] or match[1]) + 1)) if match else []
+            self.assertEqual(actual, expected, week["week"])
+
     def test_visual_figures_and_unique_anchors(self):
         config = builder.load_json(builder.CONFIG_PATH)
         total = 0

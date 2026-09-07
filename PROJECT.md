@@ -4,6 +4,15 @@
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
 - 最後更新日期：2026-09-07
+- 2026-09-07最新發布決策：教師明確要求將既有`KennethWYLee/Database`設為public，
+  已透過GitHub API確認PUBLIC。此指示取代下方較早的private、另建public repository
+  與尚未授權公開紀錄；既有maintenance、歷史與分支也會公開，不改寫或刪除歷史。
+  課綱新增每週Textbook Chapters欄，依現行計畫標註Ch2-Ch7及Ch14-Ch19與選講範圍，
+  日期、教學內容與配分不變。此更新將同步至既有main供線上閱讀。
+  公開前檢查16個可達commit的檔名及常見憑證格式，未發現教科書、考題檔或憑證
+  命中；Actions runs、Releases及Issues均為0。這些檢查不是所有敏感資訊的形式證明。
+  本機private_references、舊私人教材及未追蹤檔案仍不納入Git；未授權未來加入考題、
+  答案、學生資料或其他受限制內容。課程維護報告不等於未發布評量答案。
 - 2026-09-07最新授課決策：第一次先講課綱，再概談Ch2；notebook的Week 1/Week 2
   是閱讀分段，不要求第一堂讀到End of Week 1。沿用一章一份教材，依當堂進度接續。
   正式給學生時教師可能先提供Ch2；目前保留全部12章供教師檢查，不提前下架、

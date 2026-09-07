@@ -71,26 +71,31 @@ All official student-facing course materials use English prose and standard data
 
 ## Weekly Schedule
 
-| Week | Date | Topics and Activities | Primary Learning Evidence |
-|---:|---|---|---|
-| 1 | September 10, 2026 | Syllabus introduction, followed by an overview of Chapter 2 using a student table. Opening topics include database purpose, tuples, attributes, domains, schemas, instances, and the need for identifiers. Continue unfinished examples as directed; formal key classification follows this introduction. | Responses to the examples discussed: table identification, predictions, and explanations or corrections |
-| 2 | September 17, 2026 | Primary, candidate, and foreign keys; schema diagrams; core relational-algebra operations using small relation instances | Key map, relational-algebra results, and individual revision |
-| 3 | September 24, 2026 | SQL DDL basics; `SELECT`, `FROM`, `WHERE`, expressions, duplicates, string patterns, and ordering | SQL file and verified query results |
-| 4 | October 1, 2026 | `NULL`, three-valued logic, aggregation, `GROUP BY`, `HAVING`, `IN`, `EXISTS`, and selected subqueries; verification of AI-generated SQL | SQL verification table and individual revision |
-| 5 | October 8, 2026 | Explicit joins, left outer joins, `ON` and `WHERE`, views, integrity constraints, and basic transaction statements | SQL and constraint exercise |
-| 6 | October 15, 2026 | Written Exam 1: Chapters 2-4; error analysis and correction | Written Exam 1 and correction sheet |
-| 7 | October 22, 2026 | Selected Chapter 5 topics: window ranking, recursive CTEs, one row-level audit trigger, and the purposes of stored routines | Advanced SQL exercise and execution evidence |
-| 8 | October 29, 2026 | Entities, attributes, relationships, cardinality, participation, and keys in the E-R model | E-R diagram draft |
-| 9 | November 5, 2026 | Instructor travel, November 1-7; no in-person class, examination, or new content. Asynchronous review of Chapters 2-5 and an individual SQL and concept check | Asynchronous review record |
-| 10 | November 12, 2026 | E-R design decisions, redundancy, E-R-to-relational mapping, and verification of an AI-generated E-R diagram | Revised E-R diagram, relational schema, and individual revision |
-| 11 | November 19, 2026 | Design anomalies, functional dependencies, attribute closure, binary lossless decomposition, and introductory 3NF/BCNF decisions | Functional-dependency table, decomposition exercise, and individual revision |
-| 12 | November 26, 2026 | Written Exam 2: selected topics from Chapters 5-7; error analysis and correction | Written Exam 2 and correction sheet |
-| 13 | December 3, 2026 | Index use, B+ tree equality and range access, composite-column order, covering indexes, and query-plan evidence | Index design and before/after query-plan evidence |
-| 14 | December 10, 2026 | Scans and index searches, query-plan access order, result-equivalence checks, basic selectivity, catalog statistics, `ANALYZE`, and verification of an AI index recommendation | Query-plan interpretation and individual revision |
-| 15 | December 17, 2026 | Transaction boundaries, ACID properties, schedules, conflicts, small precedence graphs, basic recoverability, and isolation phenomena | Transaction and isolation analysis |
-| 16 | December 24, 2026 | S/X lock compatibility, grant-or-wait decisions, wait-for graphs and deadlocks; log records, write-ahead logging, one simplified redo/undo case, and comprehensive review | Concurrency and recovery analysis; final review record |
-| 17 | December 31, 2026 | University anniversary make-up holiday; no class | None |
-| 18 | January 7, 2027 | Written Exam 3 and course final examination: selected topics from Chapters 14-19, with cumulative application of SQL and database design concepts | Written Exam 3 |
+Chapter numbers refer to *Database System Concepts*, 7th Edition. The course covers
+Chapters **2-7 and 14-19**. The listed topics define the required coverage, not every
+section of each chapter. Chapters 5, 7, and 14-19 are explicitly taught through selected
+topics; additional notebook material is for further reading unless assigned.
+
+| Week | Date | Textbook Chapters | Topics and Activities | Primary Learning Evidence |
+|---:|---|---|---|---|
+| 1 | September 10, 2026 | Chapter 2 | Syllabus introduction, followed by an overview of Chapter 2 using a student table. Opening topics include database purpose, tuples, attributes, domains, schemas, instances, and the need for identifiers. Continue unfinished examples as directed; formal key classification follows this introduction. | Responses to the examples discussed: table identification, predictions, and explanations or corrections |
+| 2 | September 17, 2026 | Chapter 2 | Primary, candidate, and foreign keys; schema diagrams; core relational-algebra operations using small relation instances | Key map, relational-algebra results, and individual revision |
+| 3 | September 24, 2026 | Chapter 3 | SQL DDL basics; `SELECT`, `FROM`, `WHERE`, expressions, duplicates, string patterns, and ordering | SQL file and verified query results |
+| 4 | October 1, 2026 | Chapter 3 | `NULL`, three-valued logic, aggregation, `GROUP BY`, `HAVING`, `IN`, `EXISTS`, and selected subqueries; verification of AI-generated SQL | SQL verification table and individual revision |
+| 5 | October 8, 2026 | Chapter 4 | Explicit joins, left outer joins, `ON` and `WHERE`, views, integrity constraints, and basic transaction statements | SQL and constraint exercise |
+| 6 | October 15, 2026 | Chapters 2-4 (exam) | Written Exam 1: Chapters 2-4; error analysis and correction | Written Exam 1 and correction sheet |
+| 7 | October 22, 2026 | Chapter 5 (selected topics) | Selected Chapter 5 topics: window ranking, recursive CTEs, one row-level audit trigger, and the purposes of stored routines | Advanced SQL exercise and execution evidence |
+| 8 | October 29, 2026 | Chapter 6 | Entities, attributes, relationships, cardinality, participation, and keys in the E-R model | E-R diagram draft |
+| 9 | November 5, 2026 | Chapters 2-5 (review only) | Instructor travel, November 1-7; no in-person class, examination, or new content. Asynchronous review of Chapters 2-5 and an individual SQL and concept check | Asynchronous review record |
+| 10 | November 12, 2026 | Chapter 6 | E-R design decisions, redundancy, E-R-to-relational mapping, and verification of an AI-generated E-R diagram | Revised E-R diagram, relational schema, and individual revision |
+| 11 | November 19, 2026 | Chapter 7 (selected topics) | Design anomalies, functional dependencies, attribute closure, binary lossless decomposition, and introductory 3NF/BCNF decisions | Functional-dependency table, decomposition exercise, and individual revision |
+| 12 | November 26, 2026 | Chapters 5-7 (exam) | Written Exam 2: selected topics from Chapters 5-7; error analysis and correction | Written Exam 2 and correction sheet |
+| 13 | December 3, 2026 | Chapter 14 (selected topics) | Index use, B+ tree equality and range access, composite-column order, covering indexes, and query-plan evidence | Index design and before/after query-plan evidence |
+| 14 | December 10, 2026 | Chapters 15-16 (selected topics) | Scans and index searches, query-plan access order, result-equivalence checks, basic selectivity, catalog statistics, `ANALYZE`, and verification of an AI index recommendation | Query-plan interpretation and individual revision |
+| 15 | December 17, 2026 | Chapter 17 (selected topics) | Transaction boundaries, ACID properties, schedules, conflicts, small precedence graphs, basic recoverability, and isolation phenomena | Transaction and isolation analysis |
+| 16 | December 24, 2026 | Chapters 18-19 (selected topics); course review | S/X lock compatibility, grant-or-wait decisions, wait-for graphs and deadlocks; log records, write-ahead logging, one simplified redo/undo case, and comprehensive review | Concurrency and recovery analysis; final review record |
+| 17 | December 31, 2026 | None | University anniversary make-up holiday; no class | None |
+| 18 | January 7, 2027 | Chapters 14-19 (exam); cumulative application of Chapters 2-7 | Written Exam 3 and course final examination: selected topics from Chapters 14-19, with cumulative application of SQL and database design concepts | Written Exam 3 |
 
 ## Assessment
 
