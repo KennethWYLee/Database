@@ -3,7 +3,14 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-09-05
+- 最後更新日期：2026-09-07
+- 目前目錄決策：本機與GitHub統一使用`main`及相同追蹤路徑；`Intro DB/`放
+  唯一維護課綱`syllabus.md`與12份生成的章節notebook。`maintenance/`集中章節
+  維護來源、課程計畫、生成器、驗證與歷史紀錄。根目錄保留README、PROJECT、
+  AGENTS、CLAUDE四份Markdown，不再以不同分支提供不同的現行教材目錄。
+- 教師已另行授權本次整理commit/push至main；維護來源、Intro DB成品與本紀錄
+  同批提交，同步結果以Git history及遠端為準。舊`course-materials`與
+  `student-preview`分支保留作歷史，不再作日常教材入口，也不自動刪除。
 - 課程狀態：115-1課綱、18週課程計畫、章節範圍、三次考試與SQLite環境已對齊；
   教師審閱前客觀檢查完成，2026-08-27的範圍與語言決策已套用至英文學生教材；
   2026-08-28依教師最新決定改為不區分教師與學生導覽，每個選定章節只有一份
@@ -52,6 +59,9 @@
 - Week 1使用獨立的synthetic student table，Python/SQL為已提供的觀察工具，
   不要求掌握語法。七段示範依概念、可檢查預測、程式與實際輸出、具體判讀排列；
   練習直接寫在同一notebook，只在教師指定時繳交，未新增配分或作業平台。
+- 2026-09-07修正Week 1練習要求：可提供預測的修正，或解釋預測為何正確，
+  不要求預測正確的學生另找一個錯誤。課綱入口改稱syllabus，不建立week1.ipynb；
+  這是檔案與導覽調整，不改動既有Week 1授課範圍、日期、章節或評量。
 
 ## 教科書與已驗證章節
 
@@ -137,21 +147,21 @@
 - 正式上機DBMS定為SQLite 3；現有驗證版本為SQLite 3.45.3。學生不必安裝
   server DBMS，能執行課程SQL files的相容SQLite介面皆可使用。
 - 學生SQLite套件的維護來源為
-  `working_materials/student_sqlite_package/package_files.json`；build script依
+  `maintenance/student_sqlite_package/package_files.json`；build script依
   allow-list產生自包含資料夾及ZIP，不把教師檔案或歷史來源帶入。
 - 現行SQLite ZIP包含Ch2-Ch7、Ch14-Ch17的synthetic SQL/schema/sample data、
   Ch6/Ch14 diagrams及Ch17 schedule analyzer，仍可用`run_labs.py`重建各章database。
   統一notebook repository則把SQL、Python、data及圖片直接內嵌在對應`chXX.ipynb`，
   不要求另用ZIP、runner或外部asset。
-- `working_materials/sql_labs/university_db/`的發布來源與授權尚未確認，不列入
+- `maintenance/sql_labs/university_db/`的發布來源與授權尚未確認，不列入
   學生套件，也不作為115-1權威sample database。
 - SQLite無法完整示範的stored routines、server-side isolation、deadlock inspection
   與recovery internals，以概念、schedule、log或已驗證教學程式處理，不宣稱為
   SQLite實際server behavior。
 - `from_11001_DB/` 是歷史教材與受限制來源，不是可直接發布的學生教材。
-- `working_materials/` 是目前建置區；個別 lab、schema、sample database 或
+- `maintenance/` 是目前建置區；個別 lab、schema、sample database 或
   assessment 仍須另行指定權威版本與可見性。
-- `working_materials/assessments/` 內的內容在使用前必須標示 student、
+- `maintenance/assessments/` 內的內容在使用前必須標示 student、
   instructor、practice、historical 或 current，並檢查答案隔離。
 
 ## 權威文件與優先順序
@@ -159,23 +169,32 @@
 1. 教師在目前 task 中明確核准的決定。
 2. 國立臺北商業大學官方行事曆與課程行政資料。
 3. 本 `PROJECT.md` 記錄的固定決策。
-4. `1151_database_management_revised_syllabus.md`：英文課綱的維護來源。
-5. `database_chapter_teaching_material_prompt.md`：逐章教材的範圍、必要講解、
+4. `Intro DB/syllabus.md`：英文課綱的維護來源。
+5. `maintenance/database_chapter_teaching_material_prompt.md`：逐章教材的範圍、必要講解、
    範例、練習、查核與交付要求。
-6. `COURSE_PLAN.md`：詳細週次、授課摘要、活動、評量與備課依據。
-7. `working_materials/student_sqlite_package/package_files.json`：學生SQLite套件的
+6. `maintenance/COURSE_PLAN.md`：詳細週次、授課摘要、活動、評量與備課依據。
+7. `maintenance/student_sqlite_package/package_files.json`：學生SQLite套件的
    發布allow-list；個別檔案內容仍以對應chapter source為維護來源。
-8. `working_materials/course_repository/repository_config.json`：統一notebook
+8. `maintenance/course_repository/repository_config.json`：統一notebook
    repository的18週對應、chapter source、SQL、Python、data及image整合清單；內容
    仍受課綱、課程計畫與chapter source控制。
-9. `1151_course_analysis.md`：課程分析。
-10. `1151_database_management_workplan.md`：早期草案，只保留歷史脈絡。
+9. `maintenance/archive/1151_course_analysis.md`：本機封存課程分析，不加入Git。
+10. `maintenance/archive/1151_database_management_workplan.md`：本機早期草案，
+    只保留歷史脈絡，不加入Git。
 11. `past_syllabi/` 與 `from_11001_DB/`：歷史與來源材料，不直接控制115-1。
 
 文件若衝突，不得混合內容。先依上述順序判斷，並在修改前指出差異。
 
 ## Repository與發布狀態
 
+- 現行結構以2026-09-07決策為準：README作導覽；PROJECT記錄課程事實；AGENTS
+  與CLAUDE保留根目錄自動讀取用途並維持byte-identical。課綱直接維護在
+  `Intro DB/syllabus.md`，不另外複製或生成第二份課綱。章節來源在
+  `maintenance/chapters/`，builder只更新`Intro DB/chXX.ipynb`，不覆寫課綱或README。
+  notebook生成檔與維護來源都納入同一main的明確allow-list，課程資料夾共13個檔案。
+- `maintenance/archive/COURSES.md`保存已過期的repository狀態；舊首頁來源也已
+  封存，不再控制首頁。私人PDF、舊來源、未核准SQL資料、考題、暫存輸出維持忽略。
+  下列2026-08-31與2026-09-05分支紀錄是歷史，不代表本次仍需發布雙分支。
 - 本資料夾已初始化獨立 Git repository；`main`追蹤
   `https://github.com/KennethWYLee/Database.git`的`origin/main`。
 - 現行`KennethWYLee/Database` repository已確認為private。GitHub visibility是
@@ -219,10 +238,10 @@
 
 - [x] Ch2-Ch7與Ch14-Ch19均已建立student guide、可執行活動、instructor
   source/coverage record與verifier；2026-08-27全數重新執行通過。整合結果見
-  `working_materials/course_material_integration_report.md`。
-- [x] `1151_database_management_revised_syllabus.md` 已改為三次考試，並對齊
+  `maintenance/course_material_integration_report.md`。
+- [x] `Intro DB/syllabus.md` 已改為三次考試，並對齊
   ch2-ch7與selected ch14-ch19的正式進度及評量。
-- [x] `COURSE_PLAN.md` 已依新版英文課綱改為三次考試、Ch2-Ch7與selected
+- [x] `maintenance/COURSE_PLAN.md` 已依新版英文課綱改為三次考試、Ch2-Ch7與selected
   Ch14-Ch19，並移除學生不需要的教學設計分類名稱與分鐘配置。
 - [x] 任課教師官方英文姓名確認為`WenYi Lee`。
 - [x] 正式DBMS定為SQLite 3；現有教材以SQLite 3.45.3驗證，允許相容SQLite介面。
@@ -232,12 +251,12 @@
   schedule files的權威發布清單；chapter source仍是內容維護來源。
 - [x] 教師於2026-08-27核准目前SQLite ZIP與student README供本課程發布使用。
 - [x] 已建立GitHub remote，`main`已追蹤`origin/main`。
-- [x] 已建立`working_materials/pre_instructor_review_audit.md`，記錄全課程來源、
+- [x] 已建立`maintenance/pre_instructor_review_audit.md`，記錄全課程來源、
   一致性、執行、套件與發布安全檢查。
 - [x] 教師已決定Week 9複習Ch2-Ch5、English-only學生教材、縮減Ch15-Ch16與
   Ch18-Ch19課堂核心、官方英文姓名及GitHub選擇性公開方向；決定已套用。
 - [x] Ch2-Ch7與Ch14-Ch19的`student_guide.md`已改寫為English-only prose。
-- [x] 已將course repository改為12份根目錄`chXX.ipynb`；目前生成14個檔案，包含
+- [x] 2026-08-31曾將course repository改為12份根目錄`chXX.ipynb`；當時生成14個檔案，包含
   12份notebook、唯一Markdown檔`README.md`與`.gitignore`，沒有額外asset。README
   內含導覽、18週進度、課綱與課程政策。全部notebook
   已逐cell執行，English-only、internal path、external dependency、attachment、
@@ -274,6 +293,8 @@
 的下一步已由這項新指示取代。Week 1的編寫、來源查核、程式與顯示驗證已完成，
 目前沒有需要轉交教師處理的Week 1客觀檢查或內容阻擋問題。
 
-後續commit/push已獲明確授權，本次交付為`main`維護來源及相符的`course-materials`
-生成教材。線上檢查揭露的圖片問題已在維護來源修正並重建，不以發布成功代替
-顯示驗證。Week 1不再有需教師接手的客觀檢查；本次不自動擴寫Week 2。
+2026-09-07教師指定改用本機與GitHub一致的main目錄，因此不再延續雙分支同步。
+本次先完成目錄遷移、Week 1措辭修正與受影響驗證，詳細證據見
+`maintenance/structure_migration_review.md`。教師已另行授權將同一main的維護來源與
+Intro DB成品一併commit/push；完成條件是遠端main與本機commit一致，且追蹤目錄
+與連結檢查通過。本次不改公開權限、不更新舊預覽分支、不擴寫其他章節或調整政策。

@@ -1,0 +1,116 @@
+{
+  "package_name": "sqlite_course_package",
+  "package_version": "2026.08.27",
+  "minimum_sqlite_version": "3.39.0",
+  "content_status": "Instructor-approved for course distribution; not externally published",
+  "files": [
+    {
+      "source": "maintenance/chapters/ch02_relational_model/course_registration_setup.sql",
+      "target": "materials/ch02/course_registration_setup.sql",
+      "chapter": "Ch2-Ch5",
+      "purpose": "Shared course-registration schema and synthetic sample data"
+    },
+    {
+      "source": "maintenance/chapters/ch02_relational_model/student_lab.sql",
+      "target": "materials/ch02/student_lab.sql",
+      "chapter": "Ch2",
+      "purpose": "Relational-model and relational-algebra result examples"
+    },
+    {
+      "source": "maintenance/chapters/ch03_introduction_to_sql/student_lab.sql",
+      "target": "materials/ch03/student_lab.sql",
+      "chapter": "Ch3",
+      "purpose": "Introductory SQL lab"
+    },
+    {
+      "source": "maintenance/chapters/ch04_intermediate_sql/student_lab.sql",
+      "target": "materials/ch04/student_lab.sql",
+      "chapter": "Ch4",
+      "purpose": "Join, view, constraint, and transaction lab"
+    },
+    {
+      "source": "maintenance/chapters/ch05_advanced_sql/student_lab.sql",
+      "target": "materials/ch05/student_lab.sql",
+      "chapter": "Ch5",
+      "purpose": "Window, recursive CTE, and trigger lab"
+    },
+    {
+      "source": "maintenance/chapters/ch06_er_design/course_registration_rules.md",
+      "target": "materials/ch06/course_registration_rules.md",
+      "chapter": "Ch6",
+      "purpose": "Synthetic business rules for E-R design"
+    },
+    {
+      "source": "maintenance/chapters/ch06_er_design/course_registration_er.png",
+      "target": "materials/ch06/course_registration_er.png",
+      "chapter": "Ch6",
+      "purpose": "Rendered E-R diagram"
+    },
+    {
+      "source": "maintenance/chapters/ch06_er_design/course_registration_er.svg",
+      "target": "materials/ch06/course_registration_er.svg",
+      "chapter": "Ch6",
+      "purpose": "Scalable E-R diagram"
+    },
+    {
+      "source": "maintenance/chapters/ch06_er_design/mapped_schema.sql",
+      "target": "materials/ch06/mapped_schema.sql",
+      "chapter": "Ch6",
+      "purpose": "Relational schema mapped from the E-R design"
+    },
+    {
+      "source": "maintenance/chapters/ch07_normalization/student_lab.sql",
+      "target": "materials/ch07/student_lab.sql",
+      "chapter": "Ch7",
+      "purpose": "Anomaly, decomposition, and reconstruction lab"
+    },
+    {
+      "source": "maintenance/chapters/ch14_indexing/bplus_tree_example.png",
+      "target": "materials/ch14/bplus_tree_example.png",
+      "chapter": "Ch14",
+      "purpose": "Rendered B+ tree example"
+    },
+    {
+      "source": "maintenance/chapters/ch14_indexing/bplus_tree_example.svg",
+      "target": "materials/ch14/bplus_tree_example.svg",
+      "chapter": "Ch14",
+      "purpose": "Scalable B+ tree example"
+    },
+    {
+      "source": "maintenance/chapters/ch14_indexing/student_lab.sql",
+      "target": "materials/ch14/student_lab.sql",
+      "chapter": "Ch14",
+      "purpose": "Index and query-plan lab"
+    },
+    {
+      "source": "maintenance/chapters/ch15_query_processing/student_lab.sql",
+      "target": "materials/ch15/student_lab.sql",
+      "chapter": "Ch15",
+      "purpose": "Scan, index-search, and join-plan lab"
+    },
+    {
+      "source": "maintenance/chapters/ch16_query_optimization/student_lab.sql",
+      "target": "materials/ch16/student_lab.sql",
+      "chapter": "Ch16",
+      "purpose": "Rewrite, statistics, skew, and query-plan lab"
+    },
+    {
+      "source": "maintenance/chapters/ch17_transactions/student_lab.sql",
+      "target": "materials/ch17/student_lab.sql",
+      "chapter": "Ch17",
+      "purpose": "Rollback, commit, and transaction-boundary lab"
+    },
+    {
+      "source": "maintenance/chapters/ch17_transactions/schedule_examples.json",
+      "target": "materials/ch17/schedule_examples.json",
+      "chapter": "Ch17",
+      "purpose": "Transaction schedules for conflict analysis"
+    },
+    {
+      "source": "maintenance/chapters/ch17_transactions/schedule_analyzer.py",
+      "target": "materials/ch17/schedule_analyzer.py",
+      "chapter": "Ch17",
+      "purpose": "Student-facing schedule analysis program"
+    }
+  ]
+}

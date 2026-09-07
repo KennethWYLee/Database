@@ -3,66 +3,87 @@
 !/.gitignore
 !/AGENTS.md
 !/CLAUDE.md
-!/COURSES.md
 !/PROJECT.md
 !/README.md
-!/COURSE_PLAN.md
-!/1151_database_management_revised_syllabus.md
-!/database_chapter_teaching_material_prompt.md
+!/Intro DB/
+/Intro DB/*
+!/Intro DB/syllabus.md
+!/Intro DB/ch02.ipynb
+!/Intro DB/ch03.ipynb
+!/Intro DB/ch04.ipynb
+!/Intro DB/ch05.ipynb
+!/Intro DB/ch06.ipynb
+!/Intro DB/ch07.ipynb
+!/Intro DB/ch14.ipynb
+!/Intro DB/ch15.ipynb
+!/Intro DB/ch16.ipynb
+!/Intro DB/ch17.ipynb
+!/Intro DB/ch18.ipynb
+!/Intro DB/ch19.ipynb
 
-!/working_materials/
-/working_materials/*
-!/working_materials/README.md
-!/working_materials/course_material_integration_report.md
-!/working_materials/pre_instructor_review_audit.md
+!/maintenance/
+/maintenance/*
+!/maintenance/README.md
+!/maintenance/COURSE_PLAN.md
+!/maintenance/database_chapter_teaching_material_prompt.md
+!/maintenance/structure_migration_review.md
+!/maintenance/archive/
+/maintenance/archive/*
+!/maintenance/archive/README.md
+!/maintenance/archive/COURSES.md
+!/maintenance/archive/course_home.md
+!/maintenance/course_material_integration_report.md
+!/maintenance/pre_instructor_review_audit.md
 
-!/working_materials/chapters/
-/working_materials/chapters/*
-!/working_materials/chapters/ch02_relational_model/
-!/working_materials/chapters/ch02_relational_model/**
-!/working_materials/chapters/ch03_introduction_to_sql/
-!/working_materials/chapters/ch03_introduction_to_sql/**
-!/working_materials/chapters/ch04_intermediate_sql/
-!/working_materials/chapters/ch04_intermediate_sql/**
-!/working_materials/chapters/ch05_advanced_sql/
-!/working_materials/chapters/ch05_advanced_sql/**
-!/working_materials/chapters/ch06_er_design/
-!/working_materials/chapters/ch06_er_design/**
-!/working_materials/chapters/ch07_normalization/
-!/working_materials/chapters/ch07_normalization/**
-!/working_materials/chapters/ch14_indexing/
-!/working_materials/chapters/ch14_indexing/**
-!/working_materials/chapters/ch15_query_processing/
-!/working_materials/chapters/ch15_query_processing/**
-!/working_materials/chapters/ch16_query_optimization/
-!/working_materials/chapters/ch16_query_optimization/**
-!/working_materials/chapters/ch17_transactions/
-!/working_materials/chapters/ch17_transactions/**
-!/working_materials/chapters/ch18_concurrency_control/
-!/working_materials/chapters/ch18_concurrency_control/**
-!/working_materials/chapters/ch19_recovery_system/
-!/working_materials/chapters/ch19_recovery_system/**
+!/maintenance/chapters/
+/maintenance/chapters/*
+!/maintenance/chapters/ch02_relational_model/
+!/maintenance/chapters/ch02_relational_model/**
+!/maintenance/chapters/ch03_introduction_to_sql/
+!/maintenance/chapters/ch03_introduction_to_sql/**
+!/maintenance/chapters/ch04_intermediate_sql/
+!/maintenance/chapters/ch04_intermediate_sql/**
+!/maintenance/chapters/ch05_advanced_sql/
+!/maintenance/chapters/ch05_advanced_sql/**
+!/maintenance/chapters/ch06_er_design/
+!/maintenance/chapters/ch06_er_design/**
+!/maintenance/chapters/ch07_normalization/
+!/maintenance/chapters/ch07_normalization/**
+!/maintenance/chapters/ch14_indexing/
+!/maintenance/chapters/ch14_indexing/**
+!/maintenance/chapters/ch15_query_processing/
+!/maintenance/chapters/ch15_query_processing/**
+!/maintenance/chapters/ch16_query_optimization/
+!/maintenance/chapters/ch16_query_optimization/**
+!/maintenance/chapters/ch17_transactions/
+!/maintenance/chapters/ch17_transactions/**
+!/maintenance/chapters/ch18_concurrency_control/
+!/maintenance/chapters/ch18_concurrency_control/**
+!/maintenance/chapters/ch19_recovery_system/
+!/maintenance/chapters/ch19_recovery_system/**
 
-!/working_materials/student_sqlite_package/
-/working_materials/student_sqlite_package/*
-!/working_materials/student_sqlite_package/build_package.py
-!/working_materials/student_sqlite_package/package_files.json
-!/working_materials/student_sqlite_package/README.md
-!/working_materials/student_sqlite_package/run_labs.py
-!/working_materials/student_sqlite_package/student_README.md
-!/working_materials/student_sqlite_package/output/
-/working_materials/student_sqlite_package/output/*
-!/working_materials/student_sqlite_package/output/sqlite_course_package.zip
+!/maintenance/student_sqlite_package/
+/maintenance/student_sqlite_package/*
+!/maintenance/student_sqlite_package/build_package.py
+!/maintenance/student_sqlite_package/package_files.json
+!/maintenance/student_sqlite_package/README.md
+!/maintenance/student_sqlite_package/run_labs.py
+!/maintenance/student_sqlite_package/student_README.md
+!/maintenance/student_sqlite_package/output/
+/maintenance/student_sqlite_package/output/*
+!/maintenance/student_sqlite_package/output/sqlite_course_package.zip
 
-!/working_materials/course_repository/
-/working_materials/course_repository/*
-!/working_materials/course_repository/README.md
-!/working_materials/course_repository/build_course_repository.py
-!/working_materials/course_repository/repository_config.json
-!/working_materials/course_repository/course_home.md
-!/working_materials/course_repository/notebook_figures.py
-/working_materials/course_repository/output/
+!/maintenance/course_repository/
+/maintenance/course_repository/*
+!/maintenance/course_repository/README.md
+!/maintenance/course_repository/build_course_repository.py
+!/maintenance/course_repository/repository_config.json
+!/maintenance/course_repository/notebook_figures.py
+!/maintenance/course_repository/test_repository_layout.py
+!/maintenance/course_repository/review_notebook.py
+/maintenance/course_repository/output/
 
 **/__pycache__/
 **/*.pyc
 **/*.db
+**/.ipynb_checkpoints/
