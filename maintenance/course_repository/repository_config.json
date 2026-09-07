@@ -1,14 +1,16 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.07-unified-main-layout",
+  "repository_version": "2026.09.07-visual-teaching",
   "instructor": "WenYi Lee",
   "syllabus_source": "Intro DB/syllabus.md",
   "chapters": [
     {
       "id": "ch02",
+      "visual_teaching": true,
       "title": "Relational Model",
       "guide_source": "maintenance/chapters/ch02_relational_model/student_guide.md",
       "executable_guide": true,
+      "inline_sql": true,
       "generated_figures": [
         {
           "generator": "ch02_table_anatomy",
@@ -23,13 +25,6 @@
           "title": "Relational schema diagram",
           "alt": "Course-registration tables with primary, candidate, and foreign keys",
           "after_heading": "## 4. Foreign Keys and Schema Diagrams"
-        },
-        {
-          "generator": "ch02_algebra_pipeline",
-          "filename": "ch02_algebra_pipeline.png",
-          "title": "Selection and projection pipeline",
-          "alt": "Student relation filtered to Information Management and projected to student names",
-          "after_heading": "## 5. Relational-Algebra Operations"
         }
       ],
       "sql_sources": [
@@ -39,6 +34,7 @@
     },
     {
       "id": "ch03",
+      "visual_teaching": true,
       "title": "Introduction to SQL",
       "guide_source": "maintenance/chapters/ch03_introduction_to_sql/student_guide.md",
       "sql_sources": [
@@ -48,6 +44,7 @@
     },
     {
       "id": "ch04",
+      "visual_teaching": true,
       "title": "Intermediate SQL",
       "guide_source": "maintenance/chapters/ch04_intermediate_sql/student_guide.md",
       "sql_sources": [
@@ -57,6 +54,7 @@
     },
     {
       "id": "ch05",
+      "visual_teaching": true,
       "title": "Advanced SQL",
       "guide_source": "maintenance/chapters/ch05_advanced_sql/student_guide.md",
       "sql_sources": [
@@ -67,6 +65,7 @@
     },
     {
       "id": "ch06",
+      "visual_teaching": true,
       "title": "E-R Design",
       "guide_source": "maintenance/chapters/ch06_er_design/student_guide.md",
       "markdown_sources": [
@@ -81,6 +80,7 @@
     },
     {
       "id": "ch07",
+      "visual_teaching": true,
       "title": "Normalization",
       "guide_source": "maintenance/chapters/ch07_normalization/student_guide.md",
       "sql_sources": [
@@ -89,6 +89,7 @@
     },
     {
       "id": "ch14",
+      "visual_teaching": true,
       "title": "Indexing",
       "guide_source": "maintenance/chapters/ch14_indexing/student_guide.md",
       "image_sources": [
@@ -100,6 +101,7 @@
     },
     {
       "id": "ch15",
+      "visual_teaching": true,
       "title": "Query Processing",
       "guide_source": "maintenance/chapters/ch15_query_processing/student_guide.md",
       "sql_sources": [
@@ -108,6 +110,7 @@
     },
     {
       "id": "ch16",
+      "visual_teaching": true,
       "title": "Query Optimization",
       "guide_source": "maintenance/chapters/ch16_query_optimization/student_guide.md",
       "sql_sources": [
@@ -116,6 +119,7 @@
     },
     {
       "id": "ch17",
+      "visual_teaching": true,
       "title": "Transactions",
       "guide_source": "maintenance/chapters/ch17_transactions/student_guide.md",
       "sql_sources": [
@@ -127,6 +131,7 @@
     },
     {
       "id": "ch18",
+      "visual_teaching": true,
       "title": "Concurrency Control",
       "guide_source": "maintenance/chapters/ch18_concurrency_control/student_guide.md",
       "programs": [
@@ -136,6 +141,7 @@
     },
     {
       "id": "ch19",
+      "visual_teaching": true,
       "title": "Recovery",
       "guide_source": "maintenance/chapters/ch19_recovery_system/student_guide.md",
       "programs": [
@@ -145,8 +151,8 @@
     }
   ],
   "weeks": [
-    {"week": 1, "date": "2026-09-10", "title": "Course Introduction and Relational Structure", "materials": ["ch02"], "coverage": "Read through End of Week 1: database purpose, one relation, tuples, attributes, domains, schema/instance changes, and why identifiers are needed. Complete the Week 1 response table."},
-    {"week": 2, "date": "2026-09-17", "title": "Keys and Relational Algebra", "materials": ["ch02"], "coverage": "Begin at Week 2: Keys and Relational Algebra. Superkeys, candidate/primary/composite/foreign keys, schema diagrams, selection, projection, product, join, and set operations; four-table database demonstration."},
+    {"week": 1, "date": "2026-09-10", "title": "Syllabus and Chapter 2 Introduction", "materials": ["ch02"], "coverage": "Syllabus first, then an introduction using the opening student-table examples. The instructor indicates where to stop and resume; finishing the Week 1 reading section during the first meeting is not required."},
+    {"week": 2, "date": "2026-09-17", "title": "Keys and Relational Algebra", "materials": ["ch02"], "coverage": "Continue unfinished introductory examples as needed, then superkeys, candidate/primary/composite/foreign keys, schema diagrams, selection, projection, product, join, and set operations; four-table database demonstration."},
     {"week": 3, "date": "2026-09-24", "title": "Basic SQL", "materials": ["ch03"], "coverage": "DDL basics; SELECT, FROM, WHERE, aliases, expressions, duplicates, patterns, ordering, and set operations."},
     {"week": 4, "date": "2026-10-01", "title": "NULL, Aggregation, and Selected Subqueries", "materials": ["ch03"], "coverage": "Three-valued logic, aggregation, GROUP BY, HAVING, selected subqueries, CTEs, and reversible modifications."},
     {"week": 5, "date": "2026-10-08", "title": "Intermediate SQL", "materials": ["ch04"], "coverage": "Explicit and outer joins, ON and WHERE, views, constraints, reference actions, and basic transactions."},

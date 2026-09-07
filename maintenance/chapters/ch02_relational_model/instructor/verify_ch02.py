@@ -1,24 +1,88 @@
 from pathlib import Path
 import sqlite3
+import sys
 
 
 CHAPTER_DIR = Path(__file__).resolve().parents[1]
 SETUP_SQL = CHAPTER_DIR / "course_registration_setup.sql"
 STUDENT_LAB_SQL = CHAPTER_DIR / "student_lab.sql"
+sys.path.insert(0, str(CHAPTER_DIR.parents[1] / "course_repository"))
+from build_course_repository import load_sql_examples
 
 
 def fetchall(connection: sqlite3.Connection, query: str):
     return connection.execute(query).fetchall()
 
 
-def expect_integrity_error(connection: sqlite3.Connection, statement: str) -> None:
+def expect_integrity_error(connection: sqlite3.Connection, statement: str,
+                           error_code: int | None = None) -> None:
+    connection.execute("SAVEPOINT constraint_test")
     try:
         connection.execute(statement)
-    except sqlite3.IntegrityError:
-        connection.rollback()
-        connection.execute("PRAGMA foreign_keys = ON")
-        return
-    raise AssertionError(f"Expected an integrity error: {statement}")
+    except sqlite3.IntegrityError as error:
+        if error_code is not None:
+            assert error.sqlite_errorcode == error_code, (statement, str(error))
+    else:
+        raise AssertionError(f"Expected an integrity error: {statement}")
+    finally:
+        connection.execute("ROLLBACK TO constraint_test")
+        connection.execute("RELEASE constraint_test")
+
+
+def verify_null_keys(connection):
+    inserts = [
+        "INSERT INTO department VALUES (NULL, 'New Department', 'Hong Hall')",
+        "INSERT INTO student VALUES (NULL, 'missing@example.edu', 'New Student', 'IM')",
+        "INSERT INTO course VALUES (NULL, 'New Course', 'IM', 3)",
+        "INSERT INTO enrollment VALUES (NULL, 'DB201', '115-2', NULL)",
+        "INSERT INTO enrollment VALUES ('S101', NULL, '115-2', NULL)",
+        "INSERT INTO enrollment VALUES ('S101', 'DB201', NULL, NULL)",
+    ]
+    for statement in inserts:
+        expect_integrity_error(connection, statement, sqlite3.SQLITE_CONSTRAINT_NOTNULL)
+    for table, columns in {
+        "department": ["dept_code"], "student": ["student_id"],
+        "course": ["course_id"], "enrollment": ["student_id", "course_id", "term"],
+    }.items():
+        for column in columns:
+            expect_integrity_error(connection, f"UPDATE {table} SET {column} = NULL",
+                                   sqlite3.SQLITE_CONSTRAINT_NOTNULL)
+
+
+def verify_maintained_examples(connection):
+    examples = load_sql_examples(STUDENT_LAB_SQL.read_text(encoding="utf-8"))
+    assert set(examples) == {"1", "2", "3", "4", "5", "6", "7a", "7b", "7c", "8", "9", "10a", "10b"}
+    results = {key: fetchall(connection, sql) for key, sql in examples.items()}
+    assert [row[0] for row in results["1"]] == ["S101", "S102", "S103", "S104"]
+    assert [row[0] for row in results["2"]] == ["S101", "S103"]
+    assert results["3"] == [("DES",), ("FIN",), ("IM",)]
+    assert results["4"] == [("An Chen",), ("Kai Wu",)]
+    assert len(results["5"]) == 4 and len(results["6"]) == 6
+    assert results["7a"] == [("S101",), ("S102",), ("S103",)]
+    assert results["7b"] == results["8"] == [("S101",)]
+    assert results["7c"] == [("S103",)]
+    assert results["9"] == [("An Chen", "Kai Wu", "IM")]
+    assert results["10a"] == results["10b"]
+
+    connection.execute("SAVEPOINT changed_data")
+    try:
+        connection.execute("INSERT INTO student VALUES ('S106', 'second.an@example.edu', 'An Chen', 'IM')")
+        assert fetchall(connection, examples["4"]) == [("An Chen",), ("Kai Wu",)]
+        assert fetchall(connection, "SELECT student_name FROM student WHERE dept_code='IM' ORDER BY student_name") == [
+            ("An Chen",), ("An Chen",), ("Kai Wu",)]
+        connection.execute("INSERT INTO enrollment VALUES ('S101', 'DB201', '115-2', NULL)")
+        assert fetchall(connection, "SELECT term FROM enrollment WHERE student_id='S101' AND course_id='DB201' ORDER BY term") == [
+            ("115-1",), ("115-2",)]
+        expect_integrity_error(connection,
+            "INSERT INTO enrollment VALUES ('S101', 'DB201', '115-2', NULL)",
+            sqlite3.SQLITE_CONSTRAINT_PRIMARYKEY)
+        for pair in ["student_id, course_id", "student_id, term", "course_id, term"]:
+            assert fetchall(connection, f"SELECT {pair} FROM enrollment GROUP BY {pair} HAVING COUNT(*) > 1")
+    finally:
+        connection.execute("ROLLBACK TO changed_data")
+        connection.execute("RELEASE changed_data")
+    assert fetchall(connection, "SELECT COUNT(*) FROM student") == [(4,)]
+    assert fetchall(connection, "SELECT COUNT(*) FROM enrollment") == [(6,)]
 
 
 def main() -> None:
@@ -30,6 +94,9 @@ def main() -> None:
     assert fetchall(connection, "SELECT COUNT(*) FROM student") == [(4,)]
     assert fetchall(connection, "SELECT COUNT(*) FROM course") == [(4,)]
     assert fetchall(connection, "SELECT COUNT(*) FROM enrollment") == [(6,)]
+
+    verify_null_keys(connection)
+    verify_maintained_examples(connection)
 
     expect_integrity_error(
         connection,
@@ -192,6 +259,11 @@ def main() -> None:
     print("PASS: equivalent-query results")
     print("PASS: no foreign-key violations")
     print("PASS: complete student_lab.sql execution")
+    print("PASS: all six primary-key columns reject NULL on insert and update")
+    print("PASS: actual maintained projection handles same-name students")
+    print("PASS: cross-term enrollment and all three composite-key minimality counterexamples")
+    lab_connection.close()
+    connection.close()
 
 
 if __name__ == "__main__":

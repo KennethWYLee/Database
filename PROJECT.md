@@ -4,6 +4,14 @@
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
 - 最後更新日期：2026-09-07
+- 2026-09-07最新授課決策：第一次先講課綱，再概談Ch2；notebook的Week 1/Week 2
+  是閱讀分段，不要求第一堂讀到End of Week 1。沿用一章一份教材，依當堂進度接續。
+  正式給學生時教師可能先提供Ch2；目前保留全部12章供教師檢查，不提前下架、
+  改公開權限或另建發布分支。本次內容修改不包含新的commit/push授權。
+- 同次Ch2修正已完成：文字主鍵明列NOT NULL、composition projection補DISTINCT、
+  跨學期複合主鍵例子及逐概念SQL示範。建置器直接嵌入既有SQL來源，不複製維護
+  SQL或另加一份章末lab。完整驗證紀錄見Ch2的coverage_and_verification.md；
+  不把可執行示範的Python或transaction-control語法新增為Ch2必考內容。
 - 目前目錄決策：本機與GitHub統一使用`main`及相同追蹤路徑；`Intro DB/`放
   唯一維護課綱`syllabus.md`與12份生成的章節notebook。`maintenance/`集中章節
   維護來源、課程計畫、生成器、驗證與歷史紀錄。根目錄保留README、PROJECT、
@@ -293,8 +301,20 @@
 的下一步已由這項新指示取代。Week 1的編寫、來源查核、程式與顯示驗證已完成，
 目前沒有需要轉交教師處理的Week 1客觀檢查或內容阻擋問題。
 
-2026-09-07教師指定改用本機與GitHub一致的main目錄，因此不再延續雙分支同步。
-本次先完成目錄遷移、Week 1措辭修正與受影響驗證，詳細證據見
-`maintenance/structure_migration_review.md`。教師已另行授權將同一main的維護來源與
-Intro DB成品一併commit/push；完成條件是遠端main與本機commit一致，且追蹤目錄
-與連結檢查通過。本次不改公開權限、不更新舊預覽分支、不擴寫其他章節或調整政策。
+2026-09-07目錄遷移已完成並同步至`ba20cda`，不再延續雙分支同步。
+之後教師核准Ch2修正並澄清首堂先課綱、再概談Ch2，因此本次優先完成這些內容及
+受影響驗證，而非延續已完成的目錄遷移。新增客觀問題均已修正；具體證據見
+`maintenance/chapters/ch02_relational_model/instructor/coverage_and_verification.md`。
+
+2026-09-07教師新增以大量圖片講解的要求，取代先選定首堂停止位置的下一步。
+Ch2目前有19張內嵌圖片，其他11章各有2至3張，共45張。新增圖由Python維護，
+使用既有教材例子呈現資料表前後差異、關聯、運算步驟及交易圖，不複製教科書圖。
+每張圖放在對應段落，保持一章一份notebook，不增加學生外部檔案、作業或考試範圍。
+詳細來源、驗證及限制見`maintenance/course_repository/visual_teaching_review.md`。
+
+主要下一步是教師用Ch2的圖確認投影講解是否清楚。理由是本機圖像與執行檢查
+不能替代實際教室的觀看距離；預期成果是確認字級及圖解順序，完成條件是能在
+實際投影下辨讀欄位、數值與箭頭，沒有需要放大重畫的圖。教師已於2026-09-07
+授權將本次Ch2修正、全章圖解及驗證紀錄commit並push至既有origin/main，供線上
+審閱；實際同步狀態以Git紀錄為準。未來只提供Ch2給學生及公開allow-list維持
+獨立操作，不先下架任何章節，也不變更repository可見性。

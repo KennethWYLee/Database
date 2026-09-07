@@ -3,19 +3,22 @@
 ## Core Question
 
 What does one row represent, and how can we change the data without confusing it with
-the structure of the table? Week 1 answers this question using one student table.
-Week 2 connects several tables through keys and describes queries with relational algebra.
+the structure of the table? The opening section answers this question using one student
+table. The next section connects tables through keys and describes queries with
+relational algebra.
 
 ## Teaching Summary
 
 | Meeting | Reading and demonstrations | Practice |
 |---|---|---|
-| Week 1, September 10 | From **Week 1: Reading and Changing One Table** through **End of Week 1** | Complete the Week 1 response table in this notebook |
-| Week 2, September 17 | From **Week 2: Keys and Relational Algebra** onward | Key map, schema diagram, and intermediate algebra results |
+| First meeting, September 10 | Syllabus first, then an introduction using the opening student-table examples | Discuss the examples introduced by the instructor |
+| Chapter continuation | Finish the opening examples as needed, then study keys, schema diagrams, and relational algebra | Response table, key map, schema diagram, and intermediate algebra results as assigned |
 
-Stop at **End of Week 1** during the first meeting. The four-table database setup and
-algebra lab belong to Week 2. Assignment, rename, and formal equivalence are optional
-extensions. One notebook contains both meetings.
+The **Week 1** and **Week 2** headings separate the introductory material from keys and
+algebra. They do not require you to finish every example in one meeting. The instructor
+will indicate where to stop and resume. The four-table database follows the introduction;
+assignment, rename, and formal equivalence are optional extensions. Keep using this
+notebook as the chapter continues.
 
 In class, the instructor explains each idea and demonstrates the supplied examples.
 Pause at the prediction and practice questions to record your own reasoning. The
@@ -38,7 +41,7 @@ extensions and are not major Exam 1 operations.
 
 ## Learning Objectives
 
-By the end of Week 1, you should be able to:
+After completing the opening section, you should be able to:
 
 1. Distinguish the stored data from the DBMS that manages it.
 2. Identify a relation, tuple, attribute, and value; distinguish repeated values from
@@ -48,7 +51,7 @@ By the end of Week 1, you should be able to:
 5. Explain which instance or schema changes when a row, value, or attribute changes.
 6. Use two same-name students to explain why an identifying attribute is needed.
 
-By the end of Week 2, you should also be able to classify keys from business rules,
+After completing the core chapter sections, you should also be able to classify keys from business rules,
 follow foreign-key arrows, and calculate selection, projection, product, join, and set
 operations on small relations.
 
@@ -513,9 +516,10 @@ Keep your practice responses and your comparison between a prediction and an obs
 result in this notebook. Week 2 builds on these distinctions to define keys and connect
 several relations.
 
-**Stop here for Week 1.** The Week 1 database connection is closed. Week 2 creates a
+**Introductory reading checkpoint.** This is not a first-meeting completion deadline.
+The Week 1 database connection is closed. Week 2 creates a
 separate four-table database from the original data: S105 and the extra `status` column
-do not carry over. Begin the next meeting at the following heading.
+do not carry over. Continue at the following heading when the instructor introduces keys.
 
 ## Week 2: Keys and Relational Algebra
 
@@ -523,6 +527,10 @@ Recall why two same-name students cannot be distinguished by name alone. We now 
 formal key definitions and connect students to departments, courses, and enrollments.
 The tables below use the original synthetic data. Assignment, rename, and formal
 equivalence remain optional extensions.
+
+Use the supplied code to observe results. You do not need to write the Python setup or
+transaction-control statements in this chapter. Focus on the tables, rules, and query
+results; writing SQL begins in Chapter 3.
 
 ## Course-Registration Data
 
@@ -575,6 +583,29 @@ The design uses these business rules:
 Before studying keys, identify all attributes of `enrollment` and copy the tuple for
 S103 taking ML230. Apply the Week 1 distinction between an attribute name and its value.
 
+Before running the setup, predict the table names and row counts from the four tables
+above: how many departments, students, courses, and enrollments should be stored?
+The supplied SQL creates these tables; Chapter 3 will explain how to write this syntax.
+
+<!-- sql:setup -->
+
+The output lists 3 departments, 4 students, 4 courses, and 6 enrollments. Its
+foreign-key check reports `PASS`. This checks stored references, not whether every
+business rule of a real university has been captured. Predict which four student IDs
+the next query will display.
+
+<!-- sql:example 1 -->
+```output
+student_id | email | student_name | dept_code
+S101 | an.chen@example.edu | An Chen | IM
+S102 | bea.lin@example.edu | Bea Lin | FIN
+S103 | kai.wu@example.edu | Kai Wu | IM
+S104 | mira.ho@example.edu | Mira Ho | DES
+```
+
+The output restores the original four students. It does not contain the extra student
+or `status` column from the introductory demonstrations.
+
 ## 3. Keys
 
 Keys follow from the schema and business rules, not merely from accidental uniqueness in
@@ -593,10 +624,86 @@ the current sample.
 `student_name` is unnecessary. `{student_name}` is not guaranteed to be unique even
 though the four sample names differ. This design selects `student_id` as the primary key.
 
+A primary-key value must be present and unique. In this SQLite schema, `NOT NULL`
+explicitly enforces presence for the text identifiers. Do not assume that a declaration
+of `TEXT PRIMARY KEY` alone enforces this in an ordinary SQLite table.
+
+Predict whether each proposed student will be accepted: one has no identifier, while
+the other reuses S101 with a new email. Neither proposal should add a student.
+
+```python
+for label, values in [
+    ("Missing student ID", (None, "missing@example.edu", "New Student", "IM")),
+    ("Repeated student ID", ("S101", "new@example.edu", "New Student", "IM")),
+]:
+    connection.execute("SAVEPOINT key_example")
+    try:
+        connection.execute("INSERT INTO student VALUES (?, ?, ?, ?)", values)
+        print(label + ": accepted")
+    except sqlite3.IntegrityError:
+        print(label + ": rejected")
+    finally:
+        connection.execute("ROLLBACK TO key_example")
+        connection.execute("RELEASE key_example")
+```
+```output
+Missing student ID: rejected
+Repeated student ID: rejected
+```
+
+Both proposals are rejected. The first lacks an identifier; the second duplicates one.
+These two checks support the stated rules for this schema; they do not make names unique.
+
 ### Worked Example: `enrollment`
 
 Neither `student_id` nor `course_id` alone identifies an enrollment. The composite key
 `{student_id, course_id, term}` does under the stated rule.
+
+Why not use just `{student_id, course_id}`? In this synthetic example, the rules permit
+a student to enroll in the same course in another term. Temporarily add S101 taking
+DB201 in `115-2`, with no grade recorded yet. Predict the two rows for this student and
+course. Then predict whether another copy of `(S101, DB201, 115-2)` is allowed.
+
+```python
+connection.execute("SAVEPOINT term_example")
+try:
+    connection.execute("INSERT INTO enrollment VALUES ('S101', 'DB201', '115-2', NULL)")
+    run_sql_script(connection, """
+SELECT student_id, course_id, term, grade
+FROM enrollment
+WHERE student_id = 'S101' AND course_id = 'DB201'
+ORDER BY term;
+""")
+    try:
+        connection.execute("INSERT INTO enrollment VALUES ('S101', 'DB201', '115-2', NULL)")
+        print("Repeated student/course/term: accepted")
+    except sqlite3.IntegrityError:
+        print("Repeated student/course/term: rejected")
+finally:
+    connection.execute("ROLLBACK TO term_example")
+    connection.execute("RELEASE term_example")
+```
+```output
+student_id | course_id | term | grade
+S101 | DB201 | 115-1 | A
+S101 | DB201 | 115-2 | NULL
+Repeated student/course/term: rejected
+```
+
+The two rows share the student and course, but differ in `term`. The repeated triple
+is rejected. `NULL` here marks the unrecorded grade; it is not a missing key value.
+The example restores the original six enrollments before the next activity.
+
+To check minimality, consider removing each attribute from the proposed key:
+
+| Attribute removed | Remaining attributes | Permitted rows that cannot be distinguished |
+|---|---|---|
+| `term` | `student_id, course_id` | S101 taking DB201 in 115-1 and 115-2 |
+| `course_id` | `student_id, term` | S101 taking DB201 and FT210 in 115-1 |
+| `student_id` | `course_id, term` | S101 and S103 taking DB201 in 115-1 |
+
+Each smaller pair can repeat under the rules. The rule allows at most one row for the
+complete triple, so this triple is a candidate key, not just a large superkey.
 
 ### Practice
 
@@ -611,8 +718,30 @@ referenced relation. For example, `student.dept_code` references
 `department.dept_code`.
 
 Adding a student with department `LAW` violates the rule unless the LAW department is
-created first. A foreign key need not be unique in the referencing relation; many
+created first. In these tables the referencing identifiers are required; more generally,
+SQL foreign keys may allow missing values unless a constraint forbids them.
+A foreign key need not be unique in the referencing relation; many
 students may belong to IM.
+
+Predict whether this new student's department can be found in `department`.
+
+```python
+connection.execute("SAVEPOINT reference_example")
+try:
+    connection.execute("INSERT INTO student VALUES ('S106', 'law@example.edu', 'New Student', 'LAW')")
+    print("Department LAW: accepted")
+except sqlite3.IntegrityError:
+    print("Department LAW: rejected")
+finally:
+    connection.execute("ROLLBACK TO reference_example")
+    connection.execute("RELEASE reference_example")
+```
+```output
+Department LAW: rejected
+```
+
+`LAW` has no referenced department row. The new ID and email do not fix that missing
+reference. Trace the required arrow in the diagram before proposing a valid change.
 
 ```text
 department
@@ -667,7 +796,18 @@ This closure property allows operations to be composed.
 σ_dept_code='IM'(student)
 ```
 
-This keeps the complete S101 and S103 tuples. Predict the result of
+Before running the selection, list the student IDs whose `dept_code` is IM. Will it
+remove columns or only rows?
+
+<!-- sql:example 2 -->
+```output
+student_id | email | student_name | dept_code
+S101 | an.chen@example.edu | An Chen | IM
+S103 | kai.wu@example.edu | Kai Wu | IM
+```
+
+The output keeps the complete S101 and S103 tuples, including all four attributes.
+Predict the result of
 `σ_dept_code='IM' AND student_id!='S101'(student)` and explain which predicate excludes
 each removed tuple.
 
@@ -677,8 +817,20 @@ each removed tuple.
 Π_dept_code(student)
 ```
 
-The formal result is `{DES, FIN, IM}`. Projection removes duplicate tuples because a
-formal relation is a set. Predict `Π_building(department)` and handle the repeated
+Projection removes duplicate tuples because a formal relation is a set. Predict how
+many distinct department codes remain from the four students; IM appears twice.
+
+<!-- sql:example 3 -->
+```output
+dept_code
+DES
+FIN
+IM
+```
+
+The formal result is `{DES, FIN, IM}`: three tuples with one attribute each. SQL uses
+`DISTINCT` to match this duplicate removal. The student table still has four rows.
+Predict `Π_building(department)` and handle the repeated
 `Hong Hall` value correctly.
 
 ### Composition
@@ -687,14 +839,58 @@ formal relation is a set. Predict `Π_building(department)` and handle the repea
 Π_student_name(σ_dept_code='IM'(student))
 ```
 
+Predict the intermediate student IDs, then the final distinct names. Which operation
+must be evaluated first?
+
+<!-- sql:example 4 -->
+```output
+student_name
+An Chen
+Kai Wu
+```
+
 The inner selection keeps S101 and S103; the outer projection produces
-`{An Chen, Kai Wu}`. Write an expression for the identifiers and titles of three-credit
+`{An Chen, Kai Wu}`. Now predict the final names if another IM student is also named
+An Chen. Only the input data changes; the query stays the same.
+
+```python
+connection.execute("SAVEPOINT same_name_example")
+try:
+    connection.execute("INSERT INTO student VALUES ('S106', 'second.an@example.edu', 'An Chen', 'IM')")
+    run_sql_script(connection, SQL_EXAMPLE_4)
+finally:
+    connection.execute("ROLLBACK TO same_name_example")
+    connection.execute("RELEASE same_name_example")
+```
+```output
+student_name
+An Chen
+Kai Wu
+```
+
+The output still has two distinct names, although the temporary selected input has three
+students. Formal projection keeps one copy of the name, not one row per person. A plain
+SQL `SELECT` without `DISTINCT` would repeat An Chen. The temporary student is removed.
+
+Write an expression for the identifiers and titles of three-credit
 courses, and state which operation runs first in the expression.
 
 ### Cartesian Product
 
-For `{S101, S102} × {DB201, FT210}`, the result has four pairs. These are possible
-combinations, not four enrollment facts. The complete Student and Course relations have
+Before executing `{S101, S102} × {DB201, FT210}`, predict the number of pairs and list
+them. Does a product check whether each student enrolled in each course?
+
+<!-- sql:example 5 -->
+```output
+student_id | course_id
+S101 | DB201
+S101 | FT210
+S102 | DB201
+S102 | FT210
+```
+
+The result has four pairs. These are possible combinations, not four enrollment facts:
+S102 taking DB201 does not appear in the enrollment table. The complete Student and Course relations have
 four tuples each, so their product has 16 tuples.
 
 ### Theta Join
@@ -709,8 +905,23 @@ A theta join can be understood as a Cartesian product followed by a selection:
 r ⋈_theta s = σ_theta(r × s)
 ```
 
-Projecting `student_name` and `course_id` after the join produces the six actual
-enrollment pairs. Omitting the join predicate produces 24 combinations, most of which
+Predict the number of matching rows when four students are joined to six enrollments
+on student ID. Compare it with the number of rows in the product without that condition.
+The demonstration displays the student name, course ID, and term from each match.
+
+<!-- sql:example 6 -->
+```output
+student_name | course_id | term
+An Chen | DB201 | 115-1
+An Chen | FT210 | 115-1
+Bea Lin | FT210 | 115-1
+Kai Wu | DB201 | 115-1
+Kai Wu | ML230 | 115-1
+Mira Ho | WD120 | 115-1
+```
+
+There are six matches in this instance, one per enrollment. Unlike the product example,
+there is no S102/DB201 enrollment. Omitting the join predicate produces 24 combinations, most of which
 are not enrollment facts.
 
 Practice: identify the two relations and join predicate needed to connect a course title
@@ -727,6 +938,36 @@ Let:
 A = students in DB201 = {S101, S103}
 B = students in FT210 = {S101, S102}
 ```
+
+Predict the IDs in the union, intersection, and A-minus-B results before running the
+three queries. Pay attention to S101, which belongs to both input sets.
+
+<!-- sql:example 7a -->
+```output
+student_id
+S101
+S102
+S103
+```
+
+The union has three IDs. S101 occurs once, even though it belongs to both courses.
+
+<!-- sql:example 7b -->
+```output
+student_id
+S101
+```
+
+The intersection contains only S101, the student present in both input sets.
+
+<!-- sql:example 7c -->
+```output
+student_id
+S103
+```
+
+The difference contains S103: this student is in DB201 but not FT210. Compare the
+observed results with the complete table, including the reverse difference:
 
 | Expression | Meaning | Result |
 |---|---|---|
@@ -753,6 +994,17 @@ fintech_students <- Π_student_id(σ_course_id='FT210'(enrollment))
 db_students ∩ fintech_students
 ```
 
+Predict whether naming the two inputs changes their intersection.
+
+<!-- sql:example 8 -->
+```output
+student_id
+S101
+```
+
+S101 is still the only common ID. The SQL `WITH` clause gives names to query results;
+it does not insert new students or change the stored enrollment table.
+
 ### Rename
 
 Rename distinguishes multiple uses of the same relation:
@@ -763,6 +1015,18 @@ Rename distinguishes multiple uses of the same relation:
 ```
 
 It supports a self-comparison such as finding different students in the same department.
+
+Predict the distinct student pair from IM. The ID comparison excludes self-pairs and
+keeps only one ordering of each pair.
+
+<!-- sql:example 9 -->
+```output
+student_1 | student_2 | dept_code
+An Chen | Kai Wu | IM
+```
+
+An Chen and Kai Wu form the only pair in this instance. The two names `s1` and `s2`
+refer to separate uses of the same table; they do not create two stored tables.
 
 ### Simple Equivalence
 
@@ -777,6 +1041,31 @@ Q2 = (σ_dept_code='IM'(student))
      ⋈_student.student_id=enrollment.student_id enrollment
 ```
 
+Predict the displayed name/course pairs for both queries. The same inner-join condition
+and IM filter are used; only the placement of the filter changes.
+
+<!-- sql:example 10a -->
+```output
+student_name | course_id
+An Chen | DB201
+An Chen | FT210
+Kai Wu | DB201
+Kai Wu | ML230
+```
+
+Filtering after the join gives four pairs. Compare them with filtering students first:
+
+<!-- sql:example 10b -->
+```output
+student_name | course_id
+An Chen | DB201
+An Chen | FT210
+Kai Wu | DB201
+Kai Wu | ML230
+```
+
+Both queries display the same four pairs for this instance. The SQL demonstrations show
+selected columns from Q1 and Q2, not every attribute of the joined relations.
 They express the same result under the stated conditions. Equality on one sample alone is
 not a proof for every legal instance. Chapter 16 revisits equivalence as an optimization
 guardrail.
@@ -796,7 +1085,8 @@ guardrail.
 
 For each proposed key or algebra result, state the business rule or operation that
 supports the answer. Retain the schema sheet, key map, each intermediate relation, and
-one corrected misconception.
+one prediction with its observed result. Include either a correction or an explanation
+of why your prediction was correct. Submit only the work assigned by the instructor.
 
 ## Chapter Summary
 
@@ -810,3 +1100,18 @@ operations compare compatible results. Chapter 3 expresses these operations in S
 Recalculate one algebra expression after changing a tuple in the sample data, and explain
 which intermediate relation changed. Assignment, rename, and formal equivalence proofs
 are optional extensions rather than required Exam 1 derivations.
+
+## Check the Database State
+
+The temporary examples should leave the original 3 departments, 4 students, 4 courses,
+and 6 enrollments unchanged. Predict whether these checks will pass after the examples.
+
+<!-- sql:checks -->
+```output
+Notebook checks passed.
+Database connection closed.
+```
+
+The counts and foreign-key check pass, and the connection is closed. These checks cover
+the database state, not your written explanations. Restart from the four-table setup
+to repeat this part of the chapter; the introductory database is not required.

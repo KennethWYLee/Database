@@ -16,6 +16,54 @@ import build_course_repository as builder
 
 
 class RepositoryLayoutTests(unittest.TestCase):
+    def test_visual_figures_and_unique_anchors(self):
+        config = builder.load_json(builder.CONFIG_PATH)
+        total = 0
+        for chapter in config["chapters"]:
+            with self.subTest(chapter=chapter["id"]):
+                notebook = builder.build_notebook(chapter)
+                attachments = [name for cell in notebook["cells"]
+                               for name in cell.get("attachments", {})]
+                self.assertEqual(len(attachments), len(set(attachments)))
+                self.assertEqual(len(attachments), 19 if chapter["id"] == "ch02"
+                                 else 3 if chapter["id"] in {"ch05", "ch06", "ch14", "ch19"} else 2)
+                total += len(attachments)
+        self.assertEqual(total, 45)
+
+    def test_invalid_figure_anchors_are_rejected(self):
+        chapter = builder.load_json(builder.CONFIG_PATH)["chapters"][0]
+        original = builder.chapter_figures(chapter)
+        for anchor in ["## Missing topic", "### Read the Output"]:
+            altered = copy.deepcopy(original)
+            altered[0]["after_heading"] = anchor
+            with self.subTest(anchor=anchor), patch.object(builder, "chapter_figures", return_value=altered):
+                with self.assertRaisesRegex(ValueError, "Missing or ambiguous figure anchor"):
+                    builder.build_notebook(chapter)
+
+    def test_inline_sql_mapping_and_outputs(self):
+        chapter = builder.load_json(builder.CONFIG_PATH)["chapters"][0]
+        guide = builder.safe_source(chapter["guide_source"]).read_text(encoding="utf-8")
+        expanded = builder.expand_inline_sql(guide, chapter)
+        self.assertNotIn("<!-- sql:", expanded)
+        self.assertEqual(expanded.count("## Build and Inspect the Chapter Database"), 1)
+        self.assertLess(expanded.index("## Build and Inspect"), expanded.index("## 3. Keys"))
+        notebook = builder.build_notebook(chapter)
+        builder.execute_notebook(notebook, "inline-test")
+        code = "\n".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
+        self.assertNotIn("SQL_2 =", code)
+        self.assertEqual(code.count("-- Example 4:"), 1)
+        self.assertEqual(code.count("connection.close()"), 1)
+        for marker in ["<!-- sql:setup -->", "<!-- sql:example 4 -->", "<!-- sql:checks -->"]:
+            with self.subTest(marker=marker):
+                with self.assertRaisesRegex(ValueError, "Incomplete inline"):
+                    builder.expand_inline_sql(guide.replace(marker, ""), chapter)
+                with self.assertRaisesRegex(ValueError, "Repeated inline"):
+                    builder.expand_inline_sql(guide + "\n" + marker, chapter)
+        with self.assertRaisesRegex(ValueError, "Unknown SQL example"):
+            builder.expand_inline_sql(guide.replace("example 4 -->", "example 99 -->"), chapter)
+        with self.assertRaisesRegex(ValueError, "Duplicate SQL example"):
+            builder.load_sql_examples("-- Example 1: first\nSELECT 1;\n-- Example 1: second\nSELECT 2;")
+
     def test_root_and_course_files(self):
         root = builder.COURSE_ROOT
         self.assertEqual({p.name for p in root.glob("*.md")},

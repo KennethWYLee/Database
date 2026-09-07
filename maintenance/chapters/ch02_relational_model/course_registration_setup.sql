@@ -6,13 +6,13 @@ DROP TABLE IF EXISTS student;
 DROP TABLE IF EXISTS department;
 
 CREATE TABLE department (
-    dept_code TEXT PRIMARY KEY,
+    dept_code TEXT NOT NULL PRIMARY KEY,
     dept_name TEXT NOT NULL UNIQUE,
     building TEXT NOT NULL
 );
 
 CREATE TABLE student (
-    student_id TEXT PRIMARY KEY,
+    student_id TEXT NOT NULL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
     student_name TEXT NOT NULL,
     dept_code TEXT NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE student (
 );
 
 CREATE TABLE course (
-    course_id TEXT PRIMARY KEY,
+    course_id TEXT NOT NULL PRIMARY KEY,
     title TEXT NOT NULL,
     dept_code TEXT NOT NULL,
     credits INTEGER NOT NULL CHECK (credits BETWEEN 1 AND 6),

@@ -15,6 +15,7 @@ from pathlib import Path, PurePosixPath
 from urllib.parse import unquote
 
 from notebook_figures import generate_figure
+from teaching_figures import definitions as teaching_figure_definitions
 
 
 SOURCE_DIR = Path(__file__).resolve().parent
@@ -269,7 +270,7 @@ def validate_config(config: dict) -> None:
     for chapter in chapters:
         safe_source(chapter["guide_source"])
         figure_names: set[str] = set()
-        for figure in chapter.get("generated_figures", []):
+        for figure in chapter_figures(chapter):
             for key in ("generator", "filename", "title", "alt", "after_heading"):
                 if not figure.get(key):
                     raise ValueError(f"{chapter['id']} figure is missing {key}")
@@ -324,8 +325,16 @@ def normalize_guide(text: str) -> str:
     return text
 
 
-def split_guide(text: str) -> list[str]:
-    return [section.strip() for section in re.split(r"(?=^##\s)", text, flags=re.MULTILINE) if section.strip()]
+def split_guide(text: str, subsections: bool = False) -> list[str]:
+    pattern = r"(?=^#{2,3}\s)" if subsections else r"(?=^##\s)"
+    return [section.strip() for section in re.split(pattern, text, flags=re.MULTILINE) if section.strip()]
+
+
+def chapter_figures(chapter: dict) -> list[dict]:
+    figures = list(chapter.get("generated_figures", []))
+    if chapter.get("visual_teaching"):
+        figures.extend(teaching_figure_definitions(chapter["id"]))
+    return figures
 
 
 def guide_section_cells(section: str, attachments: dict, executable: bool) -> list[dict]:
@@ -368,7 +377,7 @@ def image_attachments(chapter: dict) -> dict[str, dict]:
 
 def generated_figure_cells(chapter: dict, heading: str) -> list[dict]:
     cells: list[dict] = []
-    for figure in chapter.get("generated_figures", []):
+    for figure in chapter_figures(chapter):
         if figure["after_heading"] != heading:
             continue
         svg = generate_figure(figure["generator"])
@@ -384,8 +393,8 @@ def generated_figure_cells(chapter: dict, heading: str) -> list[dict]:
         markdown = (
             f"### {figure['title']}\n\n"
             f"![{figure['alt']}](attachment:{figure['filename']})\n\n"
-            "This original diagram applies the chapter concepts to the synthetic "
-            "course-registration example used throughout the notebooks."
+            + figure.get("caption", "This original diagram applies the chapter concepts to the synthetic "
+                         "course-registration example used throughout the notebooks.")
         )
         cells.append(
             markdown_cell(
@@ -446,6 +455,59 @@ def sql_cells(chapter: dict) -> list[dict]:
     return cells
 
 
+def load_sql_examples(text: str) -> dict[str, str]:
+    """Read the numbered example blocks from a maintained SQL lab."""
+    text = text.split("-- Student practice:", 1)[0]
+    markers = list(re.finditer(r"^-- Example (\d+[a-z]?):.*$", text, re.MULTILINE))
+    examples: dict[str, str] = {}
+    for index, marker in enumerate(markers):
+        identifier = marker.group(1)
+        if identifier in examples:
+            raise ValueError(f"Duplicate SQL example: {identifier}")
+        end = markers[index + 1].start() if index + 1 < len(markers) else len(text)
+        examples[identifier] = text[marker.start():end].strip()
+    if not examples:
+        raise ValueError("No numbered SQL examples found")
+    return examples
+
+
+def expand_inline_sql(guide: str, chapter: dict) -> str:
+    """Embed maintained SQL at explicit positions without duplicating its source."""
+    sources = chapter["sql_sources"]
+    if len(sources) != 2 or not all(item["execute"] for item in sources):
+        raise ValueError("Inline SQL requires one setup and one executable numbered lab")
+    setup = safe_source(sources[0]["source"]).read_text(encoding="utf-8")
+    examples = load_sql_examples(safe_source(sources[1]["source"]).read_text(encoding="utf-8"))
+    seen: set[str] = set()
+
+    def replace(match: re.Match) -> str:
+        token = match.group(1)
+        if token in seen:
+            raise ValueError(f"Repeated inline SQL marker: {token}")
+        seen.add(token)
+        if token == "setup":
+            code = SQL_HELPERS + "\n" + embedded_text_assignment("SQL_1", setup)
+            code += '\nrun_sql_script(connection, SQL_1)\ninspect_database(connection)'
+            code += '\nprint("\\nTable | rows")\nfor table in ("department", "student", "course", "enrollment"):\n    count = connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]\n    print(f"{table} | {count}")'
+            return SQL_BUILD_GUIDE + "\n\n```python\n" + code + "\n```"
+        if token == "checks":
+            code = SQL_CHECKS[chapter["id"]] + '\nconnection.close()\nprint("Database connection closed.")'
+        else:
+            identifier = token.removeprefix("example ")
+            if identifier not in examples:
+                raise ValueError(f"Unknown SQL example: {identifier}")
+            variable = f"SQL_EXAMPLE_{identifier}"
+            code = embedded_text_assignment(variable, examples[identifier])
+            code += f"\nrun_sql_script(connection, {variable})"
+        return "```python\n" + code + "\n```"
+
+    result = re.sub(r"^<!-- sql:(setup|checks|example \d+[a-z]?) -->$", replace, guide, flags=re.MULTILINE)
+    expected = {"setup", "checks", *(f"example {identifier}" for identifier in examples)}
+    if seen != expected or "<!-- sql:" in result:
+        raise ValueError(f"Incomplete inline SQL mapping: missing={sorted(expected - seen)}")
+    return result
+
+
 def program_cell(program: dict) -> dict:
     script_path = safe_source(program["script_source"])
     assignments = [
@@ -492,9 +554,15 @@ with tempfile.TemporaryDirectory(prefix="database_notebook_") as temp_directory:
 
 def build_notebook(chapter: dict) -> dict:
     guide = normalize_guide(safe_source(chapter["guide_source"]).read_text(encoding="utf-8"))
+    if chapter.get("inline_sql"):
+        if not chapter.get("executable_guide"):
+            raise ValueError("Inline SQL requires executable_guide")
+        guide = expand_inline_sql(guide, chapter)
     attachments = image_attachments(chapter)
     cells: list[dict] = []
-    for section in split_guide(guide):
+    parent_heading = ""
+    seen_anchors: dict[str, int] = {}
+    for section in split_guide(guide, chapter.get("visual_teaching", False)):
         section_attachments = {
             filename: value
             for filename, value in attachments.items()
@@ -502,13 +570,25 @@ def build_notebook(chapter: dict) -> dict:
         }
         cells.extend(guide_section_cells(section, section_attachments, chapter.get("executable_guide", False)))
         heading = section.splitlines()[0].strip()
+        if heading.startswith("## "):
+            parent_heading = heading
+        seen_anchors[heading] = seen_anchors.get(heading, 0) + 1
         cells.extend(generated_figure_cells(chapter, heading))
+        if heading.startswith("### "):
+            qualified = parent_heading + " / " + heading
+            seen_anchors[qualified] = seen_anchors.get(qualified, 0) + 1
+            cells.extend(generated_figure_cells(chapter, qualified))
+
+    for figure in chapter_figures(chapter):
+        if seen_anchors.get(figure["after_heading"]) != 1:
+            raise ValueError(f"Missing or ambiguous figure anchor: {figure['after_heading']}")
 
     for item in chapter.get("markdown_sources", []):
         text = normalize_guide(safe_source(item["source"]).read_text(encoding="utf-8"))
         cells.append(markdown_cell(f"## {item['title']}\n\n{text}"))
 
-    cells.extend(sql_cells(chapter))
+    if not chapter.get("inline_sql"):
+        cells.extend(sql_cells(chapter))
     if chapter.get("programs"):
         if not chapter.get("sql_sources"):
             cells.append(
@@ -717,7 +797,7 @@ def verify_content(config: dict) -> None:
         notebook = json.loads(safe_target(f"{chapter['id']}.ipynb").read_text(encoding="utf-8"))
         expected_attachments = {item["filename"] for item in chapter.get("image_sources", [])}
         expected_attachments.update(
-            item["filename"] for item in chapter.get("generated_figures", [])
+            item["filename"] for item in chapter_figures(chapter)
         )
         actual_attachments = {
             filename

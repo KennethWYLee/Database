@@ -4,6 +4,8 @@ import argparse
 from html import escape
 from pathlib import Path
 
+from teaching_figures import FIGURES, render
+
 
 WIDTH = 1200
 
@@ -290,6 +292,8 @@ FIGURE_GENERATORS = {
 
 
 def generate_figure(name: str) -> str:
+    if name in FIGURES:
+        return render(name)
     try:
         return FIGURE_GENERATORS[name]()
     except KeyError as error:

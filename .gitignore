@@ -79,6 +79,10 @@
 !/maintenance/course_repository/build_course_repository.py
 !/maintenance/course_repository/repository_config.json
 !/maintenance/course_repository/notebook_figures.py
+!/maintenance/course_repository/teaching_figures.py
+!/maintenance/course_repository/verify_teaching_figures.py
+!/maintenance/course_repository/render_teaching_figures.cjs
+!/maintenance/course_repository/visual_teaching_review.md
 !/maintenance/course_repository/test_repository_layout.py
 !/maintenance/course_repository/review_notebook.py
 /maintenance/course_repository/output/

@@ -6,8 +6,9 @@ Revised: September 7, 2026
 
 The syllabus and all chapter notebooks are in this folder. Each chapter uses one notebook,
 which may continue across meetings. In the first meeting, begin with this syllabus, then
-read Chapter 2 through **End of Week 1**. In Week 2, continue at **Week 2: Keys and
-Relational Algebra** in the same notebook.
+discuss the purpose of databases and the opening examples in Chapter 2. The instructor
+will indicate where to stop and resume. The notebook's Week 1 and Week 2 headings organize
+the reading; they are not deadlines for completing every example during a meeting.
 
 | Notebook | Topic |
 |---|---|
@@ -72,7 +73,7 @@ All official student-facing course materials use English prose and standard data
 
 | Week | Date | Topics and Activities | Primary Learning Evidence |
 |---:|---|---|---|
-| 1 | September 10, 2026 | Course introduction; database purpose; one relation, tuples, attributes, and domains; changes to schemas and instances; why identifiers are needed. Read through End of Week 1 in Chapter 2. Formal key classification begins in Week 2. | Week 1 notebook responses: table identification, domain decisions, schema/instance comparisons, and individual correction |
+| 1 | September 10, 2026 | Syllabus introduction, followed by an overview of Chapter 2 using a student table. Opening topics include database purpose, tuples, attributes, domains, schemas, instances, and the need for identifiers. Continue unfinished examples as directed; formal key classification follows this introduction. | Responses to the examples discussed: table identification, predictions, and explanations or corrections |
 | 2 | September 17, 2026 | Primary, candidate, and foreign keys; schema diagrams; core relational-algebra operations using small relation instances | Key map, relational-algebra results, and individual revision |
 | 3 | September 24, 2026 | SQL DDL basics; `SELECT`, `FROM`, `WHERE`, expressions, duplicates, string patterns, and ordering | SQL file and verified query results |
 | 4 | October 1, 2026 | `NULL`, three-valued logic, aggregation, `GROUP BY`, `HAVING`, `IN`, `EXISTS`, and selected subqueries; verification of AI-generated SQL | SQL verification table and individual revision |

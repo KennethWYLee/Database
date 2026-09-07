@@ -1,6 +1,6 @@
 # 115-1 資料庫管理課程計畫
 
-更新日期：2026-08-27
+更新日期：2026-09-07
 狀態：現行備課依據；2026-08-27客觀檢查及教師範圍/語言決策已套用，仍待教師
 審閱英文學生教材後才能把全部逐章教材標示為student-ready
 
@@ -80,7 +80,7 @@ recovery internals，以概念說明、圖解、schedule、log 或已驗證的�
 
 | 週次 | 日期 | 章節 | 授課摘要 | 教學與範例 | 學習證據 |
 |---:|---|---|---|---|---|
-| 1 | 2026-09-10 | Ch2 | 資料庫用途；單一relation的tuples、attributes、domains、schema/instance與識別欄位的用途；讀至End of Week 1 | 讀取student table；比較新增學生、修改值、新增欄位的實際輸出；以同名學生說明識別需求，正式keys分類留至Week 2 | Week 1 notebook responses：辨認表格、domain判斷、schema/instance比較與個人修正 |
+| 1 | 2026-09-10 | 課綱、Ch2導入 | 先介紹課綱，再以student table概談資料庫用途與Ch2；不要求首堂完成整個Week 1閱讀段落 | 依實際授課選用tuples、attributes、domains、schema/instance與識別需求的開頭範例；未完成部分接續，正式keys分類在導入後進行 | 當堂指定範例的辨認、預測、解釋或修正 |
 | 2 | 2026-09-17 | Ch2 | primary/candidate/foreign keys、schema diagrams 與核心 relational algebra | 對小型 relations 逐步執行 selection、projection、product、join 與 set operations；比較 key choices | Key map, algebra results, and individual revision |
 | 3 | 2026-09-24 | Ch3 | SQL DDL basics；`SELECT`、`FROM`、`WHERE`、expressions、duplicates、patterns 與 ordering | 先預測 course-registration queries，再執行並核對 rows、columns 與 ordering | SQL file and verified query results |
 | 4 | 2026-10-01 | Ch3 | `NULL`、three-valued logic、aggregation、`GROUP BY`/`HAVING`、`IN`/`EXISTS` 與 selected subqueries | 修正含 `NULL`、aggregation 或 subquery 錯誤的 SQL；檢查 AI 生成 SQL 的語意與輸出 | SQL verification table and individual revision |

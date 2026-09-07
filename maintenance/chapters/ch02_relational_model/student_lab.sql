@@ -23,7 +23,7 @@ FROM student
 ORDER BY dept_code;
 
 -- Example 4: composition, Pi student_name (sigma dept_code = 'IM' (student)).
-SELECT student_name
+SELECT DISTINCT student_name
 FROM student
 WHERE dept_code = 'IM'
 ORDER BY student_name;

@@ -389,3 +389,130 @@ node maintenance/course_repository/output/render_week1.cjs
   objective check assigned to the instructor. Week 2 retains its existing core and
   extensions; it was regression-tested, not redesigned or newly certified for classroom
   workload. Publication and work on later lessons remain separate tasks.
+
+## September 7, 2026: Ch2 Corrections and First-Meeting Use
+
+This entry supersedes the preceding statement that Week 2 was only regression-tested.
+Reviewed baseline: `ba20cda9de100fe62dee13dff17ec6efeb1159a4`, clean `main` tracking
+`origin/main`. Build version: `2026.09.07-ch02-interleaved-examples`.
+
+### Instructor Decision and Scope
+
+The first meeting starts with the syllabus, then introduces Ch2 using the opening
+student-table examples. The Week 1/Week 2 headings remain reading divisions, not a
+requirement to finish the opening section in the first meeting. The instructor chooses
+where to stop and resume. README, syllabus, course plan, configuration, guide, and
+PROJECT now agree. All twelve notebooks remain available for review; possible future
+distribution of only Ch2 is not implemented. No new assessment or SQL/Python writing
+requirement was added, and no exam dates, weights, or chapter assignments changed.
+
+### Corrections and Source Evidence
+
+- Added explicit `NOT NULL` to the three text primary keys in the maintained shared
+  setup. SQLite's ordinary `TEXT PRIMARY KEY` declaration alone permits NULL values.
+  Rechecked the official [CREATE TABLE documentation, sections 3.5 and 3.8](https://www.sqlite.org/lang_createtable.html#the_primary_key).
+  All six primary-key columns, including the enrollment triple, now have insertion
+  and update tests that specifically require `SQLITE_CONSTRAINT_NOTNULL`.
+- Changed the actual composition example to `SELECT DISTINCT student_name`. Two legal
+  IM students named An Chen previously produced repeated names. The regression executes
+  the maintained Example 4, not a separately corrected copy of its SQL.
+- Reread the local *Database System Concepts*, 7/e, printed pp.43-45 (PDF pp.68-70),
+  covering superkeys, minimal candidate keys, primary-key choice, and foreign keys;
+  and printed pp.49-52 (PDF pp.74-77), covering selection, duplicate-free projection,
+  composition, products, and the start of join explanation. Full Ch2 source checking
+  remains documented in the September 5 entry, not newly claimed for all other chapters.
+- Added an original synthetic cross-term example: S101 takes DB201 in 115-1 and 115-2;
+  a repeated triple is rejected. Three counterexamples demonstrate why removing any
+  one of the three key attributes loses uniqueness under the declared teaching rules.
+  This simplified enrollment schema is not claimed to reproduce the textbook's full
+  university schema or the university's actual registration policy.
+- Interleaved all 13 existing numbered SQL blocks with predictions and interpretations.
+  The builder reads the maintained SQL markers and rejects missing, repeated, and
+  unknown guide references. No second SQL lab is appended to the notebook.
+- Added reversible demonstrations for missing/repeated identifiers, a missing foreign
+  reference, and duplicate names. Temporary changes are restored using savepoints;
+  the original 3/4/4/6 row counts and referential integrity are checked at completion.
+- Removed the requirement to invent a misconception when a prediction was already
+  correct. A supported explanation is accepted instead. Supplied transaction-control
+  and Python code is explicitly not a new Ch2 writing requirement.
+
+### Teaching and Example Correspondence
+
+| Content | Explanation and example | Check or retained response |
+|---|---|---|
+| Introductory relations, domains, schema/instance, identifiers | Existing seven opening demonstrations | Existing response table; first-meeting completion is not mandatory |
+| Current four-table instance | Course-Registration Data; setup and SQL Example 1 | Predict table counts and original student IDs |
+| Superkey, candidate key, primary key | Section 3, student example; absent/repeated ID checks | Compare name, email, and ID using rules and stability |
+| Composite key and minimality | Section 3, cross-term enrollment and three-subset table | Explain why each smaller pair can repeat |
+| Foreign keys and schema diagram | Section 4, LAW rejection and existing diagram | Follow references; retain schema-and-key sheet |
+| Selection | Section 5, Example 2 | Identify complete retained tuples; change the predicate |
+| Projection | Section 5, Example 3 | Count distinct department codes; predict building projection |
+| Composition | Section 5, Example 4 and second An Chen | Explain intermediate IDs and final names; express the three-credit query |
+| Cartesian product | Section 5, Example 5 | List four combinations and identify a non-enrollment pair |
+| Theta join | Section 5, Example 6 | Compare six matches with 24 product rows; identify course/department predicate |
+| Set operations | Section 6, Examples 7a-7c | Compare union/intersection/difference; calculate results for ML230 |
+| Optional assignment, rename, equivalence | Extensions, Examples 8-10b | Predict unchanged intersection, self-pair handling, and equal displayed results |
+
+### Verification
+
+Executed from the course root with Python 3.12.9 and SQLite 3.45.3:
+
+```powershell
+python maintenance/course_repository/build_course_repository.py --verify
+python maintenance/chapters/ch02_relational_model/instructor/verify_ch02.py
+python maintenance/chapters/ch02_relational_model/instructor/verify_week1.py
+python maintenance/chapters/ch03_introduction_to_sql/instructor/verify_ch03.py
+python maintenance/chapters/ch04_intermediate_sql/instructor/verify_ch04.py
+python maintenance/chapters/ch05_advanced_sql/instructor/verify_ch05.py
+python maintenance/course_repository/test_repository_layout.py
+python maintenance/course_repository/review_notebook.py
+python maintenance/student_sqlite_package/build_package.py --verify
+node maintenance/course_repository/output/render_ch02.cjs
+git diff --check
+```
+
+- All twelve notebooks execute and pass manifest, layout, English-only prose, internal
+  path, attachment, and executed-cell checks. Raw notebook schema and all eight builder
+  regression tests pass. Missing/duplicate/unknown inline markers are rejected.
+- Ch2 constraint and query tests pass, as do both reading sections independently.
+  Ch3-Ch5 verifiers pass after the shared setup change. Ch3-Ch5 notebook diffs contain
+  only the three `NOT NULL` additions; the other eight notebooks are unchanged from
+  the baseline after normalizing Git working-tree line endings.
+- Week 1, Week 2, and complete Ch2 each pass in a fresh Jupyter kernel. All actual
+  stream outputs match saved output. The review uses nbformat 5.10.4, nbclient 0.10.4,
+  and nbconvert 7.17.1, with no added student dependencies.
+- Independent probes against the pre-fix Git sources confirm that the old schema fails
+  the NULL regression and the old Example 4 repeats An Chen. The first one-line probe
+  had a PowerShell quoting error before execution; rerunning through standard input
+  succeeded. This was a harness error, not a passing or failing student-code result.
+- The SQLite ZIP contains the existing allow-listed 21 files. Its manifest and all ten
+  activities pass after extraction into a fresh temporary directory. Consecutive builds
+  produce identical hashes for all 13 Intro DB files, the notebook manifest, and ZIP.
+  Current ZIP SHA-256:
+  `78a66a9b2a857bde69afdd077fe74be2b3447c091093b7e98774d1c709155508`.
+- Local Chrome/Playwright rendering at 1440 and 390 pixels passes image-load and whole-
+  page overflow checks for both Ch2 sections, syllabus, and home. The composite-key
+  example, its minimality table, composition output, and introductory summary were
+  visually inspected. Code regions may scroll horizontally on narrow screens. The
+  existing three PNG attachments remain embedded; no figure source was altered.
+- No new private source, textbook extract, practice answer key, credential, or teacher
+  assessment was added to Intro DB or the ZIP. Local HTML, screenshots, manifests, and
+  caches remain ignored. AGENTS and CLAUDE remain byte-identical and unchanged.
+
+### Files and Remaining Limits
+
+Maintained changes: root README and PROJECT; Intro DB syllabus; COURSE_PLAN; Ch2 guide,
+setup SQL, lab SQL, both verifiers, and this record; course-repository builder,
+configuration, README, layout tests, and fresh-kernel review script. Regenerated outputs:
+Ch2-Ch5 notebooks and the approved SQLite ZIP. No generated artifact was hand-edited.
+
+This revision is authored, source-checked for the affected claims, built, executed, and
+locally rendered. No known blocking issue remains in these checks. It is not evidence
+of actual student comprehension or a new instructor approval of workload. Paper practice
+was not newly administered to students; this revision has not been inspected on GitHub.
+No commit, push, visibility change, chapter removal, or old-branch update occurred.
+
+Primary next action: choose the opening Ch2 examples to use after the syllabus. The
+expected result is a flexible first-meeting stopping point; completion means the
+instructor identifies that point without adding new required work or altering exams.
+This choice does not block completion of the delegated material corrections.

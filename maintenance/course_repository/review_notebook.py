@@ -44,9 +44,9 @@ def main():
             assert old == new, f"{label}: preserved output differs from fresh execution"
             assert not any(o.output_type == "error" for o in executed.outputs)
         print(label, "FRESH_KERNEL_PASS", flush=True)
-        if label == "week1":
+        if label in {"week1", "week2"}:
             html, _ = HTMLExporter(template_name="lab").from_notebook_node(notebook)
-            (OUTPUT / "week1_review.html").write_text(html, encoding="utf-8")
+            (OUTPUT / f"{label}_review.html").write_text(html, encoding="utf-8")
     for name, path in [("syllabus", ROOT / "Intro DB/syllabus.md"), ("home", ROOT / "README.md")]:
         notebook = nbformat.v4.new_notebook(cells=[
             nbformat.v4.new_markdown_cell(path.read_text(encoding="utf-8"))

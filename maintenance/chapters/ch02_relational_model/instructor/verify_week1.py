@@ -140,6 +140,11 @@ def main():
     assert headings.index("## 3. Keys") > start_week2
     assert headings.index("## Build and Inspect the Chapter Database") > start_week2
     assert headings.index("## Week 1 Practice") < stop
+    opening = "\n".join("".join(cell["source"]) for cell in cells[:stop]
+                        if cell["cell_type"] == "markdown")
+    assert "Syllabus first" in opening
+    assert "They do not require you to finish every example in one meeting" in opening
+    assert "Stop at **End of Week 1** during the first meeting" not in opening
 
     week1 = cells[:stop]
     markdown = "\n".join("".join(cell["source"]) for cell in week1
