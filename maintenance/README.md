@@ -18,6 +18,7 @@ it is not a second course navigation system.
 | `student_sqlite_package/` | Optional existing SQLite package and its explicit allow-list |
 | [archive/](archive/README.md) | Superseded records, not current instructions or course decisions |
 | [Migration review](structure_migration_review.md) | September 7 layout change and verification evidence |
+| [Chapter teaching review](course_repository/all_chapters_teaching_review.md) | September 8 diagrams, small examples, source checks, and execution evidence |
 
 Edit chapter sources, then regenerate notebooks. Do not independently edit both a source
 and its generated notebook. The root README and Intro DB syllabus are maintained directly

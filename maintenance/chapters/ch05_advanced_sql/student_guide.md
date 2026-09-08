@@ -275,7 +275,7 @@ prediction, window-frame result, and individually corrected solution.
 ## Chapter Summary
 
 Functions return values, procedures perform explicitly requested work, and triggers run
-after a specified database event. Recursive CTEs require a correct direction and a
+in response to a specified database event. Recursive CTEs require a correct direction and a
 termination argument. Ranking functions differ in tie handling, while partitions and
 frames define the rows used by a window calculation. Chapter 6 returns to database
 design and business rules.

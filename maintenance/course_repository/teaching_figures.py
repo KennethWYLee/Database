@@ -289,10 +289,9 @@ def _panel(x, y, width, data, color, title_height):
     for row_index, row in enumerate([data["headers"], *data["rows"]]):
         font = 22 if columns <= 3 else 21
         weight = 700 if row_index == 0 else 400
-        if row_index == 0:
-            while font > 18 and any(_font(font, weight).getlength(word) > column_width - 24
-                                   for value in row for word in str(value).replace("_", " ").split()):
-                font -= 1
+        while font > 18 and any(_font(font, weight).getlength(word) > column_width - 24
+                               for value in row for word in str(value).replace("_", " ").split()):
+            font -= 1
         wrapped = [_lines(value, column_width - 24, font, weight) for value in row]
         height = max(len(lines) for lines in wrapped) * font * 1.35 + 24
         background = "#e9eff2" if row_index == 0 else "#ffffff"
@@ -321,7 +320,21 @@ def render(name):
     title, height = _paragraph(45, 48, data["title"], 1110, 32, weight=700)
     parts = [title, _text(45, height + 80, "Original teaching illustration | Read with the worked example", 20, "#48616c")]
     y = height + 115
-    if data["kind"] in {"precedence", "wait_for"}:
+    if data["kind"] == "network":
+        graph = data["graph"]
+        for edge in graph["edges"]:
+            x1, y1, x2, y2, label, lx, ly = edge
+            marker = ' marker-end="url(#tip)"' if graph.get("directed", True) else ""
+            parts.append(f'<path d="M {x1} {y+y1} L {x2} {y+y2}" fill="none" stroke="#48616c" stroke-width="3"{marker}/>')
+            if label:
+                label_text, _ = _paragraph(lx, y + ly, label, 420, 23, "#245e9c", 600)
+                parts.append(label_text)
+        for x, top, width, height, label in graph["nodes"]:
+            parts.append(f'<rect class="network-node" x="{x}" y="{y+top}" width="{width}" height="{height}" fill="#e3f2ee" stroke="#17665d" stroke-width="3"/>')
+            content, _ = _paragraph(x+18, y+top+35, label, width-36, 25, weight=600)
+            parts.append(content)
+        bottom = y + graph["height"]
+    elif data["kind"] in {"precedence", "wait_for"}:
         is_wait = data["kind"] == "wait_for"
         parts.append(_text(55, y + 15, "Wait-for graph" if is_wait else "Precedence graph", 26, weight=700))
         for x, label in [(260, "T1"), (940, "T2")]:
@@ -359,3 +372,12 @@ def definitions(chapter_id):
                  alt=data["title"] + ". " + data["conclusion"], after_heading=data["heading"],
                  caption=data["conclusion"])
             for name, data in FIGURES.items() if name.startswith(chapter_id + "_")]
+
+
+from simple_examples import EXAMPLES
+
+for _name, _example in EXAMPLES.items():
+    figure(_name, _example["heading"], _example["title"], _example["panels"],
+           _example["interpretation"].split(". ", 1)[0].rstrip(".") + ".", arrows=False)
+    if "graph" in _example:
+        FIGURES[_name].update(kind="network", graph=_example["graph"])

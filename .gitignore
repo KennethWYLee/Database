@@ -83,6 +83,8 @@
 !/maintenance/course_repository/verify_teaching_figures.py
 !/maintenance/course_repository/render_teaching_figures.cjs
 !/maintenance/course_repository/visual_teaching_review.md
+!/maintenance/course_repository/simple_examples.py
+!/maintenance/course_repository/all_chapters_teaching_review.md
 !/maintenance/course_repository/test_repository_layout.py
 !/maintenance/course_repository/review_notebook.py
 /maintenance/course_repository/output/

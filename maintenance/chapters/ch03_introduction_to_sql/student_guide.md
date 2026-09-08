@@ -62,7 +62,7 @@ constraints. This course uses SQLite for executable work, so its examples use `T
 
 ```sql
 CREATE TABLE study_group (
-    group_id TEXT PRIMARY KEY,
+    group_id TEXT NOT NULL PRIMARY KEY,
     group_name TEXT NOT NULL,
     course_id TEXT NOT NULL,
     capacity INTEGER NOT NULL CHECK (capacity BETWEEN 2 AND 8),

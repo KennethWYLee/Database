@@ -8,15 +8,19 @@ branch or create weekly notebooks.
 
 - `repository_config.json`: chapter sources and the 18-week schedule.
 - `build_course_repository.py`: builds, executes, and verifies every notebook.
-- `review_notebook.py`: validates raw JSON and executes Ch2 in three fresh kernels.
+- `review_notebook.py`: validates raw JSON and executes Ch2 in three fresh kernels;
+  `--all-chapters` additionally executes each remaining chapter in its own fresh kernel.
 - `test_repository_layout.py`: checks layout, path safety, links, and protected files.
 - `notebook_figures.py`: dispatches original SVG teaching diagrams and renders PNGs.
 - `teaching_figures.py`: maintains topic-specific diagrams with font-measured layouts.
+- `simple_examples.py`: maintains 51 original small examples with input tables,
+  source locators, predictions, SQL or conceptual steps, figures, interpretation, and practice.
 - `verify_teaching_figures.py`: checks selected diagram data against SQL, attachment
   bytes, and notebook format; exports an ignored review gallery and notebook HTML.
 - `render_teaching_figures.cjs`: uses Playwright and Chrome to check SVG text geometry,
   notebook images, and desktop/mobile page overflow, and capture review screenshots.
 - `visual_teaching_review.md`: records the visual teaching revision and its evidence.
+- `all_chapters_teaching_review.md`: records the September 8 expansion and final checks.
 
 The chapter guides, SQL, diagrams, data, and simulation programs remain the maintained
 content sources. The builder combines them into one self-contained notebook per selected
@@ -40,8 +44,21 @@ The markers are removed before notebook generation; `output` fences verify their
 Each chapter opts into `visual_teaching`. The builder splits the guide at H2 and H3
 headings and inserts diagrams beside the matching topic. Repeated H3 headings use
 `## Parent / ### Subheading` anchors. Missing or ambiguous anchors stop the build.
-Ch2 contains 19 images; each other chapter contains two or three, for 45 in total.
+Ch2 contains 19 images; each other chapter contains five to ten, for 96 in total.
 These explain existing content without adding assignments or changing course scope.
+
+The small-example catalog adds 32 independently executable SQL examples and 19
+conceptual worked examples beside their corresponding explanations. Every SQL example
+starts with its displayed artificial inputs in a fresh in-memory database. Authored
+expected results are checked against execution; the notebook retains actual stdout,
+including trailing blank lines. Conceptual examples use diagrams and explicitly stated
+rules rather than presenting a simulated result as a live DBMS observation.
+Figure panels display SQL NULL as `NULL`, not Python's `None`.
+
+The instructor selects practice variations. These are not 51 new required submissions.
+Existing chapter labs and optional extension boundaries remain intact. Source locators
+in the catalog belong to maintenance; they are not injected as production notes into
+student notebooks. Notebook execution still needs only Python's standard library.
 
 The builder assigns deterministic, unique cell IDs to every notebook and verifies
 their format and uniqueness. Raw notebook schema validation must run before a notebook
@@ -82,7 +99,7 @@ python -m pip install nbformat nbclient nbconvert ipykernel
 python maintenance/course_repository/build_course_repository.py --verify
 python maintenance/chapters/ch02_relational_model/instructor/verify_week1.py
 python maintenance/course_repository/test_repository_layout.py
-python maintenance/course_repository/review_notebook.py
+python maintenance/course_repository/review_notebook.py --all-chapters
 python maintenance/course_repository/verify_teaching_figures.py
 node maintenance/course_repository/render_teaching_figures.cjs
 ```

@@ -45,11 +45,11 @@ JSON, and a student analysis program. It excludes:
 - Ch18-Ch19 teaching models, because they are not SQLite labs and remain separate
   chapter materials.
 
-The instructor approved the generated package for course use on August 27, 2026. The
-current course repository is private. Any future public GitHub distribution must use a
-separate public repository or an allow-listed release artifact because visibility applies
-to the complete repository. This build does not publish, upload, change visibility, or
-select the public allow-list.
+The instructor approved the generated package for course use on August 27, 2026, and
+authorized the existing course repository to become public on September 7, 2026.
+The explicit package allow-list still applies; that visibility decision does not permit
+adding private sources, assessments, or student records. This build does not publish,
+upload, change visibility, or expand the allow-list.
 
 The unified notebook builder in `../course_repository/` uses the maintained chapter
 sources directly and embeds the required examples. The SQLite package remains a separately

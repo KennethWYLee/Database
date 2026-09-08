@@ -4,6 +4,8 @@ import contextlib
 import copy
 import io
 import json
+import itertools
+from graphlib import TopologicalSorter, CycleError
 import re
 from pathlib import Path
 import tempfile
@@ -17,6 +19,11 @@ import build_course_repository as builder
 
 
 class RepositoryLayoutTests(unittest.TestCase):
+    def test_execution_preserves_actual_stream_whitespace(self):
+        notebook = {"cells": [builder.code_cell('print("result\\n")')]}
+        builder.execute_notebook(notebook, "stream-test")
+        self.assertEqual("".join(notebook["cells"][0]["outputs"][0]["text"]), "result\n\n")
+
     def test_syllabus_weekly_chapter_labels_match_plan(self):
         syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
         schedule = syllabus.split("## Weekly Schedule\n", 1)[1].split("\n## Assessment", 1)[0]
@@ -41,10 +48,102 @@ class RepositoryLayoutTests(unittest.TestCase):
                 attachments = [name for cell in notebook["cells"]
                                for name in cell.get("attachments", {})]
                 self.assertEqual(len(attachments), len(set(attachments)))
-                self.assertEqual(len(attachments), 19 if chapter["id"] == "ch02"
-                                 else 3 if chapter["id"] in {"ch05", "ch06", "ch14", "ch19"} else 2)
+                baseline = (19 if chapter["id"] == "ch02" else
+                            3 if chapter["id"] in {"ch05", "ch06", "ch14", "ch19"} else 2)
+                added = sum(e["chapter"] == chapter["id"] for e in builder.EXAMPLES.values())
+                self.assertEqual(len(attachments), baseline + added)
                 total += len(attachments)
-        self.assertEqual(total, 45)
+        self.assertEqual(total, 45 + len(builder.EXAMPLES))
+
+    def test_small_examples_have_instruction_and_verified_outputs(self):
+        for name, example in builder.EXAMPLES.items():
+            with self.subTest(example=name):
+                for field in ("heading", "source", "concept", "inputs", "prediction",
+                              "interpretation", "practice", "check", "panels"):
+                    self.assertTrue(example[field], field)
+                self.assertFalse(any(value is None for panel in example["panels"]
+                                     for row in panel["rows"] for value in row))
+                cells = builder.small_example_cells(example)
+                if example["steps"]:
+                    self.assertEqual(len(example["steps"]), len(example["outputs"]))
+                    notebook = {"cells": [builder.code_cell(builder.SMALL_EXAMPLE_RUNTIME), *cells]}
+                    builder.execute_notebook(notebook, name)
+                    self.assertTrue(notebook["cells"][-1]["outputs"])
+
+    def test_conceptual_examples_with_separate_calculations(self):
+        def closure(start, rules):
+            known = set(start)
+            while True:
+                expanded = known | set().union(*(right for left, right in rules if left <= known))
+                if expanded == known:
+                    return known
+                known = expanded
+
+        rules = [({"employee"}, {"name"}), ({"project"}, {"title"}),
+                 ({"employee", "project"}, {"hours"})]
+        self.assertEqual(closure({"employee", "project"}, rules),
+                         {"employee", "project", "name", "title", "hours"})
+        self.assertEqual(closure({"employee"}, rules), {"employee", "name"})
+        self.assertEqual(closure({"project"}, rules), {"project", "title"})
+        self.assertEqual(len(closure({"project"}, rules + [({"project"}, {"employee"})])), 5)
+
+        attributes = {"student", "course", "teacher"}
+        rules = [({"student", "course"}, {"teacher"}), ({"teacher"}, {"course"})]
+        keys = []
+        for size in range(1, 4):
+            for combination in itertools.combinations(sorted(attributes), size):
+                key = set(combination)
+                if closure(key, rules) == attributes and not any(k <= key for k in keys):
+                    keys.append(key)
+        self.assertEqual(keys, [{"course", "student"}, {"student", "teacher"}])
+        prime = set().union(*keys)
+        bcnf = third = True
+        for size in range(4):
+            for combination in itertools.combinations(sorted(attributes), size):
+                left = set(combination)
+                determined = closure(left, rules)
+                for right in determined - left:
+                    bcnf &= determined == attributes
+                    third &= determined == attributes or right in prime
+        self.assertFalse(bcnf)
+        self.assertTrue(third)
+
+        chain = {a: {b} for a, b in builder.EXAMPLES["ch18_small_wait_chain"]["inputs"][0]["rows"]}
+        self.assertEqual(list(TopologicalSorter(chain).static_order()), ["T3", "T2", "T1"])
+        chain["T3"] = {"T1"}
+        with self.assertRaises(CycleError):
+            list(TopologicalSorter(chain).static_order())
+        chain["T4"] = {"T2"}
+        self.assertNotIn("T4", chain["T1"] | chain["T2"] | chain["T3"])
+
+        pairs = builder.EXAMPLES["ch17_small_conflicts"]["inputs"][0]["rows"]
+        flags = [a[1] != b[1] and a[3] == b[3] and "w" in (a[0], b[0]) for a, b in pairs]
+        self.assertEqual(flags, [False, True, False, True])
+        schedule = [event for _, event in builder.EXAMPLES["ch17_small_commit_order"]["inputs"][0]["rows"]]
+        self.assertLess(schedule.index("c1"), schedule.index("c2"))
+        self.assertGreater(schedule.index("c1"), schedule.index("r2(A)"))
+
+        held = {"A": ("T1", "S"), "B": ("T2", "X")}
+        decisions = []
+        for mode, item in [("S", "A"), ("X", "A"), ("S", "B"), ("X", "C")]:
+            if item not in held or mode == held[item][1] == "S":
+                decisions.append("grant")
+            else:
+                decisions.append("wait for " + held[item][0])
+        displayed = builder.EXAMPLES["ch18_small_items"]["panels"][1]["rows"]
+        self.assertEqual(decisions, [decision for _, decision in displayed])
+
+        disk = {"A": 8, "B": 4}
+        updates = [("T1", "A", 10, 8), ("T2", "B", 7, 4)]
+        committed = {"T1"}
+        for transaction, item, old, new in updates:
+            if transaction in committed:
+                disk[item] = new
+        for transaction, item, old, new in reversed(updates):
+            if transaction not in committed:
+                disk[item] = old
+        self.assertEqual(list(disk.values()),
+                         builder.EXAMPLES["ch19_small_status"]["panels"][2]["rows"][0])
 
     def test_invalid_figure_anchors_are_rejected(self):
         chapter = builder.load_json(builder.CONFIG_PATH)["chapters"][0]

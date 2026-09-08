@@ -16,6 +16,7 @@ from urllib.parse import unquote
 
 from notebook_figures import generate_figure
 from teaching_figures import definitions as teaching_figure_definitions
+from simple_examples import EXAMPLES, RUNTIME as SMALL_EXAMPLE_RUNTIME
 
 
 SOURCE_DIR = Path(__file__).resolve().parent
@@ -380,6 +381,9 @@ def generated_figure_cells(chapter: dict, heading: str) -> list[dict]:
     for figure in chapter_figures(chapter):
         if figure["after_heading"] != heading:
             continue
+        example = EXAMPLES.get(figure["generator"])
+        if example:
+            cells.extend(small_example_cells(example))
         svg = generate_figure(figure["generator"])
         ET.fromstring(svg)
         # GitHub's notebook preview does not display the SVG attachments used here.
@@ -396,12 +400,60 @@ def generated_figure_cells(chapter: dict, heading: str) -> list[dict]:
             + figure.get("caption", "This original diagram applies the chapter concepts to the synthetic "
                          "course-registration example used throughout the notebooks.")
         )
+        if example:
+            markdown = f"![{figure['alt']}](attachment:{figure['filename']})"
         cells.append(
             markdown_cell(
                 markdown,
                 {figure["filename"]: {"image/png": encoded}},
             )
         )
+        if example:
+            cells.append(markdown_cell(
+                "**Read the result.** " + example["interpretation"] + "\n\n"
+                "**Try a change.** " + example["practice"] + "\n\n"
+                "**Check your reasoning.** " + example["check"] + "\n\n"
+                "When this variation is assigned, retain your prediction, result, "
+                "and correction or explanation."
+            ))
+    return cells
+
+
+def small_example_cells(example: dict) -> list[dict]:
+    intro = f"### Small Example: {example['title']}\n\n{example['concept']}\n\n"
+    intro += "The following data are artificial teaching inputs, not student records.\n\n"
+    for item in example["inputs"]:
+        intro += f"**Input: {item['name']}**\n\n"
+        intro += "| " + " | ".join(item["headers"]) + " |\n"
+        intro += "| " + " | ".join("---" for _ in item["headers"]) + " |\n"
+        for row in item["rows"]:
+            intro += "| " + " | ".join("NULL" if v is None else str(v) for v in row) + " |\n"
+        if not item["rows"]:
+            intro += "\nThe input table is empty.\n"
+        intro += "\n"
+    intro += "**Predict before checking.** " + example["prediction"]
+    cells = [markdown_cell(intro)]
+    if example["steps"]:
+        tables = [(t["name"], t["schema"], t["rows"]) for t in example["inputs"]]
+        import pprint
+        code = "tables = " + pprint.pformat(tables, width=90, sort_dicts=False)
+        code += "\nstatements = [\n"
+        for label, sql in example["steps"]:
+            code += f"    ({label!r}, \"\"\"\n{sql}\n\"\"\"),\n"
+        code += "]\nrun_small_example(tables, statements)"
+        cell = code_cell(code)
+        expected = []
+        for output in example["outputs"]:
+            expected.append(output["title"])
+            if output["headers"]:
+                expected.append(" | ".join(output["headers"]))
+            for row in output["rows"]:
+                expected.append(" | ".join("NULL" if v is None else str(v) for v in row))
+            if not output["rows"]:
+                expected.append("(no rows)")
+            expected.append("")
+        cell["_expected_stdout"] = "\n".join(expected).rstrip()
+        cells.append(cell)
     return cells
 
 
@@ -562,6 +614,7 @@ def build_notebook(chapter: dict) -> dict:
     cells: list[dict] = []
     parent_heading = ""
     seen_anchors: dict[str, int] = {}
+    small_setup_added = False
     for section in split_guide(guide, chapter.get("visual_teaching", False)):
         section_attachments = {
             filename: value
@@ -573,6 +626,21 @@ def build_notebook(chapter: dict) -> dict:
         if heading.startswith("## "):
             parent_heading = heading
         seen_anchors[heading] = seen_anchors.get(heading, 0) + 1
+        anchors = {heading, parent_heading + " / " + heading}
+        if not small_setup_added and any(e["chapter"] == chapter["id"] and e["steps"]
+                                         and e["heading"] in anchors for e in EXAMPLES.values()):
+            cells.append(markdown_cell(
+                "### Running the Small Examples\n\n"
+                "Run this setup cell once. Each small SQL example starts from its displayed "
+                "input tables in a fresh in-memory SQLite database and closes it afterward. "
+                "The table definitions and SQL are supplied; Python helper syntax is not "
+                "an additional learning requirement. Read and predict before running each example. "
+                "The larger chapter lab remains available later in this notebook."
+                " The instructor will select variations for class practice; the additional "
+                "examples are not separate required assignments."
+            ))
+            cells.append(code_cell(SMALL_EXAMPLE_RUNTIME))
+            small_setup_added = True
         cells.extend(generated_figure_cells(chapter, heading))
         if heading.startswith("### "):
             qualified = parent_heading + " / " + heading
@@ -646,9 +714,9 @@ def execute_notebook(notebook: dict, notebook_name: str) -> None:
             raise RuntimeError(f"Worked-example output mismatch in {notebook_name}, cell {cell_index}")
         outputs = []
         if stdout.getvalue():
-            outputs.append({"name": "stdout", "output_type": "stream", "text": source_lines(stdout.getvalue())})
+            outputs.append({"name": "stdout", "output_type": "stream", "text": stdout.getvalue().splitlines(keepends=True)})
         if stderr.getvalue():
-            outputs.append({"name": "stderr", "output_type": "stream", "text": source_lines(stderr.getvalue())})
+            outputs.append({"name": "stderr", "output_type": "stream", "text": stderr.getvalue().splitlines(keepends=True)})
         cell["execution_count"] = execution_count
         cell["outputs"] = outputs
 

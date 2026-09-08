@@ -20,6 +20,12 @@ const { pathToFileURL } = require('node:url');
         const errors = [];
         for (const {text, b} of texts) {
           if (b.x < 0 || b.y < 0 || b.x + b.width > width || b.y + b.height > height) errors.push(`Outside figure: ${text}`);
+          for (const node of svg.querySelectorAll('.network-node')) {
+            const r = node.getBBox();
+            const intersects = Math.min(b.x+b.width,r.x+r.width)>Math.max(b.x,r.x) && Math.min(b.y+b.height,r.y+r.height)>Math.max(b.y,r.y);
+            const contained = b.x>=r.x && b.y>=r.y && b.x+b.width<=r.x+r.width && b.y+b.height<=r.y+r.height;
+            if (intersects && !contained) errors.push(`Text crosses node boundary: ${text}`);
+          }
         }
         for (let i = 0; i < texts.length; i++) for (let j = i + 1; j < texts.length; j++) {
           const a = texts[i].b, b = texts[j].b;

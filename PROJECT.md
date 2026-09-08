@@ -3,7 +3,18 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-09-07
+- 最後更新日期：2026-09-08
+- 2026-09-08授課設計決策：依教師要求補齊全部12個選定章節，以大量原創圖解、
+  小型輸入表及簡單例子講解；仍維持`Intro DB/`一章一份notebook及英文學生教材。
+  新增51個小例子（32個可執行SQL、19個概念推演），圖共96張；Ch2既有19張保留，
+  其餘每章5至10張。範例包含預測、圖解、結果判讀、可選變化及檢查依據。
+  維護來源新增`maintenance/course_repository/simple_examples.py`，由既有建置器
+  就近插入各章，不增加學生資料夾、套件需求或必交作業。選講與延伸邊界、週次、
+  日期、出國週、三次考試及配分不變。教師於本次完成後明確授權commit/push至
+  既有`origin/main`；維護來源、12章notebook與重建SQLite套件同批提交，
+  同步結果以Git history及遠端為準，不包含私人來源或忽略檔案。
+  完整紀錄見`maintenance/course_repository/all_chapters_teaching_review.md`；
+  程式與圖形驗證不等同於教師已親自審閱或已證明學生負荷適當。
 - 2026-09-07最新發布決策：教師明確要求將既有`KennethWYLee/Database`設為public，
   已透過GitHub API確認PUBLIC。此指示取代下方較早的private、另建public repository
   與尚未授權公開紀錄；既有maintenance、歷史與分支也會公開，不改寫或刪除歷史。

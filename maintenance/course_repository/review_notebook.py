@@ -1,5 +1,6 @@
-"""Validate Ch2 in fresh kernels and render local review HTML without editing notebooks."""
+"""Validate notebooks in fresh kernels and render ignored local review HTML."""
 
+import argparse
 import copy
 import json
 from pathlib import Path
@@ -17,6 +18,9 @@ OUTPUT = Path(__file__).resolve().parent / "output"
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--all-chapters", action="store_true")
+    args = parser.parse_args()
     source = ROOT / "Intro DB/ch02.ipynb"
     raw = json.loads(source.read_text(encoding="utf-8"))
     errors = list(nbformat.validator.iter_validate(raw))
@@ -26,9 +30,19 @@ def main():
     start_week2 = next(i for i, cell in enumerate(original.cells)
                       if cell.source.startswith("## Week 2: Keys and Relational Algebra"))
     OUTPUT.mkdir(exist_ok=True)
-    for label, selection in [("week1", original.cells[:start_week2]),
-                             ("week2", original.cells[start_week2:]),
-                             ("complete-ch02", original.cells)]:
+    selections = [("week1", original, original.cells[:start_week2]),
+                  ("week2", original, original.cells[start_week2:]),
+                  ("complete-ch02", original, original.cells)]
+    if args.all_chapters:
+        for path in sorted((ROOT / "Intro DB").glob("ch*.ipynb")):
+            if path == source:
+                continue
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            errors = list(nbformat.validator.iter_validate(raw))
+            assert not errors, (path.name, errors)
+            chapter = nbformat.read(path, as_version=4)
+            selections.append(("complete-" + path.stem, chapter, chapter.cells))
+    for label, original, selection in selections:
         notebook = copy.deepcopy(original)
         notebook.cells = copy.deepcopy(selection)
         kernel = KernelManager(kernel_name="python3")
@@ -36,12 +50,13 @@ def main():
         with tempfile.TemporaryDirectory(prefix="database_review_") as directory:
             NotebookClient(notebook, km=kernel, timeout=60,
                            resources={"metadata": {"path": directory}}).execute(cleanup_kc=True)
-        for saved, executed in zip(selection, notebook.cells):
+        for cell_index, (saved, executed) in enumerate(zip(selection, notebook.cells), start=1):
             if saved.cell_type != "code":
                 continue
             old = "".join(o.get("text", "") for o in saved.outputs if o.output_type == "stream")
             new = "".join(o.get("text", "") for o in executed.outputs if o.output_type == "stream")
-            assert old == new, f"{label}: preserved output differs from fresh execution"
+            assert old == new, (f"{label} cell {cell_index}: preserved output differs from fresh execution\n"
+                                f"saved={old!r}\nfresh={new!r}")
             assert not any(o.output_type == "error" for o in executed.outputs)
         print(label, "FRESH_KERNEL_PASS", flush=True)
         if label in {"week1", "week2"}:

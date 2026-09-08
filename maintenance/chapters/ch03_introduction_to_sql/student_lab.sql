@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS study_group_member;
 DROP TABLE IF EXISTS study_group;
 
 CREATE TABLE study_group (
-    group_id TEXT PRIMARY KEY,
+    group_id TEXT NOT NULL PRIMARY KEY,
     group_name TEXT NOT NULL,
     course_id TEXT NOT NULL,
     capacity INTEGER NOT NULL CHECK (capacity BETWEEN 2 AND 8),

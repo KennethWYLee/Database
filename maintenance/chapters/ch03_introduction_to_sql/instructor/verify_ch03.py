@@ -228,6 +228,17 @@ def main() -> None:
     lab_connection.executescript(STUDENT_LAB_SQL.read_text(encoding="utf-8"))
     assert rows(lab_connection, "SELECT COUNT(*) FROM student") == [(4,)]
     assert rows(lab_connection, "PRAGMA foreign_key_check") == []
+    for sql in (
+        "INSERT INTO study_group VALUES (NULL, 'Test', 'DB201', 4)",
+        "UPDATE study_group SET group_id=NULL WHERE group_id='G01'",
+    ):
+        try:
+            lab_connection.execute(sql)
+        except sqlite3.IntegrityError as error:
+            assert "NOT NULL constraint failed: study_group.group_id" in str(error)
+        else:
+            raise AssertionError("A text primary key accepted NULL")
+    assert rows(lab_connection, "SELECT group_id FROM study_group") == [("G01",)]
 
     print(f"SQLite version: {sqlite3.sqlite_version}")
     print("PASS: SELECT, aliases, DISTINCT, expressions, WHERE, and multi-table query")
@@ -237,6 +248,7 @@ def main() -> None:
     print("PASS: IN, EXISTS, NOT IN NULL case, NOT EXISTS, FROM/CTE/scalar subqueries")
     print("PASS: reversible INSERT, UPDATE, and DELETE examples")
     print("PASS: complete student_lab.sql execution and foreign-key check")
+    print("PASS: text primary key rejects NULL in INSERT and UPDATE")
 
 
 if __name__ == "__main__":
