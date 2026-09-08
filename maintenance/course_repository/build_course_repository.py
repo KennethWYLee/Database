@@ -268,7 +268,12 @@ def validate_config(config: dict) -> None:
         raise ValueError(f"Chapter order must be {EXPECTED_CHAPTERS}; received {ids}")
     if len(set(ids)) != len(ids):
         raise ValueError("Chapter identifiers must be unique")
-    for chapter in chapters:
+    current = config.get("current_chapters", [])
+    if tuple(chapter["id"] for chapter in current) != ("ch01", "ch02", "ch05"):
+        raise ValueError("Current first-meeting chapters must be ch01, ch02, ch05")
+    if any(not chapter.get("prescribed_textbook") for chapter in current):
+        raise ValueError("Current chapters must identify the prescribed textbook")
+    for chapter in [*chapters, *current]:
         safe_source(chapter["guide_source"])
         figure_names: set[str] = set()
         for figure in chapter_figures(chapter):
@@ -334,7 +339,8 @@ def split_guide(text: str, subsections: bool = False) -> list[str]:
 def chapter_figures(chapter: dict) -> list[dict]:
     figures = list(chapter.get("generated_figures", []))
     if chapter.get("visual_teaching"):
-        figures.extend(teaching_figure_definitions(chapter["id"]))
+        prefix = "opening_" if chapter.get("prescribed_textbook") else ""
+        figures.extend(teaching_figure_definitions(prefix + chapter["id"]))
     return figures
 
 
@@ -612,6 +618,14 @@ def build_notebook(chapter: dict) -> dict:
         guide = expand_inline_sql(guide, chapter)
     attachments = image_attachments(chapter)
     cells: list[dict] = []
+    if not chapter.get("prescribed_textbook"):
+        cells.append(markdown_cell(
+            "# Previous Material: Not Assigned\n\n"
+            "This notebook uses another textbook's chapter numbering. It is retained "
+            "for review, not assigned reading for the current course. Its chapter, week, "
+            "and examination labels are historical and do not define current requirements. "
+            "Use the current course syllabus and its first-meeting notebook links."
+        ))
     parent_heading = ""
     seen_anchors: dict[str, int] = {}
     small_setup_added = False
@@ -627,7 +641,7 @@ def build_notebook(chapter: dict) -> dict:
             parent_heading = heading
         seen_anchors[heading] = seen_anchors.get(heading, 0) + 1
         anchors = {heading, parent_heading + " / " + heading}
-        if not small_setup_added and any(e["chapter"] == chapter["id"] and e["steps"]
+        if not chapter.get("prescribed_textbook") and not small_setup_added and any(e["chapter"] == chapter["id"] and e["steps"]
                                          and e["heading"] in anchors for e in EXAMPLES.values()):
             cells.append(markdown_cell(
                 "### Running the Small Examples\n\n"
@@ -721,25 +735,43 @@ def execute_notebook(notebook: dict, notebook_name: str) -> None:
         cell["outputs"] = outputs
 
 
+def all_chapters(config: dict) -> list[dict]:
+    return [*config.get("current_chapters", []), *config["chapters"]]
+
+
+def notebook_relative(chapter: dict) -> str:
+    prefix = "" if chapter.get("prescribed_textbook") else "under_revision/"
+    return f"{prefix}{chapter['id']}.ipynb"
+
+
+def expected_files(config: dict) -> set[str]:
+    return {"syllabus.md", "under_revision/README.md",
+            *(notebook_relative(chapter) for chapter in all_chapters(config))}
+
+
 def build_preview(config: dict) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    expected = {"syllabus.md", *(f"{chapter_id}.ipynb" for chapter_id in EXPECTED_CHAPTERS)}
-    unexpected = {path.name for path in PREVIEW_DIR.iterdir()} - expected
+    expected = expected_files(config)
+    unexpected = {path.relative_to(PREVIEW_DIR).as_posix()
+                  for path in PREVIEW_DIR.rglob("*") if path.is_file()} - expected
     if unexpected:
         raise ValueError(f"Unexpected files in Intro DB; nothing removed: {sorted(unexpected)}")
     # Finish all executions before replacing the known generated notebooks. Never
     # remove the course folder, its maintained syllabus, or the root README.
     with tempfile.TemporaryDirectory(prefix="notebooks_", dir=OUTPUT_DIR) as temporary:
         staging = Path(temporary)
-        for chapter in config["chapters"]:
+        for chapter in all_chapters(config):
             notebook = build_notebook(chapter)
             execute_notebook(notebook, f"{chapter['id']}.ipynb")
-            (staging / f"{chapter['id']}.ipynb").write_text(
+            target = staging / notebook_relative(chapter)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(
                 json.dumps(notebook, ensure_ascii=False, indent=1) + "\n",
                 encoding="utf-8", newline="\n",
             )
-        for chapter in config["chapters"]:
-            filename = f"{chapter['id']}.ipynb"
+        for chapter in all_chapters(config):
+            filename = notebook_relative(chapter)
+            safe_target(filename).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(staging / filename, safe_target(filename))
 
 
@@ -793,16 +825,15 @@ def notebook_markdown(notebook: dict) -> str:
 
 def verify_content(config: dict) -> None:
     errors: list[str] = []
-    expected_files = {"syllabus.md"}
-    expected_files.update(f"{chapter_id}.ipynb" for chapter_id in EXPECTED_CHAPTERS)
+    expected = expected_files(config)
     actual_files = {
         path.relative_to(PREVIEW_DIR).as_posix()
         for path in PREVIEW_DIR.rglob("*")
         if path.is_file()
     }
-    if actual_files != expected_files:
+    if actual_files != expected:
         errors.append(
-            f"Unexpected Intro DB layout; missing={sorted(expected_files - actual_files)}, unexpected={sorted(actual_files - expected_files)}"
+            f"Unexpected Intro DB layout; missing={sorted(expected - actual_files)}, unexpected={sorted(actual_files - expected)}"
         )
 
     for path in PREVIEW_DIR.rglob("*"):
@@ -861,8 +892,8 @@ def verify_content(config: dict) -> None:
             if pattern.search(content):
                 errors.append(f"{label} in {relative}")
 
-    for chapter in config["chapters"]:
-        notebook = json.loads(safe_target(f"{chapter['id']}.ipynb").read_text(encoding="utf-8"))
+    for chapter in all_chapters(config):
+        notebook = json.loads(safe_target(notebook_relative(chapter)).read_text(encoding="utf-8"))
         expected_attachments = {item["filename"] for item in chapter.get("image_sources", [])}
         expected_attachments.update(
             item["filename"] for item in chapter_figures(chapter)
@@ -877,7 +908,7 @@ def verify_content(config: dict) -> None:
 
     if errors:
         raise RuntimeError("Course-repository verification failed:\n- " + "\n- ".join(errors))
-    print(f"COURSE_CONTENT_VERIFICATION=PASS NOTEBOOKS={len(config['chapters'])} ASSET_FILES=0")
+    print(f"COURSE_CONTENT_VERIFICATION=PASS NOTEBOOKS={len(all_chapters(config))} ASSET_FILES=0")
 
 
 def main() -> int:

@@ -8,18 +8,24 @@
 !/Intro DB/
 /Intro DB/*
 !/Intro DB/syllabus.md
+!/Intro DB/ch01.ipynb
 !/Intro DB/ch02.ipynb
-!/Intro DB/ch03.ipynb
-!/Intro DB/ch04.ipynb
 !/Intro DB/ch05.ipynb
-!/Intro DB/ch06.ipynb
-!/Intro DB/ch07.ipynb
-!/Intro DB/ch14.ipynb
-!/Intro DB/ch15.ipynb
-!/Intro DB/ch16.ipynb
-!/Intro DB/ch17.ipynb
-!/Intro DB/ch18.ipynb
-!/Intro DB/ch19.ipynb
+!/Intro DB/under_revision/
+/Intro DB/under_revision/*
+!/Intro DB/under_revision/README.md
+!/Intro DB/under_revision/ch02.ipynb
+!/Intro DB/under_revision/ch03.ipynb
+!/Intro DB/under_revision/ch04.ipynb
+!/Intro DB/under_revision/ch05.ipynb
+!/Intro DB/under_revision/ch06.ipynb
+!/Intro DB/under_revision/ch07.ipynb
+!/Intro DB/under_revision/ch14.ipynb
+!/Intro DB/under_revision/ch15.ipynb
+!/Intro DB/under_revision/ch16.ipynb
+!/Intro DB/under_revision/ch17.ipynb
+!/Intro DB/under_revision/ch18.ipynb
+!/Intro DB/under_revision/ch19.ipynb
 
 !/maintenance/
 /maintenance/*
@@ -37,6 +43,12 @@
 
 !/maintenance/chapters/
 /maintenance/chapters/*
+!/maintenance/chapters/ch01_database_introduction/
+!/maintenance/chapters/ch01_database_introduction/student_guide.md
+!/maintenance/chapters/ch02_database_architecture/
+!/maintenance/chapters/ch02_database_architecture/student_guide.md
+!/maintenance/chapters/ch05_relational_model/
+!/maintenance/chapters/ch05_relational_model/student_guide.md
 !/maintenance/chapters/ch02_relational_model/
 !/maintenance/chapters/ch02_relational_model/**
 !/maintenance/chapters/ch03_introduction_to_sql/
@@ -80,11 +92,17 @@
 !/maintenance/course_repository/repository_config.json
 !/maintenance/course_repository/notebook_figures.py
 !/maintenance/course_repository/teaching_figures.py
+!/maintenance/course_repository/opening_figures.py
+!/maintenance/course_repository/first_meeting_release.md
+!/maintenance/course_repository/verify_first_meeting.py
+!/maintenance/course_repository/render_first_meeting.cjs
 !/maintenance/course_repository/verify_teaching_figures.py
 !/maintenance/course_repository/render_teaching_figures.cjs
 !/maintenance/course_repository/visual_teaching_review.md
 !/maintenance/course_repository/simple_examples.py
 !/maintenance/course_repository/all_chapters_teaching_review.md
+!/maintenance/course_repository/full_source_audit.md
+!/maintenance/course_repository/textbook_material_correspondence.md
 !/maintenance/course_repository/test_repository_layout.py
 !/maintenance/course_repository/review_notebook.py
 /maintenance/course_repository/output/

@@ -1,39 +1,55 @@
 # 資料庫管理逐章教材設計 Prompt
 
-請依照下列程序，為《Database System Concepts》第 7 版設計本學期的資料庫管理
+請依照下列程序，為Elmasri及Navathe的《Fundamentals of Database Systems》第 7 版設計本學期的資料庫管理
 教材。一次只處理一個章節，完成該章的來源查核、教材、範例、練習與驗證後，
 再進入下一章。
 
-本課依序處理 Ch2、Ch3、Ch4、Ch5、Ch6、Ch7、Ch14、Ch15、Ch16、Ch17、
-Ch18、Ch19。只有下列明定內容屬於正式教學範圍，不得因教科書仍有其他小節就
-自行擴張必教內容。
+2026-09-08來源與範圍更正：現用書為上述Elmasri/Navathe第7版，私人來源為
+`private_references/book_Fundamental of Database Systems.pdf`。教師已要求修正課綱，
+並指定三次考試各30%；Class Performance為10%。以下依新版課綱執行，不再沿用
+Database System Concepts的章號、舊週次或考試範圍。
 
-## 一、固定教學範圍
+第一批發布例外：教師另核准先完成週四9/10的課綱及Ch1、Ch2、Ch5入門選講，
+並在相應來源/程式/畫面查核後commit/push。此批只標示所教內容的查核範圍，
+不得宣稱整章或全書完整查核。現行維護來源為ch01_database_introduction、
+ch02_database_architecture、ch05_relational_model各自student_guide.md，
+圖解為`maintenance/course_repository/opening_figures.py`；舊notebook在
+`Intro DB/under_revision/`，不作正式指定。Ch5後續補入同一份notebook。
 
-| 章節 | 正式教學內容 | 不列入主要教學的內容 |
-|---|---|---|
-| Ch2 Intro to Relational Model | Structure of Relational Databases、Database Schema、Keys、Schema Diagrams；selection、projection、Cartesian product、join及set operations | 複雜relational-algebra推導、完整rename與assignment表示法作課後延伸 |
-| Ch3 Introduction to SQL | DDL basics、`SELECT`/`FROM`/`WHERE`、aliases、expressions、duplicates與`DISTINCT`、string patterns、ordering、`BETWEEN`、set operations、`NULL`、aggregate functions、`GROUP BY`、`HAVING`、`IN`、`EXISTS`、一個correlated query與一個CTE、basic `INSERT`/`UPDATE`/`DELETE` | Subquery in `FROM`、scalar與複雜correlated subqueries、SQL標準沿革、`SOME`/`ALL`、`UNIQUE`、`LATERAL`、scalar query without `FROM`、formal multiset algebra、`INTERSECT ALL`/`EXCEPT ALL`及advanced modification statements作課後延伸 |
-| Ch4 Intermediate SQL | explicit inner join、left outer join、`ON`/`USING`、outer join中`ON`與`WHERE`的差異、view定義與查詢、basic transactions、`NOT NULL`/`UNIQUE`/`CHECK`/foreign-key constraints | right/full outer join、view更新細部規則、materialized views、deferred constraints、assertions與authorization作課後延伸；Index Definition移至Ch14 |
-| Ch5 Advanced SQL | ranking/window functions、recursive CTE的base/recursive term與termination、一個row-level audit trigger與`OLD`/`NEW`；stored function/procedure只教用途與基本interface，pivot以conditional aggregation短示範 | stored routine實作、完整procedural SQL、external routines、statement-level triggers、pivot專屬語法、rollup/cube、JDBC、Python database API、ODBC及embedded SQL不列入主要教學 |
-| Ch6 Database Design Using the E-R Model | design process、entities、attributes、relationships、complex attributes、mapping cardinalities、keys、removing redundant attributes、ER-to-relational mapping、design issues | Extended E-R Features、alternative notations及其他進階設計只作補充 |
-| Ch7 Normalization | good relational design、update/insertion/deletion anomalies、functional dependencies與counterexamples、足以判斷key的attribute closure、binary lossless decomposition與spurious tuples、3NF及BCNF的基本判斷 | dependency preservation只說明取捨；完整functional-dependency theory、canonical cover、分解演算法、multivalued dependencies、更高normal forms及temporal data不列入主要教學 |
-| Ch14 Indexing | index使用時機、B+-Tree equality/range lookup概念、composite index欄位順序、covering index、`CREATE INDEX`/`DROP INDEX`及query-plan證據 | dense/sparse、clustering/secondary、B+-Tree split及hashing作概念延伸；完整insertion/deletion、cost derivation、B-Tree、write-optimized、bitmap及spatio-temporal indices不列入主要教學 |
-| Ch15 Query Processing | logical/physical plan、file/index scans、join order、nested與indexed nested-loop概念及query-plan evidence；parsing/translation只作銜接 | materialization、pipelining、merge/hash細節、完整sorting/selection/join algorithms、成本公式、I/O推導、iterator與in-memory processing作課後延伸 |
-| Ch16 Query Optimization | result equivalence作為performance comparison前提、catalog row/distinct statistics、basic equality selectivity、`ANALYZE`及practical `EXPLAIN QUERY PLAN` interpretation | selection/projection pushdown、join reorder、outer-join反例、skew細節、完整cost formula、dynamic programming、optimizer algorithms、nested-query decorrelation、materialized views及advanced optimization作課後延伸 |
-| Ch17 Transactions | SQL transaction boundaries、Transaction Concept與State、ACID、Concurrent Schedules、operation conflicts、small precedence graphs、conflict serializability、basic recoverability及isolation phenomena | 完整serializability-testing algorithm、predicate-locking protocol、locking/timestamp/multiversion實作及Ch18/Ch19細節不列入主要教學 |
-| Ch18 Concurrency Control | S/X locks與compatibility、grant/wait、wait-for graph、deadlock detection及victim/retry注意事項 | basic/strict/rigorous 2PL、timestamp protocol、MVCC、snapshot isolation、write skew、lock-manager實作及advanced topics作課後延伸 |
-| Ch19 Recovery System | transaction/system/storage failure基本區分、basic log records與old/new values、WAL ordering、committed/incomplete判斷及單一簡化redo/undo案例 | checkpoint、archival backup加post-backup log、ARIES、fuzzy checkpoint、force/steal implementation、stable-storage/OS buffer實作、remote failover、logical undo及production recovery administration作課後延伸 |
+## 一、正式教學範圍
 
-教材份量必須符合正式課綱與 `COURSE_PLAN.md` 的授課摘要：
+逐章的必教主題、小節、排除內容、週次及考試範圍，以
+`Intro DB/syllabus.md`的Textbook Coverage、Weekly Schedule與Assessment為準，
+並核對`maintenance/COURSE_PLAN.md`。不要把主體章節誤解為全章必教。
 
-- Ch2、Ch3與Ch6各分布在兩個教學週次。
-- Ch4、Ch5、Ch7、Ch14與Ch17各分布在一個教學週次。
-- Ch15與Ch16共用一個教學週次。
-- Ch18、Ch19與整合複習共用一個教學週次。
-- 不得為了追求完整而把明列略過的內容重新塞入正式進度。
-- 學生教材以「課堂核心」與「課後延伸」標示閱讀及練習順序，不寫分鐘配置。
-- 所有學生可見教材使用English-only prose及教科書/資料庫領域的標準英文術語；
+- Ch1-Ch2：導論選講；Ch3：ER；Ch5：relational model與constraints。
+- Ch6：basic SQL；Ch7：選定的complex queries、views、簡單trigger與schema changes。
+- Ch8：指定的relational algebra運算；不教relational calculus，division作延伸。
+- Ch9：只教9.1 ER-to-relational mapping；先完成Ch3與Ch5所需概念。
+  Weak entities、multivalued attributes及ternary relationship須先教再映射。
+  Ch4與9.2 EER-to-relational mapping不列必教。
+- Ch14：14.1-14.4在Week 11，以已給定candidate keys教至3NF；14.5 BCNF在Week 13。
+- Ch15：15.1.1的attribute closure及15.2的binary lossless-decomposition選定內容，
+  安排Week 13，不要求完整proof、minimal cover或schema-synthesis algorithms。
+- Ch17：索引用途、B+ tree查找、composite index及read/update成本選講。
+  先補Ch16的record、block及基本file organization；不整章教授Ch16。
+  SQLite index commands與EXPLAIN QUERY PLAN另標為實作補充，不能宣稱為原書範例。
+- Ch20：transaction boundaries、ACID、COMMIT/ROLLBACK與簡單並行錯誤選講。
+- Ch18-Ch19及Ch21-Ch22不列必教；window functions、recursive CTEs、stored routines、
+  higher normal forms及DBMS內部演算法不列本版必考範圍。
+
+教材份量與順序須符合課綱：
+
+- Week 1先課綱與導論，Week 2關聯模型及核心algebra，Weeks 3-5 SQL。
+- Weeks 7-8 ER與mapping導入；Week 10完成9.1；Weeks 11及13分次教授正規化。
+- Week 14索引，Week 15交易基礎，Week 16只整合複習。
+- Week 9出國，不排新內容；Week 17放假；Weeks 6、12、18考試。
+- Exam 2不考尚未教的closure、BCNF或formal lossless-decomposition test；
+  這些內容列Exam 3。實際題目仍需獨立命題與驗證。
+- 一章一份notebook，可跨次授課；先依新書逐節對照既有教材，不能只改舊notebook檔名。
+- 保留大量原創圖解、小型input tables、簡單範例、預測、輸出判讀及練習。
+- 不因完整來源查核而把課綱略過的小節加入正式教學或增加學生工作量。
+- 學生教材使用English-only prose及標準術語，不寫分鐘配置或內部製作分類。
   教師端coverage、verification及治理紀錄可使用繁體中文。
 
 ## 二、開始工作前必讀
@@ -46,8 +62,9 @@ Ch18、Ch19。只有下列明定內容屬於正式教學範圍，不得因教科
 4. 與本章相關的最新版18週教學計畫；若它與課綱或`PROJECT.md`衝突，以教師
    最新決定、`PROJECT.md`及英文課綱為準，並記錄衝突。
 5. 本章對應的教科書完整章節，不得只讀章節摘要或目錄。
-6. `from_11001_DB/PowerPoint Presentations/chX.pdf`中對應的官方投影片、程式、
-   圖表、公式及範例。
+6. 經確認屬於Elmasri/Navathe第7版的官方配套、程式、圖表、公式及範例；尚未
+   找到時明列未取得，不得假設存在。`from_11001_DB/PowerPoint Presentations/`
+   屬於Database System Concepts，僅是其他參考來源，不是現用書的官方投影片。
 7. `maintenance/`、`from_11001_DB/`及其他現有SQL lab、database、schema、
    題目、圖檔與歷史教材。
 8. 現有的生成來源、build script、rebuild script、notebook及相關紀錄；只有在
@@ -96,6 +113,8 @@ Ch18、Ch19。只有下列明定內容屬於正式教學範圍，不得因教科
 
 不同主題的範例至少符合下列要求：
 
+下列只適用於課綱實際指定的內容；不得藉此恢復排除的演算法或評量要求。
+
 - Relational model及relational algebra：提供小型relation instance，逐步顯示
   輸入、運算及結果relation。
 - SQL：提供可重現的schema、sample data、SQL、預期結果表及結果解釋。
@@ -108,8 +127,8 @@ Ch18、Ch19。只有下列明定內容屬於正式教學範圍，不得因教科
   query-plan差異；若DBMS或資料量不足以顯示差異，必須如實說明。
 - Query processing及optimization：提供SQL、至少兩個可能或實際plan，以及可由
   plan支持的比較，不得只用執行時間宣稱某方法必然較快。
-- Transactions：提供transaction statements或schedule，逐步判讀ACID、
-  serializability、recoverability及isolation現象。
+- Transactions：提供transaction boundaries、ACID、COMMIT/ROLLBACK與簡單交錯
+  更新範例；本版不要求formal serializability或recoverability分類。
 - Concurrency control：提供交錯schedule、lock request、等待關係及deadlock或
   正常完成的判讀。
 - Recovery：提供failure scenario、log records及復原步驟，說明哪些操作需要

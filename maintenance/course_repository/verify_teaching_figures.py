@@ -105,7 +105,7 @@ def main():
     manifest = []
     gallery = []
     for chapter in config["chapters"]:
-        notebook = nbformat.read(builder.PREVIEW_DIR / f"{chapter['id']}.ipynb", as_version=4)
+        notebook = nbformat.read(builder.PREVIEW_DIR / builder.notebook_relative(chapter), as_version=4)
         nbformat.validate(notebook)
         attachment_count = sum(len(c.get("attachments", {})) for c in notebook.cells)
         generated = builder.chapter_figures(chapter)

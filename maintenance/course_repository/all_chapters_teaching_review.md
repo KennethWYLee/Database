@@ -1,5 +1,9 @@
 # Chapter Teaching Review
 
+The later instructor-requested full-source audit is tracked in
+[Full Source Audit Progress](full_source_audit.md). It supersedes this report's next
+action, but does not retroactively change the narrower checks recorded here.
+
 ## Version and Outcome
 
 Revision date: 2026-09-08. Configuration: `2026.09.08-small-examples`.

@@ -12,7 +12,7 @@ Chapter 2 `course_registration_setup.sql` file.
 
 | Relational-algebra idea | Main SQL expression |
 |---|---|
-| Projection `Π` | Column list in `SELECT` |
+| Set projection `Π` | Column list in `SELECT DISTINCT` |
 | Selection `σ` | Predicate in `WHERE` |
 | Cartesian product `×` | Multiple inputs without a matching predicate |
 | Rename `ρ` | `AS` aliases |
@@ -70,8 +70,11 @@ CREATE TABLE study_group (
 );
 ```
 
-The primary key identifies a group. Required values cannot be `NULL`. Capacity must be
-between 2 and 8, inclusive, and the course must already exist.
+The primary key identifies a group. Required values cannot be `NULL`. The range check
+accepts values between 2 and 8, inclusive, and the course must already exist. In this
+ordinary SQLite table, declaring `INTEGER` does not by itself reject 2.5. This example
+demonstrates a range check; a whole-number rule also needs the stored-type check used
+for credits in Chapter 2.
 
 ### Practice
 
@@ -126,7 +129,9 @@ SELECT course_id, credits, credits * 18 AS semester_hours
 FROM course;
 ```
 
-This expression calculates an output value; it does not modify stored credits.
+This expression calculates an output value; it does not modify stored credits. The
+multiplier 18 is an illustrative conversion assumption, not this course's contact-hour
+schedule or an assertion about holidays.
 
 ### Multiple Inputs and Aliases
 
@@ -149,7 +154,10 @@ FROM course
 WHERE title LIKE '%Technology%';
 ```
 
-Case behavior depends on the DBMS and collation. `BETWEEN` includes both endpoints.
+In the default SQLite environment used here, `LIKE` ignores ASCII letter case. For
+example, `'Data' LIKE 'd%'` is true, even with `COLLATE BINARY`. Do not assume that
+non-ASCII upper/lowercase letters match, or that another DBMS uses these same rules.
+`BETWEEN` includes both endpoints.
 
 ```sql
 SELECT course_id, title, credits
@@ -165,7 +173,9 @@ second character is `e`.
 
 ## 4. SQL Set Operations
 
-Both query results must have the same number of columns with compatible types.
+Use the same number of columns with compatible meanings and types in both results,
+as in the textbook's SQL examples. SQLite enforces the column count but can combine
+different storage classes; acceptance alone does not make the two columns comparable.
 
 For DB students `{S101, S103}` and Financial Technology students `{S101, S102}`:
 
@@ -225,6 +235,11 @@ FROM course;
 For credits 3, 3, 3, and 2, the result is count 4, minimum 2, maximum 3, total 11, and
 average 2.75.
 
+Predict the result if the same query filters for `credits > 6`. No course qualifies.
+Without `GROUP BY`, the query still returns one result row: the count is 0 and the other
+four aggregates are `NULL`. An average of no values is not zero. With `GROUP BY`, empty
+input forms no groups and returns no group rows. The lab checks both cases.
+
 ### `GROUP BY`
 
 ```sql
@@ -270,8 +285,9 @@ WHERE student_id IN (
 );
 ```
 
-Run the inner query first. It returns S101 and S103; the outer query then retrieves their
-names.
+To check the meaning, run the inner query separately first. It returns S101 and S103;
+the complete query retrieves their names. This checking method does not prescribe the
+DBMS's physical execution order.
 
 ### `EXISTS` and Correlation
 
@@ -287,8 +303,9 @@ WHERE EXISTS (
 ```
 
 The inner query refers to the current outer Student row. `EXISTS` asks only whether at
-least one row exists. To find students with no enrollment, use `NOT EXISTS` with the same
-identifier-matching predicate.
+least one row exists. To find students with no enrollment, use `NOT EXISTS`, retain
+`e.student_id = s.student_id`, and remove the grade condition. Keeping that condition
+instead finds students with no A or A- enrollment, which is a different question.
 
 ### `NOT IN` with `NULL`
 
@@ -300,8 +317,9 @@ WHERE student_id NOT IN ('S104', NULL);
 
 This returns no rows because the `NULL` comparison can make the predicate `UNKNOWN`.
 A `NOT EXISTS` query with an explicit equality predicate avoids that problem. `NOT IN`
-is acceptable when the schema or query guarantees that the comparison set cannot contain
-`NULL`; state that guarantee rather than memorizing an unconditional ban.
+works as the intended membership exclusion here when the comparison set cannot contain
+`NULL` and the tested student ID is non-`NULL`. State those guarantees rather than
+memorizing an unconditional ban.
 
 ### Common Table Expression
 
@@ -321,6 +339,11 @@ must store a temporary table.
 
 Subqueries in `FROM`, scalar subqueries, `SOME`, `ALL`, `UNIQUE`, `LATERAL`, and formal
 multiset algebra are extensions unless separately taught and practiced.
+
+The optional scalar example uses `COUNT(*)` without grouping, so each outer course gets
+one count, including 0 for no enrollment. Do not generalize this to any subquery: the
+textbook describes an error for multiple result rows, but SQLite takes the first row.
+SQLite's acceptance therefore does not prove that the subquery identifies one value.
 
 ## 8. Data Modification
 

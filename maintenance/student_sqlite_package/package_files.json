@@ -1,8 +1,8 @@
 {
   "package_name": "sqlite_course_package",
-  "package_version": "2026.08.27",
+  "package_version": "2026.09.08-historical",
   "minimum_sqlite_version": "3.39.0",
-  "content_status": "Instructor-approved for course distribution; not externally published",
+  "content_status": "Previous textbook material retained for review; not assigned under the current syllabus",
   "files": [
     {
       "source": "maintenance/chapters/ch02_relational_model/course_registration_setup.sql",

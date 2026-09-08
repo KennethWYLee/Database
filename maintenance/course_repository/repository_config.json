@@ -1,8 +1,37 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.08-small-examples",
+  "repository_version": "2026.09.08-first-meeting",
   "instructor": "WenYi Lee",
   "syllabus_source": "Intro DB/syllabus.md",
+  "material_status": "legacy_textbook_alignment_pending",
+  "weeks_status": "historical_not_current_syllabus",
+  "current_course_plan": "maintenance/COURSE_PLAN.md",
+  "current_chapters": [
+    {
+      "id": "ch01",
+      "prescribed_textbook": true,
+      "visual_teaching": true,
+      "executable_guide": true,
+      "title": "Databases and Database Users: introductory selection",
+      "guide_source": "maintenance/chapters/ch01_database_introduction/student_guide.md"
+    },
+    {
+      "id": "ch02",
+      "prescribed_textbook": true,
+      "visual_teaching": true,
+      "executable_guide": true,
+      "title": "Database System Concepts and Architecture: introductory selection",
+      "guide_source": "maintenance/chapters/ch02_database_architecture/student_guide.md"
+    },
+    {
+      "id": "ch05",
+      "prescribed_textbook": true,
+      "visual_teaching": true,
+      "executable_guide": true,
+      "title": "Relational Model: first-meeting selection",
+      "guide_source": "maintenance/chapters/ch05_relational_model/student_guide.md"
+    }
+  ],
   "chapters": [
     {
       "id": "ch02",

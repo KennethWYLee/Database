@@ -1,5 +1,10 @@
 # Database Management SQLite Labs
 
+**Previous material: not assigned.** This package retains older textbook chapter
+numbers. They do not identify the current course's chapters, weeks, or examination
+scope. For September 10, use the course syllabus and its Ch1, Ch2, and Ch5 opening
+notebook links. This package is not needed for the first meeting.
+
 This package contains the SQLite files used in Chapters 2-7 and 14-17. The data are
 synthetic and may be recreated at any time.
 

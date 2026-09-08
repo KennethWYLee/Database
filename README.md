@@ -2,15 +2,28 @@
 
 National Taipei University of Business | WenYi Lee | Fall 2026
 
-## Start Here
+Textbook: Elmasri and Navathe, *Fundamentals of Database Systems*, 7th Edition.
 
-1. Read the [course syllabus](Intro%20DB/syllabus.md) for the schedule, assessment, and course requirements.
-2. Open [Intro DB](Intro%20DB/) for all chapter notebooks.
+## First Class: September 10
 
-For the first meeting, begin with the syllabus, then open [Chapter 2](Intro%20DB/ch02.ipynb)
-for an introduction to databases and tables. The instructor will indicate where to stop
-and resume; completing the first section that day is not required. Keep using the same
-notebook as the chapter continues. There is no separate weekly notebook.
+| Order | Open | Reading for this meeting |
+|---:|---|---|
+| 1 | [Course syllabus](Intro%20DB/syllabus.md) | Schedule, assessment, and course requirements |
+| 2 | [Chapter 1: Databases and Database Users](Intro%20DB/ch01.ipynb) | Introductory selection; finish at Chapter Summary |
+| 3 | [Chapter 2: Concepts and Architecture](Intro%20DB/ch02.ipynb) | Introductory selection; finish at Chapter Summary |
+| 4 | [Chapter 5: Relational Model](Intro%20DB/ch05.ipynb) | Opening examples; stop at First-Meeting Summary and Practice |
+
+The instructor will indicate where to stop and resume. These are selections, not
+three complete chapters to finish before class. Read the diagrams and small tables;
+the supplied code is for observing results, not a first-day programming requirement.
+GitHub displays saved outputs. To execute a notebook, follow the syllabus's opening
+instructions. Each textbook chapter has one notebook, which can continue across meetings.
+
+## Later Material
+
+Later revised chapters will be linked here when assigned. [Previous notebooks under
+revision](Intro%20DB/under_revision/) remain available for review only; their old chapter
+numbers and assessment references do not define current requirements.
 
 The same folders are used locally and on GitHub's `main` branch. Course preparation
 and build instructions are in [maintenance](maintenance/README.md).

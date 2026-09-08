@@ -47,6 +47,7 @@ FROM student
 ORDER BY dept_code;
 
 -- Example 4: expressions do not update stored data.
+-- The multiplier 18 is illustrative, not the course's contact-hour schedule.
 SELECT course_id, title, credits, credits * 18 AS semester_hours
 FROM course
 ORDER BY course_id;
@@ -70,6 +71,10 @@ SELECT course_id, title, credits
 FROM course
 WHERE title LIKE '%Technology%' OR credits BETWEEN 1 AND 2
 ORDER BY credits DESC, course_id ASC;
+
+-- Default SQLite LIKE folds ASCII case, even with BINARY collation.
+SELECT 'Data' LIKE 'd%' AS ascii_match,
+       'Data' LIKE 'd%' COLLATE BINARY AS binary_collation_match;
 
 -- Example 8a: UNION removes duplicates.
 SELECT student_id FROM enrollment WHERE course_id = 'DB201'
@@ -124,6 +129,20 @@ SELECT COUNT(*) AS course_count,
        SUM(credits) AS total_credits,
        AVG(credits) AS avg_credits
 FROM course;
+
+-- Predict both the number of result rows and their values for empty input.
+SELECT COUNT(*) AS course_count,
+       MIN(credits) AS min_credits,
+       MAX(credits) AS max_credits,
+       SUM(credits) AS total_credits,
+       AVG(credits) AS avg_credits
+FROM course
+WHERE credits > 6;
+
+SELECT dept_code, COUNT(*) AS course_count
+FROM course
+WHERE credits > 6
+GROUP BY dept_code;
 
 -- Example 11: GROUP BY creates one result row per group.
 SELECT dept_code, COUNT(*) AS course_count, AVG(credits) AS avg_credits

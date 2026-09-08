@@ -5,6 +5,7 @@ import copy
 import io
 import json
 import itertools
+from datetime import datetime, timedelta
 from graphlib import TopologicalSorter, CycleError
 import re
 from pathlib import Path
@@ -26,18 +27,65 @@ class RepositoryLayoutTests(unittest.TestCase):
 
     def test_syllabus_weekly_chapter_labels_match_plan(self):
         syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
-        schedule = syllabus.split("## Weekly Schedule\n", 1)[1].split("\n## Assessment", 1)[0]
-        rows = [line.split("|")[1:-1] for line in schedule.splitlines()
-                if re.match(r"\| \d+ \|", line)]
-        weeks = builder.load_json(builder.CONFIG_PATH)["weeks"]
-        self.assertEqual(len(rows), len(weeks))
-        for row, week in zip(rows, weeks):
-            self.assertEqual(len(row), 5)
-            self.assertEqual(int(row[0]), week["week"])
-            match = re.search(r"Chapters? (\d+)(?:-(\d+))?", row[2])
-            expected = [int(chapter[2:]) for chapter in week["materials"]]
-            actual = list(range(int(match[1]), int(match[2] or match[1]) + 1)) if match else []
-            self.assertEqual(actual, expected, week["week"])
+        config = builder.load_json(builder.CONFIG_PATH)
+        # Notebook IDs still identify the other textbook; compare current course documents.
+        self.assertEqual(config["weeks_status"], "historical_not_current_syllabus")
+        self.assertEqual(config["material_status"], "legacy_textbook_alignment_pending")
+        plan = builder.safe_source(config["current_course_plan"]).read_text(encoding="utf-8")
+
+        def schedule_rows(text):
+            section = text.split("## Weekly Schedule\n", 1)[1].split("\n## ", 1)[0]
+            return [[cell.strip() for cell in line.split("|")[1:-1]]
+                    for line in section.splitlines() if re.match(r"\| \d+ \|", line)]
+
+        rows, plan_rows = schedule_rows(syllabus), schedule_rows(plan)
+        self.assertEqual(len(rows), 18)
+        self.assertEqual(len(plan_rows), 18)
+        start = datetime(2026, 9, 10)
+        for number, (row, planned) in enumerate(zip(rows, plan_rows), 1):
+            with self.subTest(week=number):
+                self.assertEqual(len(row), 5)
+                self.assertEqual(len(planned), 4)
+                self.assertEqual(int(row[0]), number)
+                self.assertEqual(row[0], planned[0])
+                self.assertEqual(row[2], planned[2])
+                actual = datetime.strptime(row[1], "%B %d, %Y")
+                self.assertEqual(actual, datetime.strptime(planned[1], "%Y-%m-%d"))
+                self.assertEqual(actual, start + timedelta(weeks=number - 1))
+                self.assertEqual(actual.weekday(), 3)
+        self.assertEqual([int(row[0]) for row in rows if "(exam)" in row[2]], [6, 12, 18])
+        self.assertIn("review only", rows[8][2])
+        self.assertEqual(rows[15][2], "Previously taught sections only")
+        self.assertEqual(rows[16][2], "None")
+
+    def test_current_assessment_weights(self):
+        expected = {
+            "Written Exam 1": "30%", "Written Exam 2": "30%",
+            "Written Exam 3 (Final Examination)": "30%", "Class Performance": "10%",
+            "Total": "100%",
+        }
+        for path, weight_column in [(builder.PREVIEW_DIR / "syllabus.md", 1),
+                                    (builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md", 2)]:
+            with self.subTest(path=path.name):
+                section = path.read_text(encoding="utf-8").split("## Assessment\n", 1)[1].split("\n## ", 1)[0]
+                rows = [[cell.strip() for cell in line.split("|")[1:-1]]
+                        for line in section.splitlines() if line.startswith("| ")]
+                actual = {row[0]: row[weight_column] for row in rows if row[0] in expected}
+                self.assertEqual(actual, expected)
+                self.assertEqual(sum(int(value[:-1]) for key, value in actual.items()
+                                     if key != "Total"), 100)
+
+    def test_current_syllabus_scope_and_language(self):
+        syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
+        self.assertIn("Section 9.1 only", syllabus)
+        self.assertIn("Section 9.2 and Chapter 4 are not required", syllabus)
+        self.assertIn("no BCNF, closure, or formal lossless-decomposition test", syllabus)
+        self.assertIn("Chapters 4, 18-19, and 21-22 are not required chapters", syllabus)
+        self.assertNotIn("Database System Concepts", syllabus)
+        self.assertNotRegex(syllabus, r"[\u3400-\u9fff\ufffd]")
+        self.assertNotRegex(syllabus, r"(?i)\btype\s*b\b|\b\d+\s*(?:minutes?|mins?)\b")
+        for chapter_id in ("ch01", "ch02", "ch05"):
+            self.assertIn(f"({chapter_id}.ipynb)", syllabus)
 
     def test_visual_figures_and_unique_anchors(self):
         config = builder.load_json(builder.CONFIG_PATH)
@@ -184,15 +232,16 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual({p.name for p in root.glob("*.md")},
                          {"README.md", "PROJECT.md", "AGENTS.md", "CLAUDE.md"})
         self.assertEqual((root / "AGENTS.md").read_bytes(), (root / "CLAUDE.md").read_bytes())
-        self.assertEqual({p.name for p in builder.PREVIEW_DIR.iterdir()},
-                         {"syllabus.md", *(f"{c}.ipynb" for c in builder.EXPECTED_CHAPTERS)})
         config = builder.load_json(builder.CONFIG_PATH)
+        self.assertEqual({p.relative_to(builder.PREVIEW_DIR).as_posix()
+                          for p in builder.PREVIEW_DIR.rglob("*") if p.is_file()},
+                         builder.expected_files(config))
         builder.validate_config(config)
         with contextlib.redirect_stdout(io.StringIO()):
             builder.verify_content(config)
 
     def test_raw_notebook_schema(self):
-        for path in builder.PREVIEW_DIR.glob("*.ipynb"):
+        for path in builder.PREVIEW_DIR.rglob("*.ipynb"):
             with self.subTest(path=path.name):
                 raw = json.loads(path.read_text(encoding="utf-8"))
                 self.assertEqual(list(nbformat.validator.iter_validate(raw)), [])
@@ -246,8 +295,9 @@ class RepositoryLayoutTests(unittest.TestCase):
             root = Path(directory).resolve()
             course = root / "Intro DB"
             course.mkdir()
+            (course / "under_revision").mkdir()
             syllabus = course / "syllabus.md"
-            notebook = course / "ch02.ipynb"
+            notebook = course / "under_revision/ch02.ipynb"
             syllabus.write_text("maintained syllabus", encoding="utf-8")
             notebook.write_text("previous notebook", encoding="utf-8")
             config = {"chapters": [{"id": "ch02"}, {"id": "ch03"}]}

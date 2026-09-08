@@ -375,6 +375,9 @@ def definitions(chapter_id):
 
 
 from simple_examples import EXAMPLES
+from opening_figures import FIGURES as OPENING_FIGURES
+
+FIGURES.update(OPENING_FIGURES)
 
 for _name, _example in EXAMPLES.items():
     figure(_name, _example["heading"], _example["title"], _example["panels"],

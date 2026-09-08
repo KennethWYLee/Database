@@ -1,5 +1,11 @@
 # SQLite Student Package Build
 
+**September 10 release:** This is a preserved previous-material package, not the
+first-meeting distribution. Its chapter IDs belong to the other textbook. Current
+reading is the syllabus and the three opening notebooks in `Intro DB/`. The known
+NULL-key defect in the old ER mapped schema remains open; a successful runner does
+not verify that missing-identifier case. The allow-list is unchanged.
+
 This directory maintains the allow-list and build process for the Database Management
 student SQLite package. Chapter materials remain the authoritative sources. Files under
 `output/` and the ZIP archive are generated artifacts and must be rebuilt after a source

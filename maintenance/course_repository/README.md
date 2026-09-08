@@ -1,18 +1,39 @@
 # Course Repository Build
 
-This directory builds the twelve chapter notebooks directly in `Intro DB/` on `main`.
+This directory builds the current Ch1, Ch2, and Ch5 first-meeting selections directly
+in `Intro DB/` and twelve previous notebooks in `Intro DB/under_revision/` on `main`.
 Local and GitHub tracked paths are identical. It does not publish a separate preview
 branch or create weekly notebooks.
 
+**September 8 syllabus revision:** The [current syllabus](../../Intro%20DB/syllabus.md)
+and [course plan](../COURSE_PLAN.md) now use Elmasri/Navathe's seventh edition, with
+three exams at 30% each and Class Performance at 10%. The chapter IDs and weekly
+material mapping in this builder still describe the other textbook's existing
+notebooks. They are marked historical in the configuration and are not the current
+teaching schedule. A successful build does not establish alignment with the revised
+syllabus. The `current_chapters` configuration separately identifies the three
+prescribed-book opening selections. See the [first-meeting release](first_meeting_release.md).
+Do not rename remaining notebooks or replace source locators without content review.
+
+The [prescribed-textbook correspondence](textbook_material_correspondence.md) now
+maps the required topics to existing guides, examples, and figures. It records
+missing instruction and a reproduced NULL-primary-key defect in the ER mapped schema;
+it does not certify revised notebooks or complete chapter source audits.
+
 ## Maintained Files
 
-- `repository_config.json`: chapter sources and the 18-week schedule.
+- `repository_config.json`: existing chapter sources, historical weekly material mapping,
+  and the path to the current course plan.
 - `build_course_repository.py`: builds, executes, and verifies every notebook.
 - `review_notebook.py`: validates raw JSON and executes Ch2 in three fresh kernels;
   `--all-chapters` additionally executes each remaining chapter in its own fresh kernel.
-- `test_repository_layout.py`: checks layout, path safety, links, and protected files.
+- `test_repository_layout.py`: checks layout, path safety, links, protected files, and
+  agreement between the current syllabus and course plan, including assessment weights.
 - `notebook_figures.py`: dispatches original SVG teaching diagrams and renders PNGs.
 - `teaching_figures.py`: maintains topic-specific diagrams with font-measured layouts.
+- `opening_figures.py`: sixteen original diagrams for the prescribed-book opening selections.
+- `verify_first_meeting.py` and `render_first_meeting.cjs`: verify current notebook
+  outputs, source correspondence, navigation, diagrams, and local rendering.
 - `simple_examples.py`: maintains 51 original small examples with input tables,
   source locators, predictions, SQL or conceptual steps, figures, interpretation, and practice.
 - `verify_teaching_figures.py`: checks selected diagram data against SQL, attachment
@@ -21,6 +42,10 @@ branch or create weekly notebooks.
   notebook images, and desktop/mobile page overflow, and capture review screenshots.
 - `visual_teaching_review.md`: records the visual teaching revision and its evidence.
 - `all_chapters_teaching_review.md`: records the September 8 expansion and final checks.
+- `full_source_audit.md`: tracks the subsequent complete chapter-source audit, with
+  separate reading, material-comparison and final-verification status for every chapter.
+- `textbook_material_correspondence.md`: required-topic mapping, located reusable
+  material, missing examples, source-reading limits, and the next correctness fix.
 
 The chapter guides, SQL, diagrams, data, and simulation programs remain the maintained
 content sources. The builder combines them into one self-contained notebook per selected
@@ -31,8 +56,9 @@ Python fences beside the relevant explanations; the builder emits code cells at 
 positions. Adjacent `output` fences are compared with actual stdout and are not copied
 as duplicate Markdown output. The notebook preserves the executed output instead.
 Week 1 ends before the full four-table setup, and Week 2 runs independently.
-These are reading sections, not first-meeting completion deadlines. The first meeting
-starts with the syllabus and an introduction to Ch2.
+These are historical reading sections in `under_revision/ch02.ipynb`, not first-meeting completion deadlines or
+chapter references for the prescribed textbook. The revised first meeting starts
+with the syllabus and selections from Chapters 1-2 plus Chapter 5's opening concepts.
 
 Ch2 also opts into `inline_sql`. Its guide uses `<!-- sql:setup -->`,
 `<!-- sql:example 4 -->` (and the other numbered examples), and `<!-- sql:checks -->`
@@ -70,15 +96,22 @@ order before fresh-kernel execution and HTML rendering.
 ```text
 Intro DB/
   syllabus.md
+  ch01.ipynb
   ch02.ipynb
-  ...
-  ch19.ipynb
+  ch05.ipynb
+  under_revision/
+    README.md
+    ch02.ipynb
+    ...
+    ch19.ipynb
 ```
 
 `Intro DB/syllabus.md` is the maintained syllabus, including schedule, assessment,
 notebook links, and opening instructions. The root `README.md` is maintained navigation.
-Neither file is generated or overwritten. The builder only replaces the twelve named
-notebooks after all executions succeed; unexpected files cause it to stop without deletion.
+Neither file is generated or overwritten. The under_revision README is also maintained.
+The builder only replaces the fifteen named notebooks after all executions succeed;
+unexpected files cause it to stop without deletion. Old notebooks have an explicit
+not-assigned notice, and new notebooks have no dependency on their code or files.
 The old `course_home.md` is retained in `maintenance/archive/`, not used as build input.
 
 SQL and Python examples are embedded in the notebook that uses them. Existing PNG
@@ -97,6 +130,8 @@ From the course repository root:
 python -m pip install resvg-py==0.5.0 Pillow==12.1.1
 python -m pip install nbformat nbclient nbconvert ipykernel
 python maintenance/course_repository/build_course_repository.py --verify
+python maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
 python maintenance/chapters/ch02_relational_model/instructor/verify_week1.py
 python maintenance/course_repository/test_repository_layout.py
 python maintenance/course_repository/review_notebook.py --all-chapters
@@ -118,9 +153,13 @@ The generated notebooks are written to:
 Intro DB/
 ```
 
-The twelve notebooks are explicitly allowed by `.gitignore` and should be committed with
+The fifteen notebooks are explicitly allowed by `.gitignore` and should be committed with
 their source changes when authorized. The manifest and local QA files remain under ignored
-`maintenance/course_repository/output/`. The previous flat preview there is historical
+`maintenance/course_repository/output/`. The older Ch2-only `review_notebook.py` and
+the 96-figure `verify_teaching_figures.py`/renderer still describe the earlier twelve
+notebooks and are not the current first-meeting acceptance checks. Their source and
+results are retained, not silently claimed as rerun after the layout change.
+The previous flat preview there is historical
 and is not refreshed. The fresh-kernel review needs `nbformat`, `nbclient`, `nbconvert`,
 and `ipykernel`; these are review tools, not additional imports in the student notebooks.
 Commit, push, and repository visibility changes still require explicit authorization.

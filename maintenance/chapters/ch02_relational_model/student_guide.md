@@ -576,6 +576,7 @@ The design uses these business rules:
 - Each student has one unique, stable `student_id`.
 - Every student has an email; each email belongs to at most one student. Names may repeat.
 - Each department and course has a unique code.
+- Course credits are whole numbers from 1 through 6.
 - A student has at most one enrollment in the same course and term.
 - Student and course department codes must reference an existing department.
 - Enrollment student and course identifiers must reference existing rows.
@@ -586,6 +587,8 @@ S103 taking ML230. Apply the Week 1 distinction between an attribute name and it
 Before running the setup, predict the table names and row counts from the four tables
 above: how many departments, students, courses, and enrollments should be stored?
 The supplied SQL creates these tables; Chapter 3 will explain how to write this syntax.
+Its credits constraint checks both the stored integer type and the permitted range.
+In SQLite, declaring an `INTEGER` column alone does not reject every fractional value.
 
 <!-- sql:setup -->
 
@@ -713,9 +716,14 @@ meaning. A design conclusion requires reasons, not a vote.
 
 ## 4. Foreign Keys and Schema Diagrams
 
-A **foreign key** appears in the referencing relation and must match a key in the
-referenced relation. For example, `student.dept_code` references
+A **foreign key** is an attribute or attribute set in the referencing relation.
+In the textbook's Chapter 2 definition, its values must match a primary-key value in
+the referenced relation. For example, `student.dept_code` references
 `department.dept_code`.
+
+All references in this example target primary keys. SQLite also permits a reference
+to an appropriately declared unique key; that implementation rule is broader than
+the Chapter 2 definition. Neither rule permits a reference to arbitrary repeated values.
 
 Adding a student with department `LAW` violates the rule unless the LAW department is
 created first. In these tables the referencing identifiers are required; more generally,
@@ -768,6 +776,10 @@ student                              course
 To find the name and course department for enrollment `(S101, DB201, 115-1, A)`, follow
 `enrollment.student_id` to Student, then `enrollment.course_id` to Course, and finally
 `course.dept_code` to Department.
+
+This is a relational schema diagram: its boxes are tables with attributes and keys.
+It is not an E-R diagram. Chapter 6 introduces entities and relationships before
+mapping them to tables; similar-looking boxes and lines can have different meanings.
 
 ### Evidence to Retain
 
@@ -900,6 +912,10 @@ student ⋈_student.student_id=enrollment.student_id enrollment
 ```
 
 A theta join can be understood as a Cartesian product followed by a selection:
+
+Here, `r` and `s` are the input relations, and `theta` is a condition on their
+attributes. The join retains every attribute from both inputs; qualifying a repeated
+name, such as `student.student_id`, identifies which input it came from.
 
 ```text
 r ⋈_theta s = σ_theta(r × s)

@@ -14,11 +14,12 @@ it is not a second course navigation system.
 | [COURSE_PLAN.md](COURSE_PLAN.md) | Detailed teaching plan; dates and assessment must agree with the syllabus |
 | [Teaching material prompt](database_chapter_teaching_material_prompt.md) | Chapter authoring and source-check requirements |
 | `chapters/` | Maintained explanations, SQL, data, figures, and chapter verifiers |
-| [course_repository/](course_repository/README.md) | Builds the twelve tracked notebooks in Intro DB |
+| [course_repository/](course_repository/README.md) | Builds current first-meeting selections and preserves twelve previous notebooks under under_revision |
 | `student_sqlite_package/` | Optional existing SQLite package and its explicit allow-list |
 | [archive/](archive/README.md) | Superseded records, not current instructions or course decisions |
 | [Migration review](structure_migration_review.md) | September 7 layout change and verification evidence |
 | [Chapter teaching review](course_repository/all_chapters_teaching_review.md) | September 8 diagrams, small examples, source checks, and execution evidence |
+| [First-meeting release](course_repository/first_meeting_release.md) | Current scope, source locators, checks, limitations, and publication record |
 
 Edit chapter sources, then regenerate notebooks. Do not independently edit both a source
 and its generated notebook. The root README and Intro DB syllabus are maintained directly

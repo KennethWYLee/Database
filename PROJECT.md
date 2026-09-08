@@ -4,6 +4,50 @@
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
 - 最後更新日期：2026-09-08
+- 2026-09-08第一批授課發布：教師同意優先完成週四9/10使用版本，包含驗證後
+  commit/push。現行入口為課綱、`Intro DB/ch01.ipynb`、`ch02.ipynb`、`ch05.ipynb`；
+  三份分別是正確課本Ch1、Ch2導論選講及Ch5第一堂入門，不是全章已完成。
+  Ch1/2停在Chapter Summary，Ch5停在First-Meeting Summary and Practice；
+  教師可提早停止接續授課。SQL/Python為提供的觀察工具，不是第一堂撰寫要求。
+  舊12份notebook保留於`Intro DB/under_revision/`供檢閱，清楚標示未指定，
+  舊週次/考試/章號不再作正式入口。新版維持一章一份，不另做week1 notebook。
+  新增16張原創圖解；來源、範圍、驗證與發布狀態見
+  `maintenance/course_repository/first_meeting_release.md`。
+  因授課期限，第一批優先於後續ER範例修正；NULL主鍵缺陷仍列後續阻擋項，
+  受影響舊ER教材不得因此次發布被宣稱已修復或可指定。完整教科書全章查核
+  仍未完成；以下較早未授權push或尚無導論教材的狀態由本段取代。
+- 2026-09-08教材對照進度：依教師「開始下一步」完成新版必教主題與現有維護
+  來源的對照，見`maintenance/course_repository/textbook_material_correspondence.md`。
+  本次僅建立對照與缺口紀錄，沒有改寫或重新命名notebook，也未變更課綱政策。
+  需要補齊導論架構、1NF/2NF至3NF的逐步教學、1:1及三元關係mapping、
+  索引所需儲存先備。另在全新記憶體SQLite重現舊ER mapped_schema.sql接受
+  NULL文字主鍵的問題；已記錄但未在對照階段修改。因有實際正確性問題，
+  下一步優先修正該SQL、增加缺少識別值的測試並重建受影響成品，再依對照補課。
+  正確教科書完整章節來源查核仍為0章；本次沒有stage、commit或push。
+- 2026-09-08最新核准：教師要求依本次討論修正課綱，並指定三次考試各30%。
+  現用書為Elmasri/Navathe第7版；主體為Ch3、Ch5-Ch9、Ch14的課綱指定內容，
+  Ch1-Ch2作導論，Ch15、Ch17、Ch20選講，Ch16僅補索引需要的先備概念。
+  Ch9只教9.1，以Ch3及Ch5為先備；不教Ch4與9.2，不另開Ch18-Ch19、Ch21-Ch22。
+  配分為Exam 1/2/3各30%，Class Performance 10%，取代較早25/25/30/20的紀錄。
+  Week 7-8教ER，Week 10完成mapping；Week 11教至3NF，Week 13才教closure、
+  BCNF及binary lossless decomposition；後三者列Exam 3，不列Exam 2。
+  Week 14教索引，Week 15教交易基礎，Week 16只做整合複習。考試日期、出國週、
+  假日、五次比較活動及AI使用政策保持不變。最新完整範圍以
+  `Intro DB/syllabus.md`與`maintenance/COURSE_PLAN.md`為準。
+  這是課綱修正，不是全章教材完成：現有notebooks及生成設定仍保留舊書章號，
+  不能按檔名指定新書閱讀或考試，也未因本次課綱更新而自動完成來源查核。
+  本次未授權commit/push。以下較早決策如有衝突，以本段及現行課綱為準。
+- 2026-09-08教師明確更正現用書：Ramez Elmasri、Shamkant B. Navathe，
+  *Fundamentals of Database Systems*, 7th Edition，指定檔案
+  `book_Fundamental of Database Systems.pdf`。此決定取代下方所有把
+  *Database System Concepts* 列為現行主教材的歷史紀錄；不是本次另行換書。
+  現有課綱、notebook檔名與章節標籤沿用錯誤來源，尚未對齊正確課本；不得把
+  舊Ch2/Ch3查核算成本書的來源查核，也不得只換書名便沿用全部章節編號。
+  日期、三次考試配分與既有教材暫予保留；章節對照及教學範圍須重新確認。
+- 2026-09-08來源查核更正：教師要求重新逐章完整查核並建立可追溯紀錄。
+  既有建置、執行與局部原文查核不等於整本書逐句查核完成；下方歷史完成紀錄
+  不能替代本次逐節對照。最新進度見
+  `maintenance/course_repository/full_source_audit.md`。本次未授權commit或push。
 - 2026-09-08授課設計決策：依教師要求補齊全部12個選定章節，以大量原創圖解、
   小型輸入表及簡單例子講解；仍維持`Intro DB/`一章一份notebook及英文學生教材。
   新增51個小例子（32個可執行SQL、19個概念推演），圖共96張；Ch2既有19張保留，
@@ -66,10 +110,10 @@
 - 對象：四技資訊管理系二年級必修課程學生。
 - 學分與時數：3 學分，每週 3 小時。
 - 上課時間：星期四第 5-7 節，13:30-16:15。
-- 課程主體：relational model、relational algebra、SQL、E-R model、
-  relational schema、functional dependencies、normalization，以及選定的
-  indexing、query processing、query optimization、transactions、concurrency
-  control與recovery內容。
+- 課程主體：relational model、relational algebra、SQL、ER model、
+  ER-to-relational mapping、functional dependencies、normalization，以及選定的
+  indexing、query-plan interpretation及transaction basics；不要求DBMS內部
+  query optimization、concurrency-control或recovery演算法。
 - 課程可在教師允許時訓練學生檢查 AI 產生的 SQL、ER diagram、schema、
   query plan與transaction判斷；這是教師加入的應用，不宣稱為教科書原有章節。
 
@@ -91,11 +135,27 @@
   不要求預測正確的學生另找一個錯誤。課綱入口改稱syllabus，不建立week1.ipynb；
   這是檔案與導覽調整，不改動既有Week 1授課範圍、日期、章節或評量。
 
-## 教科書與已驗證章節
+## 現用教科書與查核狀態
 
-- 現行主要教科書與投影片來源：Silberschatz, Korth, and Sudarshan,
-  *Database System Concepts*, 7th Edition。
-- 2026-08-27重新確認的本機私人教科書PDF標題、作者與版本均符合上述資料；該
+- 現行主要教科書：Ramez Elmasri、Shamkant B. Navathe，
+  *Fundamentals of Database Systems*, 7th Edition，Pearson；依教師本次明確確認。
+- 正確私人複本：`private_references/book_Fundamental of Database Systems.pdf`。
+  來源為教師原始書庫中的同名檔案；原檔保留。PDF共1273頁，封面、書名頁與
+  版權頁已查驗；這份PDF列出的ISBN為978-0-13-397077-7，不能把舊課綱另一
+  裝訂/地區版本的ISBN直接當作此PDF的ISBN。原檔與複本SHA-256相同：
+  `002eceecdb5e47b050e61b30d13a8f207fb44cea4f927b98d864308c026288a5`。
+- 本書尚未完成任何一章的完整來源查核。已確認檔案身分不等於已閱讀全書。
+  `from_11001_DB/PowerPoint Presentations/`為另一本文獻的投影片，不能再稱為
+  本書對應的官方教材。[Pearson教師頁面](https://www.pearson.com/en-us/subject-catalog/p/Elmasri-Fundamentals-of-Database-Systems-7th-Edition/P200000003546?view=educator)
+  已確認列有PowerPoint配套，但實際投影片檔案尚未取得或查核。
+
+### 先前使用錯誤主教材的紀錄
+
+以下保留 *Database System Concepts*, 7th Edition 的閱讀及執行紀錄，僅供
+追溯；不代表本課現用書、章節對照或學生可用狀態。一般SQL執行結果不因用書
+更正就自動失效，但教材與本書的來源一致性必須重新查核。
+
+- 2026-08-27當時確認的本機私人PDF標題、作者與版本為上述另一本文獻；該
   PDF只作教師端來源查核，不納入Git或學生套件。
 - 2026-09-05依教師提供的目錄找到並複製教科書至
   `private_references/Database System Concepts 7th.pdf`；原檔為
@@ -107,9 +167,14 @@
   視覺檢查pp.40、42的相關圖表，並讀取Ch1 pp.1、5-8、11-14與Ch3 pp.72-73，
   重新核對新版Week 1。
   正式原文範圍、三處修正與驗證見Ch2 coverage record；不宣稱同時重審其餘章節。
-- 已完整查核本課正式範圍的教科書Ch2-Ch7、Ch14-Ch19正文及對應官方
-  slides；Ch8-Ch9另核對封面與章節綱要並決定不列入必修進度。不得再把
-  舊課綱使用的 *Fundamentals of Database Systems, 7/e* 當成本學期現行教材。
+- 過去紀錄曾聲稱完整查核Ch2-Ch7、Ch14-Ch19，但不足以支持目前版本已完成
+  全部逐句來源查核；本次依逐章紀錄重新確認，不延用這項整體完成宣稱。
+  Ch8-Ch9僅曾核對另一本文獻的章節綱要並決定不列入當時的必修進度。
+  舊稿曾排除 *Fundamentals of Database Systems, 7/e* 作為現用書；這項排除
+  已由教師本次明確確認撤銷，不得再沿用。
+
+以下表格是既有教材在 *Database System Concepts* 中的編號與範圍，尚未對應
+至現用 *Fundamentals of Database Systems*；不得據此直接指定新書閱讀或考試章節。
 
 | 章節 | 教科書章名 | 本課處理方式 |
 |---:|---|---|
@@ -135,27 +200,28 @@
 
 - 115-1 自 2026-09-07 開始上課；本課 Week 1 為 2026-09-10。
 - 教師於 2026-11-01 至 2026-11-07 參加 INFORMS；Week 9 的
-  2026-11-05 不排實體課、考試或新進度，只安排 ch2-ch5 非同步複習。
+  2026-11-05 不排實體課、考試或新進度，只複習已教的Ch1-Ch2、Ch5-Ch8選定內容。
 - Week 17 的 2026-12-31 為校慶補假，不排課。
 - Week 6 的 2026-10-15 辦理Exam 1；Week 12的2026-11-26辦理Exam 2。
-- Week 16 的 2026-12-24 完成ch18-ch19選講與期末複習。
+- Week 16 的 2026-12-24 只安排已教內容的整合複習，不增加新進度。
 - Week 18 的 2027-01-07 是校定期末考週，辦理Exam 3與課程期末考。
 
 ## 評量與章節對應
 
 | 評量 | 週次與日期 | 比例 | 範圍 |
 |---|---|---:|---|
-| Written Exam 1 | Week 6, 2026-10-15 | 25% | ch2-ch4 |
-| Written Exam 2 | Week 12, 2026-11-26 | 25% | 選定的ch5-ch7內容 |
-| Written Exam 3 / Final Examination | Week 18, 2027-01-07 | 30% | 選定的ch14-ch19內容，並累積應用SQL與database design概念 |
-| Class Performance（課堂表現） | 全學期 | 20% | SQL labs、database design exercises、ER diagrams、schemas、normalization、index與query-plan activities、個人回答與修正；peer rank不直接計分 |
+| Written Exam 1 | Week 6, 2026-10-15 | 30% | Ch1-Ch2、Ch5-Ch8的已教選定內容：導論、關聯模型、核心algebra及SQL |
+| Written Exam 2 | Week 12, 2026-11-26 | 30% | Ch3、9.1、14.1-14.4選定內容；不含Ch4、9.2、BCNF、closure及formal lossless-decomposition test |
+| Written Exam 3 / Final Examination | Week 18, 2027-01-07 | 30% | 14.5、Ch15、Ch17、Ch20選定內容；Ch16僅作索引背景，並累積應用已教SQL與database design |
+| Class Performance（課堂表現） | 全學期 | 10% | 指定SQL labs、database design exercises、ER diagrams、schemas、normalization、index與query-plan activities、個人回答與修正；peer rank不直接計分 |
 
 - 三次考試都用來確認學生本人的資料庫概念、SQL、資料庫設計、效能與交易
   處理能力。
 - 同儕排序結果不用來直接計算各組正式成績。
-- Exam 2只考課前已明列並實際教授的selected ch5-ch7內容。
-- Exam 3只考課前已明列並實際教授的selected ch14-ch19內容；累積題只能應用
-  已教過的SQL與database design概念。
+- Exam 2只考Weeks 7-11已教的ER、9.1 mapping、FD與至3NF的內容；candidate keys
+  由題目提供，不要求尚未教授的closure或binary lossless-decomposition判定。
+- Exam 3才包含Week 13的closure、BCNF與binary lossless decomposition，以及
+  索引、transaction basics；累積題只能應用已教過的SQL與database design概念。
 - 各次考試是否允許使用或審查 AI 產生的材料，必須在正式考試規則中明示。
 
 ## 課堂活動決策
@@ -316,6 +382,20 @@
   排除自己組及原始資料匯出。
 
 ## Primary next action
+
+本次課綱及配分已修正，下一步仍為依正確課本建立逐節與現有教材的對照，
+但範圍現在以核准的英文課綱為準，不再等待教師重新選章。完成條件是每個必教
+主題均能定位至原書或已標示的實作補充來源，並列出可沿用、需修正及缺少的
+教材；接著才逐章重編、完整來源查核與驗證。不能用既有生成器的舊章號或歷史
+週次對照宣稱新課綱教材已完成。下方保留較早建議作追溯。
+
+2026-09-08教師確認現用書為Elmasri/Navathe第7版，因此主要下一步改為重新建立
+現有教學主題與正確課本章、節的對照，指出教材缺口及需要教師判斷的範圍差異。
+此新證據取代「繼續另一本文獻Ch4」的舊建議。預期成果是可核對原書位置的
+對照表；完成條件為每個既有主要教學主題均有經閱讀確認的位置或明確缺口，
+不把兩本書相同章號視為相同內容，不自行增刪章節或變更評量政策。
+接著依確認後的範圍逐章完整查核。即時狀態以
+`maintenance/course_repository/full_source_audit.md`為準。以下段落保留歷史脈絡。
 
 教師於2026-09-05進一步要求直接完成Week 1，因此原先「先由教師審閱Week 1」
 的下一步已由這項新指示取代。Week 1的編寫、來源查核、程式與顯示驗證已完成，

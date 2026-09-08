@@ -21,7 +21,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--all-chapters", action="store_true")
     args = parser.parse_args()
-    source = ROOT / "Intro DB/ch02.ipynb"
+    source = ROOT / "Intro DB/under_revision/ch02.ipynb"
     raw = json.loads(source.read_text(encoding="utf-8"))
     errors = list(nbformat.validator.iter_validate(raw))
     if errors:
@@ -34,7 +34,7 @@ def main():
                   ("week2", original, original.cells[start_week2:]),
                   ("complete-ch02", original, original.cells)]
     if args.all_chapters:
-        for path in sorted((ROOT / "Intro DB").glob("ch*.ipynb")):
+        for path in sorted((ROOT / "Intro DB/under_revision").glob("ch*.ipynb")):
             if path == source:
                 continue
             raw = json.loads(path.read_text(encoding="utf-8"))

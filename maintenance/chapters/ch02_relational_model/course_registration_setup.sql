@@ -23,7 +23,8 @@ CREATE TABLE course (
     course_id TEXT NOT NULL PRIMARY KEY,
     title TEXT NOT NULL,
     dept_code TEXT NOT NULL,
-    credits INTEGER NOT NULL CHECK (credits BETWEEN 1 AND 6),
+    credits INTEGER NOT NULL
+        CHECK (typeof(credits) = 'integer' AND credits BETWEEN 1 AND 6),
     FOREIGN KEY (dept_code) REFERENCES department (dept_code)
 );
 

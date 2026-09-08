@@ -85,6 +85,27 @@ def verify_maintained_examples(connection):
     assert fetchall(connection, "SELECT COUNT(*) FROM enrollment") == [(6,)]
 
 
+def verify_credit_domain(connection):
+    for value in ("0", "7", "2.5", "'unknown'"):
+        expect_integrity_error(connection,
+            f"INSERT INTO course VALUES ('TEST', 'Domain Test', 'IM', {value})",
+            sqlite3.SQLITE_CONSTRAINT_CHECK)
+        expect_integrity_error(connection,
+            f"UPDATE course SET credits = {value} WHERE course_id = 'DB201'",
+            sqlite3.SQLITE_CONSTRAINT_CHECK)
+    for value in ("1", "6", "'4'", "4.0"):
+        connection.execute("SAVEPOINT valid_credit")
+        try:
+            connection.execute(f"UPDATE course SET credits = {value} WHERE course_id = 'DB201'")
+            actual, storage = connection.execute(
+                "SELECT credits, typeof(credits) FROM course WHERE course_id = 'DB201'"
+            ).fetchone()
+            assert storage == "integer" and 1 <= actual <= 6
+        finally:
+            connection.execute("ROLLBACK TO valid_credit")
+            connection.execute("RELEASE valid_credit")
+
+
 def main() -> None:
     connection = sqlite3.connect(":memory:")
     connection.execute("PRAGMA foreign_keys = ON")
@@ -96,6 +117,7 @@ def main() -> None:
     assert fetchall(connection, "SELECT COUNT(*) FROM enrollment") == [(6,)]
 
     verify_null_keys(connection)
+    verify_credit_domain(connection)
     verify_maintained_examples(connection)
 
     expect_integrity_error(
@@ -262,6 +284,8 @@ def main() -> None:
     print("PASS: all six primary-key columns reject NULL on insert and update")
     print("PASS: actual maintained projection handles same-name students")
     print("PASS: cross-term enrollment and all three composite-key minimality counterexamples")
+    print("PASS: credits reject fractional/out-of-range/non-numeric values on insert and update")
+    print("PASS: credits preserve integer-affinity conversion and valid boundary values")
     lab_connection.close()
     connection.close()
 

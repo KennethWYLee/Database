@@ -73,7 +73,7 @@ add("ch03", "definition", "## 1. Defining Structure", "A table definition reject
     "Which insert is rejected: G2 with 1 seat or G3 with 6 seats? How many rows remain?",
     [("Insert G2", "INSERT INTO team VALUES ('G2',1)"), ("Insert G3", "INSERT INTO team VALUES ('G3',6)"), ("Stored teams", "SELECT * FROM team ORDER BY id")],
     [result("Insert G2", [], [["IntegrityError: the statement was rejected."]]), result("Insert G3", [], [["Statement completed."]]), result("Stored teams", ["id", "seats"], [["G1",4],["G3",6]])],
-    "G2 is rejected because 1 is below the minimum 2. G3 is accepted; the final table has two rows. This range constraint is not a guarantee that every integer-like input has the intended business meaning.",
+    "G2 is rejected because 1 is below the minimum 2. G3 is accepted; the final table has two rows. In this ordinary SQLite table, the range check would accept 2.5; INTEGER does not enforce a whole-number rule by itself.",
     "Try a new G4 with NULL seats, then a new G4 with 8 seats. Keep the statement and outcome for each.",
     "Check NOT NULL separately from the inclusive upper boundary. A rejected insert must leave the stored rows unchanged.",
     panels=[result("Input", ["id","seats"], [["G1",4]]),result("Check each request",["request","decision"],[["G2 / 1","reject: below 2"],["G3 / 6","accept: 2 to 8"]]),result("Stored teams",["id","seats"],[["G1",4],["G3",6]])])
@@ -119,7 +119,7 @@ add("ch03", "sets", "## 4. SQL Set Operations", "Combining two enrollment lists"
     panels=[result("Input lists",["A","B"],[["S1","S2"],["S2","S3"]]),result("UNION ALL",["id"],[["S1"],["S2"],["S2"],["S3"]]),result("A EXCEPT B",["id"],[["S1"]])])
 
 add("ch03", "subquery", "### `EXISTS` and Correlation", "Ask whether a matching row exists for each student",
-    "3.8.1 Set Membership; 3.8.2 Set Comparison; 3.8.3 Test for Empty Relations", "A correlated EXISTS query uses the current outer-row identifier inside the inner query. Multiple matches still produce only one copy of that outer student row.",
+    "3.8.1 Set Membership; 3.8.3 Test for Empty Relations", "A correlated EXISTS query uses the current outer-row identifier inside the inner query. Multiple matches still produce only one copy of that outer student row.",
     [table("person","id TEXT",["id"],[["S1"],["S2"],["S3"]]),table("registration","sid TEXT, course TEXT",["sid","course"],[["S1","DB"],["S1","WEB"],["S2","DB"]])],
     "How many student rows survive EXISTS? Does S1 appear twice because it has two registrations?",
     [("Students with registrations", "SELECT p.id FROM person AS p WHERE EXISTS (SELECT 1 FROM registration AS r WHERE r.sid=p.id) ORDER BY p.id")],

@@ -10,7 +10,7 @@ import sys
 
 
 COURSE_ROOT = Path(__file__).resolve().parents[4]
-NOTEBOOK = COURSE_ROOT / "Intro DB/ch02.ipynb"
+NOTEBOOK = COURSE_ROOT / "Intro DB/under_revision/ch02.ipynb"
 
 
 def run_cells(cells):
