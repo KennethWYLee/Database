@@ -1,9 +1,19 @@
 # Database Management Course Syllabus, Fall 2026
 
-Revised: September 8, 2026
+Revised: September 9, 2026
 
-All chapter and section references below refer to *Fundamentals of Database Systems*,
-7th Edition, by Ramez Elmasri and Shamkant B. Navathe.
+## Textbook
+
+| Item | Details |
+|---|---|
+| Title | *Fundamentals of Database Systems* |
+| Authors | Ramez Elmasri and Shamkant B. Navathe |
+| Edition | 7th Edition |
+| Publisher | Pearson |
+
+All chapter and section references in this syllabus and the current course notebooks
+refer to this textbook and edition. The required sections are listed under
+[Textbook Coverage](#textbook-coverage) and in the weekly schedule.
 
 ## Course Materials
 
@@ -127,6 +137,8 @@ Chapter references identify the assigned topics above, not complete chapter cove
 The first two examinations cover only material taught before their examination dates.
 BCNF, attribute closure, and binary lossless-decomposition checks are taught after
 Written Exam 2 and belong to Written Exam 3.
+Review is integrated into Weeks 13-15. Written Exam 3 takes place in Week 16;
+Week 18 is reserved for a make-up examination, not new required content.
 
 | Week | Date | Textbook Chapters | Topics and Activities | Primary Learning Evidence |
 |---:|---|---|---|---|
@@ -138,16 +150,16 @@ Written Exam 2 and belong to Written Exam 3.
 | 6 | October 15, 2026 | Chapters 1-2, 5-8 selected topics (exam) | Written Exam 1: introductory concepts, relational model, taught relational algebra, and SQL; error analysis and correction | Written Exam 1 and correction sheet |
 | 7 | October 22, 2026 | Chapter 3 | Business rules, entities, attributes, keys, relationships, roles, cardinality, and participation; draw an ER diagram | ER diagram draft and reasons for design choices |
 | 8 | October 29, 2026 | Chapter 3; Chapter 9 Section 9.1 | Weak entities, multivalued attributes, and a simple ternary relationship; begin mapping regular entities and binary relationships to tables | Annotated ER diagram and initial relational schema |
-| 9 | November 5, 2026 | Chapters 1-2, 5-8 selected topics (review only) | Instructor attends INFORMS, November 1-7; no in-person class, examination, or new content. Asynchronous review of previously taught database concepts and SQL | Asynchronous review record |
+| 9 | November 5, 2026 | Chapters 1-2, 5-8 selected topics (review only) | Instructor travels abroad to attend INFORMS, November 1-8; no in-person class, examination, or new content. Asynchronous review of previously taught database concepts and SQL | Asynchronous review record |
 | 10 | November 12, 2026 | Chapter 9 Section 9.1; Chapter 3 review | Complete ER-to-relational mapping, including weak entities, relationship tables, multivalued attributes, and the taught ternary example; build and check the mapped tables; verify an AI-generated ER diagram | Revised ER diagram, relational schema, SQL, and individual revision |
 | 11 | November 19, 2026 | Chapter 14 Sections 14.1-14.4 selected topics | Design anomalies, functional dependencies, and 1NF through 3NF using stated business rules and supplied candidate keys; compare simple redesigns | Dependency table, normalization exercise, and individual revision |
 | 12 | November 26, 2026 | Chapter 3; Chapter 9 Section 9.1; Chapter 14 Sections 14.1-14.4 (exam) | Written Exam 2: ER design, ER-to-relational mapping, dependencies, anomalies, and normalization through 3NF; no BCNF, closure, or formal lossless-decomposition test | Written Exam 2 and correction sheet |
 | 13 | December 3, 2026 | Chapter 14 Section 14.5; Chapter 15 selected topics | Attribute closure and candidate-key checks; introductory BCNF; binary lossless decomposition and spurious tuples using small tables | Closure calculation, BCNF decision, and decomposition check |
 | 14 | December 10, 2026 | Chapter 16 foundations; Chapter 17 selected topics | Records, blocks, and file organization as background; index purpose, B+ tree lookup, composite-column order, and update costs; SQLite index and query-plan examples; check an AI index recommendation | Index choice, before/after query-plan evidence, and individual revision |
-| 15 | December 17, 2026 | Chapter 20 selected topics | Transaction boundaries, ACID, COMMIT/ROLLBACK, incomplete transfers, and simple interfering-update examples; distinguish conceptual diagrams from actual SQLite behavior | Transaction-boundary decisions and explained results |
-| 16 | December 24, 2026 | Previously taught sections only | Integrated review of SQL, ER mapping, normalization, indexes, and transactions using diagrams and small tables; no new required topics | Integrated practice and corrections |
+| 15 | December 17, 2026 | Chapter 20 selected topics | Transaction boundaries, ACID, and COMMIT/ROLLBACK through one transfer example; one simple interfering-update diagram; distinguish diagrams from actual SQLite behavior. Integrated review of taught SQL, design, normalization, indexes, and transactions | Transaction-boundary decisions, explained results, and review corrections |
+| 16 | December 24, 2026 | Chapter 14 Section 14.5; Chapters 15-17 and 20 selected topics (exam); cumulative application | Written Exam 3 and course final examination: taught closure, BCNF, binary lossless decomposition, indexing, and transaction concepts; Chapter 16 only as index background; cumulative SQL and database design application. No new required topics | Written Exam 3 |
 | 17 | December 31, 2026 | None | University anniversary make-up holiday; no class | None |
-| 18 | January 7, 2027 | Chapter 14 Section 14.5; Chapters 15-17 and 20 selected topics (exam); cumulative application | Written Exam 3 and course final examination: taught closure, BCNF, binary lossless decomposition, indexing, and transaction concepts; Chapter 16 only as index background; cumulative SQL and database design application | Written Exam 3 |
+| 18 | January 7, 2027 | Previously taught sections only (make-up) | Make-up examination, if applicable; eligibility, scope, and arrangements will be announced separately. No new required topics | Make-up examination, if applicable |
 
 ## Assessment
 
@@ -158,6 +170,11 @@ Written Exam 2 and belong to Written Exam 3.
 | Written Exam 3 (Final Examination) | 30% | Section 14.5 and selected Chapters 15, 17, and 20, with Chapter 16 background only: closure, BCNF, binary lossless decomposition, indexes, query-plan evidence, and transaction basics; cumulative application of taught SQL and database design |
 | Class Performance | 10% | Assigned SQL labs, database design exercises, ER diagrams, relational schemas, normalization exercises, query-plan activities, individual responses, verification evidence, and revisions |
 | Total | 100% | |
+
+Written examinations are scheduled for October 15 (Week 6), November 26 (Week 12),
+and December 24 (Week 16). The make-up examination is scheduled for January 7
+(Week 18); it is not a fourth separately weighted assessment. Make-up eligibility,
+scope, and grading arrangements will be announced separately.
 
 Each written examination contributes 30% of the final grade; together they contribute
 90%. Class performance contributes the remaining 10%. The examinations are completed
@@ -174,8 +191,8 @@ Students may use AI tools to assist with SQL, E-R diagrams, schemas, or index re
 ## Calendar and Scope Notes
 
 - According to the official university calendar, classes begin on September 7, 2026. The midterm examination period is November 2-6, 2026, and the final examination period is January 4-8, 2027.
-- Because the instructor will travel from November 1 through November 7, no synchronous class, examination, or new required content is scheduled for Thursday, November 5.
-- December 31 is a university anniversary make-up holiday. Written Exam 3 is scheduled for January 7 during the official final examination week.
+- The instructor will be abroad from November 1 through November 8, 2026, to attend INFORMS. No synchronous class, examination, or new required content is scheduled for Thursday, November 5. In-person classes resume on Thursday, November 12.
+- This course's Written Exam 3 is scheduled for December 24 (Week 16), before the university's official final examination period. December 31 is a university anniversary make-up holiday. January 7 (Week 18), within the official final examination period, is reserved for a make-up examination.
 - Chapter 8 is limited to the listed relational-algebra operations. Chapter 9 is limited to Section 9.1; Chapter 4 and Section 9.2 are not required.
 - Chapter 16 provides index prerequisites only. Chapters 18-19 and 21-22 are not required, and Week 16 adds no new content.
 

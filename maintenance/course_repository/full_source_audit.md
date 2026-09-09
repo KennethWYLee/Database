@@ -5,6 +5,30 @@ The worktree was clean at the start. No commit or push is authorized for this au
 
 ## First-Meeting Release Update
 
+September 9 schedule update: the instructor moved Written Exam 3 to Week 16
+(December 24) and reserved Week 18 (January 7) for a make-up examination. Review
+is integrated into Weeks 13-15; the core chapter selections and 30/30/30/10 weights
+remain unchanged. Travel is now November 1-8. The earlier schedule statements below
+and the September 8 release report are historical. The current syllabus and course
+plan govern. This schedule update does not advance textbook source-audit completion.
+
+The September 9 update covers the maintained syllabus, course plan, PROJECT,
+chapter-authoring prompt, this progress notice, and layout regression tests. It also
+includes the previously uncommitted textbook-information and November 1-8 edits.
+The instructor explicitly authorized commit and push to the existing `origin/main`.
+The historical `weeks` configuration and old notebooks retain their historical
+status; the current plan, not that old mapping, controls the revised schedule.
+
+Verification: six targeted `RepositoryLayoutTests` passed: textbook/travel details,
+syllabus language/scope, weekly chapter/date agreement, assessment weights, navigation,
+and final/make-up dates. `verify_content` and the refreshed local manifest passed.
+The updated syllabus was rendered and checked with Playwright at 1440 and 390 pixels
+with no page overflow; the Weeks 12-18 desktop table was visually inspected. No
+notebook or SQL source changed, so executable lessons were not rerun for this
+schedule-only revision. Make-up eligibility, scope, and grading arrangements remain
+for the instructor to announce. Git history records publication; no private source,
+assessment, or local rendering output is included.
+
 The instructor subsequently authorized completing and publishing the September 10
 first-meeting batch. The earlier no-push statements describe earlier turns, not this
 release authorization. See [the release record](first_meeting_release.md) for the

@@ -53,10 +53,26 @@ class RepositoryLayoutTests(unittest.TestCase):
                 self.assertEqual(actual, datetime.strptime(planned[1], "%Y-%m-%d"))
                 self.assertEqual(actual, start + timedelta(weeks=number - 1))
                 self.assertEqual(actual.weekday(), 3)
-        self.assertEqual([int(row[0]) for row in rows if "(exam)" in row[2]], [6, 12, 18])
+        self.assertEqual([int(row[0]) for row in rows if "(exam)" in row[2]], [6, 12, 16])
         self.assertIn("review only", rows[8][2])
-        self.assertEqual(rows[15][2], "Previously taught sections only")
+        self.assertIn("Written Exam 3", rows[15][3])
+        self.assertIn("Integrated review", rows[14][3])
         self.assertEqual(rows[16][2], "None")
+        self.assertEqual(rows[17][2], "Previously taught sections only (make-up)")
+        self.assertIn("Make-up examination", rows[17][3])
+        self.assertNotIn("Written Exam 3", rows[17][3])
+
+    def test_final_and_makeup_dates_agree(self):
+        syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
+        plan = (builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md").read_text(encoding="utf-8")
+        self.assertIn("December 24 (Week 16)", syllabus)
+        self.assertIn("January 7\n(Week 18)", syllabus)
+        for document in (syllabus, plan):
+            self.assertIn("not a fourth separately", document)
+            self.assertIn("January 4-8", document)
+        self.assertRegex(plan, r"\| Written Exam 3 \(Final Examination\) \| 2026-12-24 \| 30% \|")
+        project = (builder.COURSE_ROOT / "PROJECT.md").read_text(encoding="utf-8")
+        self.assertRegex(project, r"\| Written Exam 3 / Final Examination \| Week 16, 2026-12-24 \| 30% \|")
 
     def test_current_assessment_weights(self):
         expected = {
@@ -86,6 +102,23 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertNotRegex(syllabus, r"(?i)\btype\s*b\b|\b\d+\s*(?:minutes?|mins?)\b")
         for chapter_id in ("ch01", "ch02", "ch05"):
             self.assertIn(f"({chapter_id}.ipynb)", syllabus)
+
+    def test_textbook_details_and_updated_travel(self):
+        syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
+        textbook = syllabus.split("## Textbook\n", 1)[1].split("\n## ", 1)[0]
+        for detail in ("Fundamentals of Database Systems", "Ramez Elmasri",
+                       "Shamkant B. Navathe", "7th Edition", "Pearson"):
+            self.assertIn(detail, textbook)
+        self.assertLess(syllabus.index("## Textbook\n"), syllabus.index("## Course Materials\n"))
+        plan = (builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md").read_text(encoding="utf-8")
+        for document in (syllabus, plan):
+            self.assertIn("November 1-8", document)
+            self.assertNotRegex(document, r"November 1-7|November 1 through November 7")
+        self.assertIn("In-person classes resume on Thursday, November 12", syllabus)
+        project = (builder.COURSE_ROOT / "PROJECT.md").read_text(encoding="utf-8")
+        current_dates = project.split("## 115-1 固定日期與進度範圍", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("2026-11-08", current_dates)
+        self.assertNotIn("2026-11-07", current_dates)
 
     def test_visual_figures_and_unique_anchors(self):
         config = builder.load_json(builder.CONFIG_PATH)

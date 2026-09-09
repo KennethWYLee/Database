@@ -42,8 +42,13 @@ ch02_database_architecture、ch05_relational_model各自student_guide.md，
 
 - Week 1先課綱與導論，Week 2關聯模型及核心algebra，Weeks 3-5 SQL。
 - Weeks 7-8 ER與mapping導入；Week 10完成9.1；Weeks 11及13分次教授正規化。
-- Week 14索引，Week 15交易基礎，Week 16只整合複習。
-- Week 9出國，不排新內容；Week 17放假；Weeks 6、12、18考試。
+- Week 14索引；Weeks 13-15將複習併入既有範例。Week 15以一個轉帳例子教
+  boundaries、ACID、COMMIT/ROLLBACK，加一張簡單並行更新圖，再整合複習，
+  不增加新作業、第二個交易案例或formal schedule classification。
+- Weeks 6、12、16分別考Exam 1、2、3；Week 16（12/24）為本課期末考。
+- Week 9出國（11/1-8），不排新內容；Week 17（12/31）放假；Week 18（1/7）
+  保留補考。Weeks 16-18不加新必教內容，補考不另增第四次考試配分；資格、
+  範圍與計分方式待教師另行宣布，不能自行推定。
 - Exam 2不考尚未教的closure、BCNF或formal lossless-decomposition test；
   這些內容列Exam 3。實際題目仍需獨立命題與驗證。
 - 一章一份notebook，可跨次授課；先依新書逐節對照既有教材，不能只改舊notebook檔名。

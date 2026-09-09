@@ -1,6 +1,6 @@
 # Database Management Course Plan, Fall 2026
 
-Updated: September 8, 2026
+Updated: September 9, 2026
 
 The instructor authorized the revised chapter selection and three examinations worth
 30% each. Class Performance is 10%. This plan implements the current
@@ -55,6 +55,17 @@ a checkable prediction, a worked example, interpretation, a common error or limi
 and practice. A synthetic table can illustrate or refute a claim; it does not establish
 a dependency or decomposition property for all legal database states.
 
+The final examination moves to Week 16; retain the approved core chapter selections
+and integrate review into the worked examples in Weeks 13-15. In Week 13, revisit
+keys and joins while checking closure, BCNF, and a small binary decomposition. In
+Week 14, revisit SQL conditions and result equivalence while comparing index plans.
+In Week 15, use one transfer example for boundaries, ACID, and COMMIT/ROLLBACK, plus
+one simple interfering-update diagram. Reuse earlier SQL and design examples for
+the integrated review; do not add a second transaction case, new submission, formal
+schedule classification, or an implementation protocol. These are teaching-scope
+limits, not a claim that later notebooks have already been revised or classroom
+workload validated. Weeks 16-18 introduce no new required topics.
+
 Preserve five group-response comparisons in Weeks 2, 4, 10, 11, and 14: keys, SQL,
 ER mapping, normalization, and indexes. Each group submits a reasoned response;
 responses are displayed anonymously, every student compares them, the instructor
@@ -79,10 +90,10 @@ directly determine grades. Fixed-answer practice need not use group comparisons.
 | 12 | 2026-11-26 | Chapter 3; Chapter 9 Section 9.1; Chapter 14 Sections 14.1-14.4 (exam) | Written Exam 2; no BCNF, closure, or formal lossless-decomposition test; corrections |
 | 13 | 2026-12-03 | Chapter 14 Section 14.5; Chapter 15 selected topics | Closure and candidate keys, then BCNF and binary lossless decomposition; show spurious tuples |
 | 14 | 2026-12-10 | Chapter 16 foundations; Chapter 17 selected topics | Record/block/file background; B+ tree search, composite indexes, read/update costs, and SQLite query-plan evidence; compare an AI index recommendation |
-| 15 | 2026-12-17 | Chapter 20 selected topics | Transfer example, ACID, transaction boundaries, COMMIT/ROLLBACK, and interfering updates |
-| 16 | 2026-12-24 | Previously taught sections only | Integrated SQL, mapping, normalization, index, and transaction review; no new required topics |
+| 15 | 2026-12-17 | Chapter 20 selected topics | One transfer example for ACID, boundaries, and COMMIT/ROLLBACK; one interfering-update diagram; integrated review using earlier SQL, design, normalization, and index examples |
+| 16 | 2026-12-24 | Chapter 14 Section 14.5; Chapters 15-17 and 20 selected topics (exam); cumulative application | Written Exam 3 / Final Examination; Chapter 16 only as index background; no new required topics |
 | 17 | 2026-12-31 | None | University anniversary make-up holiday; no class or new required work |
-| 18 | 2027-01-07 | Chapter 14 Section 14.5; Chapters 15-17 and 20 selected topics (exam); cumulative application | Written Exam 3 / Final Examination; Chapter 16 only as index background |
+| 18 | 2027-01-07 | Previously taught sections only (make-up) | Make-up examination, if applicable; eligibility, scope, and arrangements to be announced; no new required topics |
 
 ## Assessment
 
@@ -90,9 +101,13 @@ directly determine grades. Fixed-answer practice need not use group comparisons.
 |---|---|---:|---|
 | Written Exam 1 | 2026-10-15 | 30% | Selected Chapters 1-2 and 5-8, as taught in Weeks 1-5 |
 | Written Exam 2 | 2026-11-26 | 30% | Chapter 3, Section 9.1, and selected Sections 14.1-14.4; no EER, BCNF, closure, or formal lossless-decomposition test |
-| Written Exam 3 (Final Examination) | 2027-01-07 | 30% | Section 14.5; selected Chapters 15, 17, and 20; Chapter 16 background only; cumulative taught SQL and design |
+| Written Exam 3 (Final Examination) | 2026-12-24 | 30% | Section 14.5; selected Chapters 15, 17, and 20; Chapter 16 background only; cumulative taught SQL and design |
 | Class Performance | Throughout the semester | 10% | Assigned practice, technical correctness, verification evidence, explanation, and revisions |
 | Total | | 100% | |
+
+Week 18 (January 7) is reserved for a make-up examination, not a fourth separately
+weighted assessment. The instructor still needs to announce eligibility, scope,
+and grading arrangements; this schedule revision does not decide those policies.
 
 Only assigned submissions contribute to Class Performance. The former internal
 exam-by-chapter percentages belonged to the incorrect textbook scope and are no
@@ -108,8 +123,12 @@ AI is permitted only in designated activities. Preserve the planned checks in We
 in the three individual written examinations. Other allowed exam resources remain
 to be announced.
 
-Exam dates and the calendar are unchanged: instructor travel November 1-7; no class
-on December 31; the final exam is January 7 during the official final-exam week.
+The instructor updated the travel period to November 1-8 on September 9. November 5
+remains asynchronous review only; in-person teaching resumes November 12. The instructor
+also moved the course final examination to December 24 (Week 16), with January 7
+(Week 18) reserved for a make-up examination. Exams 1 and 2 remain October 15 and
+November 26. December 31 remains a holiday. The university's official final-exam
+period remains January 4-8; distinguish it from this course's earlier final exam.
 The [official calendar PDF](https://acad.ntub.edu.tw/var/file/4/1004/img/1347/780969106.pdf)
 and [calendar page](https://acad.ntub.edu.tw/p/404-1004-37975.php?Lang=zh-tw) were checked
 on September 8. No new content is assigned during the travel week or final-exam week.
