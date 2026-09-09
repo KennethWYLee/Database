@@ -4,8 +4,9 @@ Updated: September 9, 2026
 
 The instructor authorized the revised chapter selection and three examinations worth
 30% each. Class Performance is 10%. This plan implements the current
-[English syllabus](../Intro%20DB/syllabus.md); the syllabus's Textbook Coverage table
-defines the required topics and exclusions. The first-meeting Ch1, Ch2, and Ch5
+[English syllabus](../Intro%20DB/syllabus.md). The instructor requested a concise
+student syllabus on September 9; detailed topic limits are retained below without
+changing scope. The first-meeting Ch1, Ch2, and Ch5
 opening selections now use the prescribed book. Earlier notebooks are retained under
 `Intro DB/under_revision/` and are not assigned material.
 
@@ -47,6 +48,33 @@ Ch5 Sections 5.2-5.3 continue in the same notebook after the first-meeting openi
   updates. Do not add formal schedule classification or implementation protocols.
 - Chapters 4, 18-19, and 21-22 are not required. Window functions, recursive CTEs,
   stored routines, advanced indexing, and higher normal forms remain optional.
+
+## Detailed Coverage
+
+The main course chapters are **3, 5, 6, 7, 8, 9, and 14**, within the limits below.
+Chapters **1-2** provide the introduction; Chapters **15, 17, and 20** are selected
+topics. Chapter **16** supplies only the storage concepts needed to understand indexes.
+Listing a chapter does not make every section, exercise, or proof required.
+
+| Chapter | Required Topics | Limits |
+|---|---|---|
+| 1-2: Introduction and Architecture | Database purpose and benefits; models, schemas, instances, data independence, languages, and basic client/server architecture | Introductory selections from 1.1-1.3, 1.6, 2.1-2.3, and 2.5; no detailed history or system classification |
+| 3: ER Model | Entities, attributes, keys, relationships, roles, cardinality, participation, weak entities, and ER design; one simple ternary relationship | Core concepts from 3.1-3.7; a basic example from 3.9; no EER inheritance or UML requirement |
+| 5: Relational Model and Constraints | Relations, tuples, domains, schemas, keys, entity integrity, referential integrity, and constraint violations | Core topics from 5.1-5.3 |
+| 6: Basic SQL | Data definition, data types, constraints, basic retrieval, and INSERT/DELETE/UPDATE | Core topics from 6.1-6.4, implemented with SQLite |
+| 7: More SQL | NULL, joins, aggregation, GROUP BY/HAVING, IN/EXISTS, selected subqueries, views, a simple trigger, and basic schema changes | Selected topics from 7.1-7.4; recursive queries, assertions, and advanced trigger behavior are not required |
+| 8: Relational Algebra | Selection, projection, union, intersection, difference, Cartesian product, and joins using small relation instances | Selected operations from 8.1-8.3 and examples from 8.5; division and relational calculus are not required |
+| 9: ER-to-Relational Mapping | Regular and weak entities, 1:1/1:N/M:N relationships, multivalued attributes, and one simple ternary relationship | **Section 9.1 only. Section 9.2 and Chapter 4 are not required.** Prerequisites are Chapters 3 and 5 |
+| 14: Functional Dependencies and Normalization | Design anomalies, functional dependencies, 1NF, 2NF, 3NF, and introductory BCNF | Selected concepts and examples from 14.1-14.5; 4NF and 5NF are not required |
+| 15: Relational Design Theory | Attribute closure, simple candidate-key checks, and binary lossless decomposition with spurious-tuple examples | Selected material from 15.1.1 and 15.2; no formal proofs, minimal-cover procedures, general decomposition tests, or schema-synthesis algorithms |
+| 16-17: Storage Foundations and Indexing | Records, blocks, and basic file organization; index purpose, B+ tree search, composite indexes, and read/update costs | Chapter 16 is prerequisite background only; selected concepts from 17.1-17.4 and 17.7, without full tree-update algorithms or cost derivations |
+| 20: Transactions | Logical units of work, transaction boundaries, ACID, COMMIT/ROLLBACK, and simple interfering-update examples | Selected concepts from 20.1-20.3 and 20.6; no formal schedule classification, serializability proofs, or implementation protocols |
+
+Chapters 4, 18-19, and 21-22 are not required chapters. SQLite index commands and
+basic `EXPLAIN QUERY PLAN` interpretation are practical supplements to Chapter 17,
+not a separate course in query optimization. Window functions, recursive CTEs, and
+stored routines are optional supplements, not required examination topics.
+
 
 ## Teaching and Assessment Alignment
 

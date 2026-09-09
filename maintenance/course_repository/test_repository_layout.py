@@ -39,26 +39,33 @@ class RepositoryLayoutTests(unittest.TestCase):
                     for line in section.splitlines() if re.match(r"\| \d+ \|", line)]
 
         rows, plan_rows = schedule_rows(syllabus), schedule_rows(plan)
+
+        def scope_numbers(label):
+            # The detailed plan repeats the chapter number before a section number.
+            label = re.sub(r"Chapters? \d+ Sections? ", "", label)
+            return re.findall(r"\d+(?:\.\d+)*", label)
+
         self.assertEqual(len(rows), 18)
         self.assertEqual(len(plan_rows), 18)
         start = datetime(2026, 9, 10)
         for number, (row, planned) in enumerate(zip(rows, plan_rows), 1):
             with self.subTest(week=number):
-                self.assertEqual(len(row), 5)
+                self.assertEqual(len(row), 4)
                 self.assertEqual(len(planned), 4)
                 self.assertEqual(int(row[0]), number)
                 self.assertEqual(row[0], planned[0])
-                self.assertEqual(row[2], planned[2])
-                actual = datetime.strptime(row[1], "%B %d, %Y")
+                self.assertEqual(scope_numbers(row[2]), scope_numbers(planned[2]))
+                self.assertLessEqual(len(row[3].split()), 16)
+                actual = datetime.strptime(row[1], "%Y-%m-%d")
                 self.assertEqual(actual, datetime.strptime(planned[1], "%Y-%m-%d"))
                 self.assertEqual(actual, start + timedelta(weeks=number - 1))
                 self.assertEqual(actual.weekday(), 3)
-        self.assertEqual([int(row[0]) for row in rows if "(exam)" in row[2]], [6, 12, 16])
-        self.assertIn("review only", rows[8][2])
+        self.assertEqual([int(row[0]) for row in rows if row[3].startswith("Written Exam")], [6, 12, 16])
+        self.assertIn("review only", rows[8][3])
         self.assertIn("Written Exam 3", rows[15][3])
-        self.assertIn("Integrated review", rows[14][3])
+        self.assertIn("integrated review", rows[14][3])
         self.assertEqual(rows[16][2], "None")
-        self.assertEqual(rows[17][2], "Previously taught sections only (make-up)")
+        self.assertEqual(rows[17][2], "Previously taught sections")
         self.assertIn("Make-up examination", rows[17][3])
         self.assertNotIn("Written Exam 3", rows[17][3])
 
@@ -66,9 +73,10 @@ class RepositoryLayoutTests(unittest.TestCase):
         syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
         plan = (builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md").read_text(encoding="utf-8")
         self.assertIn("December 24 (Week 16)", syllabus)
-        self.assertIn("January 7\n(Week 18)", syllabus)
+        self.assertIn("January 7 (Week 18)", syllabus)
+        self.assertIn("no additional assessment weight", syllabus)
+        self.assertIn("not a fourth separately", plan)
         for document in (syllabus, plan):
-            self.assertIn("not a fourth separately", document)
             self.assertIn("January 4-8", document)
         self.assertRegex(plan, r"\| Written Exam 3 \(Final Examination\) \| 2026-12-24 \| 30% \|")
         project = (builder.COURSE_ROOT / "PROJECT.md").read_text(encoding="utf-8")
@@ -94,9 +102,12 @@ class RepositoryLayoutTests(unittest.TestCase):
     def test_current_syllabus_scope_and_language(self):
         syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
         self.assertIn("Section 9.1 only", syllabus)
-        self.assertIn("Section 9.2 and Chapter 4 are not required", syllabus)
-        self.assertIn("no BCNF, closure, or formal lossless-decomposition test", syllabus)
-        self.assertIn("Chapters 4, 18-19, and 21-22 are not required chapters", syllabus)
+        self.assertIn("Chapters 4, 18-19, 21-22 and Section 9.2 are excluded", syllabus)
+        self.assertIn("BCNF, closure, and lossless-decomposition checks belong to Exam 3, not Exam 2", syllabus)
+        self.assertLessEqual(len(syllabus.split()), 700)
+        self.assertIn("Five group comparisons", syllabus)
+        self.assertIn("rankings do not determine grades", syllabus)
+        self.assertIn("Written exams are individual and AI-free", syllabus)
         self.assertNotIn("Database System Concepts", syllabus)
         self.assertNotRegex(syllabus, r"[\u3400-\u9fff\ufffd]")
         self.assertNotRegex(syllabus, r"(?i)\btype\s*b\b|\b\d+\s*(?:minutes?|mins?)\b")
@@ -114,11 +125,22 @@ class RepositoryLayoutTests(unittest.TestCase):
         for document in (syllabus, plan):
             self.assertIn("November 1-8", document)
             self.assertNotRegex(document, r"November 1-7|November 1 through November 7")
-        self.assertIn("In-person classes resume on Thursday, November 12", syllabus)
+        self.assertIn("in-person classes resume November 12", syllabus)
         project = (builder.COURSE_ROOT / "PROJECT.md").read_text(encoding="utf-8")
         current_dates = project.split("## 115-1 固定日期與進度範圍", 1)[1].split("\n## ", 1)[0]
         self.assertIn("2026-11-08", current_dates)
         self.assertNotIn("2026-11-07", current_dates)
+
+    def test_detailed_coverage_preserved_in_plan(self):
+        plan = (builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md").read_text(encoding="utf-8")
+        coverage = plan.split("## Detailed Coverage\n", 1)[1].split("\n## ", 1)[0]
+        rows = [line for line in coverage.splitlines() if re.match(r"\| \d", line)]
+        self.assertEqual(len(rows), 11)
+        for detail in ("1.1-1.3", "3.1-3.7", "5.1-5.3", "6.1-6.4", "7.1-7.4",
+                       "8.1-8.3", "Section 9.1 only", "14.1-14.5", "15.1.1", "15.2",
+                       "17.1-17.4", "17.7", "20.1-20.3", "20.6", "4NF and 5NF",
+                       "division and relational calculus", "minimal-cover procedures"):
+            self.assertIn(detail, coverage)
 
     def test_visual_figures_and_unique_anchors(self):
         config = builder.load_json(builder.CONFIG_PATH)

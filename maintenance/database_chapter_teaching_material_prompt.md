@@ -19,8 +19,9 @@ ch02_database_architecture、ch05_relational_model各自student_guide.md，
 ## 一、正式教學範圍
 
 逐章的必教主題、小節、排除內容、週次及考試範圍，以
-`Intro DB/syllabus.md`的Textbook Coverage、Weekly Schedule與Assessment為準，
-並核對`maintenance/COURSE_PLAN.md`。不要把主體章節誤解為全章必教。
+`Intro DB/syllabus.md`的Weekly Schedule與Assessment，以及
+`maintenance/COURSE_PLAN.md`的Detailed Coverage為準。學生課綱只保留必要資訊，
+詳細選講範圍已移至課程計畫，不代表刪減教學內容。不要把主體章節誤解為全章必教。
 
 - Ch1-Ch2：導論選講；Ch3：ER；Ch5：relational model與constraints。
 - Ch6：basic SQL；Ch7：選定的complex queries、views、簡單trigger與schema changes。
