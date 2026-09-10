@@ -15,6 +15,10 @@ Database System Concepts的章號、舊週次或考試範圍。
 ch02_database_architecture、ch05_relational_model各自student_guide.md，
 圖解為`maintenance/course_repository/opening_figures.py`；舊notebook在
 `Intro DB/under_revision/`，不作正式指定。Ch5後續補入同一份notebook。
+2026-09-10續修：Ch5已補keys、constraints與資料異動；Ch8新版來源為
+`maintenance/chapters/ch08_relational_algebra/student_guide.md`，輸出為獨立ch08.ipynb。
+兩章完整文字閱讀與指定主題查核紀錄見full_source_audit.md的Relational Foundations
+Revision；未把選講教材驗證宣稱為全部原圖、習題或全書完整查核。
 
 ## 一、正式教學範圍
 
@@ -319,6 +323,8 @@ SQL註解及執行輸出。每一句至少檢查：
 阻擋性問題，應先嘗試利用現有來源、環境及可重現測試解決；只有確實無法繼續時
 才停止並具體說明所需資訊或決定。
 
-依序完成Ch2、Ch3、Ch4、Ch5、Ch6、Ch7、Ch14、Ch15、Ch16、Ch17、Ch18、
-Ch19後，提供全課整合報告，確認章節銜接、術語、sample database、SQL dialect、
-Class Performance與三次考試範圍一致。
+依現行課綱的授課順序完成：Ch1-Ch2導論、Ch5、Ch8選定algebra、Ch6-Ch7、
+Ch3與Ch9的9.1、Ch4與Ch9的9.2、Ch14選講、Ch16必要背景與Ch17選講、Ch20選講。
+Ch9的兩部分維持在同一份notebook，不拆成兩門課。只處理本次教師授權的批次；
+完成全課後再提供整合報告，確認章節銜接、術語、sample database、SQL dialect、
+Class Performance與三次考試範圍一致。不得再按舊書章號清單自動加入Ch15或Ch18-Ch19。

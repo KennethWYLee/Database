@@ -3,6 +3,161 @@
 Started: 2026-09-08. Baseline: `a9bc1a8` on `main`, tracking existing `origin/main`.
 The worktree was clean at the start. No commit or push is authorized for this audit.
 
+## Relational Foundations Revision
+
+Date: September 10, 2026. Baseline: `4fc5dca28aeac637b0576a54b0984d0d0ac7dd3a`.
+Branch: main, tracking existing origin/main; clean at the start.
+The instructor authorized fixing the reviewed notebooks and committing/pushing
+the result. No course dates, assessment weights, EER scope, or required submissions
+are changed.
+
+### Deliverables and Teaching Boundary
+
+- Ch1 and Ch2 retain their already reviewed introductory content; rebuilding leaves
+  their notebook bytes unchanged. They are not expanded into whole-chapter courses.
+- Ch5 retains its first-meeting stopping point and adds Sections 6-13 of the guide:
+  schema notation, keys, constraints, database setup, changes, deletion policies,
+  business rules, and an introductory explicit rollback example.
+- Ch8 is a separate prescribed-book notebook, not the old book's Ch8. It teaches
+  selection, projection, renaming, compatible set operations, product, condition/
+  equijoin/natural join, and simple composition. Division, calculus, aggregate and
+  recursive algebra, and optimizer implementation are excluded.
+- Original images: Ch1 5, Ch2 6, Ch5 13, Ch8 9. The 17 additions contain synthetic
+  inputs and results, not copied textbook figures. The notebooks contain PNG
+  attachments and saved actual stdout, with no separate student image directory.
+- First meeting still stops within Ch5. Week 2 resumes there and continues to Ch8.
+  SQL is supplied for observing results; independent SQL writing starts in Ch6.
+  The examples and variations are not all newly required submissions.
+
+### Source Reading and Locators
+
+The source is the instructor's private Elmasri/Navathe seventh-edition PDF:
+`private_references/book_Fundamental of Database Systems.pdf`.
+SHA-256: `002eceecdb5e47b050e61b30d13a8f207fb44cea4f927b98d864308c026288a5`.
+It stays ignored and is not included in the commit.
+
+Full extracted chapter text was read in bounded, untruncated batches before
+authoring: Ch5 printed 149-175 / PDF 180-206, and Ch8 printed 239-288 / PDF 270-319.
+This includes the chapter summaries, exercise statements, and bibliographies.
+Assigned-topic claims were compared with the locations below. Original teaching
+examples and SQLite execution are distinct from the book's example results.
+
+Visual source checks: Ch5 printed 160 / PDF 191 (Figure 5.4 keys), printed 164 /
+PDF 195 (Figure 5.7 references); Ch8 printed 242 / PDF 273 (Figure 8.1 and selection
+notation), printed 248 / PDF 279 (Figure 8.4 set operations), printed 252 / PDF 283
+(Figure 8.6 and join notation), printed 253 / PDF 284 (equijoin/natural join).
+Other original figures and all exercise solutions were not individually verified.
+Consequently the earlier full-chapter audit completion count remains zero:
+complete chapter text reading plus assigned-scope verification is not the requested
+whole-book, every-claim/every-figure/every-exercise audit.
+
+| Guide location | Textbook section; printed pages (PDF pages) | Teaching and checkable example |
+|---|---|---|
+| Ch5 opening Sections 1-5 | 5.1.1-5.1.3; 151-157 (182-188) | Preserved tuple/domain/atomic-value/order/identifier examples |
+| Ch5 Section 6 | 5.1.1-5.1.3; 151-157 (182-188) | Three attributes, two tuples, missing department; schema/value practice |
+| Ch5 Section 7 | 5.2.2; 158-160 (189-191) | Given unique ID/email versus repeated names; nonminimal superkey; group comparison |
+| Ch5 Section 8 | 5.2.2; 158-160 (189-191) | Student/course/term key; legal retake and duplicate-triple counterexample |
+| Ch5 Section 9 | 5.2.3-5.2.4; 160-165 (191-196) | Four-table arrows; mandatory/optional references; same-relation mentor |
+| Ch5 Section 10 | 5.2.1-5.2.4; 158-165 (189-196), plus SQLite docs below | Fresh schema, required candidate keys, whole-number credits, enabled foreign keys |
+| Ch5 Section 11 | 5.3.1-5.3.3; 166-169 (197-200) | Twenty independent INSERT/UPDATE/DELETE attempts; blocked-state comparison |
+| Ch5 Section 12 | 5.3.2; 167-168 (198-199), plus SQLite docs below | Four policies with identical parent/contact inputs; retained counts and values |
+| Ch5 Section 13 | 5.2.5 and 5.3.4; 165, 169 (196, 200) | Unimplemented count/transition rules; explicit rollback after failed registration |
+| Ch8 Section 1 | Chapter opening and 8.1; 239-241 (270-272) | Same synthetic students/registrations; relation-valued operations |
+| Ch8 Section 2 | 8.1.1; 241-243 (272-274) | IM yields two tuples; MED yields an empty relation with unchanged degree |
+| Ch8 Section 3 | 8.1.2; 243-245 (274-276) | Duplicate departments versus distinct projection and projection retaining a key |
+| Ch8 Section 4 | 8.1.3; 245-246 (276-277) | Select before removing department; rename output without altering values |
+| Ch8 Section 5 | 8.2.1; 246-249 (277-280) | Two student-ID club relations; four set results and compatibility counterexample |
+| Ch8 Section 6 | 8.2.2; 249-251 (280-282) | Three students times two courses; six pairs are not registration facts |
+| Ch8 Section 7 | 8.3.1-8.3.2; 251-255 (282-286) | Equijoin retains two matching ID roles; unequal-credit theta join |
+| Ch8 Section 8 | 8.3.2; 253-255 (284-286) | Shared department name wrongly removes an offering; explicit-ID/renamed comparison |
+| Ch8 Section 9 | 8.1-8.3 and simple composition in 8.5; 241-255, 265-268 (272-286, 296-299) | IM/DB1/F26 intermediate relations and projection; unregistered IDs by difference |
+
+Each numbered topic includes a named prediction, diagram or input table, worked
+interpretation, specific limitation/counterexample, and practice/checking directions.
+The summaries specify evidence to retain and the link to following chapters.
+Paper examples do not claim database execution. The synthetic business-rule diagram
+uses explicitly hypothetical additional registrations, not the initial SQL state.
+
+SQLite-specific checks use official [CREATE TABLE documentation](https://www.sqlite.org/lang_createtable.html)
+and [foreign-key documentation](https://www.sqlite.org/foreignkeys.html): primary-key
+NULL exceptions, UNIQUE with NULL, per-connection enforcement, and referential actions.
+These are implementation supplements, not attributed to the book's executable code.
+No verified official companion code or slide package for this edition was used.
+
+A source discrepancy was noticed outside the assigned algebra scope: Ch8 Section
+8.5 Query 5, printed 267 / PDF 298, says two or more dependents but displays a
+greater-than-two count test. Exactly two does not satisfy that test. This aggregation
+example was not copied or assigned. Reading a source does not certify all its claims.
+
+### Files and Verification
+
+Maintained edits: Ch5 guide; new Ch8 guide; opening_figures.py; repository_config.json;
+build_course_repository.py; verify_first_meeting.py; render_first_meeting.cjs;
+new test_second_meeting.py; explicit allow-list entries; README; syllabus material
+links; PROJECT; COURSE_PLAN; authoring prompt; maintenance READMEs; superseding
+notices in first_meeting_release and textbook_material_correspondence; this record.
+Derived edits: Intro DB/ch05.ipynb and new Intro DB/ch08.ipynb.
+Ch1/Ch2 and all twelve historical notebooks remain content-identical to the baseline.
+
+Environment: Windows; Python 3.12.9; SQLite 3.45.3; nbformat/nbclient for fresh kernels,
+resvg for generated PNGs, Playwright and local Chrome for screenshots.
+From the course root, these commands were executed:
+
+```powershell
+python -X utf8 maintenance/course_repository/build_course_repository.py --verify
+python -X utf8 -m unittest discover -s maintenance/course_repository -p 'test*.py'
+python -X utf8 maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
+```
+
+Use the installed Python 3.12 executable and bundled Node when those are not on PATH.
+Results on this revision:
+- Build/content/manifest checks passed: 16 notebooks, 18 course files. Every builder
+  code cell ran and authored stdout matched. A rebuild reproduced current notebooks.
+- 29 tests passed, including nine new tests. They test exact authored DDL, all three
+  composite-key NULL positions, eight credits boundary inputs, twenty changes,
+  SET NULL/SET DEFAULT failure limits, and statement failure versus full rollback.
+- Ten algebra query results were independently compared with Python sets/products;
+  additional tests cover duplicate SQL results, empty results/products, and the
+  natural-join shared-name trap. These share the authored input data, not its query logic.
+- Four fresh notebook kernels passed: Ch1 0 code cells, Ch2 1, Ch5 6, Ch8 10.
+  They matched saved outputs and created no persistent files in their fresh directories.
+- A kernel-shutdown callback emitted a ZMQ 'not a socket' diagnostic after
+  execution. The verifier exited zero with all output assertions passed. This is
+  recorded as an environment warning, not a skipped or failed teaching cell.
+- 33 PNG attachments decoded and were nonblank; 33 SVGs passed outer-boundary and
+  network-node text geometry checks. All 17 added diagrams were visually inspected.
+- Six preview pages at 1440/390 pixels passed image and page-overflow checks.
+  Ch8 mathematical notation was visually checked at both widths. Wide SQL blocks
+  and tables scroll on narrow screens; dense images may require zoom.
+- Student-visible checks found no CJK prose, timing allocations, Type B label,
+  internal source paths, forbidden content patterns, or unexecuted code cells.
+  Relative course links passed. Public examples use synthetic records; no textbook
+  pages, source screenshots, exams, answer keys, credentials, or private data are added.
+
+The local output/first_meeting directory holds ignored verification JSON, previews,
+and screenshots; source-page screenshots remain under ignored output/second_meeting.
+No old SQLite ZIP was rebuilt: the new notebooks are self-contained and do not
+depend on that historical package. No historical schema defect is claimed fixed.
+
+### Remaining Work
+
+The reviewed assigned Ch1/Ch2/Ch5/Ch8 material has no known blocking issue under
+these checks. This does not establish classroom workload or complete source-audit
+status. Week 2 is dense: use the displayed tables and supplied examples without
+requiring students to author the helper code or submit every variation.
+
+Primary next action remains correcting the reproduced NULL-primary-key defect in
+the old ER mapping source before its reassignment. Expected result: corrected
+maintained DDL, explicit missing-key rejection tests, and regenerated affected
+artifacts. Completion requires rejected missing identifiers and valid mapping
+examples still passing; it does not by itself finish the new Ch3/Ch4/Ch9 coverage.
+Later prescribed-book notebooks, full source audits, and actual examination items
+remain separate unfinished work.
+
+Commit/push of this revision is authorized to existing origin/main. The final commit
+and remote synchronization result are recorded in Git history and the task response.
+
 ## September 10 EER Schedule Update
 
 The instructor requested full EER teaching and chapter numbers with textbook titles.

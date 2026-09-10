@@ -1,6 +1,6 @@
 # Course Repository Build
 
-This directory builds the current Ch1, Ch2, and Ch5 first-meeting selections directly
+This directory builds the current Ch1/Ch2 introductory selections, Ch5, and selected Ch8 directly
 in `Intro DB/` and twelve previous notebooks in `Intro DB/under_revision/` on `main`.
 Local and GitHub tracked paths are identical. It does not publish a separate preview
 branch or create weekly notebooks.
@@ -11,8 +11,9 @@ three exams at 30% each and Class Performance at 10%. The chapter IDs and weekly
 material mapping in this builder still describe the other textbook's existing
 notebooks. They are marked historical in the configuration and are not the current
 teaching schedule. A successful build does not establish alignment with the revised
-syllabus. The `current_chapters` configuration separately identifies the three
-prescribed-book opening selections. See the [first-meeting release](first_meeting_release.md).
+syllabus. The `current_chapters` configuration separately identifies four
+prescribed-book notebooks. See the [first-meeting release](first_meeting_release.md)
+and [Ch5/Ch8 revision](full_source_audit.md#relational-foundations-revision).
 Do not rename remaining notebooks or replace source locators without content review.
 
 The [prescribed-textbook correspondence](textbook_material_correspondence.md) now
@@ -31,7 +32,8 @@ it does not certify revised notebooks or complete chapter source audits.
   agreement between the current syllabus and course plan, including assessment weights.
 - `notebook_figures.py`: dispatches original SVG teaching diagrams and renders PNGs.
 - `teaching_figures.py`: maintains topic-specific diagrams with font-measured layouts.
-- `opening_figures.py`: sixteen original diagrams for the prescribed-book opening selections.
+- `opening_figures.py`: 33 original diagrams for the prescribed-book Ch1/Ch2/Ch5/Ch8 notebooks.
+- `test_second_meeting.py`: exact-DDL boundary checks and independent set-result comparisons.
 - `verify_first_meeting.py` and `render_first_meeting.cjs`: verify current notebook
   outputs, source correspondence, navigation, diagrams, and local rendering.
 - `simple_examples.py`: maintains 51 original small examples with input tables,

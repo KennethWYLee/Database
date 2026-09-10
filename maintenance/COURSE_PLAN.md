@@ -32,6 +32,9 @@ First-Meeting Summary and Practice. The instructor may stop earlier and resume.
 These are selections, not three complete chapters to finish before class. Supplied
 code demonstrates results; SQL/Python authoring is not a first-day requirement.
 Ch5 Sections 5.2-5.3 continue in the same notebook after the first-meeting opening.
+The continuation and the separate Ch8 algebra notebook now provide the Week 2
+examples. The supplied SQL demonstrates operations; independent SQL writing starts
+in Ch6. Practice remains assigned at the instructor's discretion.
 
 - Main chapters: 3, 4, 5, 6, 7, 8, 9, and 14, limited to the syllabus's named topics.
 - Chapters 1-2: introductory selections. Chapter 8: core relational algebra, not calculus.
@@ -195,7 +198,9 @@ records the earlier scope's gaps, not a full source audit. Its September 10 noti
 identifies the additional Ch4/9.2 coverage still to map. The first-meeting release and
 its scoped verification are recorded in
 [the release record](course_repository/first_meeting_release.md). Ch5 continuation
-and subsequent notebooks still need revision. The reproduced missing-key defect in
+and selected Ch8 algebra are now revised; see the
+[relational foundations record](course_repository/full_source_audit.md#relational-foundations-revision).
+Later notebooks still need revision. The reproduced missing-key defect in
 the previous ER schema remains a prerequisite fix before that schema is reassigned.
 The classroom response system and the actual examination items still need their
 separate preparation and review.

@@ -4,6 +4,15 @@
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
 - 最後更新日期：2026-09-10
+- 2026-09-10教材續修：教師授權修正後commit/push。Ch1、Ch2保留導論選講；
+  Ch5在原第一堂停止點後補5.1-5.3的keys、constraints與資料異動；
+  新增獨立Ch8 notebook，依課綱教8.1-8.3指定algebra及8.5簡單組合，
+  不含division、calculus或進階algebra。維持一章一份，日期、配分與EER範圍不變。
+  Ch5/Ch8完整章節文字已閱讀，所教主題逐項定位並以原創例子驗證；
+  不等於逐題解答、所有原圖目視或全書逐句完整查核完成。
+  最新教材入口、範圍與驗證紀錄見
+  maintenance/course_repository/full_source_audit.md#relational-foundations-revision。
+  此段取代下方Ch5只有第一堂及Ch8尚無新版的歷史狀態；舊ER缺陷仍待處理。
 - 2026-09-10最新EER決策：教師要求EER都教，重新調整進度，課綱標明章號及
   教科書正式章名。Ch4的4.1-4.7全列教學，搭配Ch9的9.1-9.2；Weeks 7-8
   完成ER與9.1，Weeks 10-11教EER與9.2。UML、abstraction、knowledge

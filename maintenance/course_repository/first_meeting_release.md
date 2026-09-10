@@ -7,6 +7,11 @@ Existing textbook-correction and audit changes were present and preserved.
 
 ## Scope
 
+September 10 continuation: Ch5 now includes the second meeting after the preserved
+opening stop, and a separate Ch8 algebra notebook is available. This record describes
+the original opening batch. See the [later revision](full_source_audit.md#relational-foundations-revision)
+for the current four-notebook checks and remaining limits.
+
 - Current entry: [syllabus](../../Intro%20DB/syllabus.md), then
   [Ch1](../../Intro%20DB/ch01.ipynb), [Ch2](../../Intro%20DB/ch02.ipynb), and
   [Ch5 opening](../../Intro%20DB/ch05.ipynb), in that order.

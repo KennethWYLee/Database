@@ -12,7 +12,7 @@ const output = path.join(__dirname, 'output', 'first_meeting');
   const results = [];
   try {
     for (const width of [1440, 390]) {
-      for (const name of ['home', 'syllabus', 'ch01', 'ch02', 'ch05']) {
+      for (const name of ['home', 'syllabus', 'ch01', 'ch02', 'ch05', 'ch08']) {
         const page = await browser.newPage({viewport: {width, height: 1000}});
         await page.goto(pathToFileURL(path.join(output, `${name}.html`)).href);
         await page.evaluate(() => Promise.all(Array.from(document.images).map(img => img.decode())));
@@ -30,6 +30,10 @@ const output = path.join(__dirname, 'output', 'first_meeting');
           await page.screenshot({path: path.join(output, `${name}-${width}-diagram.png`)});
         }
         results.push({name, width, ...check});
+        if (name === 'ch08') {
+          await page.getByRole('heading', {name: '2. SELECT Keeps Rows That Satisfy a Condition', exact: true}).scrollIntoViewIfNeeded();
+          await page.screenshot({path: path.join(output, `ch08-${width}-notation.png`)});
+        }
         await page.close();
       }
     }

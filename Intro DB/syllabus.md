@@ -23,6 +23,8 @@ in [Ch1: Databases and Database Users](ch01.ipynb),
 [Ch2: Database System Concepts and Architecture](ch02.ipynb), and
 [Ch5: The Relational Data Model and Relational Database Constraints](ch05.ipynb).
 The instructor sets stopping points; first-day programming is not required.
+Week 2 continues Ch5, then [Ch8: The Relational Algebra and Relational Calculus](ch08.ipynb)
+(selected algebra).
 GitHub displays saved outputs; use a Python 3 notebook with SQLite 3.39+ to run examples.
 Previous materials under revision are not assigned.
 

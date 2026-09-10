@@ -19,6 +19,14 @@ the supplied code is for observing results, not a first-day programming requirem
 GitHub displays saved outputs. To execute a notebook, follow the syllabus's opening
 instructions. Each textbook chapter has one notebook, which can continue across meetings.
 
+## Second Class: September 17
+
+Continue [Ch5: The Relational Data Model and Relational Database Constraints](Intro%20DB/ch05.ipynb)
+at **Continue: Keys and Integrity Constraints**. Then open
+[Ch8: The Relational Algebra and Relational Calculus](Intro%20DB/ch08.ipynb)
+for the selected relational algebra. Predict results from the small input tables,
+then compare them with the saved outputs.
+
 ## Later Material
 
 Later revised chapters will be linked here when assigned. [Previous notebooks under

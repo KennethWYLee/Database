@@ -8,6 +8,14 @@ Its source hashes and missing-introduction findings describe that earlier versio
 See [the first-meeting release record](first_meeting_release.md) for the later Ch1/Ch2/Ch5
 opening work; the remaining chapter gaps and ER schema defect are still outstanding.
 
+## September 10 Relational Foundations Update
+
+The Ch5 continuation and separate Ch8 algebra notebook now supersede their earlier
+missing-material findings. Ch1/Ch2 remain introductory selections. See the
+[topic-by-topic record](full_source_audit.md#relational-foundations-revision)
+for assigned-scope source locations, original examples, and verification.
+Other gaps, including the old ER schema defect, remain unresolved.
+
 ## September 10 EER Schedule Update
 
 The instructor requested full EER teaching and chapter numbers with textbook titles.

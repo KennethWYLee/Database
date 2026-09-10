@@ -3,6 +3,7 @@
 FIGURES = {}
 
 
+
 def panel(title, headers, rows, note=""):
     return dict(title=title, headers=headers, rows=rows, note=note, marks=())
 
@@ -133,3 +134,117 @@ add("ch05", "identifiers", "## 5. Why Identifiers Matter",
         panel("Verified distinct students", ["student_id", "student_name", "dept_code"], [["S103", "Kai Wu", "IM"], ["S105", "Kai Wu", "DES"]]),
         panel("Interpret a request", ["condition", "matching rows"], [["Name is Kai Wu", "2"], ["ID is S105", "1 under the stated ID rule"]]),
     ], "Names do not identify a unique student here. The ID's meaning comes from the stated business rule.")
+
+add("ch05", "notation", "## 6. Read a Schema and a Missing Value",
+    "One missing value does not remove an attribute", [
+        panel("Schema", ["position", "attribute"], [["1", "student_id"], ["2", "student_name"], ["3", "dept_code"]]),
+        panel("Two tuples", ["student_id", "student_name", "dept_code"], [["S103", "Kai Wu", "IM"], ["S104", "New Name", "NULL"]]),
+    ], "Degree = 3; tuple count = 2. NULL does not establish S104's department.")
+
+add("ch05", "keys", "## 7. Superkeys, Candidate Keys, and the Primary Key",
+    "Uniqueness and minimality are different checks", [
+        panel("Given rules", ["attribute", "rule"], [["student_id", "Unique; not missing"], ["email", "Unique; not missing"], ["student_name", "May repeat"]]),
+        panel("Classify the attribute set", ["set", "superkey?", "minimal?"], [["student_id", "Yes", "Yes"], ["email", "Yes", "Yes"], ["student_id + name", "Yes", "No"], ["name", "Not guaranteed", "Not a key"]]),
+    ], "Choose student_id as primary; email remains a candidate key. Sample uniqueness is not a rule.")
+
+add("ch05", "composite", "## 8. A Composite Key Identifies a Combination",
+    "A permitted retake needs the term in the key", [
+        panel("Existing registrations", ["student", "course", "term"], [["S101", "DB1", "F26"], ["S101", "DB1", "S27"], ["S102", "DB1", "F26"]]),
+        panel("Proposed registrations", ["student", "course", "term", "decision"], [["S101", "DB1", "F26", "Duplicate"], ["S102", "DB1", "S27", "New key"]]),
+    ], "The complete triple is unique. Neither individual columns nor the student/course pair must be unique.")
+
+add("ch05", "references", "## 9. Connect Relations with Foreign Keys",
+    "Foreign keys point to referenced keys", [],
+    "Arrows show enrollment references and the optional student department reference, not execution or ER cardinality.",
+    dict(height=500, nodes=[
+        (40, 0, 470, 100, "department: primary key dept_code"),
+        (40, 210, 470, 110, "student: primary key student_id; foreign key dept_code"),
+        (700, 0, 470, 100, "course: primary key course_id"),
+        (680, 340, 500, 130, "enrollment: primary key (student_id, course_id, term); student_id and course_id are foreign keys"),
+    ], edges=[
+        (275, 210, 275, 100, "", 0, 0),
+        (680, 385, 510, 290, "", 0, 0),
+        (930, 340, 930, 100, "", 0, 0),
+    ]))
+
+add("ch05", "database", "## 10. Build and Inspect a Small Database",
+    "Create parents before inserting references", [
+        panel("department", ["dept_code"], [["IM"], ["FIN"], ["DES"]]),
+        panel("course", ["course_id", "credits"], [["DB1", "3"], ["AI1", "2"]]),
+        panel("student", ["student_id", "dept_code"], [["S101", "IM"], ["S102", "FIN"], ["S103", "IM"]]),
+    ], "Enrollment also needs student_id, course_id, and term. These are synthetic input rows, not the full schema.")
+
+add("ch05", "violations", "## 11. Predict Accepted and Rejected Changes",
+    "A new ID alone does not make a new row valid", [
+        panel("Proposal", ["change", "decision"], [["Duplicate S101", "Blocked"], ["NULL primary key", "Blocked"], ["MED reference", "Blocked"], ["NULL optional department", "Accepted"]]),
+        panel("Other independent checks", ["change", "decision"], [["2.5 credits", "Blocked"], ["7 credits", "Blocked"], ["Repeated name", "Accepted"], ["Another enrollment term", "Accepted"]]),
+    ], "Check each rule against the same starting state. Accepted means the implemented constraints passed, not factual truth.")
+
+add("ch05", "deletion", "## 12. Choose What Happens to References",
+    "Deleting IM has four different consequences", [
+        panel("Initial contacts", ["id", "department"], [["C1", "IM"], ["C2", "IM"]]),
+        panel("After attempted parent deletion", ["action", "contacts", "department"], [["RESTRICT", "2", "IM; deletion blocked"], ["CASCADE", "0", "No contacts remain"], ["SET NULL", "2", "NULL"], ["SET DEFAULT", "2", "UNASSIGNED"]]),
+    ], "The example creates UNASSIGNED first. Clearing a mandatory foreign key or referencing an absent default would fail.")
+
+add("ch05", "business", "## 13. Business Rules and a Unit of Work",
+    "Valid references do not enforce every intended rule", [
+        panel("S101 registrations in F26", ["before", "after"], [["DB1", "DB1"], ["AI1", "AI1"], ["", "X1"]], "All three course IDs exist; the intended limit is two."),
+        panel("Credits", ["old", "new", "domain", "no-decrease rule"], [["3", "2", "Both valid", "Change violates rule"]]),
+    ], "The current DDL does not enforce these extra rules. Check the count or both old and new values separately.")
+
+add("ch08", "inputs", "## 1. Start with Small Relations",
+    "Three registrations do not mean three registered students", [
+        panel("student", ["ID", "name", "department"], [["S101", "An Chen", "IM"], ["S102", "Bea Lin", "FIN"], ["S103", "Kai Wu", "IM"]]),
+        panel("enrollment", ["ID", "course", "term"], [["S101", "DB1", "F26"], ["S101", "DB1", "S27"], ["S102", "DB1", "F26"]]),
+    ], "Both inputs contain three tuples. Only S101 and S102 occur in enrollment.")
+
+add("ch08", "select", "## 2. SELECT Keeps Rows That Satisfy a Condition",
+    "Filter by department; retain all attributes", [
+        panel("Input: student", ["ID", "name", "department"], [["S101", "An Chen", "IM"], ["S102", "Bea Lin", "FIN"], ["S103", "Kai Wu", "IM"]]),
+        panel("Output: department = IM", ["ID", "name", "department"], [["S101", "An Chen", "IM"], ["S103", "Kai Wu", "IM"]]),
+    ], "Three input tuples become two output tuples. The three attributes are unchanged.")
+
+add("ch08", "project", "## 3. PROJECT Keeps Attributes and Removes Duplicate Tuples",
+    "Remove duplicate complete projected tuples", [
+        panel("Input values", ["ID", "department"], [["S101", "IM"], ["S102", "FIN"], ["S103", "IM"]]),
+        panel("Project department", ["department"], [["FIN"], ["IM"]]),
+        panel("Keep the ID too", ["ID", "department"], [["S101", "IM"], ["S102", "FIN"], ["S103", "IM"]]),
+    ], "A one-attribute projection has two tuples. Including the unique ID preserves all three.")
+
+add("ch08", "sequence", "## 4. Name Intermediate Results and Preserve Needed Attributes",
+    "Check a condition before removing its attribute", [
+        panel("Select department = IM", ["student_id", "student_name", "dept_code"], [["S101", "An Chen", "IM"], ["S103", "Kai Wu", "IM"]]),
+        panel("Project; rename output attributes", ["id", "name"], [["S101", "An Chen"], ["S103", "Kai Wu"]]),
+    ], "The right result no longer contains dept_code. Renaming changes names, not the values.")
+
+add("ch08", "sets", "## 5. UNION, INTERSECTION, and DIFFERENCE Compare Sets",
+    "Compare the same student-ID domain", [
+        panel("Inputs", ["DB club (R)", "AI club (S)"], [["S101", "S102"], ["S102", "S103"]], "Read each column as its own one-attribute relation."),
+        panel("Outputs", ["operation", "student IDs"], [["Union", "S101, S102, S103"], ["Intersection", "S102"], ["R minus S", "S101"], ["S minus R", "S103"]]),
+    ], "S102 occurs once in the union. Reversing difference changes its result.")
+
+add("ch08", "product", "## 6. CARTESIAN PRODUCT Makes Every Pair",
+    "Three students times two courses gives six pairs", [
+        panel("Student IDs", ["ID"], [["S101"], ["S102"], ["S103"]]),
+        panel("Course IDs", ["course"], [["AI1"], ["DB1"]]),
+        panel("Product, showing IDs only", ["ID", "course"], [["S101", "AI1"], ["S101", "DB1"], ["S102", "AI1"], ["S102", "DB1"], ["S103", "AI1"], ["S103", "DB1"]]),
+    ], "These are possible pairs, not enrollment facts. The full product also carries the other input attributes.")
+
+add("ch08", "join", "## 7. JOIN Keeps Matching Pairs",
+    "One student may match several registrations", [
+        panel("Matches by ID", ["student", "registrations"], [["S101", "DB1/F26; DB1/S27"], ["S102", "DB1/F26"], ["S103", "None"]]),
+        panel("Equijoin, showing IDs and registration", ["student ID", "enrolled ID", "course", "term"], [["S101", "S101", "DB1", "F26"], ["S101", "S101", "DB1", "S27"], ["S102", "S102", "DB1", "F26"]]),
+    ], "All three matching pairs remain. Both compared ID attributes are retained; S103 has no match.")
+
+add("ch08", "natural", "## 8. NATURAL JOIN Uses Every Shared Attribute Name",
+    "Same attribute name can hide different meanings", [
+        panel("S101 input facts", ["relation", "student_id", "dept_code"], [["student", "S101", "IM"], ["offering", "S101", "FIN"]]),
+        panel("Compare the join conditions", ["condition", "matching tuples"], [["ID and department equal", "0"], ["ID equal only", "1: S101, An Chen"]]),
+    ], "Natural join uses both shared names. The offering's department is not the student's major.")
+
+add("ch08", "combine", "## 9. Combine Operations to Answer a Question",
+    "Find IM students registered in DB1 during F26", [
+        panel("Selected students", ["ID", "name"], [["S101", "An Chen"], ["S103", "Kai Wu"]], "Department = IM; selected input shown without department."),
+        panel("Selected registrations", ["ID", "course", "term"], [["S101", "DB1", "F26"], ["S102", "DB1", "F26"]]),
+        panel("Join; project ID and name", ["ID", "name"], [["S101", "An Chen"]]),
+    ], "The only shared student ID is S101. Omitting the term filter adds a join tuple but not a distinct projected student.")

@@ -1,6 +1,6 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.08-first-meeting",
+  "repository_version": "2026.09.10-relational-foundations",
   "instructor": "WenYi Lee",
   "syllabus_source": "Intro DB/syllabus.md",
   "material_status": "legacy_textbook_alignment_pending",
@@ -28,8 +28,16 @@
       "prescribed_textbook": true,
       "visual_teaching": true,
       "executable_guide": true,
-      "title": "Relational Model: first-meeting selection",
+      "title": "The Relational Data Model and Relational Database Constraints",
       "guide_source": "maintenance/chapters/ch05_relational_model/student_guide.md"
+    },
+    {
+      "id": "ch08",
+      "prescribed_textbook": true,
+      "visual_teaching": true,
+      "executable_guide": true,
+      "title": "The Relational Algebra and Relational Calculus: selected algebra",
+      "guide_source": "maintenance/chapters/ch08_relational_algebra/student_guide.md"
     }
   ],
   "chapters": [
