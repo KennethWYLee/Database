@@ -8,6 +8,22 @@ Its source hashes and missing-introduction findings describe that earlier versio
 See [the first-meeting release record](first_meeting_release.md) for the later Ch1/Ch2/Ch5
 opening work; the remaining chapter gaps and ER schema defect are still outstanding.
 
+## September 10 EER Schedule Update
+
+The instructor requested full EER teaching and chapter numbers with textbook titles.
+The current plan now includes Ch4 Sections 4.1-4.7 and Ch9 Sections 9.1-9.2 in the
+Weeks 7-11 design sequence. Normalization through 3NF moves to Week 13 and Exam 3;
+Exam 2 covers taught ER, EER, and mapping. BCNF and Ch15 are now optional.
+Dates, travel, holidays, and 30/30/30/10 weights are unchanged.
+
+The older scope and correspondence below are historical where they conflict with
+this update. Ch4/9.2 still need a complete teaching-point correspondence and source
+audit; no newly assigned EER notebook is claimed complete. Complete prescribed-book
+chapter audits remain zero. See [the revision record](full_source_audit.md#eer-schedule-revision-record)
+for the bounded source checks and schedule verification. The instructor subsequently authorized synchronizing the related local files and
+committing and pushing this revision to the existing origin/main. Older no-publication
+statements below describe their original audit steps.
+
 ## Conclusion and Limits
 
 The approved syllabus can use substantial parts of the existing SQL, algebra, ER,

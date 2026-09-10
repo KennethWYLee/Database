@@ -40,11 +40,6 @@ class RepositoryLayoutTests(unittest.TestCase):
 
         rows, plan_rows = schedule_rows(syllabus), schedule_rows(plan)
 
-        def scope_numbers(label):
-            # The detailed plan repeats the chapter number before a section number.
-            label = re.sub(r"Chapters? \d+ Sections? ", "", label)
-            return re.findall(r"\d+(?:\.\d+)*", label)
-
         self.assertEqual(len(rows), 18)
         self.assertEqual(len(plan_rows), 18)
         start = datetime(2026, 9, 10)
@@ -54,7 +49,7 @@ class RepositoryLayoutTests(unittest.TestCase):
                 self.assertEqual(len(planned), 4)
                 self.assertEqual(int(row[0]), number)
                 self.assertEqual(row[0], planned[0])
-                self.assertEqual(scope_numbers(row[2]), scope_numbers(planned[2]))
+                self.assertEqual(row[2], planned[2])
                 self.assertLessEqual(len(row[3].split()), 16)
                 actual = datetime.strptime(row[1], "%Y-%m-%d")
                 self.assertEqual(actual, datetime.strptime(planned[1], "%Y-%m-%d"))
@@ -101,14 +96,16 @@ class RepositoryLayoutTests(unittest.TestCase):
 
     def test_current_syllabus_scope_and_language(self):
         syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
-        self.assertIn("Section 9.1 only", syllabus)
-        self.assertIn("Chapters 4, 18-19, 21-22 and Section 9.2 are excluded", syllabus)
-        self.assertIn("BCNF, closure, and lossless-decomposition checks belong to Exam 3, not Exam 2", syllabus)
-        self.assertLessEqual(len(syllabus.split()), 700)
+        self.assertIn("Sections 4.1-4.7", syllabus)
+        self.assertIn("Sections 9.1-9.2", syllabus)
+        self.assertIn("Normalization through 3NF belongs to Exam 3, not Exam 2", syllabus)
+        self.assertIn("BCNF and formal relational-design algorithms are optional", syllabus)
+        # Full textbook chapter titles add words; weekly topic summaries remain short.
+        self.assertLessEqual(len(syllabus.split()), 900)
         self.assertIn("Five group comparisons", syllabus)
         self.assertIn("rankings do not determine grades", syllabus)
         self.assertIn("Written exams are individual and AI-free", syllabus)
-        self.assertNotIn("Database System Concepts", syllabus)
+        self.assertNotIn("*Database System Concepts*", syllabus)
         self.assertNotRegex(syllabus, r"[\u3400-\u9fff\ufffd]")
         self.assertNotRegex(syllabus, r"(?i)\btype\s*b\b|\b\d+\s*(?:minutes?|mins?)\b")
         for chapter_id in ("ch01", "ch02", "ch05"):
@@ -131,16 +128,76 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertIn("2026-11-08", current_dates)
         self.assertNotIn("2026-11-07", current_dates)
 
-    def test_detailed_coverage_preserved_in_plan(self):
+    def test_detailed_coverage_includes_full_eer(self):
         plan = (builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md").read_text(encoding="utf-8")
         coverage = plan.split("## Detailed Coverage\n", 1)[1].split("\n## ", 1)[0]
         rows = [line for line in coverage.splitlines() if re.match(r"\| \d", line)]
         self.assertEqual(len(rows), 11)
         for detail in ("1.1-1.3", "3.1-3.7", "5.1-5.3", "6.1-6.4", "7.1-7.4",
-                       "8.1-8.3", "Section 9.1 only", "14.1-14.5", "15.1.1", "15.2",
+                       "8.1-8.3", "Sections 4.1-4.7", "Sections 9.1-9.2", "14.1-14.4",
+                       "BCNF (14.5) is optional", "Chapter 15 is optional", "8A-8D",
                        "17.1-17.4", "17.7", "20.1-20.3", "20.6", "4NF and 5NF",
-                       "division and relational calculus", "minimal-cover procedures"):
+                       "division and relational calculus", "knowledge representation", "ontology concepts"):
             self.assertIn(detail, coverage)
+
+
+    def test_syllabus_chapter_titles_and_eer_sequence(self):
+        syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
+        # Titles checked against the prescribed PDF contents, PDF pages 18-30.
+        titles = {
+            1: "Databases and Database Users",
+            2: "Database System Concepts and Architecture",
+            3: "Data Modeling Using the Entity-Relationship (ER) Model",
+            4: "The Enhanced Entity-Relationship (EER) Model",
+            5: "The Relational Data Model and Relational Database Constraints",
+            6: "Basic SQL",
+            7: "More SQL: Complex Queries, Triggers, Views, and Schema Modification",
+            8: "The Relational Algebra and Relational Calculus",
+            9: "Relational Database Design by ER- and EER-to-Relational Mapping",
+            14: "Basics of Functional Dependencies and Normalization for Relational Databases",
+            16: "Disk Storage, Basic File Structures, Hashing, and Modern Storage Architectures",
+            17: "Indexing Structures for Files and Physical Database Design",
+            20: "Introduction to Transaction Processing Concepts and Theory",
+        }
+        schedule = syllabus.split("## Weekly Schedule\n", 1)[1].split("\n## ", 1)[0]
+        rows = [[cell.strip() for cell in line.split("|")[1:-1]]
+                for line in schedule.splitlines() if re.match(r"\| \d+ \|", line)]
+        seen = set()
+        for row in rows:
+            for label in row[2].split("<br>"):
+                match = re.match(r"Ch(\d+): (.+)", label)
+                if match:
+                    number = int(match[1])
+                    self.assertIn(number, titles)
+                    self.assertTrue(match[2].startswith(titles[number]), label)
+                    seen.add(number)
+                elif row[0] in {"6", "9", "12", "16"}:
+                    self.assertRegex(label, r"\bCh\d+")
+                else:
+                    self.assertNotRegex(label, r"\bCh\d+|Chapter\s+\d")
+        self.assertEqual(seen, set(titles))
+        for index, fragment in [(7, "(9.1)"), (9, "(4.1-4.3)"),
+                                (9, "(9.2.1-9.2.2)"), (10, "(4.4-4.7)"),
+                                (10, "(9.2.3)"), (12, "(14.1-14.4 selected)")]:
+            self.assertIn(fragment, rows[index][2])
+        for index, expected in {
+            5: "Ch1-2 and Ch5-8 (taught selections)",
+            8: "Ch1-2 and Ch5-8 (review only)",
+            11: "Ch3, Ch4, and Ch9 (taught selections)",
+            15: "Ch14, Ch17, and Ch20 (selected); Ch16 background; cumulative SQL and design",
+        }.items():
+            self.assertEqual(rows[index][2], expected)
+        exam_rows = [line for line in syllabus.splitlines() if line.startswith("| Written Exam")]
+        self.assertEqual(len(exam_rows), 3)
+        self.assertTrue(all(re.search(r"\bCh\d+", line) for line in exam_rows))
+        self.assertIn("ER, EER, and mapping", rows[11][3])
+        plan = (builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md").read_text(encoding="utf-8")
+        self.assertIn("Weeks 2, 4, 10, 13, and 14", plan)
+        project = (builder.COURSE_ROOT / "PROJECT.md").read_text(encoding="utf-8")
+        assessment = project.split("## 評量與章節對應", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("4.1-4.7及9.1-9.2", assessment)
+        self.assertIn("14.1-14.4、Ch17、Ch20", assessment)
+        self.assertNotIn("14.5、Ch15", assessment)
 
     def test_visual_figures_and_unique_anchors(self):
         config = builder.load_json(builder.CONFIG_PATH)

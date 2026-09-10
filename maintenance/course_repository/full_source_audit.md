@@ -3,6 +3,135 @@
 Started: 2026-09-08. Baseline: `a9bc1a8` on `main`, tracking existing `origin/main`.
 The worktree was clean at the start. No commit or push is authorized for this audit.
 
+## September 10 EER Schedule Update
+
+The instructor requested full EER teaching and chapter numbers with textbook titles.
+The current plan now includes Ch4 Sections 4.1-4.7 and Ch9 Sections 9.1-9.2 in the
+Weeks 7-11 design sequence. Normalization through 3NF moves to Week 13 and Exam 3;
+Exam 2 covers taught ER, EER, and mapping. BCNF and Ch15 are now optional.
+Dates, travel, holidays, and 30/30/30/10 weights are unchanged.
+
+The older scope and correspondence below are historical where they conflict with
+this update. Ch4/9.2 still need a complete teaching-point correspondence and source
+audit; no newly assigned EER notebook is claimed complete. Complete prescribed-book
+chapter audits remain zero. See [the revision record](full_source_audit.md#eer-schedule-revision-record)
+for the bounded source checks and schedule verification. The instructor subsequently authorized synchronizing the related local files and
+committing and pushing this revision to the existing origin/main. Older no-publication
+statements below describe their original audit steps.
+
+## EER Schedule Revision Record
+
+Date: September 10, 2026.
+Baseline: `50973a4370b9db9f411e7563b29a1a1c40856e21`, branch `main`,
+tracking existing `origin/main`. Worktree was clean before this revision.
+The instructor requested full EER coverage, a revised schedule, and chapter numbers
+with textbook titles. The instructor subsequently authorized commit and push of this revision to the
+existing origin/main, after checking the related files against the displayed schedule.
+
+### Changes and Boundaries
+
+- Required Ch4 scope: Sections 4.1-4.7. Required Ch9 scope: Sections 9.1-9.2.
+  All substantive Ch4 sections are scheduled; this does not assign every exercise.
+  UML, abstraction, knowledge representation, and ontology remain introductory.
+- Weeks 7-8 cover ER and ER mapping; Weeks 10-11 cover EER and its mapping.
+  Week 10 includes all four specialization mappings and shared subclasses.
+  Week 11 includes categories, their mappings, and the remaining Ch4 topics.
+- Normalization through 3NF moves to Week 13 using supplied candidate keys.
+  BCNF and Ch15 become optional to make room within the existing teaching weeks.
+  There is no required closure or formal lossless-decomposition test.
+- Exam 2 now assesses taught ER/EER and mapping; normalization moves to Exam 3.
+  All exam dates and the 30/30/30/10 weights are unchanged.
+- The normalization comparison moves from Week 11 to Week 13; five comparisons
+  remain in Weeks 2, 4, 10, 13, 14. AI activities remain Weeks 4, 10, 14.
+- November 1-8 travel, Week 17 holiday, Week 16 final, and Week 18 make-up remain.
+  Make-up eligibility and grading are still for the instructor to announce.
+- Student-facing teaching-week chapter labels use the prescribed book's full titles;
+  only their dash typography is normalized to ASCII. Exam and travel-review rows also
+  identify Ch numbers. Weekly topic summaries remain short. The root README now uses
+  the full Ch2 and Ch5 titles without changing first-meeting reading limits.
+
+### Source Checks
+
+Source: Elmasri and Navathe, *Fundamentals of Database Systems*, seventh edition,
+the instructor's private PDF. Its existing SHA-256 is
+`002eceecdb5e47b050e61b30d13a8f207fb44cea4f927b98d864308c026288a5`.
+The PDF remains ignored and is not distributed.
+
+- Contents, PDF pages 18-30: chapter titles and section structure.
+- Ch4 Section 4.4, printed page 120 / PDF page 151: category versus shared subclass.
+- Ch4 Section 4.7 opening and Figure 4.10 page text, printed page 128 / PDF page 159:
+  introductory discussion and UML comparison context. This was text extraction,
+  not a visual verification of the textbook figure.
+- Ch9 Section 9.2, printed pages 298-303 / PDF pages 329-334: specialization options
+  8A-8D and conditions, shared subclasses, categories and source-key differences.
+
+These are bounded scheduling checks, not a full Ch4 or Ch9 source audit.
+Complete prescribed-book chapter audits remain zero. A larger attempted extraction
+was truncated and was not counted as reading; the bounded pages above were reread.
+The source establishes topic names and dependencies, not that this classroom pace
+has been validated.
+
+### Maintained Files
+
+- `Intro DB/syllabus.md`: full chapter titles, EER schedule, exam scope, concise prose.
+- `README.md`: complete chapter titles in the existing opening links.
+- `maintenance/COURSE_PLAN.md`: required sections, sequence, examples, scope limits.
+- `PROJECT.md`: current instructor decision and current assessment/activity facts;
+  older dated decisions retained as history.
+- `maintenance/database_chapter_teaching_material_prompt.md`: new authoring scope.
+- `maintenance/course_repository/full_source_audit.md` and
+  `textbook_material_correspondence.md`: superseding notices, not rewritten history.
+- `maintenance/course_repository/test_repository_layout.py`: regression checks for
+  the new titles, EER sequence, dates, scopes, weights, and concise summaries.
+- This revision record.
+
+No notebook, SQL source, assessment item, package source, or historical configuration
+was changed. The syllabus is maintained directly; the HTML preview and manifest are
+local ignored outputs.
+
+### Verification
+
+Eight targeted `RepositoryLayoutTests` passed using Python 3.12.9:
+textbook/travel, scope/language, weekly agreement, weights, navigation, final/make-up
+dates, full EER detailed coverage, and titles/EER sequence.
+
+Command, from the course repository:
+
+```powershell
+python -X utf8 maintenance/course_repository/test_repository_layout.py RepositoryLayoutTests.test_textbook_details_and_updated_travel RepositoryLayoutTests.test_current_syllabus_scope_and_language RepositoryLayoutTests.test_syllabus_weekly_chapter_labels_match_plan RepositoryLayoutTests.test_current_assessment_weights RepositoryLayoutTests.test_current_navigation_links RepositoryLayoutTests.test_final_and_makeup_dates_agree RepositoryLayoutTests.test_detailed_coverage_includes_full_eer RepositoryLayoutTests.test_syllabus_chapter_titles_and_eer_sequence
+```
+
+The existing builder's `verify_content(config)` passed (15 notebooks; structural
+checks only). `verify_manifest(write_manifest(config))` passed. The syllabus preview
+was regenerated with `verify_first_meeting.preview` and `MARKDOWN.render`.
+Headless Chrome through Playwright checked 1440x1000 and 390x1000 viewports:
+document width matched viewport width, all 18 schedule rows were present, and no
+missing images were reported. Full-page screenshots were visually inspected.
+On mobile, both tables scroll horizontally (358-pixel wrapper, 650-pixel table);
+scrolling 292 pixels exposes the last column. The EER topic rows were also visually
+inspected after scrolling. This is a local Markdown preview, not a newly published
+GitHub rendering.
+
+`git diff --check` passed. Executable lessons were not rerun because no lesson code
+or notebook changed. The subsequent publication request authorizes staging these
+reviewed files, committing, and pushing to the existing origin/main. Final commit
+identity and remote synchronization are checked after push; the Git history records
+the completed publication rather than this pre-commit record claiming it in advance.
+
+### Remaining Work
+
+Week 8 mapping and Week 13 normalization are compressed. Use small reused examples;
+do not add formal theory back into those meetings. Classroom workload is not yet
+validated. New EER coverage still needs teaching-point correspondence, complete
+chapter source checking, and instructional examples; scheduling it is not completing it.
+
+The existing missing-key defect in the old ER schema remains unresolved, and that
+schema remains unassigned. The primary next action is still to repair that schema's
+NULL-key handling and regression tests before reusing it for ER/EER instruction.
+Completion requires explicit non-null identifiers, passing missing-key tests, and
+regenerated, verified affected artifacts. This correctness issue precedes adding new
+EER examples; the schedule revision does not remove it.
+
 ## First-Meeting Release Update
 
 September 9 schedule update: the instructor moved Written Exam 3 to Week 16

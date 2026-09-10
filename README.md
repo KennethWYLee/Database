@@ -10,8 +10,8 @@ Textbook: Elmasri and Navathe, *Fundamentals of Database Systems*, 7th Edition.
 |---:|---|---|
 | 1 | [Course syllabus](Intro%20DB/syllabus.md) | Schedule, assessment, and course requirements |
 | 2 | [Chapter 1: Databases and Database Users](Intro%20DB/ch01.ipynb) | Introductory selection; finish at Chapter Summary |
-| 3 | [Chapter 2: Concepts and Architecture](Intro%20DB/ch02.ipynb) | Introductory selection; finish at Chapter Summary |
-| 4 | [Chapter 5: Relational Model](Intro%20DB/ch05.ipynb) | Opening examples; stop at First-Meeting Summary and Practice |
+| 3 | [Chapter 2: Database System Concepts and Architecture](Intro%20DB/ch02.ipynb) | Introductory selection; finish at Chapter Summary |
+| 4 | [Chapter 5: The Relational Data Model and Relational Database Constraints](Intro%20DB/ch05.ipynb) | Opening examples; stop at First-Meeting Summary and Practice |
 
 The instructor will indicate where to stop and resume. These are selections, not
 three complete chapters to finish before class. Read the diagrams and small tables;

@@ -21,17 +21,23 @@ ch02_database_architecture、ch05_relational_model各自student_guide.md，
 逐章的必教主題、小節、排除內容、週次及考試範圍，以
 `Intro DB/syllabus.md`的Weekly Schedule與Assessment，以及
 `maintenance/COURSE_PLAN.md`的Detailed Coverage為準。學生課綱只保留必要資訊，
-詳細選講範圍已移至課程計畫，不代表刪減教學內容。不要把主體章節誤解為全章必教。
+詳細範圍以2026-09-10的EER修訂為準。Ch4教4.1-4.7，其餘主體章節仍依指定範圍。
 
 - Ch1-Ch2：導論選講；Ch3：ER；Ch5：relational model與constraints。
 - Ch6：basic SQL；Ch7：選定的complex queries、views、簡單trigger與schema changes。
 - Ch8：指定的relational algebra運算；不教relational calculus，division作延伸。
-- Ch9：只教9.1 ER-to-relational mapping；先完成Ch3與Ch5所需概念。
+- Ch4：4.1-4.7全列教學，包括inheritance、specialization/generalization、
+  membership與disjoint/overlapping及total/partial限制、hierarchies/lattices、
+  shared subclasses、categories、design choices與formal definitions、UML比較，
+  以及課本的abstraction、knowledge representation與ontology入門概念。
+  每項搭配圖解與簡例，不另加系統開發或ontology工程專案。
+- Ch9：9.1與9.2；先完成對應Ch3、Ch4、Ch5概念，再做mapping。
   Weak entities、multivalued attributes及ternary relationship須先教再映射。
-  Ch4與9.2 EER-to-relational mapping不列必教。
-- Ch14：14.1-14.4在Week 11，以已給定candidate keys教至3NF；14.5 BCNF在Week 13。
-- Ch15：15.1.1的attribute closure及15.2的binary lossless-decomposition選定內容，
-  安排Week 13，不要求完整proof、minimal cover或schema-synthesis algorithms。
+  9.2包含8A-8D四種選項與成立條件、shared subclasses及categories的映射；
+  比較來源keys相同或不同的情形，區分EER限制與SQLite實際強制的限制。
+- Ch14：14.1-14.4在Week 13，以已給定candidate keys教至3NF；14.5 BCNF改延伸。
+- Ch15：延伸參考，不排正式進度或必考；不加入attribute closure、formal binary
+  lossless-decomposition tests、proof、minimal cover或schema-synthesis algorithms。
 - Ch17：索引用途、B+ tree查找、composite index及read/update成本選講。
   先補Ch16的record、block及基本file organization；不整章教授Ch16。
   SQLite index commands與EXPLAIN QUERY PLAN另標為實作補充，不能宣稱為原書範例。
@@ -42,7 +48,8 @@ ch02_database_architecture、ch05_relational_model各自student_guide.md，
 教材份量與順序須符合課綱：
 
 - Week 1先課綱與導論，Week 2關聯模型及核心algebra，Weeks 3-5 SQL。
-- Weeks 7-8 ER與mapping導入；Week 10完成9.1；Weeks 11及13分次教授正規化。
+- Weeks 7-8完成ER與9.1；Weeks 10-11教授Ch4與9.2；Week 13教至3NF。
+  五次小組比較安排Weeks 2、4、10、13、14；AI活動仍為Weeks 4、10、14。
 - Week 14索引；Weeks 13-15將複習併入既有範例。Week 15以一個轉帳例子教
   boundaries、ACID、COMMIT/ROLLBACK，加一張簡單並行更新圖，再整合複習，
   不增加新作業、第二個交易案例或formal schedule classification。
@@ -50,8 +57,8 @@ ch02_database_architecture、ch05_relational_model各自student_guide.md，
 - Week 9出國（11/1-8），不排新內容；Week 17（12/31）放假；Week 18（1/7）
   保留補考。Weeks 16-18不加新必教內容，補考不另增第四次考試配分；資格、
   範圍與計分方式待教師另行宣布，不能自行推定。
-- Exam 2不考尚未教的closure、BCNF或formal lossless-decomposition test；
-  這些內容列Exam 3。實際題目仍需獨立命題與驗證。
+- Exam 2考已教ER、EER及9.1-9.2 mapping；正規化至3NF列Exam 3。
+  BCNF、closure與formal lossless-decomposition tests不列必考。實際題目仍需獨立命題與驗證。
 - 一章一份notebook，可跨次授課；先依新書逐節對照既有教材，不能只改舊notebook檔名。
 - 保留大量原創圖解、小型input tables、簡單範例、預測、輸出判讀及練習。
 - 不因完整來源查核而把課綱略過的小節加入正式教學或增加學生工作量。

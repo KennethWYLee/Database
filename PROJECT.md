@@ -3,7 +3,21 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-09-09
+- 最後更新日期：2026-09-10
+- 2026-09-10最新EER決策：教師要求EER都教，重新調整進度，課綱標明章號及
+  教科書正式章名。Ch4的4.1-4.7全列教學，搭配Ch9的9.1-9.2；Weeks 7-8
+  完成ER與9.1，Weeks 10-11教EER與9.2。UML、abstraction、knowledge
+  representation及ontology依課本作入門介紹，不新增軟體或ontology專案。
+  為維持既有授課週數，14.1-14.4移至Week 13，以已給定candidate keys教至3NF；
+  14.5 BCNF及Ch15改為延伸，不列必考。Exam 2改考ER/EER及mapping；
+  正規化移至Exam 3。小組比較改Weeks 2、4、10、13、14，AI活動仍4、10、14。
+  Exam 1/2/3日期、30/30/30/10配分、11/1-8出國、Week 17放假及Week 18補考不變。
+  這是進度修正，不是Ch4/9.2教材或完整來源查核完成；新範圍對照尚需補齊。
+  下方較早排除Ch4/9.2、Week 11正規化及Week 13必教Ch15的紀錄由此取代。
+  教師後續要求本機相關文件與這份課綱一致，並明確授權commit/push至既有origin/main。
+  考試與出國複習週也列Ch章號；首頁使用完整章名。保留舊教材的修訂中狀態，
+  不將新進度等同於全章教材完成。發布結果以Git history與遠端核對為準。
+  詳細查核見maintenance/course_repository/full_source_audit.md#eer-schedule-revision-record。
 - 2026-09-09課綱精簡：教師要求所有課綱內容簡短、只留必要訊息。學生課綱保留
   基本資料、教科書、簡短介紹、逐週簡短進度、評量及必要規則；詳細選講小節、
   教學範圍、排除內容及備課要求移至maintenance/COURSE_PLAN.md的Detailed Coverage，
@@ -131,8 +145,8 @@
 - 對象：四技資訊管理系二年級必修課程學生。
 - 學分與時數：3 學分，每週 3 小時。
 - 上課時間：星期四第 5-7 節，13:30-16:15。
-- 課程主體：relational model、relational algebra、SQL、ER model、
-  ER-to-relational mapping、functional dependencies、normalization，以及選定的
+- 課程主體：relational model、relational algebra、SQL、ER/EER model、
+  ER- and EER-to-relational mapping、functional dependencies、normalization，以及選定的
   indexing、query-plan interpretation及transaction basics；不要求DBMS內部
   query optimization、concurrency-control或recovery演算法。
 - 課程可在教師允許時訓練學生檢查 AI 產生的 SQL、ER diagram、schema、
@@ -232,23 +246,23 @@
 | 評量 | 週次與日期 | 比例 | 範圍 |
 |---|---|---:|---|
 | Written Exam 1 | Week 6, 2026-10-15 | 30% | Ch1-Ch2、Ch5-Ch8的已教選定內容：導論、關聯模型、核心algebra及SQL |
-| Written Exam 2 | Week 12, 2026-11-26 | 30% | Ch3、9.1、14.1-14.4選定內容；不含Ch4、9.2、BCNF、closure及formal lossless-decomposition test |
-| Written Exam 3 / Final Examination | Week 16, 2026-12-24 | 30% | 14.5、Ch15、Ch17、Ch20選定內容；Ch16僅作索引背景，並累積應用已教SQL與database design |
+| Written Exam 2 | Week 12, 2026-11-26 | 30% | Ch3已教內容、4.1-4.7及9.1-9.2；ER、EER與mapping，不含正規化 |
+| Written Exam 3 / Final Examination | Week 16, 2026-12-24 | 30% | 14.1-14.4、Ch17、Ch20選定內容；Ch16僅作索引背景，並累積應用已教SQL與database design |
 | Class Performance（課堂表現） | 全學期 | 10% | 指定SQL labs、database design exercises、ER diagrams、schemas、normalization、index與query-plan activities、個人回答與修正；peer rank不直接計分 |
 
 - 三次考試都用來確認學生本人的資料庫概念、SQL、資料庫設計、效能與交易
   處理能力。
 - 同儕排序結果不用來直接計算各組正式成績。
 - Week 18補考不另增配分；資格、範圍及計分安排待教師另行宣布。
-- Exam 2只考Weeks 7-11已教的ER、9.1 mapping、FD與至3NF的內容；candidate keys
-  由題目提供，不要求尚未教授的closure或binary lossless-decomposition判定。
-- Exam 3才包含Week 13的closure、BCNF與binary lossless decomposition，以及
-  索引、transaction basics；累積題只能應用已教過的SQL與database design概念。
+- Exam 2只考Weeks 7-11已教的ER、EER與9.1-9.2 mapping，不考尚未教授的正規化。
+- Exam 3包含Week 13的FD及至3NF的正規化，以及索引、transaction basics；
+  candidate keys由題目提供。BCNF、closure與formal lossless-decomposition判定
+  不列必考；累積題只能應用已教過的SQL與database design概念。
 - 各次考試是否允許使用或審查 AI 產生的材料，必須在正式考試規則中明示。
 
 ## 課堂活動決策
 
-- 全學期規劃5次小組共同回答與個人完整比較，安排於Weeks 2、4、10、11、14。
+- 全學期規劃5次小組共同回答與個人完整比較，安排於Weeks 2、4、10、13、14。
 - 各組先提交一份共同回答與理由；回答鎖定後匿名展示。每位學生排列全部
   回答，系統保存原始排序並彙整平均名次與名次分布，教師最後依技術標準
   回饋，學生再修正。
