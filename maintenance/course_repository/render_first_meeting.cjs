@@ -6,13 +6,14 @@ const { chromium } = require(process.env.PLAYWRIGHT_PATH ||
   'C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 
 const output = path.join(__dirname, 'output', 'first_meeting');
+const verified = JSON.parse(fs.readFileSync(path.join(output, 'verification.json'), 'utf8'));
 (async () => {
   const browser = await chromium.launch({headless: true,
     executablePath: process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe'});
   const results = [];
   try {
     for (const width of [1440, 390]) {
-      for (const name of ['home', 'syllabus', 'ch01', 'ch02', 'ch03', 'ch05', 'ch08']) {
+      for (const name of ['home', 'syllabus', ...verified.chapters.map(c => c.chapter)]) {
         const page = await browser.newPage({viewport: {width, height: 1000}});
         await page.goto(pathToFileURL(path.join(output, `${name}.html`)).href);
         await page.evaluate(() => Promise.all(Array.from(document.images).map(img => img.decode())));

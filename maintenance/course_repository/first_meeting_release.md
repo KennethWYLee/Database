@@ -1,5 +1,9 @@
 # September 10 First-Meeting Release
 
+Publication update: only Ch1, Ch2 and Ch3 are now published on main. Ch5/Ch8
+and under_revision files mentioned in this historical record are retained
+locally but ignored; the current entry is the root README and syllabus.
+
 ## Current Chapter Order
 
 September 10, 2026: the instructor now requires today's Ch1/Ch2 only, followed
@@ -22,9 +26,9 @@ opening stop, and a separate Ch8 algebra notebook is available. This record desc
 the original opening batch. See the [later revision](full_source_audit.md#relational-foundations-revision)
 for the current four-notebook checks and remaining limits.
 
-- Current entry: [syllabus](../../Intro%20DB/syllabus.md), then
+- Historical entry: [syllabus](../../Intro%20DB/syllabus.md), then
   [Ch1](../../Intro%20DB/ch01.ipynb), [Ch2](../../Intro%20DB/ch02.ipynb), and
-  [Ch5 opening](../../Intro%20DB/ch05.ipynb), in that order.
+  Ch5 opening (`Intro DB/ch05.ipynb`, now local only), in that order.
 - Ch1 and Ch2 stop at Chapter Summary; Ch5 stops at First-Meeting Summary and Practice.
   The instructor may stop earlier. These are selected topics, not three full chapters
   to complete before class. No separate Week 1 notebook or new assignment is introduced.

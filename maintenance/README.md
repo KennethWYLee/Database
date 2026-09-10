@@ -7,8 +7,9 @@ it is not a second course navigation system.
 
 ## Maintained Sources
 
-Current sequence: today's Ch1/Ch2 only, then Ch3-9 and Ch14-19. Ch5/Ch8 are
-available for Weeks 4/8, not the first two meetings. See the
+Current sequence: today's Ch1/Ch2 only, then Ch3-9 and Ch14-19. Only current
+Ch1/Ch2/Ch3 materials are published; later chapters and their sources remain
+ignored locally. This changes publication, not the syllabus. See the
 [current scope record](course_repository/full_source_audit.md#chapter-order-and-expanded-scope).
 
 | File or directory | Responsibility |
@@ -18,8 +19,7 @@ available for Weeks 4/8, not the first two meetings. See the
 | [COURSE_PLAN.md](COURSE_PLAN.md) | Detailed teaching plan; dates and assessment must agree with the syllabus |
 | [Teaching material prompt](database_chapter_teaching_material_prompt.md) | Chapter authoring and source-check requirements |
 | `chapters/` | Maintained explanations, SQL, data, figures, and chapter verifiers |
-| [course_repository/](course_repository/README.md) | Builds current Ch1/Ch2/Ch3/Ch5/Ch8 notebooks and preserves twelve previous notebooks under under_revision |
-| `student_sqlite_package/` | Optional existing SQLite package and its explicit allow-list |
+| [course_repository/](course_repository/README.md) | Builds and verifies published Ch1/Ch2/Ch3; optional local-only build for unreleased chapters |
 | [archive/](archive/README.md) | Superseded records, not current instructions or course decisions |
 | [Migration review](structure_migration_review.md) | September 7 layout change and verification evidence |
 | [Chapter teaching review](course_repository/all_chapters_teaching_review.md) | September 8 diagrams, small examples, source checks, and execution evidence |
@@ -34,7 +34,8 @@ normal checkout includes the same files used in class.
 Root `AGENTS.md` and `CLAUDE.md` remain byte-identical tool instructions. `PROJECT.md`
 remains at the root for course context; the root README is the human-facing entry point.
 
-Private textbook PDFs and historical sources stay local. Ignored `assessments/`,
+Private textbook PDFs, other chapter sources/notebooks, the SQLite package,
+and exercise answers stay local. Ignored `assessments/`,
 `sql_labs/`, and temporary outputs remain excluded from Git; moving this directory did
 not authorize their publication. Previously created preview branches are historical,
 not current course entry points, and are not deleted by this change.

@@ -19,8 +19,8 @@ through diagrams and small examples.
 ## Course Materials
 
 One notebook per chapter. Today: this syllabus, [Ch1](ch01.ipynb), and [Ch2](ch02.ipynb) only.
-Then follow Ch3-9 and Ch14-19 in order. Available [Ch3](ch03.ipynb), [Ch5](ch05.ipynb), and [Ch8](ch08.ipynb)
-are for their scheduled meetings, not today's work.
+Then follow Ch3-9 and Ch14-19 in order. [Ch3](ch03.ipynb) is available for the next meeting.
+Only Ch1-Ch3 notebooks are currently published; later chapters will be released when ready.
 GitHub displays saved outputs; use Python 3 with SQLite 3.39+ to run examples.
 Unreleased chapters use the textbook; previous materials under revision are not assigned.
 

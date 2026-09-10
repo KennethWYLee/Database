@@ -273,7 +273,11 @@ def validate_config(config: dict) -> None:
         raise ValueError("Current revised chapters must be ch01, ch02, ch03, ch05, ch08")
     if any(not chapter.get("prescribed_textbook") for chapter in current):
         raise ValueError("Current chapters must identify the prescribed textbook")
-    for chapter in [*chapters, *current]:
+    published = config.get("published_chapters")
+    if published is not None and (len(published) != len(set(published)) or
+                                  not set(published).issubset(c["id"] for c in current)):
+        raise ValueError("Published chapters must be unique current chapter identifiers")
+    for chapter in all_chapters(config):
         safe_source(chapter["guide_source"])
         figure_names: set[str] = set()
         for figure in chapter_figures(chapter):
@@ -736,6 +740,8 @@ def execute_notebook(notebook: dict, notebook_name: str) -> None:
 
 
 def all_chapters(config: dict) -> list[dict]:
+    if "published_chapters" in config and not config.get("include_unreleased"):
+        return [c for c in config.get("current_chapters", []) if c["id"] in config["published_chapters"]]
     return [*config.get("current_chapters", []), *config["chapters"]]
 
 
@@ -745,15 +751,21 @@ def notebook_relative(chapter: dict) -> str:
 
 
 def expected_files(config: dict) -> set[str]:
-    return {"syllabus.md", "under_revision/README.md",
-            *(notebook_relative(chapter) for chapter in all_chapters(config))}
+    files = {"syllabus.md", *(notebook_relative(chapter) for chapter in all_chapters(config))}
+    if any(not c.get("prescribed_textbook") for c in all_chapters(config)):
+        files.add("under_revision/README.md")
+    return files
+
+
+def known_local_files(config: dict) -> set[str]:
+    return expected_files(dict(config, include_unreleased=True))
 
 
 def build_preview(config: dict) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     expected = expected_files(config)
     unexpected = {path.relative_to(PREVIEW_DIR).as_posix()
-                  for path in PREVIEW_DIR.rglob("*") if path.is_file()} - expected
+                  for path in PREVIEW_DIR.rglob("*") if path.is_file()} - known_local_files(config)
     if unexpected:
         raise ValueError(f"Unexpected files in Intro DB; nothing removed: {sorted(unexpected)}")
     # Finish all executions before replacing the known generated notebooks. Never
@@ -777,7 +789,7 @@ def build_preview(config: dict) -> None:
 
 def write_manifest(config: dict) -> list[dict]:
     files = []
-    for path in sorted(PREVIEW_DIR.rglob("*")):
+    for path in sorted(safe_target(name) for name in expected_files(config)):
         if path.is_file():
             files.append(
                 {
@@ -789,7 +801,7 @@ def write_manifest(config: dict) -> list[dict]:
     manifest = {
         "repository_name": config["repository_name"],
         "repository_version": config["repository_version"],
-        "content_status": "Intro DB files built locally; Git synchronization is a separate action",
+        "content_status": "Selected Intro DB files built locally; unpublished local files are not in this manifest",
         "files": files,
     }
     MANIFEST_PATH.write_text(
@@ -802,11 +814,7 @@ def write_manifest(config: dict) -> list[dict]:
 
 def verify_manifest(files: list[dict]) -> None:
     listed = {item["path"]: item for item in files}
-    actual = {
-        path.relative_to(PREVIEW_DIR).as_posix()
-        for path in PREVIEW_DIR.rglob("*")
-        if path.is_file()
-    }
+    actual = {name for name in listed if safe_target(name).is_file()}
     if actual != set(listed):
         raise RuntimeError("Manifest does not match the generated repository")
     for relative, item in listed.items():
@@ -831,12 +839,12 @@ def verify_content(config: dict) -> None:
         for path in PREVIEW_DIR.rglob("*")
         if path.is_file()
     }
-    if actual_files != expected:
+    if not expected.issubset(actual_files) or actual_files - known_local_files(config):
         errors.append(
             f"Unexpected Intro DB layout; missing={sorted(expected - actual_files)}, unexpected={sorted(actual_files - expected)}"
         )
 
-    for path in PREVIEW_DIR.rglob("*"):
+    for path in (safe_target(name) for name in sorted(expected)):
         if not path.is_file() or path.name == ".gitignore":
             continue
         relative = path.relative_to(PREVIEW_DIR).as_posix()
@@ -914,9 +922,12 @@ def verify_content(config: dict) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build the unified Database Management course repository.")
     parser.add_argument("--verify", action="store_true", help="verify content, manifest, and notebook execution")
+    parser.add_argument("--include-unreleased", action="store_true",
+                        help="also rebuild ignored local chapters; requires their local sources, does not publish")
     args = parser.parse_args()
 
     config = load_json(CONFIG_PATH)
+    config["include_unreleased"] = args.include_unreleased
     validate_config(config)
     build_preview(config)
     files = write_manifest(config)

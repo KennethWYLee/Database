@@ -25,6 +25,10 @@ def executed_namespace(chapter_id):
 class SecondMeetingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        config = builder.load_json(builder.CONFIG_PATH)
+        if any(not (builder.COURSE_ROOT / c["guide_source"]).exists()
+               for c in config["current_chapters"] if c["id"] in {"ch05", "ch08"}):
+            raise unittest.SkipTest("Unreleased Ch5/Ch8 sources are local only")
         cls.ch5 = executed_namespace("ch05")
         cls.ch8 = executed_namespace("ch08")
 

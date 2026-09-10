@@ -11,23 +11,7 @@
 !/Intro DB/ch01.ipynb
 !/Intro DB/ch02.ipynb
 !/Intro DB/ch03.ipynb
-!/Intro DB/ch05.ipynb
-!/Intro DB/ch08.ipynb
-!/Intro DB/under_revision/
-/Intro DB/under_revision/*
-!/Intro DB/under_revision/README.md
-!/Intro DB/under_revision/ch02.ipynb
-!/Intro DB/under_revision/ch03.ipynb
-!/Intro DB/under_revision/ch04.ipynb
-!/Intro DB/under_revision/ch05.ipynb
-!/Intro DB/under_revision/ch06.ipynb
-!/Intro DB/under_revision/ch07.ipynb
-!/Intro DB/under_revision/ch14.ipynb
-!/Intro DB/under_revision/ch15.ipynb
-!/Intro DB/under_revision/ch16.ipynb
-!/Intro DB/under_revision/ch17.ipynb
-!/Intro DB/under_revision/ch18.ipynb
-!/Intro DB/under_revision/ch19.ipynb
+# Other notebooks and under_revision stay local until explicitly released.
 
 !/maintenance/
 /maintenance/*
@@ -122,3 +106,10 @@
 **/*.pyc
 **/*.db
 **/.ipynb_checkpoints/
+
+# Current textbook Chapters 1-3 only; keep other maintained material local.
+/maintenance/chapters/*
+!/maintenance/chapters/ch01_database_introduction/
+!/maintenance/chapters/ch02_database_architecture/
+!/maintenance/chapters/ch03_er_model/
+/maintenance/student_sqlite_package/

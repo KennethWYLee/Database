@@ -59,7 +59,8 @@ def verify():
     builder.validate_config(config)
     builder.verify_content(config)
     results = []
-    for chapter in config["current_chapters"]:
+    selected = builder.all_chapters(config)
+    for chapter in selected:
         path = builder.safe_target(builder.notebook_relative(chapter))
         raw = json.loads(path.read_text(encoding="utf-8"))
         assert not list(nbformat.validator.iter_validate(raw)), path
@@ -121,12 +122,14 @@ def verify():
     assert len(set(departments)) == 2
     assert [x for x in [5, 2.5, 7] if isinstance(x, int) and 1 <= x <= 6] == [5]
     assert len({("S101", "02-0000-0101"), ("S101", "02-0000-0102"), ("S102", "02-0000-0201")}) == 3
+    expected_counts = {"ch01": 5, "ch02": 6, "ch03": 27, "ch05": 13, "ch08": 9}
     assert {r["chapter"]: r["images"] for r in results} == {
-        "ch01": 5, "ch02": 6, "ch03": 27, "ch05": 13, "ch08": 9}
+        c["id"]: expected_counts[c["id"]] for c in selected}
     assert len(FIGURES) == 60
 
     # Inspect the exact DDL in the new Ch5 code, not a separate idealized schema.
-    ch5 = json.loads((builder.PREVIEW_DIR / "ch05.ipynb").read_text(encoding="utf-8"))
+    ch5 = (json.loads((builder.PREVIEW_DIR / "ch05.ipynb").read_text(encoding="utf-8"))
+           if any(c["id"] == "ch05" for c in selected) else {"cells": []})
     key_cases = 0
     for cell in ch5["cells"]:
         if cell["cell_type"] != "code":
@@ -156,11 +159,11 @@ def verify():
                 key_cases += 1
             finally:
                 db.close()
-    assert key_cases == 2
+    assert key_cases == (2 if ch5["cells"] else 0)
 
     links = 0
     docs = [builder.COURSE_ROOT / "README.md", builder.PREVIEW_DIR / "syllabus.md",
-            builder.PREVIEW_DIR / "under_revision/README.md", builder.COURSE_ROOT / "maintenance/README.md",
+            builder.COURSE_ROOT / "maintenance/README.md",
             builder.COURSE_ROOT / "maintenance/COURSE_PLAN.md", builder.COURSE_ROOT / "PROJECT.md",
             builder.SOURCE_DIR / "README.md", builder.SOURCE_DIR / "first_meeting_release.md"]
     for path in docs:
@@ -178,13 +181,18 @@ def verify():
         if path.name == "syllabus.md":
             preview("syllabus", MARKDOWN.render(text))
 
-    for chapter in config["chapters"]:
+    for chapter in selected:
+        if chapter.get("prescribed_textbook"):
+            continue
         old = json.loads(builder.safe_target(builder.notebook_relative(chapter)).read_text(encoding="utf-8"))
         assert "Previous Material: Not Assigned" in "".join(old["cells"][0]["source"])
 
     # Gallery retains SVG for geometry checks; student notebooks contain PNGs only.
     cards = []
+    names = {item["generator"] for c in selected for item in builder.chapter_figures(c)}
     for name in FIGURES:
+        if name not in names:
+            continue
         svg = builder.generate_figure(name)
         cards.append(f'<section class="figure" id="{name}"><h2>{name}</h2>{svg}</section>')
     preview("figures", "".join(cards))

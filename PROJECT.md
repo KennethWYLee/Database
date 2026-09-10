@@ -7,6 +7,14 @@
 
 ## 最新範圍與授課順序
 
+GitHub最新發布決策：教師要求線上教材僅放現用課本Ch1、Ch2、Ch3。
+課綱保留完整學期進度；Intro DB/ch05、ch08及全部under_revision只留本機，
+其他章節的maintenance來源與SQLite整包同步停止Git追蹤並ignore，不刪本機資料。
+既有Git歷史不改寫。首頁與課綱不再連到未發布notebook。
+published_chapters控制預設建置及驗證；--include-unreleased僅供有完整本機來源時使用，
+不會將ignore解除或自動發布。此決策只限制發布範圍，不取消後續章節教學。
+本次GitHub更新包括上一筆已核准的Ch3修正；解答與翻拍原書仍不發布。
+
 Ch3最新追加：教師回報已使用ch03.ipynb，要求增加weak entities範例並加入
 3.9.2及3.10。現行範圍為3.1-3.7、3.9.1-3.9.2、3.10；3.8仍不列本章教學。
 同一notebook擴至27張圖，增加owner-local、strong/weak對照、多層及多owner，

@@ -108,7 +108,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertNotIn("*Database System Concepts*", syllabus)
         self.assertNotRegex(syllabus, r"[\u3400-\u9fff\ufffd]")
         self.assertNotRegex(syllabus, r"(?i)\btype\s*b\b|\b\d+\s*(?:minutes?|mins?)\b")
-        for chapter_id in ("ch01", "ch02", "ch05"):
+        for chapter_id in ("ch01", "ch02", "ch03"):
             self.assertIn(f"({chapter_id}.ipynb)", syllabus)
 
     def test_textbook_details_and_updated_travel(self):
@@ -216,10 +216,11 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertIn("Next class: Ch3", home)
         config = builder.load_json(builder.CONFIG_PATH)
         guides = {c["id"]: builder.safe_source(c["guide_source"]).read_text(encoding="utf-8")
-                  for c in config["current_chapters"]}
+                  for c in builder.all_chapters(config)}
         self.assertIn("Next, Chapter 3", guides["ch02"])
-        self.assertIn("Continue with Chapter 6", guides["ch05"])
-        self.assertIn("Chapter 9 for ER/EER-to-relational mapping", guides["ch08"])
+        self.assertNotIn("ch05.ipynb", home)
+        self.assertNotIn("ch08.ipynb", home)
+        self.assertNotIn("under_revision/", home)
         prompt = (builder.COURSE_ROOT / "maintenance/database_chapter_teaching_material_prompt.md").read_text(encoding="utf-8")
         self.assertIn("今天只教Ch1/Ch2", prompt)
         self.assertIn("Ch14-Ch19", prompt)
@@ -227,6 +228,8 @@ class RepositoryLayoutTests(unittest.TestCase):
 
     def test_visual_figures_and_unique_anchors(self):
         config = builder.load_json(builder.CONFIG_PATH)
+        if not (builder.COURSE_ROOT / config["chapters"][0]["guide_source"]).exists():
+            self.skipTest("Unreleased legacy sources are local only")
         total = 0
         for chapter in config["chapters"]:
             with self.subTest(chapter=chapter["id"]):
@@ -333,6 +336,8 @@ class RepositoryLayoutTests(unittest.TestCase):
 
     def test_invalid_figure_anchors_are_rejected(self):
         chapter = builder.load_json(builder.CONFIG_PATH)["chapters"][0]
+        if not (builder.COURSE_ROOT / chapter["guide_source"]).exists():
+            self.skipTest("Unreleased legacy source is local only")
         original = builder.chapter_figures(chapter)
         for anchor in ["## Missing topic", "### Read the Output"]:
             altered = copy.deepcopy(original)
@@ -343,6 +348,8 @@ class RepositoryLayoutTests(unittest.TestCase):
 
     def test_inline_sql_mapping_and_outputs(self):
         chapter = builder.load_json(builder.CONFIG_PATH)["chapters"][0]
+        if not (builder.COURSE_ROOT / chapter["guide_source"]).exists():
+            self.skipTest("Unreleased legacy source is local only")
         guide = builder.safe_source(chapter["guide_source"]).read_text(encoding="utf-8")
         expanded = builder.expand_inline_sql(guide, chapter)
         self.assertNotIn("<!-- sql:", expanded)
@@ -371,15 +378,17 @@ class RepositoryLayoutTests(unittest.TestCase):
                          {"README.md", "PROJECT.md", "AGENTS.md", "CLAUDE.md"})
         self.assertEqual((root / "AGENTS.md").read_bytes(), (root / "CLAUDE.md").read_bytes())
         config = builder.load_json(builder.CONFIG_PATH)
-        self.assertEqual({p.relative_to(builder.PREVIEW_DIR).as_posix()
-                          for p in builder.PREVIEW_DIR.rglob("*") if p.is_file()},
-                         builder.expected_files(config))
+        actual = {p.relative_to(builder.PREVIEW_DIR).as_posix()
+                  for p in builder.PREVIEW_DIR.rglob("*") if p.is_file()}
+        self.assertTrue(builder.expected_files(config).issubset(actual))
+        self.assertFalse(actual - builder.known_local_files(config))
         builder.validate_config(config)
         with contextlib.redirect_stdout(io.StringIO()):
             builder.verify_content(config)
 
     def test_raw_notebook_schema(self):
-        for path in builder.PREVIEW_DIR.rglob("*.ipynb"):
+        config = builder.load_json(builder.CONFIG_PATH)
+        for path in (builder.safe_target(builder.notebook_relative(c)) for c in builder.all_chapters(config)):
             with self.subTest(path=path.name):
                 raw = json.loads(path.read_text(encoding="utf-8"))
                 self.assertEqual(list(nbformat.validator.iter_validate(raw)), [])
@@ -428,6 +437,29 @@ class RepositoryLayoutTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             builder.safe_target("../PROJECT.md")
 
+    def test_published_chapters_exclude_local_material(self):
+        config = builder.load_json(builder.CONFIG_PATH)
+        self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
+        self.assertEqual(builder.expected_files(config),
+                         {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb"})
+        self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
+        import subprocess
+        allowed = {"Intro DB/" + name for name in builder.expected_files(config)}
+        tracked = set(subprocess.check_output(["git", "ls-files", "Intro DB"],
+                      cwd=builder.COURSE_ROOT, text=True).splitlines())
+        self.assertEqual(tracked, allowed)
+        sources = set(subprocess.check_output(["git", "ls-files", "maintenance/chapters"],
+                      cwd=builder.COURSE_ROOT, text=True).splitlines())
+        self.assertEqual(sources, {c["guide_source"] for c in builder.all_chapters(config)})
+        self.assertEqual(subprocess.check_output(["git", "ls-files", "maintenance/student_sqlite_package",
+                         "private_references", "Database pdfs"], cwd=builder.COURSE_ROOT, text=True), "")
+        ignored = subprocess.check_output(["git", "check-ignore", "--no-index", "--",
+            "Intro DB/ch05.ipynb", "Intro DB/ch08.ipynb", "Intro DB/under_revision/ch03.ipynb",
+            "maintenance/chapters/ch05_relational_model/student_guide.md",
+            "maintenance/student_sqlite_package/output/sqlite_course_package.zip"],
+            cwd=builder.COURSE_ROOT, text=True).splitlines()
+        self.assertEqual(len(ignored), 5)
+
     def test_build_preserves_syllabus_and_existing_files_on_failure(self):
         with tempfile.TemporaryDirectory(prefix="db_layout_") as directory:
             root = Path(directory).resolve()
@@ -451,6 +483,26 @@ class RepositoryLayoutTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "nothing removed"):
                     builder.build_preview(config)
                 self.assertEqual(extra.read_text(), "keep this")
+
+    def test_default_build_preserves_unreleased_notebook(self):
+        with tempfile.TemporaryDirectory(prefix="db_release_") as directory:
+            root = Path(directory)
+            course = root / "Intro DB"
+            course.mkdir()
+            (course / "syllabus.md").write_text("maintained", encoding="utf-8")
+            unpublished = course / "ch05.ipynb"
+            unpublished.write_bytes(b"local unfinished work")
+            config = {"chapters": [], "published_chapters": ["ch01"], "current_chapters": [
+                {"id": "ch01", "prescribed_textbook": True},
+                {"id": "ch05", "prescribed_textbook": True}]}
+            with patch.object(builder, "PREVIEW_DIR", course), \
+                 patch.object(builder, "OUTPUT_DIR", root / "output"), \
+                 patch.object(builder, "build_notebook", return_value={}) as build, \
+                 patch.object(builder, "execute_notebook"):
+                builder.build_preview(config)
+            self.assertEqual(build.call_count, 1)
+            self.assertEqual(build.call_args.args[0]["id"], "ch01")
+            self.assertEqual(unpublished.read_bytes(), b"local unfinished work")
 
 
 if __name__ == "__main__":
