@@ -274,6 +274,9 @@ def validate_config(config: dict) -> None:
     if any(not chapter.get("prescribed_textbook") for chapter in current):
         raise ValueError("Current chapters must identify the prescribed textbook")
     published = config.get("published_chapters")
+    pdfs = config.get("published_pdf_chapters", [])
+    if len(pdfs) != len(set(pdfs)) or not set(pdfs).issubset(published or []):
+        raise ValueError("Published PDFs must refer to published notebook chapters")
     if published is not None and (len(published) != len(set(published)) or
                                   not set(published).issubset(c["id"] for c in current)):
         raise ValueError("Published chapters must be unique current chapter identifiers")
@@ -752,6 +755,7 @@ def notebook_relative(chapter: dict) -> str:
 
 def expected_files(config: dict) -> set[str]:
     files = {"syllabus.md", *(notebook_relative(chapter) for chapter in all_chapters(config))}
+    files.update(chapter + ".pdf" for chapter in config.get("published_pdf_chapters", []))
     if any(not c.get("prescribed_textbook") for c in all_chapters(config)):
         files.add("under_revision/README.md")
     return files
@@ -848,6 +852,12 @@ def verify_content(config: dict) -> None:
         if not path.is_file() or path.name == ".gitignore":
             continue
         relative = path.relative_to(PREVIEW_DIR).as_posix()
+        if path.suffix == ".pdf":
+            import fitz
+            with fitz.open(path) as pdf:
+                if not len(pdf) or pdf.metadata.get("subject") != "Notebook SHA256: " + sha256(path.with_suffix(".ipynb")):
+                    errors.append(f"Missing pages or stale notebook PDF: {relative}; rerun export_chapter_pdfs.py")
+            continue
         if path.suffix == ".ipynb":
             try:
                 notebook = json.loads(path.read_text(encoding="utf-8"))

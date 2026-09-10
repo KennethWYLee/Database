@@ -2,6 +2,7 @@
   "repository_name": "Database Management",
   "repository_version": "2026.09.10-public-ch01-ch03",
   "published_chapters": ["ch01", "ch02", "ch03"],
+  "published_pdf_chapters": ["ch01", "ch02", "ch03"],
   "instructor": "WenYi Lee",
   "syllabus_source": "Intro DB/syllabus.md",
   "material_status": "legacy_textbook_alignment_pending",

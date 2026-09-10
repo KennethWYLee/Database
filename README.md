@@ -29,5 +29,7 @@ outputs. Use the textbook for chapters whose revised notebooks are not yet avail
 Only Ch1, Ch2, and Ch3 notebooks are currently published. Later chapters will be
 released when ready.
 
+PDF copies: [Ch1](Intro%20DB/ch01.pdf) | [Ch2](Intro%20DB/ch02.pdf) | [Ch3](Intro%20DB/ch03.pdf).
+
 Local and GitHub tracked paths are identical on `main`.
 Preparation and build records are in [maintenance](maintenance/README.md).

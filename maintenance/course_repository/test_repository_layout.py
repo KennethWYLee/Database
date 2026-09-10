@@ -441,7 +441,8 @@ class RepositoryLayoutTests(unittest.TestCase):
         config = builder.load_json(builder.CONFIG_PATH)
         self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
         self.assertEqual(builder.expected_files(config),
-                         {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb"})
+                         {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb",
+                          "ch01.pdf", "ch02.pdf", "ch03.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
         import subprocess
         allowed = {"Intro DB/" + name for name in builder.expected_files(config)}
@@ -503,6 +504,21 @@ class RepositoryLayoutTests(unittest.TestCase):
             self.assertEqual(build.call_count, 1)
             self.assertEqual(build.call_args.args[0]["id"], "ch01")
             self.assertEqual(unpublished.read_bytes(), b"local unfinished work")
+
+    def test_pdf_provenance_and_figures(self):
+        import fitz
+        config = builder.load_json(builder.CONFIG_PATH)
+        self.assertEqual(config["published_pdf_chapters"], ["ch01", "ch02", "ch03"])
+        for chapter, images in [("ch01", 5), ("ch02", 6), ("ch03", 27)]:
+            with fitz.open(builder.safe_target(chapter + ".pdf")) as pdf:
+                self.assertGreater(len(pdf), 0)
+                self.assertEqual(pdf.metadata["author"], "WenYi Lee")
+                self.assertEqual(pdf.metadata["subject"], "Notebook SHA256: " +
+                                 builder.sha256(builder.safe_target(chapter + ".ipynb")))
+                self.assertEqual(sum(len(page.get_image_info()) for page in pdf), images)
+        with patch.object(builder, "sha256", return_value="0" * 64):
+            with self.assertRaisesRegex(RuntimeError, "stale notebook PDF"):
+                builder.verify_content(config)
 
 
 if __name__ == "__main__":

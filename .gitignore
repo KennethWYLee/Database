@@ -11,6 +11,9 @@
 !/Intro DB/ch01.ipynb
 !/Intro DB/ch02.ipynb
 !/Intro DB/ch03.ipynb
+!/Intro DB/ch01.pdf
+!/Intro DB/ch02.pdf
+!/Intro DB/ch03.pdf
 # Other notebooks and under_revision stay local until explicitly released.
 
 !/maintenance/
@@ -80,6 +83,8 @@
 /maintenance/course_repository/*
 !/maintenance/course_repository/README.md
 !/maintenance/course_repository/build_course_repository.py
+!/maintenance/course_repository/export_chapter_pdfs.py
+!/maintenance/course_repository/print_chapter_pdfs.cjs
 !/maintenance/course_repository/repository_config.json
 !/maintenance/course_repository/notebook_figures.py
 !/maintenance/course_repository/teaching_figures.py

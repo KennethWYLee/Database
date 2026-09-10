@@ -8,6 +8,10 @@
 ## 最新範圍與授課順序
 
 GitHub最新發布決策：教師要求線上教材僅放現用課本Ch1、Ch2、Ch3。
+教師後續要求將這三份notebook另轉PDF並commit/push；Intro DB保留原notebook，
+並加入ch01.pdf、ch02.pdf、ch03.pdf，內容與保存的輸出不變，不包含習題解答。
+PDF由export_chapter_pdfs.py及print_chapter_pdfs.cjs生成，metadata記錄notebook
+SHA256，避免教材改版後誤把舊PDF視為最新版。公開章節仍限Ch1-Ch3。
 課綱保留完整學期進度；Intro DB/ch05、ch08及全部under_revision只留本機，
 其他章節的maintenance來源與SQLite整包同步停止Git追蹤並ignore，不刪本機資料。
 既有Git歷史不改寫。首頁與課綱不再連到未發布notebook。

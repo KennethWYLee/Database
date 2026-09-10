@@ -2,8 +2,8 @@
 
 ## Current Publication: Chapters 1-3
 
-The public `Intro DB/` contains only `syllabus.md`, `ch01.ipynb`, `ch02.ipynb`,
-and `ch03.ipynb`. Other notebooks, their chapter sources, and the SQLite package
+The public `Intro DB/` contains `syllabus.md`, `ch01.ipynb`, `ch02.ipynb`,
+`ch03.ipynb`, and their three matching PDFs. Other notebooks, their chapter sources, and the SQLite package
 are ignored and kept locally. The semester scope has not changed.
 `published_chapters` in `repository_config.json` controls default builds.
 The manifest and default verification cover only that published selection.
@@ -27,7 +27,49 @@ The remainder is the historical full local-build description. Its counts of
 current GitHub release. Historical audit records remain as provenance, not
 links promising that unreleased files exist in a fresh checkout.
 
-### Publication Check, September 10
+### PDF Export, September 10
+
+The instructor authorized Ch1-Ch3 PDF conversion, commit and push after baseline
+`77cc16c`. The original notebooks and saved outputs are unchanged.
+`export_chapter_pdfs.py` reads their cells and attachments; `print_chapter_pdfs.cjs`
+prints self-contained HTML through Chrome. No textbook PDF or private answer is
+used as export input. The three explicit PDF paths are allow-listed in Git.
+
+```powershell
+python maintenance/course_repository/build_course_repository.py
+python maintenance/course_repository/export_chapter_pdfs.py
+python maintenance/course_repository/build_course_repository.py --verify
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+```
+
+Export dependencies: Python with PyMuPDF, BeautifulSoup4, markdown-it-py and
+nbformat; Node/Playwright, Chrome and Poppler's `pdftoppm` on PATH. Chrome/Playwright
+paths can be overridden using `CHROME_PATH` / `PLAYWRIGHT_PATH`. Arial and Consolas
+are the print fonts. Python 3.12.9 and Chrome 153 were used in this check.
+HTML, metadata checks and 56 rendered page previews stay under ignored `output/pdf/`.
+
+| PDF | Pages | Original figures retained |
+|---|---:|---:|
+| ch01.pdf | 6 | 5 |
+| ch02.pdf | 9 | 6 |
+| ch03.pdf | 41 | 27 |
+
+The PDF export checks all rendered HTML text tokens against PDF text, image
+counts and bounds, nonempty pages, and absence of internal attachment/file URLs.
+The first pass found a wrapped INSTRUCTOR identifier; changing table word-wrap
+preserved it as a whole word and the comparison passed. Short tables, figures,
+and closing summaries are kept together. All 56 pages were rendered with Poppler
+and inspected in overview sheets; the large ER figure and code/output page were
+also inspected at readable resolution. Some pages retain whitespace to keep a
+complete figure or table together. This is a static reading version, not executable.
+
+The PDF Subject stores its notebook's SHA256, checked by the normal repository
+verifier to detect stale exports. The builder now verifies 7 published files and
+the same 3 notebooks; test coverage also checks PDF provenance and image counts.
+PDF timestamps/Chrome serialization can change across runs; byte-identical PDF
+rebuilds are not claimed. Export and course checks passed before publication.
+
+### Earlier Publication Check
 
 Baseline: `84b8570` on main; origin/main was `c97312d` after fetching.
 The instructor requested that GitHub show only current Ch1-Ch3 materials.
