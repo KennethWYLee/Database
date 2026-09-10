@@ -219,7 +219,8 @@ Retain one prediction, one observed result or diagram-based explanation, and eit
 your correction or the reason your prediction was correct. No additional submission
 is required unless assigned. Stop here for the first-meeting architecture selection.
 
-Next, read the opening of Chapter 5 to identify relations, tuples, attributes, domains,
-and student identifiers. Formal SQL writing and index design are later topics.
+Next, Chapter 3 introduces entities, attributes, and relationships in ER diagrams.
+Chapter 4 extends those designs with EER concepts. Relational tables and SQL follow
+in Chapters 5-7; they are not additional reading for today's meeting.
 
 Practical reference: [SQLite's serverless architecture](https://www.sqlite.org/serverless.html).

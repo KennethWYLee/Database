@@ -8,14 +8,14 @@ compositions from 8.5 of Elmasri and Navathe, *Fundamentals of Database Systems*
 seventh edition. Division, relational calculus, aggregate algebra, recursion, and
 formal query optimization are not assigned here.
 
-Read Chapter 5 first: relations, tuples, attributes, keys, and references. You should
+Read Chapters 5-7 first: relations, keys, references, and SQL queries. You should
 be able to predict selected rows, projected attributes, set-operation results,
 Cartesian products, and joins, then combine them into a query. The supplied SQL
-checks your predictions; SQL writing is taught in Chapter 6.
+checks your predictions using the SQL introduced in Chapters 6-7.
 
 All data and diagrams are synthetic teaching examples. Inputs contain no NULLs.
-Classical set operations and SQL NULL behavior are not interchangeable; Chapter 7
-handles SQL's additional cases. Output sorting is for readability, not a claim
+Classical set operations and SQL NULL behavior are not interchangeable; recall
+Chapter 7's additional cases. Output sorting is for readability, not a claim
 that a relation has an inherent tuple order.
 
 ## 1. Start with Small Relations
@@ -494,5 +494,6 @@ correct. For paper work, retain intermediate relations and a rule-based check.
 Submit only assigned work.
 
 This chapter's diagrams describe logical results, not measured execution plans.
-No query-optimizer implementation or speed comparison is required. Continue to
-Chapter 6: Basic SQL to write the queries and data definitions yourself.
+No query-optimizer implementation or speed comparison is required here. Continue to
+Chapter 9 for ER/EER-to-relational mapping. Chapters 18-19 later compare selected
+query-processing methods and execution plans.

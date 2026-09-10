@@ -4,34 +4,31 @@ National Taipei University of Business | WenYi Lee | Fall 2026
 
 Textbook: Elmasri and Navathe, *Fundamentals of Database Systems*, 7th Edition.
 
-## First Class: September 10
+## Today: September 10
 
-| Order | Open | Reading for this meeting |
+| Order | Open | Reading |
 |---:|---|---|
-| 1 | [Course syllabus](Intro%20DB/syllabus.md) | Schedule, assessment, and course requirements |
-| 2 | [Chapter 1: Databases and Database Users](Intro%20DB/ch01.ipynb) | Introductory selection; finish at Chapter Summary |
-| 3 | [Chapter 2: Database System Concepts and Architecture](Intro%20DB/ch02.ipynb) | Introductory selection; finish at Chapter Summary |
-| 4 | [Chapter 5: The Relational Data Model and Relational Database Constraints](Intro%20DB/ch05.ipynb) | Opening examples; stop at First-Meeting Summary and Practice |
+| 1 | [Course syllabus](Intro%20DB/syllabus.md) | Schedule, scope, and assessment |
+| 2 | [Ch1: Databases and Database Users](Intro%20DB/ch01.ipynb) | Introductory selection |
+| 3 | [Ch2: Database System Concepts and Architecture](Intro%20DB/ch02.ipynb) | Introductory selection |
 
-The instructor will indicate where to stop and resume. These are selections, not
-three complete chapters to finish before class. Read the diagrams and small tables;
-the supplied code is for observing results, not a first-day programming requirement.
-GitHub displays saved outputs. To execute a notebook, follow the syllabus's opening
-instructions. Each textbook chapter has one notebook, which can continue across meetings.
+Today covers Ch1 and Ch2 only. Read the diagrams and small tables; supplied code
+shows results and is not a first-day programming requirement.
 
-## Second Class: September 17
+## Course Order
 
-Continue [Ch5: The Relational Data Model and Relational Database Constraints](Intro%20DB/ch05.ipynb)
-at **Continue: Keys and Integrity Constraints**. Then open
-[Ch8: The Relational Algebra and Relational Calculus](Intro%20DB/ch08.ipynb)
-for the selected relational algebra. Predict results from the small input tables,
-then compare them with the saved outputs.
+**Ch1-2 → Ch3-9 → Ch14-19.** Next class: Ch3, the ER model.
+ER and EER are required. Follow the syllabus for selected sections and examination scope.
 
-## Later Material
+| Available Notebook | Scheduled Meeting |
+|---|---|
+| [Ch5: The Relational Data Model and Relational Database Constraints](Intro%20DB/ch05.ipynb) | Week 4, October 1 |
+| [Ch8: The Relational Algebra and Relational Calculus](Intro%20DB/ch08.ipynb) | Week 8, October 29; selected algebra |
 
-Later revised chapters will be linked here when assigned. [Previous notebooks under
-revision](Intro%20DB/under_revision/) remain available for review only; their old chapter
-numbers and assessment references do not define current requirements.
+One notebook per chapter; the instructor sets stopping points. GitHub displays saved
+outputs. Use the textbook for chapters whose revised notebooks are not yet available.
+[Previous notebooks under revision](Intro%20DB/under_revision/) are for review only,
+not assigned material; their old chapter numbers do not define this course.
 
-The same folders are used locally and on GitHub's `main` branch. Course preparation
-and build instructions are in [maintenance](maintenance/README.md).
+Local and GitHub tracked paths are identical on `main`.
+Preparation and build records are in [maintenance](maintenance/README.md).

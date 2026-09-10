@@ -25,6 +25,9 @@ const output = path.join(__dirname, 'output', 'first_meeting');
         }));
         if (check.pageOverflow || check.brokenImages || check.overflowingText) throw new Error(JSON.stringify({name, width, ...check}));
         await page.screenshot({path: path.join(output, `${name}-${width}.png`)});
+        if (name === 'syllabus' && width === 1440) {
+          await page.locator('table').first().screenshot({path: path.join(output, 'syllabus-schedule.png')});
+        }
         if (name.startsWith('ch')) {
           await page.locator('img').first().scrollIntoViewIfNeeded();
           await page.screenshot({path: path.join(output, `${name}-${width}-diagram.png`)});

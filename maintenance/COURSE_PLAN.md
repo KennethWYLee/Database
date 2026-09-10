@@ -1,206 +1,166 @@
 # Database Management Course Plan, Fall 2026
 
-Updated: September 10, 2026
-
-The instructor authorized the revised chapter selection and three examinations worth
-30% each. Class Performance is 10%. This plan implements the current
-[English syllabus](../Intro%20DB/syllabus.md). The instructor requested a concise
-student syllabus on September 9 and full EER coverage on September 10. This revision
-adds Chapter 4 and Section 9.2, moves normalization to Week 13, and makes BCNF and
-Chapter 15 optional to keep the existing teaching weeks and assessment weights.
-The first-meeting Ch1, Ch2, and Ch5 opening selections now use the prescribed book.
-Earlier notebooks are retained under
-`Intro DB/under_revision/` and are not assigned material.
+Updated: September 10, 2026. Current scope: Ch1-2 introduction, then Ch3-9 and Ch14-19.
+This replaces the earlier SQL-first sequence and the separate Ch20 meeting.
+The instructor authorized replanning, synchronizing related files, and commit/push.
+The [English syllabus](../Intro%20DB/syllabus.md) remains the concise student version.
 
 ## Course Context
 
-- Instructor: WenYi Lee; second-year Information Management students; required course.
+- WenYi Lee; second-year Information Management students; required course.
 - Three credits; Thursdays, periods 5-7, 1:30-4:15 p.m.
-- Prescribed text: Ramez Elmasri and Shamkant B. Navathe, *Fundamentals of Database
-  Systems*, seventh edition, Pearson.
-- English-only student materials; instructor-led explanation, many diagrams, small
-  input tables, worked examples, SQL practice, and ER drawing.
-- SQLite 3 is required; no server DBMS or complete application-development project.
-- One notebook per textbook chapter, with selected scope where applicable. A notebook
-  may continue across meetings; the schedule does not require one chapter per week.
+- Elmasri and Navathe, *Fundamentals of Database Systems*, seventh edition, Pearson.
+- English student material, instructor-led explanations, many original diagrams,
+  small input tables, worked examples, SQL practice, and ER/EER drawing.
+- SQLite 3; no server DBMS, paid platform, or application-development project.
+- One notebook per chapter; a chapter can span meetings. Ch9 stays one notebook.
+- Today's reading is the syllabus and Ch1/Ch2 only. Ch5 is not a first-day assignment.
 
 ## Scope and Prerequisites
 
-First-meeting reading order: syllabus, `Intro DB/ch01.ipynb` through Chapter Summary,
-`Intro DB/ch02.ipynb` through Chapter Summary, and `Intro DB/ch05.ipynb` through
-First-Meeting Summary and Practice. The instructor may stop earlier and resume.
-These are selections, not three complete chapters to finish before class. Supplied
-code demonstrates results; SQL/Python authoring is not a first-day requirement.
-Ch5 Sections 5.2-5.3 continue in the same notebook after the first-meeting opening.
-The continuation and the separate Ch8 algebra notebook now provide the Week 2
-examples. The supplied SQL demonstrates operations; independent SQL writing starts
-in Ch6. Practice remains assigned at the instructor's discretion.
-
-- Main chapters: 3, 4, 5, 6, 7, 8, 9, and 14, limited to the syllabus's named topics.
-- Chapters 1-2: introductory selections. Chapter 8: core relational algebra, not calculus.
-- Chapter 4: all substantive sections, 4.1-4.7. Cover inheritance, specialization,
-  generalization, membership constraints, hierarchies, lattices, shared subclasses,
-  categories, design choices and formal definitions, UML comparison, and the
-  chapter's introductory abstraction, knowledge-representation, and ontology concepts.
-  Use diagrams and small examples; this is not an ontology-engineering course.
-- Chapter 9: Sections 9.1-9.2. Chapters 3 and 5 precede ER mapping; the relevant
-  Chapter 4 concepts precede each EER mapping. Teach weak entities, multivalued
-  attributes, and the simple ternary relationship before their mapping examples.
-  Compare all four specialization options (8A-8D), their applicability conditions,
-  shared-subclass mappings, and category mappings with same or different source keys.
-- Chapter 14: selected Sections 14.1-14.4 in Week 13, using supplied candidate keys.
-  Normalization through 3NF is on Exam 3, not Exam 2. BCNF (14.5) is optional.
-- Chapter 15: optional reference, not scheduled or required for examinations.
-  Attribute closure, formal binary lossless-decomposition tests, proofs, minimal-cover
-  procedures, and schema-synthesis algorithms are outside the required scope.
-- Chapter 17: selected index concepts. First supply Chapter 16's basic record, block,
-  and file-organization concepts. SQLite index commands and query-plan interpretation
-  are implementation supplements, not coverage of all Chapters 18-19.
-- Chapter 20: transaction boundaries, ACID, COMMIT/ROLLBACK, and simple interfering
-  updates. Do not add formal schedule classification or implementation protocols.
-- Chapters 15, 18-19, and 21-22 are not required. Window functions, recursive CTEs,
-  stored routines, advanced indexing, and higher normal forms remain optional.
+Teach Ch3 before Ch4, Ch5 before SQL, Ch6 before Ch7, and Ch8 after the SQL examples.
+Ch3/Ch4/Ch5 all precede Ch9 mapping. Reuse the same design case rather than
+introducing a new project. Ch14 precedes Ch15, and Ch16/Ch17 precede Ch18/Ch19.
+Ch8 supplies the logical operations needed for query trees.
 
 ## Detailed Coverage
 
-The main course chapters are **3, 4, 5, 6, 7, 8, 9, and 14**, within the limits below.
-Chapters **1-2** provide the introduction; Chapters **17 and 20** are selected
-topics. Chapter **16** supplies only the storage concepts needed to understand indexes.
-Listing a chapter does not make every section, exercise, or proof required.
+All chapters below are in scope, but only the named selections are required.
+Ch3 and Ch4 are core teaching, not optional supplements. Ch15, Ch18, and Ch19
+now have explicit required examples; Ch16 is no longer only incidental background.
 
 | Chapter | Required Topics | Limits |
 |---|---|---|
-| 1-2: Introduction and Architecture | Database purpose and benefits; models, schemas, instances, data independence, languages, and basic client/server architecture | Introductory selections from 1.1-1.3, 1.6, 2.1-2.3, and 2.5; no detailed history or system classification |
-| 3: ER Model | Entities, attributes, keys, relationships, roles, cardinality, participation, weak entities, and ER design; one simple ternary relationship | Core concepts from 3.1-3.7; a basic example from 3.9; UML comparison follows in 4.6 |
-| 4: EER Model | Inheritance; specialization/generalization; predicate-, attribute-, and user-defined membership; disjoint/overlapping and total/partial constraints; hierarchies, lattices, shared subclasses; categories; design choices and definitions; UML comparison; abstraction, knowledge representation, and ontology concepts | Sections 4.1-4.7, with diagrams and small examples for every topic; 4.6-4.7 remain at the textbook's introductory level, without an additional software or ontology project |
-| 5: Relational Model and Constraints | Relations, tuples, domains, schemas, keys, entity integrity, referential integrity, and constraint violations | Core topics from 5.1-5.3 |
-| 6: Basic SQL | Data definition, data types, constraints, basic retrieval, and INSERT/DELETE/UPDATE | Core topics from 6.1-6.4, implemented with SQLite |
-| 7: More SQL | NULL, joins, aggregation, GROUP BY/HAVING, IN/EXISTS, selected subqueries, views, a simple trigger, and basic schema changes | Selected topics from 7.1-7.4; recursive queries, assertions, and advanced trigger behavior are not required |
-| 8: Relational Algebra | Selection, projection, union, intersection, difference, Cartesian product, and joins using small relation instances | Selected operations from 8.1-8.3 and examples from 8.5; division and relational calculus are not required |
-| 9: ER- and EER-to-Relational Mapping | ER mapping; specialization options 8A-8D and their conditions; shared subclasses and categories, including surrogate keys where appropriate | Sections 9.1-9.2; teach the corresponding Ch3/Ch4 concept first; distinguish diagram constraints from constraints actually enforced by SQLite |
-| 14: Functional Dependencies and Normalization | Design anomalies, functional dependencies, 1NF, 2NF, and 3NF using supplied candidate keys | Selected concepts and examples from 14.1-14.4; BCNF (14.5) is optional; 4NF and 5NF are not required |
-| 16-17: Storage Foundations and Indexing | Records, blocks, and basic file organization; index purpose, B+ tree search, composite indexes, and read/update costs | Chapter 16 is prerequisite background only; selected concepts from 17.1-17.4 and 17.7, without full tree-update algorithms or cost derivations |
-| 20: Transactions | Logical units of work, transaction boundaries, ACID, COMMIT/ROLLBACK, and simple interfering-update examples | Selected concepts from 20.1-20.3 and 20.6; no formal schedule classification, serializability proofs, or implementation protocols |
+| 1-2: Introduction and Architecture | Database purpose; models, schemas, states, data independence, languages, client/server architecture | Introductory selections from 1.1-1.3, 1.6, 2.1-2.3, 2.5; today only |
+| 3: ER Model | Entities, attributes, keys, relationships, roles, cardinality, participation, weak entities, multivalued attributes, one ternary example | Core 3.1-3.7 and a simple 3.9 example; use one common diagram; SQL is not prerequisite |
+| 4: EER Model | Inheritance; specialization/generalization; predicate-, attribute-, user-defined membership; disjoint/overlapping, total/partial constraints; hierarchies, lattices, shared subclasses, categories, design choices, definitions, UML, abstraction, knowledge representation, ontology concepts | Sections 4.1-4.7; 4.1-4.4 in Week 3, 4.5-4.7 in Week 4; remaining topics introductory, no ontology project |
+| 5: Relational Model and Constraints | Relations, tuples, domains, schemas, superkeys, candidate/composite/primary/foreign keys, entity/referential integrity, updates and violations | Core 5.1-5.3 in Week 4; provided SQLite examples demonstrate rules before SQL writing; brief transaction unit from 5.3.4 only |
+| 6: Basic SQL | DDL, data types, constraints, SELECT, INSERT/DELETE/UPDATE | Core 6.1-6.4; supply setup and small input tables; assess only practiced statements |
+| 7: More SQL | Joins, NULL, GROUP BY/HAVING, IN/EXISTS, selected subqueries, views, one simple trigger, basic schema changes | Selected 7.1-7.4; recursive queries, assertions, advanced triggers, and stored routines excluded |
+| 8: Relational Algebra | Selection, projection, rename, compatible set operations, product, condition/equi/natural joins, simple composition | Selected 8.1-8.3 and 8.5; division and relational calculus excluded |
+| 9: ER/EER Mapping | Seven ER-mapping steps; specialization options 8A-8D and conditions; shared subclasses; categories with same or different source keys | Sections 9.1-9.2; one diagram with small variants; distinguish modeled rules from SQLite enforcement |
+| 14: Dependencies and Normalization | Anomalies, FDs, 1NF/2NF/3NF and a simple BCNF contrast | Selected 14.1-14.5; supplied candidate keys and one common schema; 4NF and 5NF excluded |
+| 15: Decomposition Design | One short attribute-closure calculation; lossless join versus spurious tuples; dependency preservation; trace 3NF synthesis using supplied minimal cover and key | Selected 15.1-15.3, including Algorithm 15.4; define minimal cover but do not require deriving it; no inference proofs, general chase, full BCNF algorithm, or 15.4-15.6 |
+| 16: Storage and File Organization | Records/blocks, basic buffering, blocking factor, heap/sorted files, static hashing and collision example | Selected 16.1-16.8; simple block-access comparisons; no hardware timing derivations, dynamic-hash algorithms, RAID design, or distributed-storage architecture |
+| 17: Indexing and Physical Design | Primary/clustering/secondary and dense/sparse indexes, multilevel search, B+ tree equality/range search, composite keys, read/update costs | Selected 17.1-17.4 and 17.7; one small tree, no full split/merge algorithm; SQLite CREATE INDEX and plan display are implementation supplements |
+| 18: Query Processing | SQL-to-algebra translation; scan versus indexed selection; nested-loop versus indexed nested-loop join; overview of sort/hash join and materialization/pipelining | Selected 18.1, 18.3-18.4, 18.7; one two-table query; no external-sort derivations, full join implementations, or parallel algorithms |
+| 19: Query Optimization | Query trees, valid selection/projection pushdown, alternative access/join plans, catalog counts, simple equality selectivity, estimated versus measured cost | Selected 19.1-19.3; supplied statistics and two candidate plans; keep join attributes, preserve results, state uniformity assumptions; no dynamic programming, cost-function derivations, Oracle internals, or optimizer implementation |
 
-Chapter 15 is optional reference; Chapters 18-19 and 21-22 are not required chapters.
-SQLite index commands and
-basic `EXPLAIN QUERY PLAN` interpretation are practical supplements to Chapter 17,
-not a separate course in query optimization. Window functions, recursive CTEs, and
-stored routines are optional supplements, not required examination topics.
-
+The expanded scope is broad for the available meetings. Week 11 combines Ch14/Ch15;
+Week 15 combines Ch18/Ch19. These are selected teaching units, not claims of
+whole-chapter coverage. Ch20-22 are not scheduled; the Ch5 rollback illustration
+does not create a separate ACID, concurrency-control, or recovery requirement.
 
 ## Teaching and Assessment Alignment
 
-Every required topic needs a concept explanation, a concrete diagram or input table,
-a checkable prediction, a worked example, interpretation, a common error or limitation,
-and practice. A synthetic table can illustrate or refute a claim; it does not establish
-a dependency or decomposition property for all legal database states.
+Every required concept needs an explanation, original diagram or small input table,
+prediction, worked result, interpretation, limitation, and practice/checking evidence.
+Keep theory and SQL implementation claims separate. A successful query execution
+does not prove a dependency for every legal state or establish the optimal plan.
 
-The final examination remains in Week 16. The instructor's full-EER decision uses
-Weeks 7-8 for ER and Section 9.1, and Weeks 10-11 for Chapter 4 with Section 9.2.
-Week 8 completes the seven ER-mapping steps with small diagrams and tables; avoid
-turning each step into a separate lab. Week 10 compares all four specialization
-mappings and checks shared-subclass membership. Week 11 distinguishes categories
-from shared subclasses, completes category mapping, and introduces the remaining
-Chapter 4 topics through a common design example. Reuse the same example when
-comparing EER and UML or explaining abstraction; do not add a project.
+Week 2: one ER example includes weak entities, multivalued attributes, and a simple
+ternary relationship; postpone relational mapping to Ch9.
+Weeks 3-4: complete EER before relational tables. Reuse that diagram for the
+remaining EER topics; the Ch5 examples then introduce the different table notation.
+Week 5: supplied schema and data let students focus on basic SQL, not an application.
+Week 7: reuse that data for complex queries; demonstrate one trigger, not a trigger project.
+Week 10: reuse the ER/EER diagram for all mapping options; each variant is a small
+comparison, not another lab submission.
 
-Integrate review into the worked examples in Weeks 13-15. In Week 13, use one small
-schema with supplied candidate keys to explain anomalies, dependencies, and the
-successive changes through 3NF. Do not silently reintroduce closure, BCNF, or formal
-lossless-decomposition tests. This is a compressed normalization meeting; actual
-pace still needs classroom confirmation.
-In Week 14, revisit SQL conditions and result equivalence while comparing index plans.
-In Week 15, use one transfer example for boundaries, ACID, and COMMIT/ROLLBACK, plus
-one simple interfering-update diagram. Reuse earlier SQL and design examples for
-the integrated review; do not add a second transaction case, new submission, formal
-schedule classification, or an implementation protocol. These are teaching-scope
-limits, not a claim that later notebooks have already been revised or classroom
-workload validated. Weeks 16-18 introduce no new required topics.
+Week 11: use one small dependency set and supplied candidate keys to progress through
+1NF-3NF and a BCNF contrast. In Ch15, work one short closure, inspect a lossless
+versus lossy split, distinguish dependency preservation, and trace Algorithm 15.4
+with a supplied minimal cover/key. Reuse those inputs across the explanation and
+practice. Do not add deriving a minimal cover, proofs, chase, or general synthesis code.
+Only taught and practiced steps are assessed on Exam 2.
 
-Preserve five group-response comparisons in Weeks 2, 4, 10, 13, and 14: keys, SQL,
-EER mapping, normalization, and indexes. Each group submits a reasoned response;
-responses are displayed anonymously, every student compares them, the instructor
-corrects technical errors, and students revise individually. Group rankings do not
-directly determine grades. Fixed-answer practice need not use group comparisons.
+Weeks 13-14: connect concrete record/block layouts to file and index choices.
+Week 15: one two-table query supports Ch18 execution methods and Ch19 alternative
+trees/plans. Supply statistics, compare two alternatives, and verify equivalent
+results before discussing cost. Describe sort/hash joins conceptually; do not
+require a DBMS implementation. Integrate review into these examples.
+Actual classroom pace is unverified. If the selected core still cannot fit, report
+the unfinished topics before assigning or examining them; do not silently shift
+new teaching into the travel, exam, holiday, or make-up weeks.
+
+Preserve five group comparisons in Weeks 2, 4, 10, 13, and 14: ER constraints,
+EER/relational keys, mapping alternatives, file organization, and indexes.
+Groups submit reasons; responses are displayed anonymously; each student compares;
+the instructor gives technical feedback; students revise individually. Rankings
+do not determine grades. Fixed-answer checks need not use group comparisons.
+AI activities remain Weeks 4, 10, 14, now checking an EER/constraint claim, a mapping,
+and an index recommendation respectively. Do not require SQL before Week 5.
 
 ## Weekly Schedule
 
-| Week | Date | Textbook Chapters | Teaching Focus and Examples |
+| Week | Date | Textbook Chapters | Teaching Focus |
 |---:|---|---|---|
-| 1 | 2026-09-10 | Ch1: Databases and Database Users (selected)<br>Ch2: Database System Concepts and Architecture (selected)<br>Ch5: The Relational Data Model and Relational Database Constraints (introduction) | Syllabus; database purpose, schemas/instances, architecture and data independence; a small student table and identifiers |
-| 2 | 2026-09-17 | Ch5: The Relational Data Model and Relational Database Constraints<br>Ch8: The Relational Algebra and Relational Calculus (selected) | Keys and integrity constraints; small-table selection, projection, set operations, product, and joins; key comparison |
-| 3 | 2026-09-24 | Ch6: Basic SQL | Create tables, set constraints, query data, and use INSERT/UPDATE/DELETE; verify results |
-| 4 | 2026-10-01 | Ch7: More SQL: Complex Queries, Triggers, Views, and Schema Modification (selected) | NULL, aggregation, GROUP BY/HAVING, IN/EXISTS, selected subqueries; verify an AI-generated query |
-| 5 | 2026-10-08 | Ch6: Basic SQL (review)<br>Ch7: More SQL: Complex Queries, Triggers, Views, and Schema Modification (selected) | Joins, ON/WHERE, views, constraints, schema changes, and one simple trigger |
-| 6 | 2026-10-15 | Ch1-2 and Ch5-8 (taught selections) | Written Exam 1; introductory concepts, relational model, taught algebra, and SQL; corrections |
-| 7 | 2026-10-22 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (selected) | Business rules to ER diagrams: entities, attributes, keys, roles, cardinality, participation, and weak entities |
-| 8 | 2026-10-29 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (continued)<br>Ch9: Relational Database Design by ER- and EER-to-Relational Mapping (9.1) | Multivalued attributes and a simple ternary relationship; complete the seven ER-mapping steps using diagrams and small tables |
-| 9 | 2026-11-05 | Ch1-2 and Ch5-8 (review only) | INFORMS travel; asynchronous review of previously taught SQL and concepts; no in-person class, exam, or new content |
-| 10 | 2026-11-12 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.1-4.3)<br>Ch9: Relational Database Design by ER- and EER-to-Relational Mapping (9.2.1-9.2.2) | Inheritance, specialization/generalization, membership constraints, hierarchies/lattices and shared subclasses; compare mappings 8A-8D and verify an AI-generated EER design |
-| 11 | 2026-11-19 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.4-4.7)<br>Ch9: Relational Database Design by ER- and EER-to-Relational Mapping (9.2.3) | Categories versus shared subclasses; category mappings with same/different keys; EER design choices and formal definitions; UML comparison; introductory abstraction, knowledge representation, and ontology concepts |
-| 12 | 2026-11-26 | Ch3, Ch4, and Ch9 (taught selections) | Written Exam 2; taught ER, EER, and mapping; normalization is not yet assessed; corrections |
-| 13 | 2026-12-03 | Ch14: Basics of Functional Dependencies and Normalization for Relational Databases (14.1-14.4 selected) | Anomalies, FDs, and 1NF-3NF with supplied candidate keys; compare redesigns; no closure, BCNF, or formal decomposition tests |
-| 14 | 2026-12-10 | Ch16: Disk Storage, Basic File Structures, Hashing, and Modern Storage Architectures (background)<br>Ch17: Indexing Structures for Files and Physical Database Design (selected) | Record/block/file background; B+ tree search, composite indexes, read/update costs, and SQLite query-plan evidence; compare an AI index recommendation |
-| 15 | 2026-12-17 | Ch20: Introduction to Transaction Processing Concepts and Theory (selected) | One transfer example for ACID, boundaries, and COMMIT/ROLLBACK; one interfering-update diagram; integrated review using earlier SQL, design, normalization, and index examples |
-| 16 | 2026-12-24 | Ch14, Ch17, and Ch20 (selected); Ch16 background; cumulative SQL and design | Written Exam 3 / Final Examination; normalization through 3NF, indexes, transactions, and cumulative taught SQL/design; no new required topics |
-| 17 | 2026-12-31 | None | University anniversary make-up holiday; no class or new required work |
-| 18 | 2027-01-07 | Previously taught sections | Make-up examination, if applicable; eligibility, scope, and arrangements to be announced; no new required topics |
+| 1 | 2026-09-10 | Ch1: Databases and Database Users (selected)<br>Ch2: Database System Concepts and Architecture (selected) | Syllabus, database concepts, schemas, and architecture. |
+| 2 | 2026-09-17 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (selected) | ER diagrams, business rules, weak entities, and relationship constraints. |
+| 3 | 2026-09-24 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.1-4.4) | Inheritance, specialization, generalization, constraints, shared subclasses, and categories. |
+| 4 | 2026-10-01 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.5-4.7)<br>Ch5: The Relational Data Model and Relational Database Constraints | EER design, UML, abstraction, ontology concepts; relational tables, keys, and constraints. |
+| 5 | 2026-10-08 | Ch6: Basic SQL | Create tables; query and update data. |
+| 6 | 2026-10-15 | Ch1-6 (taught selections) | Written Exam 1: introduction, ER/EER, relational model, and basic SQL. |
+| 7 | 2026-10-22 | Ch7: More SQL: Complex Queries, Triggers, Views, and Schema Modification (selected) | Joins, NULL, aggregation, subqueries, views, schema changes, and a simple trigger. |
+| 8 | 2026-10-29 | Ch8: The Relational Algebra and Relational Calculus (selected algebra) | Selection, projection, set operations, products, joins, and query expressions. |
+| 9 | 2026-11-05 | Ch1-8 (review only) | INFORMS travel; asynchronous review only. No in-person class or new content. |
+| 10 | 2026-11-12 | Ch9: Relational Database Design by ER- and EER-to-Relational Mapping (9.1-9.2) | Map ER/EER diagrams to tables; compare mapping alternatives and constraints. |
+| 11 | 2026-11-19 | Ch14: Basics of Functional Dependencies and Normalization for Relational Databases (14.1-14.5 selected)<br>Ch15: Relational Database Design Algorithms and Further Dependencies (15.1-15.3 selected) | Dependencies, normalization through BCNF, and guided decomposition design. |
+| 12 | 2026-11-26 | Ch7-9 and Ch14-15 (taught selections) | Written Exam 2: advanced SQL, algebra, mapping, and normalization. |
+| 13 | 2026-12-03 | Ch16: Disk Storage, Basic File Structures, Hashing, and Modern Storage Architectures (selected) | Records, blocks, buffering, heap and sorted files, and hashing. |
+| 14 | 2026-12-10 | Ch17: Indexing Structures for Files and Physical Database Design (selected) | Ordered indexes, B+ trees, composite indexes, and physical design choices. |
+| 15 | 2026-12-17 | Ch18: Strategies for Query Processing (selected)<br>Ch19: Query Optimization (selected) | Query-processing methods, equivalent query trees, plan selection, and integrated review. |
+| 16 | 2026-12-24 | Ch16-19 (selected); cumulative SQL and design | Written Exam 3: final examination, including cumulative SQL and design. |
+| 17 | 2026-12-31 | None | University anniversary make-up holiday; no class. |
+| 18 | 2027-01-07 | Previously taught sections | Make-up examination, if applicable; no new content. |
 
 ## Assessment
 
 | Assessment | Date | Weight | Scope |
 |---|---|---:|---|
-| Written Exam 1 | 2026-10-15 | 30% | Selected Chapters 1-2 and 5-8, as taught in Weeks 1-5 |
-| Written Exam 2 | 2026-11-26 | 30% | Taught Chapter 3, Sections 4.1-4.7 and 9.1-9.2; ER, EER, and mapping; no normalization |
-| Written Exam 3 (Final Examination) | 2026-12-24 | 30% | Selected Sections 14.1-14.4 and Chapters 17 and 20; Chapter 16 background only; cumulative taught SQL and design; no BCNF or formal relational-design algorithms |
-| Class Performance | Throughout the semester | 10% | Assigned practice, technical correctness, verification evidence, explanation, and revisions |
+| Written Exam 1 | 2026-10-15 | 30% | Ch1-6: taught introduction, ER/EER, relational model, and basic SQL |
+| Written Exam 2 | 2026-11-26 | 30% | Ch7-9 and Ch14-15: taught SQL, algebra, mapping, normalization, and guided decomposition; earlier ER/key concepts as prerequisites |
+| Written Exam 3 (Final Examination) | 2026-12-24 | 30% | Ch16-19 selected storage, indexing, processing, and optimization; cumulative taught SQL and design |
+| Class Performance | Throughout the semester | 10% | Assigned practice, explanations, verification evidence, and revisions |
 | Total | | 100% | |
 
-Week 18 (January 7) is reserved for a make-up examination, not a fourth separately
-weighted assessment. The instructor still needs to announce eligibility, scope,
-and grading arrangements; this schedule revision does not decide those policies.
-
-Only assigned submissions contribute to Class Performance. The former internal
-exam-by-chapter percentages belonged to the incorrect textbook scope and are no
-longer applicable. This revision does not invent replacement item-level percentages.
-Before releasing an exam, prepare and verify its items, solutions, marking criteria,
-allowed resources, and version against the taught scope. Optional material must be
-taught, practiced, and announced before it can be assessed.
+Week 18 (January 7) is a make-up examination, not a fourth separately weighted assessment.
+Eligibility, scope, and grading remain for the instructor to announce.
+Exam 2 now includes taught Ch14/Ch15 rather than postponing normalization to Exam 3.
+No item-level chapter weights are invented. Prepare and independently check exam
+items, solutions, rubrics, permitted resources, and version before release.
+Optional content needs teaching, practice, and advance notice before assessment.
 
 ## AI Use and Calendar
 
-AI is permitted only in designated activities. Preserve the planned checks in Weeks
-4, 10, and 14. Students must explain and verify submitted work; AI is not permitted
-in the three individual written examinations. Other allowed exam resources remain
-to be announced.
+Written exams are individual and AI-free. Other allowed exam resources remain
+to be announced. AI use in designated class activities requires explanation and verification.
 
-The instructor updated the travel period to November 1-8 on September 9. November 5
-remains asynchronous review only; in-person teaching resumes November 12. The instructor
-also moved the course final examination to December 24 (Week 16), with January 7
-(Week 18) reserved for a make-up examination. Exams 1 and 2 remain October 15 and
-November 26. December 31 remains a holiday. The university's official final-exam
-period remains January 4-8; distinguish it from this course's earlier final exam.
-The [official calendar PDF](https://acad.ntub.edu.tw/var/file/4/1004/img/1347/780969106.pdf)
-and [calendar page](https://acad.ntub.edu.tw/p/404-1004-37975.php?Lang=zh-tw) were checked
-on September 8. No new content is assigned during the travel week or final-exam week.
+Travel is November 1-8, 2026; in-person classes resume November 12.
+Week 9 reviews previously taught Ch1-8 only, with no in-person class, exam, or new topic.
+Final exam: December 24 (Week 16). Make-up: January 7 (Week 18).
+December 31 is the university anniversary make-up holiday. Weeks 16-18 add no new topics.
+The university final-exam period is January 4-8; it is distinct from this course's
+earlier final. Exams 1 and 2 retain October 15 and November 26.
+
+The [official calendar](https://acad.ntub.edu.tw/var/file/4/1004/img/1347/780969106.pdf)
+was rechecked September 10. Semester teaching starts September 7. Listed September
+25/28, October 9/26, December 25, and January 1 holidays do not fall on this course's
+Thursday meetings. December 31 does and is excluded. The university midterm period
+November 2-6 overlaps travel; retain the instructor's existing course exam dates
+without claiming institution-wide policy approval.
 
 ## Materials Still to Revise
 
-The repository is public under the instructor's earlier decision. The source PDF,
-private assessments, and answers remain excluded. Existing notebooks, generators,
-and their historical weekly mapping are not evidence that this new scope is already
-implemented. Preserve them until their content has been mapped and revised against
-the correct book; do not rename them by assuming equal chapter numbers mean equal topics.
+Ch1/Ch2 introductory notebooks are today's material. Ch5 and selected Ch8 notebooks
+exist for Weeks 4 and 8; their reading transitions are updated to this sequence.
+Ch3/Ch4 and the remaining prescribed-book notebooks are not made complete by this
+schedule revision. Use the textbook until a corresponding notebook is revised.
+Do not assign the twelve old-book notebooks in Intro DB/under_revision or rename
+them as if chapter numbers alone establish a match.
 
-The [topic correspondence](course_repository/textbook_material_correspondence.md)
-records the earlier scope's gaps, not a full source audit. Its September 10 notice
-identifies the additional Ch4/9.2 coverage still to map. The first-meeting release and
-its scoped verification are recorded in
-[the release record](course_repository/first_meeting_release.md). Ch5 continuation
-and selected Ch8 algebra are now revised; see the
-[relational foundations record](course_repository/full_source_audit.md#relational-foundations-revision).
-Later notebooks still need revision. The reproduced missing-key defect in
-the previous ER schema remains a prerequisite fix before that schema is reassigned.
-The classroom response system and the actual examination items still need their
-separate preparation and review.
+Private textbook/assessment files remain excluded. The earlier ER mapping schema's
+NULL-key defect must be corrected before reuse. Full chapter source audits, actual
+exams, and the classroom response system remain unfinished.
+See the [current revision record](course_repository/full_source_audit.md#chapter-order-and-expanded-scope)
+for source-reading bounds, edits, checks, and publication evidence.

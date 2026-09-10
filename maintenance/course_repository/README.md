@@ -23,6 +23,10 @@ it does not certify revised notebooks or complete chapter source audits.
 
 ## Maintained Files
 
+The current syllabus follows Ch1/Ch2, Ch3-9, then Ch14-19; only Ch1/Ch2 are
+assigned today. The four available revised notebooks do not imply the remaining
+chapters are ready. Ch15/Ch18/Ch19 are selected teaching, and Ch20 is not scheduled.
+
 - `repository_config.json`: existing chapter sources, historical weekly material mapping,
   and the path to the current course plan.
 - `build_course_repository.py`: builds, executes, and verifies every notebook.
@@ -60,7 +64,8 @@ as duplicate Markdown output. The notebook preserves the executed output instead
 Week 1 ends before the full four-table setup, and Week 2 runs independently.
 These are historical reading sections in `under_revision/ch02.ipynb`, not first-meeting completion deadlines or
 chapter references for the prescribed textbook. The revised first meeting starts
-with the syllabus and selections from Chapters 1-2 plus Chapter 5's opening concepts.
+with the syllabus and selections from Chapters 1-2 only. The current chapter order
+is Ch3-9 followed by Ch14-19; Ch5 and Ch8 are scheduled for Weeks 4 and 8.
 
 Ch2 also opts into `inline_sql`. Its guide uses `<!-- sql:setup -->`,
 `<!-- sql:example 4 -->` (and the other numbered examples), and `<!-- sql:checks -->`

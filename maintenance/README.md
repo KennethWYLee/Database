@@ -7,6 +7,10 @@ it is not a second course navigation system.
 
 ## Maintained Sources
 
+Current sequence: today's Ch1/Ch2 only, then Ch3-9 and Ch14-19. Ch5/Ch8 are
+available for Weeks 4/8, not the first two meetings. See the
+[current scope record](course_repository/full_source_audit.md#chapter-order-and-expanded-scope).
+
 | File or directory | Responsibility |
 |---|---|
 | [PROJECT.md](../PROJECT.md) | Course facts, decisions, authoritative files, and current status |

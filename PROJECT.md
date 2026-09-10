@@ -4,6 +4,29 @@
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
 - 最後更新日期：2026-09-10
+
+## 最新範圍與授課順序
+
+教師最新指定：今天只教Ch1、Ch2；之後按Ch3-Ch9、Ch14-Ch19順序授課，
+並授權修正相關文件後commit/push。ER/EER均必教；Ch4仍含4.1-4.7，
+Ch9仍含9.1-9.2。Ch15、Ch18、Ch19恢復正式選講；Ch16安排完整一週選講，
+Ch20不另列授課章節。不得再沿用先SQL後ER的次序或今天安排Ch5。
+
+Weeks 2/3/4分別為Ch3、Ch4前段、Ch4後段及Ch5；Week 5為Ch6；
+Weeks 7/8為Ch7/Ch8；Week 10為Ch9；Week 11為Ch14/Ch15選講；
+Weeks 13/14/15為Ch16、Ch17、Ch18/Ch19選講。
+考試日期及30/30/30/10不變；Exam 1為Ch1-6，Exam 2為Ch7-9與Ch14-15，
+Exam 3為Ch16-19加已教SQL與設計。出國、放假、期末考及補考安排不變。
+細部必教/排除內容依maintenance/COURSE_PLAN.md，不能將列章等同整章全教。
+Ch14/15與Ch18/19各合併一週，份量仍需實際授課確認；只考已教與練習內容。
+
+今天入口是課綱、ch01.ipynb、ch02.ipynb；現有ch05/ch08延至Weeks 4/8。
+本次修改課綱、銜接及治理文件，不代表Ch3/4或全課新版教材已完成。
+最新查核見maintenance/course_repository/full_source_audit.md#chapter-order-and-expanded-scope。
+
+## 歷史決策紀錄
+
+以下日期紀錄保留追溯；與上方最新範圍衝突時，不再作為本期指令。
 - 2026-09-10教材續修：教師授權修正後commit/push。Ch1、Ch2保留導論選講；
   Ch5在原第一堂停止點後補5.1-5.3的keys、constraints與資料異動；
   新增獨立Ch8 notebook，依課綱教8.1-8.3指定algebra及8.5簡單組合，
@@ -156,10 +179,10 @@
 - 上課時間：星期四第 5-7 節，13:30-16:15。
 - 課程主體：relational model、relational algebra、SQL、ER/EER model、
   ER- and EER-to-relational mapping、functional dependencies、normalization，以及選定的
-  indexing、query-plan interpretation及transaction basics；不要求DBMS內部
-  query optimization、concurrency-control或recovery演算法。
+  storage/file organization、indexing、query processing與query optimization選講；
+  不要求DBMS實作、完整成本推導、concurrency-control或recovery演算法。
 - 課程可在教師允許時訓練學生檢查 AI 產生的 SQL、ER diagram、schema、
-  query plan與transaction判斷；這是教師加入的應用，不宣稱為教科書原有章節。
+  query plan判讀；這是教師加入的應用，不宣稱為教科書原有章節。
 
 ## 用語與學生可見內容
 
@@ -170,14 +193,10 @@
 - 課程計畫與逐章教材不寫分鐘配置；需要控制份量時，以授課摘要、課堂核心
   內容及課後延伸內容區分。
 - 不把課堂流程、評量方式或 AI 使用方式另取未經教師核准的名稱。
-- Week 1只介紹識別欄位的用途，以同名學生說明；superkey、candidate/primary/
-  composite/foreign key的正式分類留在Week 2。課綱、課程計畫與首頁對齊此決定。
-- Week 1使用獨立的synthetic student table，Python/SQL為已提供的觀察工具，
-  不要求掌握語法。七段示範依概念、可檢查預測、程式與實際輸出、具體判讀排列；
-  練習直接寫在同一notebook，只在教師指定時繳交，未新增配分或作業平台。
-- 2026-09-07修正Week 1練習要求：可提供預測的修正，或解釋預測為何正確，
-  不要求預測正確的學生另找一個錯誤。課綱入口改稱syllabus，不建立week1.ipynb；
-  這是檔案與導覽調整，不改動既有Week 1授課範圍、日期、章節或評量。
+- Week 1只教Ch1/Ch2導論與架構；Ch3 ER在Week 2，Ch4 EER在Weeks 3-4，
+  Ch5關聯模型與正式keys分類在Week 4。SQL寫作從Week 5的Ch6開始。
+- 一章一份notebook，不建立week1.ipynb；只在教師指定時繳交練習。
+- 預測正確時可解釋原因，不要求學生捏造一次修正。
 
 ## 現用教科書與查核狀態
 
@@ -244,7 +263,7 @@
 
 - 115-1 自 2026-09-07 開始上課；本課 Week 1 為 2026-09-10。
 - 教師於 2026-11-01 至 2026-11-08 出國參加 INFORMS；Week 9 的
-  2026-11-05 不排實體課、考試或新進度，只複習已教的Ch1-Ch2、Ch5-Ch8選定內容。
+  2026-11-05 不排實體課、考試或新進度，只複習已教的Ch1-Ch8選定內容。
 - Week 17 的 2026-12-31 為校慶補假，不排課。
 - Week 6 的 2026-10-15 辦理Exam 1；Week 12的2026-11-26辦理Exam 2。
 - Weeks 13-15的既有範例併入複習；Week 16的2026-12-24辦理Exam 3與課程期末考。
@@ -254,24 +273,23 @@
 
 | 評量 | 週次與日期 | 比例 | 範圍 |
 |---|---|---:|---|
-| Written Exam 1 | Week 6, 2026-10-15 | 30% | Ch1-Ch2、Ch5-Ch8的已教選定內容：導論、關聯模型、核心algebra及SQL |
-| Written Exam 2 | Week 12, 2026-11-26 | 30% | Ch3已教內容、4.1-4.7及9.1-9.2；ER、EER與mapping，不含正規化 |
-| Written Exam 3 / Final Examination | Week 16, 2026-12-24 | 30% | 14.1-14.4、Ch17、Ch20選定內容；Ch16僅作索引背景，並累積應用已教SQL與database design |
-| Class Performance（課堂表現） | 全學期 | 10% | 指定SQL labs、database design exercises、ER diagrams、schemas、normalization、index與query-plan activities、個人回答與修正；peer rank不直接計分 |
+| Written Exam 1 | Week 6, 2026-10-15 | 30% | Ch1-6已教內容：導論、ER/EER、關聯模型、basic SQL |
+| Written Exam 2 | Week 12, 2026-11-26 | 30% | Ch7-9及Ch14-15已教選講：SQL、algebra、mapping、正規化與引導式分解 |
+| Written Exam 3 / Final Examination | Week 16, 2026-12-24 | 30% | Ch16-19選講；累積已教SQL與database design |
+| Class Performance（課堂表現） | 全學期 | 10% | 指定練習、解釋、驗證與修正；peer rank不直接計分 |
 
-- 三次考試都用來確認學生本人的資料庫概念、SQL、資料庫設計、效能與交易
-  處理能力。
-- 同儕排序結果不用來直接計算各組正式成績。
+- Exam 2的Ch14包括至BCNF的小例子；Ch15提供candidate keys及minimal cover，
+  教短closure、lossless/dependency preservation比較與Algorithm 15.4引導步驟。
+  不考general chase、minimal-cover推導、完整BCNF演算法或未練習內容。
+- Exam 3考所教storage、indexing、query processing及optimization，不另考Ch20。
+- 三次written exams皆為個人且AI-free，其他可用資源待宣布。
 - Week 18補考不另增配分；資格、範圍及計分安排待教師另行宣布。
-- Exam 2只考Weeks 7-11已教的ER、EER與9.1-9.2 mapping，不考尚未教授的正規化。
-- Exam 3包含Week 13的FD及至3NF的正規化，以及索引、transaction basics；
-  candidate keys由題目提供。BCNF、closure與formal lossless-decomposition判定
-  不列必考；累積題只能應用已教過的SQL與database design概念。
-- 各次考試是否允許使用或審查 AI 產生的材料，必須在正式考試規則中明示。
 
 ## 課堂活動決策
 
 - 全學期規劃5次小組共同回答與個人完整比較，安排於Weeks 2、4、10、13、14。
+  主題改為ER限制、EER/keys、mapping、file organization、indexes。
+  AI活動仍Weeks 4、10、14，依序檢查EER/constraint、mapping與index建議。
 - 各組先提交一份共同回答與理由；回答鎖定後匿名展示。每位學生排列全部
   回答，系統保存原始排序並彙整平均名次與名次分布，教師最後依技術標準
   回饋，學生再修正。

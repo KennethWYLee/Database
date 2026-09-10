@@ -1,5 +1,15 @@
 # September 10 First-Meeting Release
 
+## Current Chapter Order
+
+September 10, 2026: the instructor now requires today's Ch1/Ch2 only, followed
+by Ch3-9 and Ch14-19 in order. Ch3/Ch4 remain required; Ch15/Ch18/Ch19 are
+restored as selected teaching, and Ch20 is not scheduled. Ch5/Ch8 move to Weeks
+4/8. Earlier dates, scope exclusions, and first-meeting directions below are
+historical where they conflict. See the
+[current revision record](full_source_audit.md#chapter-order-and-expanded-scope).
+This schedule change does not complete the remaining prescribed-book notebooks.
+
 Date: September 8, 2026. Baseline: `a9bc1a8` on `main`.
 The instructor authorized the first batch, including verification, commit, and push
 to the existing origin. The branch matched `origin/main` after fetching at the start.

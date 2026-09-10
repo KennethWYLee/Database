@@ -3,6 +3,151 @@
 Started: 2026-09-08. Baseline: `a9bc1a8` on `main`, tracking existing `origin/main`.
 The worktree was clean at the start. No commit or push is authorized for this audit.
 
+## Chapter Order and Expanded Scope
+
+Date: September 10, 2026. Baseline: 4c445a4c7b2d5691576fc61d1fc4af546992ea59,
+main tracking existing origin/main; clean at the start.
+The instructor explicitly authorized replanning the syllabus, correcting related
+files, and committing/pushing. No remote or publication setting is changed.
+
+### Current Decision and Changes
+
+Today covers Ch1/Ch2 only, then Ch3-9 and Ch14-19 in textbook order.
+Ch3 ER and all substantive Ch4 sections remain required; Ch9 includes 9.1-9.2.
+Ch15, Ch18, and Ch19 now have required selected teaching rather than being excluded.
+Ch16 has a scheduled storage/file-organization meeting. Ch20 is not scheduled.
+This supersedes the earlier first-meeting Ch5 and Week 2 Ch5/Ch8 directions.
+
+| Weeks | Current material |
+|---|---|
+| 1 | Ch1/Ch2 only |
+| 2 | Ch3 ER |
+| 3 | Ch4 Sections 4.1-4.4 |
+| 4 | Ch4 Sections 4.5-4.7, then Ch5 |
+| 5 | Ch6 |
+| 6 | Exam 1: taught Ch1-6 |
+| 7-8 | Ch7, then Ch8 selected algebra |
+| 9 | Travel; review taught Ch1-8 only |
+| 10 | Ch9 Sections 9.1-9.2 |
+| 11 | Ch14/Ch15 selected normalization and guided decomposition |
+| 12 | Exam 2: taught Ch7-9 and Ch14-15 |
+| 13-14 | Ch16, then Ch17 selections |
+| 15 | Ch18/Ch19 selected processing and optimization; integrated review |
+| 16 | Exam 3/final: Ch16-19 selections and cumulative taught SQL/design |
+| 17-18 | Holiday, then make-up examination; no new topics |
+
+Exam dates remain October 15, November 26, and December 24; weights remain
+30/30/30/10. Travel remains November 1-8, December 31 remains a holiday,
+and January 7 is the make-up. Five group comparisons and three designated AI
+activities retain their weeks, with topics changed to match what has been taught.
+
+The new scope is broad. There are twelve teaching meetings including the introduction.
+Weeks 4, 11, and 15 are compressed. The detailed plan limits new requirements:
+a common EER case; supplied keys/minimal cover for a small 3NF synthesis example;
+one two-table query for processing and plan comparison. BCNF contrast, short
+closure, decomposition properties, storage and optimizer concepts are included,
+but complete algorithms/proofs/implementations are not silently required.
+Actual pacing is not validated; unfinished content must not be examined without
+teaching and practice or silently moved to the travel/exam weeks.
+
+### Source Checks
+
+Prescribed source: the instructor's private Elmasri/Navathe seventh-edition PDF,
+SHA-256 002eceecdb5e47b050e61b30d13a8f207fb44cea4f927b98d864308c026288a5.
+The source and uploaded dependency diagram confirm the book identity and topic
+relationships. The diagram supports prerequisites; it is not a requirement that
+every course follow a single ordering.
+
+The contents at PDF pages 18-21 and 23-26 were checked for exact titles and section
+numbers. Relevant newly scheduled passages were read, not just the contents:
+- Ch15 printed 505, 513, 519 / PDF 536, 544, 550: FD prerequisite, decomposition
+  properties, and Algorithm 15.4; its minimal-cover/key prerequisites are supplied.
+- Ch16 printed 560, 567, 572 / PDF 591, 598, 603: records, heap organization,
+  hashing and equality-search context.
+- Ch18 printed 657, 663, 668, 681 / PDF 688, 694, 699, 712: SQL/algebra/storage/index
+  prerequisites, selection methods, joins, and materialization/pipelining.
+- Ch19 printed 692, 701, 710 / PDF 723, 732, 741: query trees, alternative
+  plans, and cost estimates rather than guaranteed globally optimal execution.
+
+These are bounded scheduling checks, not a complete chapter-source audit.
+They do not verify every exercise, original figure, or proposed future teaching
+example. Existing Ch5/Ch8 checks retain their earlier stated scope; full chapter
+audit completion remains zero.
+
+The [official NTUB calendar](https://acad.ntub.edu.tw/var/file/4/1004/img/1347/780969106.pdf)
+was reopened September 10. It confirms September 7 teaching start, December 31
+holiday, January 4-8 final period, and November 2-6 university midterm period.
+Listed other first-semester holidays do not land on scheduled Thursdays.
+The instructor's exam/travel arrangements remain distinct from university-wide
+exam periods; this audit does not claim administrative approval for that difference.
+
+### Maintained Sources and Derived Outputs
+
+- Syllabus and COURSE_PLAN: matching 18-week schedule, chapter titles, selected
+  depth, revised examination scopes, dates, and unchanged grading policy.
+- README: only Ch1/Ch2 in today's entry; Ch5/Ch8 available for Weeks 4/8.
+- PROJECT: newest decision plus updated current scope, first-day guidance,
+  assessment and activity sections; earlier decisions explicitly historical.
+- Authoring prompt: current sequence, required selections, exclusions, and limits.
+- Ch2/Ch5/Ch8 maintained guides: forward/backward reading references corrected;
+  Ch5 first-meeting label removed. All executable code and figures preserved.
+- repository_config.json: build revision identifier; legacy chapter mapping
+  remains marked historical, not repurposed as the current syllabus.
+- Maintenance READMEs, first_meeting_release, textbook_material_correspondence:
+  current scope notices without pretending old audit records describe this version.
+- test_repository_layout.py and test_second_meeting.py: schedule, title,
+  scope, first-day navigation, and chapter-transition regression checks.
+- Derived ch02.ipynb, ch05.ipynb, ch08.ipynb regenerated from maintained sources.
+  Ch01 and twelve historical notebooks are unchanged.
+
+### Verification
+
+Commands used the installed Python 3.12 and bundled Node from the course root:
+
+```powershell
+python -X utf8 maintenance/course_repository/build_course_repository.py --verify
+python -X utf8 -m unittest discover -s maintenance/course_repository -p 'test*.py'
+python -X utf8 maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
+```
+
+Build/content/manifest checks passed for 16 notebooks and 18 course files.
+Thirty regression tests passed, including exact Thursday dates, exam weeks 6/12/16,
+30/30/30/10 weights, full textbook titles, required chapters, selected scope, today's
+Ch1/Ch2-only links, and notebook transitions.
+Four fresh kernels reproduced saved outputs: Python 3.12.9, SQLite 3.45.3,
+with 0/1/6/10 code cells for Ch1/Ch2/Ch5/Ch8. The verifier exited zero.
+A libzmq connection-reset diagnostic occurred during kernel lifecycle handling;
+no teaching cell or output assertion failed. No environment packages were modified.
+
+All 33 embedded PNGs decoded and were nonblank; no separate assets are required.
+Six pages at 1440/390 pixels passed image, text-boundary, and page-overflow checks;
+33 SVGs passed geometry checks. The complete desktop schedule, desktop syllabus
+opening, and mobile home were visually inspected. Wide tables scroll on mobile;
+date cells can wrap without losing content.
+All 78 relative links in changed Markdown resolved. Exact code cells, saved outputs,
+and figure attachments in Ch2/Ch5/Ch8 match the baseline. Ch1 and twelve historical
+notebooks are byte-identical; instruction mirrors remain identical.
+The renderer now saves a complete syllabus-table screenshot for future checks.
+Private PDFs, source-page images, caches, and assessments remain excluded.
+
+### Limits and Next Action
+
+This completes the schedule and its related directions, not all newly scheduled
+chapter notebooks. Ch3/Ch4 still require prescribed-book authoring. Old notebooks
+remain explicitly unassigned, and the private textbook is not published.
+The older ER mapped-schema NULL-primary-key defect remains a blocker before its
+reuse. Correct and test that maintained schema as part of preparing the now-next
+Ch3 ER material. Expected outcome: source-grounded ch03.ipynb with diagrams and
+practice, plus missing-key rejection tests for any reused mapping SQL; no new
+mapping assignment before Ch9. This becomes the immediate teaching priority
+because the instructor moved ER to Week 2.
+
+No new exams/answer keys, student data, dependencies, or private sources are added.
+The commit/push is authorized to existing origin/main; the final hash and remote
+synchronization are reported in Git history and the task response.
+
+
 ## Relational Foundations Revision
 
 Date: September 10, 2026. Baseline: `4fc5dca28aeac637b0576a54b0984d0d0ac7dd3a`.

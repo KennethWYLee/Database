@@ -2,15 +2,14 @@
 
 ## Teaching Summary
 
-What does one row mean? The first-meeting selection introduces relations, tuples,
-attributes, domains, and the purpose of identifiers. Read Chapters 1-2 first.
+What does one row mean? This chapter introduces relations, tuples,
+attributes, domains, and identifiers after the ER/EER designs in Chapters 3-4.
 You only need to compare values and read a table; programming syntax is not a prerequisite.
 
 Textbook: Elmasri and Navathe, *Fundamentals of Database Systems*, seventh edition,
-selected opening concepts from Section 5.1. Formal keys and integrity constraints
-from Sections 5.2-5.3 are the chapter's continuation, not first-meeting requirements.
-The continuation is included after First-Meeting Summary and Practice in this same
-notebook. Read it when the instructor resumes the chapter.
+core concepts from Sections 5.1-5.3. Formal keys and integrity constraints
+follow the opening table examples in this same notebook.
+This chapter is scheduled for Week 4, not the first class.
 
 You should be able to identify a complete tuple and an attribute value, distinguish
 the domain from observed values, compare repeated values with duplicate tuples,
@@ -81,7 +80,7 @@ Tuples: 4; attributes: 4
 
 The output preserves all four values for each student. Its 16 displayed attribute
 values are not 16 students. The supplied key declaration protects identifiers;
-its syntax and formal key classification are not required in this first meeting.
+its syntax is supplied; formal key classification follows later in this chapter.
 
 **Practice:** Write S102's complete tuple and S104's department value. Check your tuple
 against all four attribute names. Explain why these two requested answers have
@@ -205,7 +204,7 @@ the rule must establish how it distinguishes permitted records.
 prove that names are always unique. Use the two Kai Wu rows as a counterexample.
 Candidate, primary, composite, and foreign key definitions are for the continuation.
 
-## First-Meeting Summary and Practice
+## Table Concepts: Summary and Practice
 
 One tuple expresses one fact appropriate to its relation. Attributes give values
 their roles; domains constrain possible values. Repeated values differ from repeated
@@ -222,14 +221,13 @@ Keep one prediction, the observed result, and either your correction or an expla
 of why your prediction was correct. Questions support classroom discussion and review;
 only instructor-assigned submissions are graded.
 
-**Stop here for the first meeting.** The continuation of this chapter will cover
-formal keys, entity integrity, referential integrity, and constraint violations.
-Chapter 8 then expresses queries as relational-algebra operations. Neither continuation
-is an extra task to finish before the next class unless explicitly assigned.
+Continue below with formal keys, entity integrity, referential integrity, and
+constraint violations. The instructor sets the stopping point; only assigned
+practice is submitted. Chapter 6 follows with SQL writing.
 
 ## Continue: Keys and Integrity Constraints
 
-Resume here after the first-meeting stopping point. This continuation covers core
+Continue after the table concepts above. This part covers core
 Sections 5.2-5.3 and the needed notation from 5.1. SQL is supplied to check predictions;
 independent SQL writing begins in Chapter 6. Explain the rules before running code.
 
@@ -650,7 +648,8 @@ S104 rows: 0
 
 The explicit ROLLBACK undid S104's insertion. A statement failure does not generally
 roll back an entire transaction automatically. Detailed ACID and transaction
-theory remain in Chapter 20; this is the introductory concept from Section 5.3.4.
+theory belong to Chapter 20, which is not scheduled in this course.
+This is only the introductory concept from Section 5.3.4.
 
 **Practice:** Describe the intended final state if both operations succeed. Explain
 why inserting the student before its enrollment respects referential integrity.
@@ -668,9 +667,8 @@ result, the exact rule, and a correction or confirmation. For a paper example,
 keep your worked result without claiming database execution. Only assigned work
 is submitted.
 
-Continue with Chapter 8: The Relational Algebra and Relational Calculus, selected
-algebra operations. Chapter 6 then teaches SQL writing; ER/EER design and mapping
-follow later in Chapters 3-4 and 9.
+Continue with Chapter 6: Basic SQL, followed by Chapter 7 and Chapter 8's selected
+algebra. Chapter 9 then maps the ER/EER designs from Chapters 3-4 to relational tables.
 
 Implementation references: [SQLite CREATE TABLE](https://www.sqlite.org/lang_createtable.html)
 and [SQLite foreign keys](https://www.sqlite.org/foreignkeys.html).

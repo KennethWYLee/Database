@@ -9,65 +9,52 @@
 並指定三次考試各30%；Class Performance為10%。以下依新版課綱執行，不再沿用
 Database System Concepts的章號、舊週次或考試範圍。
 
-第一批發布例外：教師另核准先完成週四9/10的課綱及Ch1、Ch2、Ch5入門選講，
-並在相應來源/程式/畫面查核後commit/push。此批只標示所教內容的查核範圍，
-不得宣稱整章或全書完整查核。現行維護來源為ch01_database_introduction、
-ch02_database_architecture、ch05_relational_model各自student_guide.md，
-圖解為`maintenance/course_repository/opening_figures.py`；舊notebook在
-`Intro DB/under_revision/`，不作正式指定。Ch5後續補入同一份notebook。
-2026-09-10續修：Ch5已補keys、constraints與資料異動；Ch8新版來源為
-`maintenance/chapters/ch08_relational_algebra/student_guide.md`，輸出為獨立ch08.ipynb。
-兩章完整文字閱讀與指定主題查核紀錄見full_source_audit.md的Relational Foundations
-Revision；未把選講教材驗證宣稱為全部原圖、習題或全書完整查核。
+2026-09-10最新指示：今天只教Ch1/Ch2，後續按Ch3-Ch9、Ch14-Ch19順序。
+教師授權重排課綱與同步文件後commit/push。先前Ch5/Ch8在前兩週的安排已撤換，
+既有教材保留至Week 4/8使用；Ch20不另排教學。不得把歷史紀錄當作現行範圍。
 
 ## 一、正式教學範圍
 
-逐章的必教主題、小節、排除內容、週次及考試範圍，以
-`Intro DB/syllabus.md`的Weekly Schedule與Assessment，以及
-`maintenance/COURSE_PLAN.md`的Detailed Coverage為準。學生課綱只保留必要資訊，
-詳細範圍以2026-09-10的EER修訂為準。Ch4教4.1-4.7，其餘主體章節仍依指定範圍。
+以`Intro DB/syllabus.md`及`maintenance/COURSE_PLAN.md`的Detailed Coverage為準。
+範圍是Ch1/Ch2導論、Ch3-Ch9、Ch14-Ch19；列出章節不代表所有小節或習題均必教。
 
-- Ch1-Ch2：導論選講；Ch3：ER；Ch5：relational model與constraints。
-- Ch6：basic SQL；Ch7：選定的complex queries、views、簡單trigger與schema changes。
-- Ch8：指定的relational algebra運算；不教relational calculus，division作延伸。
-- Ch4：4.1-4.7全列教學，包括inheritance、specialization/generalization、
-  membership與disjoint/overlapping及total/partial限制、hierarchies/lattices、
-  shared subclasses、categories、design choices與formal definitions、UML比較，
-  以及課本的abstraction、knowledge representation與ontology入門概念。
-  每項搭配圖解與簡例，不另加系統開發或ontology工程專案。
-- Ch9：9.1與9.2；先完成對應Ch3、Ch4、Ch5概念，再做mapping。
-  Weak entities、multivalued attributes及ternary relationship須先教再映射。
-  9.2包含8A-8D四種選項與成立條件、shared subclasses及categories的映射；
-  比較來源keys相同或不同的情形，區分EER限制與SQLite實際強制的限制。
-- Ch14：14.1-14.4在Week 13，以已給定candidate keys教至3NF；14.5 BCNF改延伸。
-- Ch15：延伸參考，不排正式進度或必考；不加入attribute closure、formal binary
-  lossless-decomposition tests、proof、minimal cover或schema-synthesis algorithms。
-- Ch17：索引用途、B+ tree查找、composite index及read/update成本選講。
-  先補Ch16的record、block及基本file organization；不整章教授Ch16。
-  SQLite index commands與EXPLAIN QUERY PLAN另標為實作補充，不能宣稱為原書範例。
-- Ch20：transaction boundaries、ACID、COMMIT/ROLLBACK與簡單並行錯誤選講。
-- Ch18-Ch19及Ch21-Ch22不列必教；window functions、recursive CTEs、stored routines、
-  higher normal forms及DBMS內部演算法不列本版必考範圍。
+- Ch3 ER必教；3.1-3.7核心加3.9簡單三元例子。
+- Ch4 EER必教4.1-4.7，包含全部核心種類、限制、design choices、definitions、
+  UML及abstraction/knowledge representation/ontology入門；不新增ontology專案。
+- Ch5教5.1-5.3；Ch6教6.1-6.4；Ch7選7.1-7.4含一個簡單trigger。
+- Ch8選8.1-8.3 algebra及8.5組合；division、calculus不列必教。
+- Ch9教9.1-9.2；七個ER步驟、8A-8D成立條件、shared subclasses與categories，
+  比較相同/不同來源key；區分圖上限制與SQLite實際強制限制。
+- Ch14選14.1-14.5，含1NF至3NF及BCNF簡單比較，使用給定candidate keys。
+- Ch15選15.1-15.3：短attribute closure、lossless/dependency preservation，
+  用給定minimal cover/key追蹤Algorithm 15.4。minimal cover要定義，
+  但不要求推導；不加入general chase、證明、完整BCNF演算法或4NF/5NF。
+- Ch16選16.1-16.8：records、blocks、buffering、blocking factor、
+  heap/sorted files、static hashing及collision；不只列為索引背景。
+- Ch17選17.1-17.4與17.7：ordered/dense/sparse indexes、B+ tree、composite keys，
+  讀寫代價與physical design；不教完整split/merge實作。
+- Ch18選18.1、18.3-18.4、18.7：SQL到algebra、selection方法、
+  nested-loop/indexed nested-loop、sort/hash join概念、materialization/pipelining。
+- Ch19選19.1-19.3：query trees、合法pushdown、兩種plan、catalog、
+  equality selectivity與估計限制；不做完整成本推導或optimizer實作。
+- Ch20-Ch22不排正式章節；Ch5的簡短rollback例子不代表另教整章交易。
 
-教材份量與順序須符合課綱：
-
-- Week 1先課綱與導論，Week 2關聯模型及核心algebra，Weeks 3-5 SQL。
-- Weeks 7-8完成ER與9.1；Weeks 10-11教授Ch4與9.2；Week 13教至3NF。
-  五次小組比較安排Weeks 2、4、10、13、14；AI活動仍為Weeks 4、10、14。
-- Week 14索引；Weeks 13-15將複習併入既有範例。Week 15以一個轉帳例子教
-  boundaries、ACID、COMMIT/ROLLBACK，加一張簡單並行更新圖，再整合複習，
-  不增加新作業、第二個交易案例或formal schedule classification。
-- Weeks 6、12、16分別考Exam 1、2、3；Week 16（12/24）為本課期末考。
-- Week 9出國（11/1-8），不排新內容；Week 17（12/31）放假；Week 18（1/7）
-  保留補考。Weeks 16-18不加新必教內容，補考不另增第四次考試配分；資格、
-  範圍與計分方式待教師另行宣布，不能自行推定。
-- Exam 2考已教ER、EER及9.1-9.2 mapping；正規化至3NF列Exam 3。
-  BCNF、closure與formal lossless-decomposition tests不列必考。實際題目仍需獨立命題與驗證。
-- 一章一份notebook，可跨次授課；先依新書逐節對照既有教材，不能只改舊notebook檔名。
-- 保留大量原創圖解、小型input tables、簡單範例、預測、輸出判讀及練習。
-- 不因完整來源查核而把課綱略過的小節加入正式教學或增加學生工作量。
-- 學生教材使用English-only prose及標準術語，不寫分鐘配置或內部製作分類。
-  教師端coverage、verification及治理紀錄可使用繁體中文。
+週次與評量：
+- Week 1 Ch1/Ch2；Week 2 Ch3；Week 3 Ch4的4.1-4.4；
+  Week 4 Ch4的4.5-4.7與Ch5；Week 5 Ch6。
+- Weeks 7/8 Ch7/Ch8；Week 10 Ch9；Week 11 Ch14/Ch15；
+  Weeks 13/14/15 Ch16、Ch17、Ch18/Ch19。
+- Weeks 6/12/16三次考試各30%，範圍依序Ch1-6、Ch7-9與Ch14-15、
+  Ch16-19加累積已教SQL/design；Class Performance 10%。
+- 11/1-8出國，Week 9只複習Ch1-8；Week 17放假；Week 18補考。
+  Weeks 16-18不排新內容，補考不加第四次配分。
+- 五次小組比較Weeks 2、4、10、13、14；AI活動仍4、10、14，
+  題材依現行plan，不能在SQL教授前要求學生獨立寫SQL。
+- Weeks 11/15份量緊，使用共同小例子及給定資料；不足時回報，不擅自增加
+  考試週進度、作業或考未教內容。
+- 一章一份notebook；大量原創圖、input tables、簡例、預測、實際輸出、
+  判讀及練習。英文學生教材不寫分鐘配置或內部製作分類。
+- 本次改課綱/銜接，不等於全章或全書逐句查核完成；查核範圍須獨立記錄。
 
 ## 二、開始工作前必讀
 
@@ -323,8 +310,7 @@ SQL註解及執行輸出。每一句至少檢查：
 阻擋性問題，應先嘗試利用現有來源、環境及可重現測試解決；只有確實無法繼續時
 才停止並具體說明所需資訊或決定。
 
-依現行課綱的授課順序完成：Ch1-Ch2導論、Ch5、Ch8選定algebra、Ch6-Ch7、
-Ch3與Ch9的9.1、Ch4與Ch9的9.2、Ch14選講、Ch16必要背景與Ch17選講、Ch20選講。
-Ch9的兩部分維持在同一份notebook，不拆成兩門課。只處理本次教師授權的批次；
-完成全課後再提供整合報告，確認章節銜接、術語、sample database、SQL dialect、
-Class Performance與三次考試範圍一致。不得再按舊書章號清單自動加入Ch15或Ch18-Ch19。
+依現行課綱順序完成Ch1-Ch2導論、Ch3-Ch9、Ch14-Ch19的指定範圍。
+只處理本次教師授權的批次；一章一份notebook，Ch9不拆分。
+完成全課後提供整合報告，確認章節銜接、術語、sample database、SQL dialect、
+Class Performance與三次考試範圍一致。不得沿用舊書章號或擅自排入Ch20。

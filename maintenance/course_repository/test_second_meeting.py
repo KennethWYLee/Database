@@ -140,7 +140,8 @@ class SecondMeetingTests(unittest.TestCase):
 
     def test_coverage_and_opening_stop(self):
         ch5 = builder.safe_source("maintenance/chapters/ch05_relational_model/student_guide.md").read_text(encoding="utf-8")
-        self.assertLess(ch5.index("## First-Meeting Summary and Practice"), ch5.index("## Continue: Keys and Integrity Constraints"))
+        self.assertLess(ch5.index("## Table Concepts: Summary and Practice"), ch5.index("## Continue: Keys and Integrity Constraints"))
+        self.assertNotIn("first-meeting", ch5)
         for chapter_id in ("ch05", "ch08"):
             config = builder.load_json(builder.CONFIG_PATH)
             chapter = next(c for c in config["current_chapters"] if c["id"] == chapter_id)
