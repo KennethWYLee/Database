@@ -18,7 +18,9 @@ Database System Concepts的章號、舊週次或考試範圍。
 以`Intro DB/syllabus.md`及`maintenance/COURSE_PLAN.md`的Detailed Coverage為準。
 範圍是Ch1/Ch2導論、Ch3-Ch9、Ch14-Ch19；列出章節不代表所有小節或習題均必教。
 
-- Ch3 ER必教；3.1-3.7核心加3.9簡單三元例子。
+- Ch3 ER必教；3.1-3.7、3.9.1-3.9.2、3.10。教師使用教材後要求擴充weak
+  entities，並加入三元關係限制及UNIVERSITY案例；須區分兩種SECTION識別規則，
+  以及課本文字和Figure 3.20的HAS最小參與數差異。新增內容不等於授權改考試日期。
 - Ch4 EER必教4.1-4.7，包含全部核心種類、限制、design choices、definitions、
   UML及abstraction/knowledge representation/ontology入門；不新增ontology專案。
 - Ch5教5.1-5.3；Ch6教6.1-6.4；Ch7選7.1-7.4含一個簡單trigger。

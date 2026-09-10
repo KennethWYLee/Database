@@ -185,6 +185,138 @@ add("complete", "15. Assemble the Campus Diagram", "The core campus ER schema fo
      (355, 1290, "Core attributes only; see the inventory below.")])
 
 
+# Additional instructor-approved Ch3 examples, separate from the original core.
+ORDER_ITEMS = (("O10", 1, "Notebook", 2), ("O10", 2, "Pen", 3), ("O20", 1, "Notebook", 2))
+ITEM_NOTES = (("O10", 1, 1), ("O10", 2, 1), ("O20", 1, 1))
+INTERVIEWS = (("S101", "C1", 1), ("S101", "C2", 1), ("S102", "C1", 1))
+APPROVAL_ADDITIONS = (("S101", "I2", "DB101"), ("S103", "I1", "DB101"), ("S103", "I2", "DB101"))
+UNIVERSITY_RELATIONSHIPS = (
+    ("ADMINS", "COLLEGE", "(0,N)", "DEPT", "(1,1)"),
+    ("DEAN", "COLLEGE", "(1,1)", "INSTRUCTOR", "(0,1)"),
+    ("CHAIR", "DEPT", "(1,1)", "INSTRUCTOR", "(0,1)"),
+    ("EMPLOYS", "DEPT", "(0,N)", "INSTRUCTOR", "(1,1)"),
+    ("HAS", "DEPT", "(0,N)", "STUDENT", "(0,1)"),
+    ("OFFERS", "DEPT", "(0,N)", "COURSE", "(1,1)"),
+    ("SECS", "COURSE", "(0,N)", "SECTION", "(1,1)"),
+    ("TEACHES", "INSTRUCTOR", "(0,N)", "SECTION", "(1,1)"),
+    ("TAKES", "STUDENT", "(0,N)", "SECTION", "(5,N)"),
+)
+WEAK_HEADING = "12. Weak Entities and Partial Keys / ### "
+TERNARY_HEADING = "14. A Fact That Needs Three Participants / ### "
+UNIVERSITY_HEADING = "16. Section 3.10: A UNIVERSITY Database / ### "
+
+add("order_items", WEAK_HEADING + "12.1. Order Items: the Same Number under Different Owners",
+    "An item number identifies an item only within its order",
+    "O10 / 1 and O20 / 1 are distinct items. Quantity describes an item but is not its partial key.",
+    430,
+    [node("o", "ORDER", "entity", 190, 225), node("r", "CONTAINS", "identifying", 600, 225),
+     node("i", "ORDER_ITEM", "weak", 1010, 225),
+     node("oid", "OrderId", "attribute", 190, 35, key="full"),
+     node("line", "LineNo", "attribute", 1010, 35, key="partial"),
+     node("qty", "Quantity", "attribute", 1010, 405)],
+    [edge("o", "r"), edge("r", "i", True), edge("o", "oid"), edge("i", "line"), edge("i", "qty")],
+    [(350, 200, "1"), (820, 200, "N")])
+add("strong_card", WEAK_HEADING + "12.2. A Required Owner Does Not Automatically Make an Entity Weak",
+    "CARD has its own key even when ownership is required",
+    "CardId is globally unique. A required owner changes participation, not this independent identification.",
+    330,
+    [node("s", "STUDENT", "entity", 190, 230), node("h", "HOLDS", "relationship", 600, 230),
+     node("c", "CARD", "entity", 1010, 230),
+     node("sid", "StudentId", "attribute", 190, 35, key="full"),
+     node("cid", "CardId", "attribute", 1010, 35, key="full")],
+    [edge("s", "h"), edge("h", "c", True), edge("s", "sid"), edge("c", "cid")],
+    [(350, 205, "1"), (820, 205, "N")])
+add("nested_weak", WEAK_HEADING + "12.3. A Weak Entity Can Own Another Weak Entity",
+    "Follow identification through every owner",
+    "A note is identified by OrderId, LineNo, and NoteNo. ORDER_ITEM is both weak and an owner.",
+    920,
+    [node("o", "ORDER", "entity", 700, 65), node("id", "OrderId", "attribute", 250, 65, key="full"),
+     node("r", "CONTAINS", "identifying", 700, 260),
+     node("i", "ORDER_ITEM", "weak", 700, 450), node("line", "LineNo", "attribute", 250, 450, key="partial"),
+     node("h", "HAS_NOTE", "identifying", 700, 640),
+     node("n", "ITEM_NOTE", "weak", 700, 830), node("no", "NoteNo", "attribute", 250, 830, key="partial")],
+    [edge("o", "id"), edge("o", "r"), edge("r", "i", True), edge("i", "line"),
+     edge("i", "h"), edge("h", "n", True), edge("n", "no")],
+    [(725, 155, "1"), (725, 390, "N"), (725, 540, "1"), (725, 770, "N")])
+add("two_owners", WEAK_HEADING + "12.4. Two Owners Can Be Needed Together",
+    "An interview number is local to a student-company pair",
+    "Fix both owners, then use VisitNo. StudentId or CompanyId plus VisitNo alone is insufficient.",
+    650,
+    [node("s", "STUDENT", "entity", 190, 120), node("c", "COMPANY", "entity", 1010, 120),
+     node("r", "ARRANGES", "identifying", 600, 120),
+     node("i", "INTERVIEW", "weak", 600, 365),
+     node("v", "VisitNo", "attribute", 600, 575, key="partial")],
+    [edge("s", "r"), edge("c", "r"), edge("r", "i", True), edge("i", "v")])
+
+add("ternary_one", TERNARY_HEADING + "14.1. Section 3.9.2: Fix Two Participants before Reading a 1",
+    "Fix student and course: at most one instructor",
+    "The 1 limits the instructor for a fixed student-course pair, not all approvals involving that instructor.",
+    490,
+    [node("s", "STUDENT", "entity", 190, 100), node("a", "APPROVES", "relationship", 600, 100),
+     node("i", "INSTRUCTOR", "entity", 1010, 100), node("c", "COURSE", "entity", 600, 375)],
+    [edge("s", "a"), edge("a", "i"), edge("a", "c")],
+    [(350, 70, "M"), (820, 70, "1"), (625, 285, "N")])
+add("ternary_count", TERNARY_HEADING + "14.2. Section 3.9.2: Count All Participations with Min-Max",
+    "Count every approval involving one instructor",
+    "(0,2) permits zero to two approval instances per instructor; it does not enforce one instructor per student-course pair.",
+    490,
+    [node("s", "STUDENT", "entity", 190, 100), node("a", "APPROVES", "relationship", 600, 100),
+     node("i", "INSTRUCTOR", "entity", 1010, 100), node("c", "COURSE", "entity", 600, 375)],
+    [edge("s", "a"), edge("a", "i"), edge("a", "c")],
+    [(335, 65, "(0,N)"), (790, 65, "(0,2)"), (625, 295, "(0,N)")])
+add("ternary_checks", TERNARY_HEADING + "14.3. Use Both Checks When Both Rules Are Required",
+    "Test the same proposed addition against two different rules",
+    "Each row starts from the original three approvals. Only (S103, I2, DB101) passes both rules.",
+    panels=[panel("Pair rule", ["Addition", "One instructor per pair?"],
+                  [["S101, I2, DB101", "No"], ["S103, I1, DB101", "Yes"], ["S103, I2, DB101", "Yes"]]),
+            panel("Participation rule", ["Instructor's new count", "At most two?"],
+                  [["I2: 2", "Yes"], ["I1: 3", "No"], ["I2: 2", "Yes"]])])
+
+add("university_section", UNIVERSITY_HEADING + "16.1. Identify the Entities and Attributes",
+    "In Section 3.10, SECTION has a globally unique SecId",
+    "SecId is a full key. CRoom has Building and RoomNo components; SecNo is not a global identifier.",
+    710,
+    [node("s", "SECTION", "entity", 600, 275),
+     node("id", "SecId", "attribute", 220, 80, key="full"), node("no", "SecNo", "attribute", 600, 50),
+     node("sem", "Sem", "attribute", 980, 80), node("year", "Year", "attribute", 1020, 360),
+     node("time", "DaysTime", "attribute", 180, 360), node("room", "CRoom", "attribute", 600, 510),
+     node("b", "Bldg", "attribute", 390, 660), node("r", "RoomNo", "attribute", 820, 660)],
+    [edge("s", a) for a in ("id", "no", "sem", "year", "time", "room")] +
+    [edge("room", "b"), edge("room", "r")])
+
+for name, section, title, rules, conclusion in (
+    ("university_organization", "16.2. Build the Organization and Staff Relationships",
+     "Read the organization one relationship at a time", UNIVERSITY_RELATIONSHIPS[:5],
+     "Counts follow Figure 3.20. HAS shows STUDENT (0,1); the prose instead requires (1,1). Keep that discrepancy explicit."),
+    ("university_teaching", "16.3. Connect Courses, Sections, Teachers, and Students",
+     "Link courses and sections without making SECTION weak", UNIVERSITY_RELATIONSHIPS[5:],
+     "Each SECTION needs a course, an instructor, and at least five students. A COURSE may have no section."),
+):
+    nodes, edges, notes = [], [], []
+    for index, (rel, left, lcount, right, rcount) in enumerate(rules):
+        y = 80 + index * 220
+        prefix = str(index)
+        nodes += [node(prefix+"l", left, "entity", 190, y),
+                  node(prefix+"r", rel, "relationship", 600, y),
+                  node(prefix+"e", right, "entity", 1010, y)]
+        edges += [edge(prefix+"l", prefix+"r"), edge(prefix+"r", prefix+"e")]
+        notes += [(325, y-35, lcount), (785, y-35, rcount)]
+    add(name, UNIVERSITY_HEADING + section, title, conclusion,
+        len(rules)*220, nodes, edges, notes)
+add("university_conflicts", UNIVERSITY_HEADING + "16.4. Some Uniqueness Rules Need More Than a SecId Oval",
+    "Different section IDs do not prevent other conflicts",
+    "Each pair has different SecId values but violates its named extra rule. The three cases are checked independently.",
+    panels=[panel("Proposed sections", ["Case", "SecId pair", "Repeated combination"],
+                  [["A", "Q101 / Q102", "Course, term, SecNo"],
+                   ["B", "Q201 / Q202", "Term, room, time"],
+                   ["C", "Q301 / Q302", "Term, instructor, time"]]),
+            panel("Reason to reject", ["Case", "Conflict"],
+                  [["A", "Duplicate local number"], ["B", "Room already occupied"], ["C", "Instructor already teaching"]])])
+for name, data in FIGURES.items():
+    if name.startswith("opening_ch03_university_"):
+        data["subtitle"] = "Original teaching layout | Textbook Section 3.10"
+
+
 def boundary(n, target):
     dx, dy = target[0] - n["x"], target[1] - n["y"]
     a, b = n["w"] / 2, n["h"] / 2
@@ -201,7 +333,7 @@ def render_er(data, paragraph, font):
     """Render Chen shapes with explicitly routed, undirected lines."""
     title, used = paragraph(45, 48, data["title"], 1110, 32, weight=700)
     offset = used + 135
-    parts = [title, paragraph(45, used + 85, "Original synthetic campus example", 1110, 20)[0]]
+    parts = [title, paragraph(45, used + 85, data.get("subtitle", "Original synthetic campus example"), 1110, 20)[0]]
     d = data["diagram"]
     nodes = {n["id"]: n for n in d["nodes"]}
     for link in d["edges"]:

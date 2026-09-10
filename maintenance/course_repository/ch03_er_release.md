@@ -1,5 +1,204 @@
 # Ch3 ER Teaching Release
 
+## Photographed Source Corrections and Private Worked Answers
+
+Date: 2026-09-10. Current version: `2026.09.10-ch03-photograph-checked`.
+Baseline: `c97312d3eb9284a41e3d6ed049c9a39156b3baef`, main tracking origin/main.
+The worktree already contained the authorized weak-entity/3.9.2/3.10 extension
+below. The instructor now approved the review corrections, requested answers
+to all photographed Ch3 questions, and authorized a local commit. No push is
+requested. The course repository is public; private answers remain ignored,
+pending an explicit decision about including them in this repository.
+
+### Source and Correction Record
+
+Photographed source: `Database pdfs/Chapter3.pdf`, 24 image-only spreads,
+printed pp.89-135, with a blank facing page before p.89. All spreads were
+visually read in the preceding review and relevant exercise/diagram details
+were inspected again while answering. This is not an OCR-only summary check.
+SHA256: `55366a1faa7718dd1b89bdb95a938db5c5e7b00886f99aeb88a16086409e72c7`.
+
+| Finding | Correction or retained distinction |
+|---|---|
+| Figure 3.20, p.124; old printing p.94 | Both CCode and CoName are underlined in both copies. Corrected the earlier review error; they are independent keys, not one composite key. |
+| Student reading locators | Use photographed pp.90-124 for the taught sections, keeping section numbers as the stable cross-printing reference. |
+| Section 3.10 prose, p.123, versus Figure 3.20 | Retain the explicit conflict: prose assigns a primary department; HAS permits STUDENT (0,1). No silent change to the chosen figure interpretation. |
+| Local and global SECTION identity | Keep the initial single-term weak SECTION separate from UNIVERSITY's regular SECTION with globally unique SecId. |
+
+The historical tables below use the earlier printing's page numbers and record
+the checks run then. They are not the new student's reading list. The current
+guide's Textbook Reading table supplies the updated locators.
+
+### Private Answer Deliverable
+
+Original English answers cover every question 3.1-3.35: 15 review questions,
+15 exercises, and 5 laboratory exercises, with all numbered subparts addressed.
+There are 26 original diagrams/table figures and additional editable Markdown
+tables. Source locators, assumptions, alternatives and counterexamples accompany
+the answers. Question statements and scanned book figures are not reproduced.
+Real credits in the selected three-movie example cite primary studio sources;
+invented identifiers and the teaching lead-role classification are distinguished.
+
+Maintained files are under ignored `private_references/ch03_solutions/`:
+`solutions.md`, `build.py`, `verify.py`, and `render.cjs`.
+Generated `ch03_solutions.html` and `ch03_solutions.ipynb` embed all 26 figures;
+the latter has 38 Markdown cells and no executable student cells.
+The generated manifest records source/output/figure SHA256 values.
+No answer content is inserted into `Intro DB/ch03.ipynb` or staged for the
+public course repository. UML is included only to answer question 3.30; it
+does not change the approved taught scope or assessment.
+
+### Current Verification
+
+Commands ran from the course root using the environment listed in the extension
+record below. Fresh kernels use temporary empty working directories with the
+existing Python installation; dependencies were not reinstalled from scratch.
+
+| Command | Actual result |
+|---|---|
+| `python -X utf8 maintenance/course_repository/build_course_repository.py --verify` | PASS: 17 notebooks, 19 course files, executions, content and manifest. Only Ch3 notebook differs from the baseline. |
+| `python -X utf8 -m unittest discover -s maintenance/course_repository -p 'test_*.py'` | PASS: 44 tests, including 14 Ch3 tests. Initial source-locator regression regex falsely matched `pp.93-102`; fixed the test to distinguish `p.93` and reran all 44. |
+| `python -X utf8 maintenance/course_repository/verify_first_meeting.py` | PASS: 5 fresh kernels, 60 figures, 41 relative links, 2 exact-DDL cases, maintained/generated consistency. A Windows libzmq connection-reset assertion occurred during shutdown; exit code 0 and expected notebook outputs passed. Diagnostic remains unresolved. |
+| `node maintenance/course_repository/render_first_meeting.cjs` | PASS: 14 desktop/mobile previews, no page/text overflow or broken images; figure geometry reported no issues. |
+| `python -X utf8 private_references/ch03_solutions/build.py` | PASS: all 35 answers, 26 figures, 38 notebook cells. |
+| `python -X utf8 private_references/ch03_solutions/verify.py` | PASS: 12 checks covering numbering, hashes, image/notebook structure, source identity, answer separation, keys, counterexamples, selected movie constraints, and review requirements. These are focused checks, not an exhaustive proof of every open design. |
+| `node private_references/ch03_solutions/render.cjs` | PASS: 1440/390 pixel pages show 35 question headings, 26 loaded images, no page overflow; all 26 SVGs pass text overlap/bounds checks. |
+
+Two consecutive private builds produced byte-identical manifests and all listed
+source/output hashes; the 12 private tests were rerun after that check.
+`git diff --check` passed. `git check-ignore -v` confirms that the answer
+notebook/source, photographed PDF and generated QA records remain excluded.
+The local commit contains only the 14 intentional course source/notebook,
+syllabus/plan and audit/test files; no remote change or push is performed.
+
+Visually inspected representative weak-owner, airline, composite-key, movie
+instance, UML and conference figures, plus desktop/mobile answer previews.
+Diagrams scale down on mobile; detailed diagram reading may require zoom.
+Local rendering does not verify GitHub's remote renderer or classroom projection.
+
+Current student Ch3 SHA256:
+`51c347b8fa2a19da3cb075e7fb425f956c5cac14b93e4b0eb05d5665d4c137d4`.
+Private answer notebook SHA256:
+`49c7cb69c5282f121a81296367b5e3d48938b12e751fabf55b3a637d6ab9d33c`.
+
+### Limits and Next Action
+
+These are original worked answers, not an official solution manual or an
+independently reviewed answer key. Open designs require the assumptions stated.
+ERwin/Rational Rose have not been run: model diagrams, inventories and checking
+steps are supplied, but no proprietary-tool project or execution is claimed.
+The unresolved old ER SQL/ZIP defect and unconverted chapters remain outside
+this change. No textbook, scan, private answer, or generated QA file enters Git.
+
+Primary next action: instructor-review the assumptions in the open design
+answers before assigning or releasing any solution. The expected outcome is
+an approved set of assumptions and selected examples; completion means each
+chosen answer matches the instructor's intended interpretation. Course schedule,
+weights and mandatory student workload remain unchanged.
+
+## Expanded Weak Entities and Sections 3.9.2-3.10
+
+Historical extension version: `2026.09.10-ch03-extended`, based on clean
+`c97312d3eb9284a41e3d6ed049c9a39156b3baef` on main.
+The instructor reported using Ch3 in class, then explicitly requested more
+weak-entity examples, 3.9.2, and 3.10. This follow-up authorizes editing,
+not staging, commit, push, or a changed examination schedule.
+The original release record below remains historical.
+
+### Source Check and Coverage
+
+Reread printed p.79 and pp.90-94 of the same private textbook; inspected the
+complete Figure 3.20 page visually. The original full Chapter 3 reading remains
+documented below, not newly claimed for another book or all exercises.
+All new records are synthetic and new layouts are drawn from maintained Python;
+the textbook PDF and its rendered page remain excluded from Git.
+
+| Guide location | Source | Added explanation, example, and check |
+|---|---|---|
+| 12.1 | 3.5, p.79 | Order-item owner-local identification; same partial key under different owners; duplicate under one owner |
+| 12.2 | 3.5, p.79 | Required ownership versus weak identification, using globally unique access-card IDs |
+| 12.3 | 3.5, p.79 | Weak owner of a weak type; order/item/note identity needs all levels |
+| 12.4 | 3.5, p.79; 3.9.1, pp.90-91 | Two owners plus VisitNo; alternative with no partial key when one object per owner pair is guaranteed |
+| Attribute/entity choice after 12.4 | 3.5, p.79 | Multivalued composite contact versus an entity with an independent verification relationship |
+| 14.1 | 3.9.2, pp.91-92 | Fix other participants before reading a ternary 1; generalization to n-ary relationships |
+| 14.2-14.3 | 3.9.2, p.92 | Count per-entity participation separately; examples that pass only one rule and a case that passes both |
+| 16 and 16.1 | 3.10, pp.92-94 | Six entity types and attribute inventory; SecId makes SECTION regular; composite name and room; relationship attributes |
+| 16.2-16.3 | 3.10, pp.92-94; Fig.3.20 | All nine relationship types in two original diagram groups; counts, dean/chair/employment, Grade, and minimum five students |
+| 16.4 | 3.10, p.93 | Course-term-number, room-time, instructor-time uniqueness; combined-section qualification and exact-equality limit |
+
+Each added unit includes explanation, concrete data or facts, prediction,
+worked interpretation, and practice with explicit checking criteria.
+The initial one-term campus model and the multi-year UNIVERSITY case remain
+separate. They differ in section identification and minimum enrollment.
+No Ch9 relational mapping, SQL requirement, new mandatory submission, or grading
+weight was introduced. The original comparison activity is now Section 17.
+
+### Source Differences Preserved
+
+- The p.93 prose assigns each student to one primary department. Figure 3.20
+  shows STUDENT (0,1) on HAS. The new diagram follows the figure and the text
+  explicitly contrasts the (1,1) prose version. Neither is silently made the
+  unique authoritative requirement for the exercise.
+- Correction after photograph review: both CCode and CoName are underlined in
+  Figure 3.20 in both source copies. The previous claim that only CCode was
+  underlined was a review error, not a textbook inconsistency.
+- The three additional SECTION uniqueness rules include related course/instructor
+  identity. The guide does not redraw those identifiers as ordinary independent
+  SECTION key attributes.
+- Distinct time labels can overlap: the exact-equality example is not a complete
+  scheduling-conflict algorithm. This limitation is a labeled teaching explanation.
+
+### Validation and Remaining Work
+
+Validation completed locally for this version:
+
+- `python -X utf8 maintenance/course_repository/build_course_repository.py --verify`:
+  passed; 17 notebooks and 19 course files, content and manifest checks passed.
+- `python -X utf8 -m unittest discover -s maintenance/course_repository -p 'test_*.py'`:
+  all 43 tests passed, including 13 Ch3 tests. Added checks independently count
+  owner combinations, ternary constraints, and UNIVERSITY uniqueness conflicts.
+- `python -X utf8 maintenance/course_repository/verify_first_meeting.py`:
+  passed in five fresh kernels; checked 60 figures, 41 relative links, two exact
+  DDL key cases, and maintained/generated consistency. Ch3 contains 27 figures
+  (11 additions) and no student code cells. No other chapter notebook changed.
+- `node maintenance/course_repository/render_first_meeting.cjs`: passed;
+  14 previews at widths 1440 and 390 showed no page overflow, overflowing text,
+  or broken images. Figure geometry checks reported no issues. Visually inspected
+  all 11 new figures and six desktop/mobile topic screenshots. Wide tables use
+  horizontal scrolling on mobile; these local previews do not verify GitHub's
+  own renderer or establish classroom projection readability.
+
+Environment: Python 3.12.9, SQLite 3.45.3, nbformat 5.10.4, nbclient 0.10.4,
+ipykernel 7.2.0, pyzmq 27.1.0, resvg-py 0.5.0, Pillow 12.1.1,
+PyMuPDF 1.27.2.2, and markdown-it-py 4.0.0. The fresh-kernel command emitted
+Windows ZMQ connection-reset/not-a-socket diagnostics during shutdown; its exit
+code was zero, all five kernels returned their environment values, and expected
+outputs passed without notebook error cells. The environment diagnostic remains
+unresolved and is not presented as a clean diagnostic log.
+
+Ch3 notebook SHA256:
+`78508bae82c1db8fafc445cf324c9fdb96976a2d7f1e446bdc263a29db597473`.
+Machine-readable evidence is in the ignored
+`maintenance/course_repository/output/first_meeting/verification.json` and
+`rendering.json`; screenshots are in the same directory.
+
+Changes are limited to the Ch3 guide, figure generator, generated notebook,
+scope descriptions in the syllabus/plan/project/prompt, build configuration,
+verification/rendering tests, and maintenance records. No source PDF, rendered
+textbook page, private SQL/ZIP, or generated QA output is included in the changes.
+No staging, commit, push, remote modification, or history rewrite was performed.
+No whole-book audit, independent solution of every textbook exercise, instructor
+review of this extension, or classroom workload validation is claimed.
+
+The scope is substantially larger than the first 16-figure release.
+Do not infer that all added reading and drawing practice fits the original
+single scheduled meeting. Dates and 30/30/30/10 are unchanged.
+The instructor's actual stopping point and continuation need to be established
+before any schedule adjustment. Old ER SQL/ZIP limitations remain unchanged;
+no old mapped SQL is reused.
+
+## Original Release Record
+
 Status: authored, taught-selection source-checked, built, tested, and locally rendered.
 Version: `2026.09.10-ch03-er`. No unresolved Ch3 blocking error was found in these checks.
 This is not a claim of instructor review or classroom-tested workload.

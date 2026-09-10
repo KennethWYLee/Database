@@ -7,6 +7,24 @@
 
 ## 最新範圍與授課順序
 
+Ch3最新追加：教師回報已使用ch03.ipynb，要求增加weak entities範例並加入
+3.9.2及3.10。現行範圍為3.1-3.7、3.9.1-3.9.2、3.10；3.8仍不列本章教學。
+同一notebook擴至27張圖，增加owner-local、strong/weak對照、多層及多owner，
+三元pair限制與participation counts，以及UNIVERSITY全部九種relationships和額外唯一性規則。
+原本單學期弱SECTION與3.10有SecId的regular SECTION必須分開；Figure 3.20的
+HAS學生(0,1)與翻拍本p.123正文一個主系所的差異原樣記錄，不假裝來源完全一致。
+教師後續同意查核修正並授權本機commit，未要求push或調動週次、考試；
+新增份量需另行確認授課停止點。翻拍Chapter3.pdf共24張跨頁、紙本pp.89-135，
+已逐頁檢視並對照現行教學；學生閱讀頁碼改用翻拍本，章節號碼作跨版本定位。
+Figure 3.20的CCode與CoName在兩份來源都有底線；先前說CoName未加底線是
+查核錯誤，已修正，不再稱為課本差異。
+教師另要求所有Ch3習題解答，涵蓋3.1-3.35，含review及laboratory questions。
+原創英文解答、圖表、生成來源與驗證暫存private_references/ch03_solutions，
+維持Git忽略，不混入學生ch03.ipynb；公開課程repo不自動包含解答或翻拍原書。
+解答不是出版社官方解答；ERwin/Rational Rose未實際執行，課程不因此增加UML範圍。
+最新驗證及限制見maintenance/course_repository/ch03_er_release.md頂端紀錄。
+下方Ch3首次發布的16圖及commit/push授權為歷史狀態，不適用本次追加。
+
 教師最新指定：今天只教Ch1、Ch2；之後按Ch3-Ch9、Ch14-Ch19順序授課，
 並授權修正相關文件後commit/push。ER/EER均必教；Ch4仍含4.1-4.7，
 Ch9仍含9.1-9.2。Ch15、Ch18、Ch19恢復正式選講；Ch16安排完整一週選講，
@@ -449,6 +467,11 @@ pp.59-105已閱讀，所教概念及關鍵符號另有對照；不是全書或�
   排除自己組及原始資料匯出。
 
 ## Primary next action
+
+Ch3課後追加後的下一步：先依教師今天實際講到的位置，確定新增弱實體、3.9.2、
+3.10的接續授課停止點。新增範圍及教材份量是改變優先順序的新原因；完成條件為
+教師確認接續範圍與是否需要調整Ch4開始位置，再更新有必要變動的週次。
+本次不自行改期、不增加考試要求。下方Ch4製作建議保留，待此教學銜接確定。
 
 2026-09-10最新：Ch3完成後，下一步是Ch4的4.1-4.7教材，優先準備Week 3使用的
 4.1-4.4，仍維持一章一份並沿用本次校園案例。理由是Ch3已補上且Ch4為下一堂

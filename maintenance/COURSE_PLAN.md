@@ -32,7 +32,7 @@ now have explicit required examples; Ch16 is no longer only incidental backgroun
 | Chapter | Required Topics | Limits |
 |---|---|---|
 | 1-2: Introduction and Architecture | Database purpose; models, schemas, states, data independence, languages, client/server architecture | Introductory selections from 1.1-1.3, 1.6, 2.1-2.3, 2.5; today only |
-| 3: ER Model | Entities, attributes, keys, relationships, roles, cardinality, participation, weak entities, multivalued attributes, one ternary example | Core 3.1-3.7 and a simple 3.9 example; use one common diagram; SQL is not prerequisite |
+| 3: ER Model | Entities, attributes, keys, relationships, roles, cardinality, participation, expanded weak-entity examples, multivalued attributes, ternary constraints, UNIVERSITY design | Core 3.1-3.7, 3.9.1-3.9.2, and 3.10; keep the original campus model distinct from UNIVERSITY; SQL is not prerequisite |
 | 4: EER Model | Inheritance; specialization/generalization; predicate-, attribute-, user-defined membership; disjoint/overlapping, total/partial constraints; hierarchies, lattices, shared subclasses, categories, design choices, definitions, UML, abstraction, knowledge representation, ontology concepts | Sections 4.1-4.7; 4.1-4.4 in Week 3, 4.5-4.7 in Week 4; remaining topics introductory, no ontology project |
 | 5: Relational Model and Constraints | Relations, tuples, domains, schemas, superkeys, candidate/composite/primary/foreign keys, entity/referential integrity, updates and violations | Core 5.1-5.3 in Week 4; provided SQLite examples demonstrate rules before SQL writing; brief transaction unit from 5.3.4 only |
 | 6: Basic SQL | DDL, data types, constraints, SELECT, INSERT/DELETE/UPDATE | Core 6.1-6.4; supply setup and small input tables; assess only practiced statements |
@@ -58,8 +58,13 @@ prediction, worked result, interpretation, limitation, and practice/checking evi
 Keep theory and SQL implementation claims separate. A successful query execution
 does not prove a dependency for every legal state or establish the optimal plan.
 
-Week 2: one ER example includes weak entities, multivalued attributes, and a simple
-ternary relationship; postpone relational mapping to Ch9.
+Ch3 now adds owner-local, nested, and multiple-owner examples; both kinds of
+ternary constraints in 3.9.2; and the UNIVERSITY walkthrough in 3.10.
+The instructor requested this expansion after using the original Ch3 notebook.
+It adds substantial reading and drawing practice. Do not assume the expanded
+chapter fits its original single meeting or silently move Ch4 or the exam dates.
+Keep any unfinished teaching explicit; assess only material taught and practiced.
+Postpone relational mapping to Ch9.
 Weeks 3-4: complete EER before relational tables. Reuse that diagram for the
 remaining EER topics; the Ch5 examples then introduce the different table notation.
 Week 5: supplied schema and data let students focus on basic SQL, not an application.
@@ -96,7 +101,7 @@ and an index recommendation respectively. Do not require SQL before Week 5.
 | Week | Date | Textbook Chapters | Teaching Focus |
 |---:|---|---|---|
 | 1 | 2026-09-10 | Ch1: Databases and Database Users (selected)<br>Ch2: Database System Concepts and Architecture (selected) | Syllabus, database concepts, schemas, and architecture. |
-| 2 | 2026-09-17 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (selected) | ER diagrams, business rules, weak entities, and relationship constraints. |
+| 2 | 2026-09-17 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (3.1-3.7, 3.9-3.10) | ER design, weak entities, ternary constraints, and the UNIVERSITY example. |
 | 3 | 2026-09-24 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.1-4.4) | Inheritance, specialization, generalization, constraints, shared subclasses, and categories. |
 | 4 | 2026-10-01 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.5-4.7)<br>Ch5: The Relational Data Model and Relational Database Constraints | EER design, UML, abstraction, ontology concepts; relational tables, keys, and constraints. |
 | 5 | 2026-10-08 | Ch6: Basic SQL | Create tables; query and update data. |
@@ -154,7 +159,7 @@ without claiming institution-wide policy approval.
 
 Ch1/Ch2 introductory notebooks are today's material. Ch5 and selected Ch8 notebooks
 exist for Weeks 4 and 8; their reading transitions are updated to this sequence.
-Ch3 now has one conceptual notebook for Week 2, with 16 original figures, small
+Ch3 now has one conceptual notebook for Week 2, with 27 original figures, small
 synthetic input tables, drawing practice, and the approved comparison activity.
 Its [source and verification record](course_repository/ch03_er_release.md) identifies
 the taught selections and reading limits. No Ch9 mapping or SQL was added to Ch3.

@@ -37,8 +37,8 @@ chapters are ready. Ch15/Ch18/Ch19 are selected teaching, and Ch20 is not schedu
   agreement between the current syllabus and course plan, including assessment weights.
 - `notebook_figures.py`: dispatches original SVG teaching diagrams and renders PNGs.
 - `teaching_figures.py`: maintains topic-specific diagrams with font-measured layouts.
-- `opening_figures.py`: 33 Ch1/Ch2/Ch5/Ch8 diagrams plus the Ch3 registry, 49 total.
-- `er_figures.py`: 16 original Ch3 figures and their synthetic example data;
+- `opening_figures.py`: 33 Ch1/Ch2/Ch5/Ch8 diagrams plus the Ch3 registry, 60 total.
+- `er_figures.py`: 27 original Ch3 figures and their synthetic example data;
   ER shapes and undirected connections, not relational table diagrams.
 - `test_ch03_er.py`: independent participation, identification, ternary-fact,
   notation, placement, and publication-boundary checks.

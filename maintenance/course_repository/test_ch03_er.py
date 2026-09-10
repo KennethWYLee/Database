@@ -6,6 +6,7 @@ from itertools import product
 
 import build_course_repository as builder
 from er_figures import APPROVALS, ENROLLMENTS, FIGURES, SECTIONS, STUDENTS, TEACHES
+from er_figures import ORDER_ITEMS, ITEM_NOTES, INTERVIEWS, APPROVAL_ADDITIONS, UNIVERSITY_RELATIONSHIPS
 
 
 class ERChapterTests(unittest.TestCase):
@@ -25,15 +26,16 @@ class ERChapterTests(unittest.TestCase):
 
     def test_teaching_sections_and_figure_placement(self):
         sections = re.split(r"(?m)^## (?=\d+\. )", self.guide)[1:]
-        self.assertEqual(len(sections), 16)
+        self.assertEqual(len(sections), 17)
         for index, section in enumerate(sections, 1):
-            self.assertIn("Practice" if index == 16 else "**Practice:**", section)
-            if index < 16:
+            self.assertIn("Practice" if index == 17 else "**Practice:**", section)
+            if index < 17:
                 self.assertIn("**Prediction:**", section)
-                self.assertIn("### Read the Diagram", section)
-        self.assertEqual(len(FIGURES), 16)
+                self.assertRegex(section, r"(?m)^### (Read|Check) ")
+        self.assertEqual(len(FIGURES), 27)
         for figure in FIGURES.values():
-            self.assertEqual(self.guide.count(figure["heading"] + "\n"), 1)
+            for heading in figure["heading"].split(" / "):
+                self.assertEqual(self.guide.count(heading + "\n"), 1)
         self.assertIn("either your correction or an explanation", self.guide)
         self.assertIn("Submit only the work the instructor assigns", self.guide)
 
@@ -102,6 +104,64 @@ class ERChapterTests(unittest.TestCase):
         self.assertTrue(endpoints[("t", "q")]["total"])
         self.assertFalse(endpoints[("s", "e")]["total"])
 
+    def test_additional_owner_identification_examples(self):
+        self.assertEqual(len({(o, n) for o, n, _, _ in ORDER_ITEMS}), 3)
+        self.assertLess(len({n for _, n, _, _ in ORDER_ITEMS}), 3)
+        self.assertLess(len({(line, note) for _, line, note in ITEM_NOTES}), len(ITEM_NOTES))
+        self.assertEqual(len(set(ITEM_NOTES)), 3)
+        self.assertEqual(len(set(INTERVIEWS)), 3)
+        self.assertLess(len({(s, v) for s, _, v in INTERVIEWS}), 3)
+        self.assertLess(len({(c, v) for _, c, v in INTERVIEWS}), 3)
+        d = FIGURES["opening_ch03_strong_card"]["diagram"]
+        self.assertEqual(next(n for n in d["nodes"] if n["id"] == "c")["kind"], "entity")
+        self.assertTrue(next(e for e in d["edges"] if e["b"] == "c")["total"])
+
+    def test_two_ternary_rules_are_independent(self):
+        results = []
+        for addition in APPROVAL_ADDITIONS:
+            rows = set(APPROVALS) | {addition}
+            pairs = {(s, c) for s, i, c in rows}
+            pair_ok = all(len({i for ss, i, cc in rows if (ss, cc) == (s, c)}) <= 1
+                          for s, c in pairs)
+            count_ok = all(sum(ii == i for _, ii, _ in rows) <= 2
+                           for i in {i for _, i, _ in rows})
+            results.append((pair_ok, count_ok))
+        self.assertEqual(results, [(False, True), (True, False), (True, True)])
+
+    def test_university_constraints_preserve_source_difference(self):
+        rules = {r[0]: r for r in UNIVERSITY_RELATIONSHIPS}
+        self.assertEqual(len(rules), 9)
+        self.assertEqual(rules["HAS"], ("HAS", "DEPT", "(0,N)", "STUDENT", "(0,1)"))
+        self.assertEqual(rules["TAKES"], ("TAKES", "STUDENT", "(0,N)", "SECTION", "(5,N)"))
+        self.assertEqual(rules["TEACHES"][-1], "(1,1)")
+        self.assertIn("source inconsistency", self.guide)
+        self.assertIn("the prose version would instead use (1,1)", self.guide)
+        d = FIGURES["opening_ch03_university_section"]["diagram"]
+        nodes = {n["id"]: n for n in d["nodes"]}
+        self.assertEqual(nodes["s"]["kind"], "entity")
+        self.assertEqual(nodes["id"]["key"], "full")
+        self.assertIsNone(nodes["no"]["key"])
+        self.assertEqual({(e["a"], e["b"]) for e in d["edges"] if e["a"] == "room"},
+                         {("room", "b"), ("room", "r")})
+        enrollment = {(f"U{i}", "Q101") for i in range(1, 6)}
+        self.assertEqual(len(enrollment), 5)
+        enrollment.remove(("U5", "Q101"))
+        self.assertLess(len(enrollment), 5)
+
+    def test_university_extra_uniqueness_checks(self):
+        # A different global ID leaves each local collision unchanged.
+        original = dict(SecId="Q101", Course="DB101", Sem="Fall", Year=2026,
+                        SecNo=1, Room="A/201", Time="Thu-P5", Instructor="I1")
+        for keys, changed, collision in [
+            (("Course", "Sem", "Year", "SecNo"), dict(SecId="Q102", Room="B/201", Instructor="I2"), True),
+            (("Sem", "Year", "Room", "Time"), dict(SecId="Q202", Course="CS102", Instructor="I2"), True),
+            (("Sem", "Year", "Instructor", "Time"), dict(SecId="Q302", Course="CS102", Room="B/201"), True),
+            (("Course", "Sem", "Year", "SecNo"), dict(SecId="Q102", Sem="Spring", Year=2027), False),
+        ]:
+            other = dict(original, **changed)
+            self.assertNotEqual(original["SecId"], other["SecId"])
+            self.assertEqual(tuple(original[k] for k in keys) == tuple(other[k] for k in keys), collision)
+
     def test_language_and_public_boundary(self):
         self.assertNotRegex(self.guide, r"(?i)type\s*b|\b\d+\s*(?:minutes?|mins?)\b|[\u3400-\u9fff\ufffd]")
         self.assertNotRegex(self.guide, r"(?i)C:[/\\]|private_references|maintenance/|answer key|API[_ -]?KEY")
@@ -109,6 +169,14 @@ class ERChapterTests(unittest.TestCase):
         self.assertIn("Fall 2026 only", self.guide)
         self.assertIn("No SQL", self.guide)
         self.assertIn("Peer ranking does not determine grades", self.guide)
+
+    def test_photographed_source_correction(self):
+        self.assertIn("underlines both CCode and CoName", self.guide)
+        self.assertNotIn("underlines CCode but not CoName", self.guide)
+        self.assertIn("3.5, p.109", self.guide)
+        self.assertIn("3.9.2, pp.121-122", self.guide)
+        self.assertIn("3.10, pp.122-124", self.guide)
+        self.assertNotRegex(self.guide, r"pp\.92-94|(?<!p)p\.93\b")
 
 
 if __name__ == "__main__":

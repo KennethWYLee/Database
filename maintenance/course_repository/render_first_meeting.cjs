@@ -37,6 +37,16 @@ const output = path.join(__dirname, 'output', 'first_meeting');
           await page.getByRole('heading', {name: '2. SELECT Keeps Rows That Satisfy a Condition', exact: true}).scrollIntoViewIfNeeded();
           await page.screenshot({path: path.join(output, `ch08-${width}-notation.png`)});
         }
+        if (name === 'ch03') {
+          for (const [label, heading] of [
+            ['weak', '12.1. Order Items: the Same Number under Different Owners'],
+            ['ternary', '14.1. Section 3.9.2: Fix Two Participants before Reading a 1'],
+            ['university', '16. Section 3.10: A UNIVERSITY Database']
+          ]) {
+            await page.getByRole('heading', {name: heading, exact: true}).scrollIntoViewIfNeeded();
+            await page.screenshot({path: path.join(output, `ch03-${width}-${label}.png`)});
+          }
+        }
         await page.close();
       }
     }

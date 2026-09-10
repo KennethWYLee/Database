@@ -6,6 +6,24 @@ commit/push. Later authorized releases are recorded separately below.
 
 ## Ch3 ER Teaching Release
 
+Latest photograph review: all 24 photographed spreads (printed pp.89-135) were
+visually read and compared with the current taught Ch3 material. Figure 3.20
+underlines both CCode and CoName in both source copies; the previous contrary
+claim was a review error and has been corrected. Student page locators now use
+the photographed printing. The HAS participation conflict remains explicit.
+Original answers to all 35 review/exercise/laboratory questions were also authored
+privately at the instructor's request. They are not official publisher answers,
+not assigned student work, and not included in the public course notebook or Git.
+The instructor authorized a local commit of course corrections; no push is requested.
+See the newest [Ch3 record](ch03_er_release.md) for checks and limitations.
+This does not establish a whole-book source audit or proprietary modeling-tool execution.
+
+Earlier follow-up: the instructor requested more weak-entity examples and Sections
+3.9.2 and 3.10 after classroom use. The current notebook has 27 figures; the
+extension record at the top of [ch03_er_release.md](ch03_er_release.md) supersedes
+the earlier exclusion of those sections. Its then-uncommitted changes are included
+in the newly authorized local commit; the historical validation below is retained.
+
 September 10, 2026: the instructor authorized completing Ch3, then commit/push.
 The [Ch3 record](ch03_er_release.md) supersedes earlier statements that no revised
 Ch3 notebook exists. It records full Chapter 3 text reading (printed pp.59-105),

@@ -31,7 +31,7 @@ Chapter numbers refer to the textbook above; only taught selections are required
 | Week | Date | Chapters / Sections | Topic |
 |---:|---|---|---|
 | 1 | 2026-09-10 | Ch1: Databases and Database Users (selected)<br>Ch2: Database System Concepts and Architecture (selected) | Syllabus, database concepts, schemas, and architecture. |
-| 2 | 2026-09-17 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (selected) | ER diagrams, business rules, weak entities, and relationship constraints. |
+| 2 | 2026-09-17 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (3.1-3.7, 3.9-3.10) | ER design, weak entities, ternary constraints, and the UNIVERSITY example. |
 | 3 | 2026-09-24 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.1-4.4) | Inheritance, specialization, generalization, constraints, shared subclasses, and categories. |
 | 4 | 2026-10-01 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.5-4.7)<br>Ch5: The Relational Data Model and Relational Database Constraints | EER design, UML, abstraction, ontology concepts; relational tables, keys, and constraints. |
 | 5 | 2026-10-08 | Ch6: Basic SQL | Create tables; query and update data. |
