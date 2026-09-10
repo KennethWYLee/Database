@@ -317,6 +317,9 @@ def _panel(x, y, width, data, color, title_height):
 
 def render(name):
     data = FIGURES[name]
+    if data["kind"] == "er":
+        from er_figures import render_er
+        return render_er(data, _paragraph, _font)
     title, height = _paragraph(45, 48, data["title"], 1110, 32, weight=700)
     parts = [title, _text(45, height + 80, "Original teaching illustration | Read with the worked example", 20, "#48616c")]
     y = height + 115

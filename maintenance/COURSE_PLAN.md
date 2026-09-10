@@ -154,8 +154,12 @@ without claiming institution-wide policy approval.
 
 Ch1/Ch2 introductory notebooks are today's material. Ch5 and selected Ch8 notebooks
 exist for Weeks 4 and 8; their reading transitions are updated to this sequence.
-Ch3/Ch4 and the remaining prescribed-book notebooks are not made complete by this
-schedule revision. Use the textbook until a corresponding notebook is revised.
+Ch3 now has one conceptual notebook for Week 2, with 16 original figures, small
+synthetic input tables, drawing practice, and the approved comparison activity.
+Its [source and verification record](course_repository/ch03_er_release.md) identifies
+the taught selections and reading limits. No Ch9 mapping or SQL was added to Ch3.
+Ch4 and the remaining prescribed-book notebooks still need revision.
+Use the textbook until a corresponding notebook is revised.
 Do not assign the twelve old-book notebooks in Intro DB/under_revision or rename
 them as if chapter numbers alone establish a match.
 

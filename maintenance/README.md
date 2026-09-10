@@ -18,7 +18,7 @@ available for Weeks 4/8, not the first two meetings. See the
 | [COURSE_PLAN.md](COURSE_PLAN.md) | Detailed teaching plan; dates and assessment must agree with the syllabus |
 | [Teaching material prompt](database_chapter_teaching_material_prompt.md) | Chapter authoring and source-check requirements |
 | `chapters/` | Maintained explanations, SQL, data, figures, and chapter verifiers |
-| [course_repository/](course_repository/README.md) | Builds current Ch1/Ch2/Ch5/Ch8 notebooks and preserves twelve previous notebooks under under_revision |
+| [course_repository/](course_repository/README.md) | Builds current Ch1/Ch2/Ch3/Ch5/Ch8 notebooks and preserves twelve previous notebooks under under_revision |
 | `student_sqlite_package/` | Optional existing SQLite package and its explicit allow-list |
 | [archive/](archive/README.md) | Superseded records, not current instructions or course decisions |
 | [Migration review](structure_migration_review.md) | September 7 layout change and verification evidence |

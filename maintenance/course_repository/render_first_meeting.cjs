@@ -12,7 +12,7 @@ const output = path.join(__dirname, 'output', 'first_meeting');
   const results = [];
   try {
     for (const width of [1440, 390]) {
-      for (const name of ['home', 'syllabus', 'ch01', 'ch02', 'ch05', 'ch08']) {
+      for (const name of ['home', 'syllabus', 'ch01', 'ch02', 'ch03', 'ch05', 'ch08']) {
         const page = await browser.newPage({viewport: {width, height: 1000}});
         await page.goto(pathToFileURL(path.join(output, `${name}.html`)).href);
         await page.evaluate(() => Promise.all(Array.from(document.images).map(img => img.decode())));
@@ -58,6 +58,25 @@ const output = path.join(__dirname, 'output', 'first_meeting');
             if (b.x >= r.x && b.x < r.x + r.width && b.y >= r.y && b.y < r.y + r.height &&
                 (b.x + b.width > r.x + r.width + 1 || b.y + b.height > r.y + r.height + 1))
               failures.push({figure: svg.parentElement.id, text: text.textContent, type: 'outside node'});
+          }
+        }
+        for (const group of svg.querySelectorAll('.er-node')) {
+          const shape = group.querySelector('rect,ellipse,polygon');
+          const text = group.querySelector('text');
+          const b = text.getBBox();
+          for (const [x, y] of [[b.x,b.y], [b.x+b.width,b.y],
+                                [b.x,b.y+b.height], [b.x+b.width,b.y+b.height]]) {
+            if (!shape.isPointInFill(new DOMPoint(x, y)))
+              failures.push({figure: svg.parentElement.id, text: text.textContent, type: 'outside ER shape'});
+          }
+        }
+        if (svg.querySelector('.er-node')) {
+          const labels = Array.from(svg.querySelectorAll('text'));
+          for (let i=0; i<labels.length; i++) for (let j=i+1; j<labels.length; j++) {
+            const a=labels[i].getBBox(), b=labels[j].getBBox();
+            if (a.x < b.x+b.width && a.x+a.width > b.x && a.y < b.y+b.height && a.y+a.height > b.y)
+              failures.push({figure: svg.parentElement.id, text: labels[i].textContent,
+                other: labels[j].textContent, type: 'overlapping ER labels'});
           }
         }
       }

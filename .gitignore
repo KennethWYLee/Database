@@ -10,6 +10,7 @@
 !/Intro DB/syllabus.md
 !/Intro DB/ch01.ipynb
 !/Intro DB/ch02.ipynb
+!/Intro DB/ch03.ipynb
 !/Intro DB/ch05.ipynb
 !/Intro DB/ch08.ipynb
 !/Intro DB/under_revision/
@@ -48,6 +49,9 @@
 !/maintenance/chapters/ch01_database_introduction/student_guide.md
 !/maintenance/chapters/ch02_database_architecture/
 !/maintenance/chapters/ch02_database_architecture/student_guide.md
+!/maintenance/chapters/ch03_er_model/
+/maintenance/chapters/ch03_er_model/*
+!/maintenance/chapters/ch03_er_model/student_guide.md
 !/maintenance/chapters/ch05_relational_model/
 !/maintenance/chapters/ch05_relational_model/student_guide.md
 !/maintenance/chapters/ch08_relational_algebra/
@@ -96,6 +100,9 @@
 !/maintenance/course_repository/notebook_figures.py
 !/maintenance/course_repository/teaching_figures.py
 !/maintenance/course_repository/opening_figures.py
+!/maintenance/course_repository/er_figures.py
+!/maintenance/course_repository/test_ch03_er.py
+!/maintenance/course_repository/ch03_er_release.md
 !/maintenance/course_repository/first_meeting_release.md
 !/maintenance/course_repository/verify_first_meeting.py
 !/maintenance/course_repository/test_second_meeting.py

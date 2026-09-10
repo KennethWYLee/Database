@@ -1,7 +1,17 @@
 # Full Source Audit Progress
 
 Started: 2026-09-08. Baseline: `a9bc1a8` on `main`, tracking existing `origin/main`.
-The worktree was clean at the start. No commit or push is authorized for this audit.
+The worktree was clean at that audit's start; its original request did not authorize
+commit/push. Later authorized releases are recorded separately below.
+
+## Ch3 ER Teaching Release
+
+September 10, 2026: the instructor authorized completing Ch3, then commit/push.
+The [Ch3 record](ch03_er_release.md) supersedes earlier statements that no revised
+Ch3 notebook exists. It records full Chapter 3 text reading (printed pp.59-105),
+the taught-selection correspondence, 16 original figures, verification, and limits.
+This does not mark every textbook exercise, every source figure, or the whole
+book as audited. Ch4 remains the next scheduled chapter to author.
 
 ## Chapter Order and Expanded Scope
 

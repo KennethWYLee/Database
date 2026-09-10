@@ -1,6 +1,8 @@
 """Original diagrams for the prescribed textbook's first-meeting selections."""
 
-FIGURES = {}
+from er_figures import FIGURES as ER_FIGURES
+
+FIGURES = dict(ER_FIGURES)
 
 
 

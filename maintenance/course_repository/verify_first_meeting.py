@@ -122,8 +122,8 @@ def verify():
     assert [x for x in [5, 2.5, 7] if isinstance(x, int) and 1 <= x <= 6] == [5]
     assert len({("S101", "02-0000-0101"), ("S101", "02-0000-0102"), ("S102", "02-0000-0201")}) == 3
     assert {r["chapter"]: r["images"] for r in results} == {
-        "ch01": 5, "ch02": 6, "ch05": 13, "ch08": 9}
-    assert len(FIGURES) == 33
+        "ch01": 5, "ch02": 6, "ch03": 16, "ch05": 13, "ch08": 9}
+    assert len(FIGURES) == 49
 
     # Inspect the exact DDL in the new Ch5 code, not a separate idealized schema.
     ch5 = json.loads((builder.PREVIEW_DIR / "ch05.ipynb").read_text(encoding="utf-8"))

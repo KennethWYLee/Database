@@ -269,8 +269,8 @@ def validate_config(config: dict) -> None:
     if len(set(ids)) != len(ids):
         raise ValueError("Chapter identifiers must be unique")
     current = config.get("current_chapters", [])
-    if tuple(chapter["id"] for chapter in current) != ("ch01", "ch02", "ch05", "ch08"):
-        raise ValueError("Current revised chapters must be ch01, ch02, ch05, ch08")
+    if tuple(chapter["id"] for chapter in current) != ("ch01", "ch02", "ch03", "ch05", "ch08"):
+        raise ValueError("Current revised chapters must be ch01, ch02, ch03, ch05, ch08")
     if any(not chapter.get("prescribed_textbook") for chapter in current):
         raise ValueError("Current chapters must identify the prescribed textbook")
     for chapter in [*chapters, *current]:

@@ -1,6 +1,6 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.10-chapter-order",
+  "repository_version": "2026.09.10-ch03-er",
   "instructor": "WenYi Lee",
   "syllabus_source": "Intro DB/syllabus.md",
   "material_status": "legacy_textbook_alignment_pending",
@@ -22,6 +22,14 @@
       "executable_guide": true,
       "title": "Database System Concepts and Architecture: introductory selection",
       "guide_source": "maintenance/chapters/ch02_database_architecture/student_guide.md"
+    },
+    {
+      "id": "ch03",
+      "prescribed_textbook": true,
+      "visual_teaching": true,
+      "executable_guide": true,
+      "title": "Data Modeling Using the Entity-Relationship (ER) Model",
+      "guide_source": "maintenance/chapters/ch03_er_model/student_guide.md"
     },
     {
       "id": "ch05",

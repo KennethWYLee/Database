@@ -1,6 +1,6 @@
 # Course Repository Build
 
-This directory builds the current Ch1/Ch2 introductory selections, Ch5, and selected Ch8 directly
+This directory builds the current Ch1/Ch2 introductory selections, Ch3, Ch5, and selected Ch8 directly
 in `Intro DB/` and twelve previous notebooks in `Intro DB/under_revision/` on `main`.
 Local and GitHub tracked paths are identical. It does not publish a separate preview
 branch or create weekly notebooks.
@@ -11,9 +11,10 @@ three exams at 30% each and Class Performance at 10%. The chapter IDs and weekly
 material mapping in this builder still describe the other textbook's existing
 notebooks. They are marked historical in the configuration and are not the current
 teaching schedule. A successful build does not establish alignment with the revised
-syllabus. The `current_chapters` configuration separately identifies four
+syllabus. The `current_chapters` configuration separately identifies five
 prescribed-book notebooks. See the [first-meeting release](first_meeting_release.md)
-and [Ch5/Ch8 revision](full_source_audit.md#relational-foundations-revision).
+and [Ch5/Ch8 revision](full_source_audit.md#relational-foundations-revision), plus
+the [Ch3 ER release](ch03_er_release.md).
 Do not rename remaining notebooks or replace source locators without content review.
 
 The [prescribed-textbook correspondence](textbook_material_correspondence.md) now
@@ -24,7 +25,7 @@ it does not certify revised notebooks or complete chapter source audits.
 ## Maintained Files
 
 The current syllabus follows Ch1/Ch2, Ch3-9, then Ch14-19; only Ch1/Ch2 are
-assigned today. The four available revised notebooks do not imply the remaining
+assigned today. The five available revised notebooks do not imply the remaining
 chapters are ready. Ch15/Ch18/Ch19 are selected teaching, and Ch20 is not scheduled.
 
 - `repository_config.json`: existing chapter sources, historical weekly material mapping,
@@ -36,7 +37,11 @@ chapters are ready. Ch15/Ch18/Ch19 are selected teaching, and Ch20 is not schedu
   agreement between the current syllabus and course plan, including assessment weights.
 - `notebook_figures.py`: dispatches original SVG teaching diagrams and renders PNGs.
 - `teaching_figures.py`: maintains topic-specific diagrams with font-measured layouts.
-- `opening_figures.py`: 33 original diagrams for the prescribed-book Ch1/Ch2/Ch5/Ch8 notebooks.
+- `opening_figures.py`: 33 Ch1/Ch2/Ch5/Ch8 diagrams plus the Ch3 registry, 49 total.
+- `er_figures.py`: 16 original Ch3 figures and their synthetic example data;
+  ER shapes and undirected connections, not relational table diagrams.
+- `test_ch03_er.py`: independent participation, identification, ternary-fact,
+  notation, placement, and publication-boundary checks.
 - `test_second_meeting.py`: exact-DDL boundary checks and independent set-result comparisons.
 - `verify_first_meeting.py` and `render_first_meeting.cjs`: verify current notebook
   outputs, source correspondence, navigation, diagrams, and local rendering.
@@ -105,7 +110,9 @@ Intro DB/
   syllabus.md
   ch01.ipynb
   ch02.ipynb
+  ch03.ipynb
   ch05.ipynb
+  ch08.ipynb
   under_revision/
     README.md
     ch02.ipynb
@@ -116,7 +123,7 @@ Intro DB/
 `Intro DB/syllabus.md` is the maintained syllabus, including schedule, assessment,
 notebook links, and opening instructions. The root `README.md` is maintained navigation.
 Neither file is generated or overwritten. The under_revision README is also maintained.
-The builder only replaces the fifteen named notebooks after all executions succeed;
+The builder only replaces the seventeen named notebooks after all executions succeed;
 unexpected files cause it to stop without deletion. Old notebooks have an explicit
 not-assigned notice, and new notebooks have no dependency on their code or files.
 The old `course_home.md` is retained in `maintenance/archive/`, not used as build input.
@@ -160,7 +167,7 @@ The generated notebooks are written to:
 Intro DB/
 ```
 
-The fifteen notebooks are explicitly allowed by `.gitignore` and should be committed with
+The seventeen notebooks are explicitly allowed by `.gitignore` and should be committed with
 their source changes when authorized. The manifest and local QA files remain under ignored
 `maintenance/course_repository/output/`. The older Ch2-only `review_notebook.py` and
 the 96-figure `verify_teaching_figures.py`/renderer still describe the earlier twelve

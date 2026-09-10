@@ -123,8 +123,8 @@ Database System Concepts的章號、舊週次或考試範圍。
   輸入、運算及結果relation。
 - SQL：提供可重現的schema、sample data、SQL、預期結果表及結果解釋。
 - Joins、views及constraints：同時提供正確案例與至少一個容易出錯的案例。
-- E-R model：提供business rules、ER diagram、cardinality判斷及relational
-  schema mapping。
+- E-R model：Ch3提供business rules、ER diagram及cardinality判斷；relational
+  schema mapping保留至Ch9，不在Ch3提前要求SQL或轉表。
 - Normalization：提供原始relation、functional dependencies、anomaly、分解過程、
   lossless判斷及正規化後schema。
 - Indexing：提供query與資料情境、index選擇理由，以及建立index前後可觀察的

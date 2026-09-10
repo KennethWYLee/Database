@@ -22,6 +22,7 @@ ER and EER are required. Follow the syllabus for selected sections and examinati
 
 | Available Notebook | Scheduled Meeting |
 |---|---|
+| [Ch3: Data Modeling Using the Entity-Relationship (ER) Model](Intro%20DB/ch03.ipynb) | Week 2, September 17; diagrams and drawing practice |
 | [Ch5: The Relational Data Model and Relational Database Constraints](Intro%20DB/ch05.ipynb) | Week 4, October 1 |
 | [Ch8: The Relational Algebra and Relational Calculus](Intro%20DB/ch08.ipynb) | Week 8, October 29; selected algebra |
 
