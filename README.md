@@ -31,5 +31,7 @@ released when ready.
 
 PDF copies: [Ch1](Intro%20DB/ch01.pdf) | [Ch2](Intro%20DB/ch02.pdf) | [Ch3](Intro%20DB/ch03.pdf).
 
+Ch3 exercise answers: [Questions 3.1-3.35 (PDF)](Intro%20DB/ch03_answer.pdf).
+
 Local and GitHub tracked paths are identical on `main`.
 Preparation and build records are in [maintenance](maintenance/README.md).

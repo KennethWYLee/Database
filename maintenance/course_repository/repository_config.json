@@ -3,6 +3,12 @@
   "repository_version": "2026.09.10-public-ch01-ch03",
   "published_chapters": ["ch01", "ch02", "ch03"],
   "published_pdf_chapters": ["ch01", "ch02", "ch03"],
+  "published_answer_pdfs": {
+    "ch03_answer.pdf": {
+      "notebook_sha256": "4876675ec8f86767444cefe713ee7aecb68edecaab076e8b89e95cab49686ee8",
+      "pdf_sha256": "7a099ed4ecc169bb7c7f3a31fa029787760e62cd8ae2ec7588e7446cf08066e9"
+    }
+  },
   "instructor": "WenYi Lee",
   "syllabus_source": "Intro DB/syllabus.md",
   "material_status": "legacy_textbook_alignment_pending",

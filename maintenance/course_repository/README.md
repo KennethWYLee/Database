@@ -3,7 +3,8 @@
 ## Current Publication: Chapters 1-3
 
 The public `Intro DB/` contains `syllabus.md`, `ch01.ipynb`, `ch02.ipynb`,
-`ch03.ipynb`, and their three matching PDFs. Other notebooks, their chapter sources, and the SQLite package
+`ch03.ipynb`, their three matching PDFs, and the separately authorized
+`ch03_answer.pdf`. Other notebooks, their chapter sources, and the SQLite package
 are ignored and kept locally. The semester scope has not changed.
 `published_chapters` in `repository_config.json` controls default builds.
 The manifest and default verification cover only that published selection.
@@ -26,6 +27,58 @@ The remainder is the historical full local-build description. Its counts of
 17 notebooks/19 files and earlier tracking statements do not describe the
 current GitHub release. Historical audit records remain as provenance, not
 links promising that unreleased files exist in a fresh checkout.
+
+### Chapter 3 Answer PDF, September 12
+
+After baseline `7f3cc1a`, the instructor explicitly authorized publishing
+`Intro DB/ch03_answer.pdf`, with commit and push. This supersedes the earlier
+local-only answer decision for this PDF only. The answer Markdown, notebook,
+HTML, builders, figures and photographed textbook remain ignored local files.
+The existing three teaching notebooks and PDFs are unchanged.
+
+The answer PDF contains all 35 answers (3.1-3.35), 26 original figures and tables,
+in English. These are original worked answers, not the publisher's solution
+manual; full question statements and photographed pages are not reproduced.
+Stated alternatives and the unexecuted ERwin/Rational Rose limitation remain.
+Two production-note sentences were simplified in the maintained answer Markdown
+before rebuilding. No technical answer, assessment or taught scope was changed.
+
+Local reproduction, from the course root:
+
+```powershell
+python -X utf8 private_references/ch03_solutions/build.py
+python -X utf8 private_references/ch03_solutions/verify.py
+python -X utf8 private_references/ch03_solutions/export_pdf.py
+python maintenance/course_repository/build_course_repository.py --verify
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+```
+
+The local exporter reuses the published HTML/PDF helpers, but its maintained
+input stays private. A public checkout can validate the approved PDF's hash,
+source-notebook hash metadata, numbered answers and image count; it cannot
+rebuild this answer without the local source. Update the two
+`published_answer_pdfs` hashes only after reviewing a regenerated answer PDF.
+Regular chapter PDF exports still use only the three public notebooks.
+
+The final answer export is 48 A4 pages, 1,789,569 bytes. Its PDF SHA256 is
+`7a099ed4ecc169bb7c7f3a31fa029787760e62cd8ae2ec7588e7446cf08066e9`;
+its input notebook SHA256 is
+`4876675ec8f86767444cefe713ee7aecb68edecaab076e8b89e95cab49686ee8`.
+The twelve local answer tests passed. Export checks passed for all HTML text
+tokens, 26 embedded figures, page/image bounds, loaded images and DOM overflow.
+Headings were kept with their source line and opening content; figures were
+kept whole. All 48 pages were rendered with Poppler for visual review.
+All page overview sheets and the composite-key/UML pages at readable resolution
+were inspected; no clipping or overlapping labels were found. The repository
+verifier passed for 8 published files and 3 notebooks; all 48 repository tests
+passed. An initial test treated a normal PDF line wrap as missing text; whitespace
+normalization fixed that check without changing the answer text.
+Some whitespace remains to keep complete figures or tables together.
+PDF timestamps mean byte-identical re-export is not promised.
+
+This is export/publication verification, not a new full textbook source audit
+or evidence that the instructor has reviewed each answer. The earlier source
+review and conceptual-answer limits remain in `ch03_er_release.md`.
 
 ### PDF Export, September 10
 

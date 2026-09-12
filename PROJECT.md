@@ -3,9 +3,18 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-09-10
+- 最後更新日期：2026-09-12
 
 ## 最新範圍與授課順序
+
+2026-09-12教師明確授權將既有Ch3原創解答轉成Intro DB/ch03_answer.pdf，
+並commit/push到公開GitHub。此份獨立PDF包含3.1-3.35及26張原創圖；
+不混入ch03.ipynb或ch03.pdf，不變更教學範圍或評量。
+這項決策取代下方「解答不發布」的舊限制，但只核准解答PDF；
+private_references內維護來源、解答HTML/notebook及翻拍課本仍忽略且不上傳。
+首頁新增PDF連結；公開成品的hash及來源notebook hash列入repository_config.json。
+重新生成需本機private_references/ch03_solutions來源；公開clone可驗證成品，
+不能只靠公開檔案重建這份解答。詳細驗證見maintenance/course_repository/README.md。
 
 GitHub最新發布決策：教師要求線上教材僅放現用課本Ch1、Ch2、Ch3。
 教師後續要求將這三份notebook另轉PDF並commit/push；Intro DB保留原notebook，

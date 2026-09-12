@@ -277,6 +277,13 @@ def validate_config(config: dict) -> None:
     pdfs = config.get("published_pdf_chapters", [])
     if len(pdfs) != len(set(pdfs)) or not set(pdfs).issubset(published or []):
         raise ValueError("Published PDFs must refer to published notebook chapters")
+    supplements = config.get("published_answer_pdfs", {})
+    for name, record in supplements.items():
+        if name not in {chapter + "_answer.pdf" for chapter in published or []}:
+            raise ValueError("Answer PDFs must refer to published notebook chapters")
+        for field in ("notebook_sha256", "pdf_sha256"):
+            if not re.fullmatch(r"[0-9a-f]{64}", record.get(field, "")):
+                raise ValueError("Answer PDF publication requires source and output hashes")
     if published is not None and (len(published) != len(set(published)) or
                                   not set(published).issubset(c["id"] for c in current)):
         raise ValueError("Published chapters must be unique current chapter identifiers")
@@ -756,6 +763,7 @@ def notebook_relative(chapter: dict) -> str:
 def expected_files(config: dict) -> set[str]:
     files = {"syllabus.md", *(notebook_relative(chapter) for chapter in all_chapters(config))}
     files.update(chapter + ".pdf" for chapter in config.get("published_pdf_chapters", []))
+    files.update(config.get("published_answer_pdfs", {}))
     if any(not c.get("prescribed_textbook") for c in all_chapters(config)):
         files.add("under_revision/README.md")
     return files
@@ -855,7 +863,12 @@ def verify_content(config: dict) -> None:
         if path.suffix == ".pdf":
             import fitz
             with fitz.open(path) as pdf:
-                if not len(pdf) or pdf.metadata.get("subject") != "Notebook SHA256: " + sha256(path.with_suffix(".ipynb")):
+                answer = config.get("published_answer_pdfs", {}).get(relative)
+                if answer:
+                    if (not len(pdf) or sha256(path) != answer["pdf_sha256"] or
+                            pdf.metadata.get("subject") != "Notebook SHA256: " + answer["notebook_sha256"]):
+                        errors.append(f"Answer PDF differs from approved export: {relative}")
+                elif not len(pdf) or pdf.metadata.get("subject") != "Notebook SHA256: " + sha256(path.with_suffix(".ipynb")):
                     errors.append(f"Missing pages or stale notebook PDF: {relative}; rerun export_chapter_pdfs.py")
             continue
         if path.suffix == ".ipynb":

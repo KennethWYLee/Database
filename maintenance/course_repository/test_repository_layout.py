@@ -442,7 +442,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
         self.assertEqual(builder.expected_files(config),
                          {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb",
-                          "ch01.pdf", "ch02.pdf", "ch03.pdf"})
+                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_answer.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
         import subprocess
         allowed = {"Intro DB/" + name for name in builder.expected_files(config)}
@@ -519,6 +519,27 @@ class RepositoryLayoutTests(unittest.TestCase):
         with patch.object(builder, "sha256", return_value="0" * 64):
             with self.assertRaisesRegex(RuntimeError, "stale notebook PDF"):
                 builder.verify_content(config)
+
+    def test_authorized_answer_pdf(self):
+        import fitz
+        config = builder.load_json(builder.CONFIG_PATH)
+        self.assertEqual(set(config["published_answer_pdfs"]), {"ch03_answer.pdf"})
+        record = config["published_answer_pdfs"]["ch03_answer.pdf"]
+        path = builder.safe_target("ch03_answer.pdf")
+        self.assertEqual(builder.sha256(path), record["pdf_sha256"])
+        with fitz.open(path) as pdf:
+            self.assertEqual(pdf.metadata["author"], "WenYi Lee")
+            self.assertEqual(pdf.metadata["subject"], "Notebook SHA256: " + record["notebook_sha256"])
+            self.assertEqual(pdf.embfile_count(), 0)
+            text = "\n".join(page.get_text() for page in pdf)
+            self.assertEqual(re.findall(r"(?m)^3\.(\d+)\. ", text), [str(i) for i in range(1, 36)])
+            self.assertEqual(sum(len(page.get_image_info()) for page in pdf), 26)
+            self.assertIn("not an official publisher solution manual", " ".join(text.split()))
+            self.assertNotRegex(text, r"(?i)private_references|C:[/\\]|file:///|attachment:")
+        wrong = copy.deepcopy(config)
+        wrong["published_answer_pdfs"]["ch03_answer.pdf"]["pdf_sha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "Answer PDF differs"):
+            builder.verify_content(wrong)
 
 
 if __name__ == "__main__":

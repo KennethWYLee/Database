@@ -19,8 +19,8 @@ OUT = builder.OUTPUT_DIR / "pdf"
 MD = MarkdownIt("commonmark", {"html": False}).enable("table")
 
 
-def make_html(chapter):
-    path = builder.safe_target(chapter + ".ipynb")
+def make_html(chapter, notebook_path=None):
+    path = notebook_path or builder.safe_target(chapter + ".ipynb")
     notebook = json.loads(path.read_text(encoding="utf-8"))
     nbformat.validate(nbformat.from_dict(notebook))
     body, images = [], 0
