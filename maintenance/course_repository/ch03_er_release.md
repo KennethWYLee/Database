@@ -1,5 +1,260 @@
 # Ch3 ER Teaching Release
 
+## Publication Authorization After the Audit
+
+On 2026-09-12, after receiving the completed audit below, the instructor explicitly
+requested commit and push. This supersedes the audit's pending-authorization next
+step. The authorized change is the corrected answer PDF and five related tracked
+maintenance files, targeting `origin/main`. The reviewed PDF SHA256 remains
+`79ecb018e4646c4ebe0ed83eae85376b4a69b22c0c9254e56c8e0015d0736c87`.
+Private sources, photographed textbook pages, other chapters, and ignore rules
+are excluded. No further answer-content changes are made during publication.
+The five modeling-application tasks remain uncompleted. The no-commit/no-push
+statements below describe the preceding audit stage, not this later authorization.
+
+## 2026-09-12 Answer Requirements Audit
+
+Date: 2026-09-12. Baseline: `23b5c8c766d2a107d3280cf15255a8355a98b868`
+on `main`, initially clean and equal to the local `origin/main` tracking ref.
+Remote: `https://github.com/KennethWYLee/Database.git`.
+
+The instructor approved the next step after questioning whether the published
+answers directly answered the photographed exercises. This audit checks every
+question and explicit subpart, corrects the local maintained answers, and rebuilds
+the local answer PDF. It does not authorize or perform a new commit or push.
+The syllabus, grading policy, taught scope, and Ch1-Ch3 teaching notebooks are unchanged.
+
+### Conclusion
+
+The baseline was not a fully verified answer set. In particular, 3.5 answered a
+different comparison, 3.21 omitted specified domains, and 3.25 discussed but did
+not draw the ternary ADOPTS relationship. Numbering and successful rendering did
+not establish completeness of the answers.
+
+The revised written responses to 3.1-3.30 have been checked against the complete
+question requirements. For 3.31-3.35, the conceptual answers are supplied, but the
+original tasks remain incomplete because no model was entered and checked in a
+data-modeling application. ERwin and Rational Rose are examples in the textbook,
+not the only possible tools; Python-generated figures do not establish that this
+separate application requirement was performed. No tool substitution is approved
+by this audit. Every lab answer now states this limitation at its start.
+
+These are original worked answers, not official publisher solutions. Open designs
+are conditional on their stated assumptions. The same agent performed the source
+review and the edits; this is not independent instructor or expert review.
+
+### Sources and Method
+
+- Authoritative questions: instructor's `Database pdfs/Chapter3.pdf`, 24 photographed
+  spreads, printed pp.89-135; SHA256
+  `55366a1faa7718dd1b89bdb95a938db5c5e7b00886f99aeb88a16086409e72c7`.
+- Every question and continuation on printed pp.126-134 was visually read, including
+  Figures 3.21-3.25. Spreads 20-24 contain those complete questions. The summary and
+  Figure 3.20 on spread 19 and the UNIVERSITY requirements on spread 18 were checked.
+- Relevant explanatory passages in 3.1-3.9 were visually checked on spreads 2-18:
+  definitions, domains, NULL, notation, keys, weak identification, attribute
+  placement, recursive relationships, min-max versus ratios, ternary constraints,
+  and UML. The audit does not claim to have reread the entire book.
+- Supplement for 3.20: local `private_references/book_Fundamental of Database Systems.pdf`,
+  Elmasri/Navathe, seventh edition; SHA256
+  `002eceecdb5e47b050e61b30d13a8f207fb44cea4f927b98d864308c026288a5`.
+  Ch1 1.4-1.5, printed pp.15-17, and Ch2 2.4.1-2.4.3, printed pp.42-46, were read
+  for users, administration, design, programming, catalogs, modules, and tools.
+- The entire maintained answer text was read. Each required definition, field,
+  relationship, bound, subpart, requested drawing, and tool action was compared
+  with its answer. Selected analytic consequences were checked using separately
+  constructed data examples in `private_references/ch03_solutions/verify.py`.
+  Those tests share the source interpretation with the prose; they are not a
+  second independent authority or a proof that every open design is correct.
+- The private baseline files were preserved before editing in
+  `private_references/ch03_solutions/qa/audit_baseline_23b5c8c/`.
+
+The locations below use numbered sections of maintained `solutions.md`, which
+become the same headings in the generated notebook and PDF. Figure identifiers
+refer to original drawings in its `figures/` directory, not copied textbook figures.
+Question requirements are paraphrased rather than reproduced verbatim.
+
+### Review Questions
+
+| Question / printed page | Requirements checked | Answer location and evidence | Finding and disposition |
+|---|---|---|---|
+| 3.1 / 126 | Role of high-level conceptual modeling in the design process | 3.1; four-step table; q01; source 3.1, pp.90-92 | Directly answered. Requirements, communication, logical mapping, and physical implementation remain distinct. |
+| 3.2 / 126 | Appropriate cases for NULL | 3.2; three cases with examples; source p.96 | Directly answered. SQL storage does not preserve the conceptual reason by itself. |
+| 3.3 / 126 | All ten named definitions | 3.3; ten-row definition/example table; source 3.3-3.4 | All ten present: entity, attribute, attribute value, relationship instance, composite, multivalued, derived, complex, key, value set. |
+| 3.4 / 126 | Entity type and set; contrast both with an entity | 3.4; S1/S2/S3 example; source pp.97-99 | Directly answered by schema versus current objects. |
+| 3.5 / 126 | Attribute versus value set | 3.5; q05; Credits property/domain/actual-value example; source pp.99-100 | **Corrected wrong target.** Baseline compared an entity with an attribute value. New answer distinguishes property, allowed values, actual value, and current database values. |
+| 3.6 / 126 | Relationship type, instance, and set | 3.6; TAKES set with three pairs; source pp.102-103 | All three present and distinguished. |
+| 3.7 / 126 | Participation role; when role names are necessary | 3.7; supervisor/supervisee and q07; source pp.104-105 | Direct answer. Reversing roles changes the fact; recursive binary relationship uses the book's convention. |
+| 3.8 / 126 | Two structural-constraint notations; advantages and disadvantages | 3.8; comparison and q08; source pp.106-108,114-115,121-122 | Direct answer. Minimum four is lost by ordinary 1/N plus line style; ternary key constraints differ from counts. |
+| 3.9 / 126 | Conditions for moving a binary relationship attribute | 3.9; 1:1, 1:N, M:N cases; q09; source p.108 | Conditional answer correct. Two employees with different start dates refute placement on the department. Optionality/history qualifications retained. |
+| 3.10 / 126 | Values of relationship-valued attributes; model family | 3.10; D, E, P(E) example; source p.104 including footnote | Clarified the entity-set and power-set domains; explicitly identifies functional data models. Removed an unnecessary object-database aside. |
+| 3.11 / 126 | Recursive relationship definition and examples | 3.11; supervisor, parent, prerequisite; source p.105 | Directly answered. Roles and extra no-cycle constraints distinguished. |
+| 3.12 / 126 | When weak types are used; four requested definitions | 3.12; definition/example table; q12; source p.109 | Added explicit definitions for owner type, weak type, identifying relationship, partial key; owner-local versus global identity preserved. |
+| 3.13 / 126 | Can identification have degree above two; examples | 3.13; INTERVIEW q13; invented patient-clinic visit; source pp.120-121, Fig.3.19 | Added a second explicit example. Both require two owners plus the weak entity and stated local uniqueness. |
+| 3.14 / 126 | ER drawing conventions | 3.14; symbol table; source pp.111-113, Fig.3.14 | Conventions covered, including independent keys versus composite keys, partial keys, roles, and participation. |
+| 3.15 / 126 | Naming conventions | 3.15; construct/name/example table; source p.112 | Directly answered using the book's uppercase/singular/initial-capital/lowercase conventions. |
+
+### Written Exercises
+
+| Question / printed page | Requirements checked | Answer location and evidence | Finding and disposition |
+|---|---|---|---|
+| 3.16 / 126-127 | All a-c uniqueness rules and another plausible constraint | 3.16; rule/counterexample tables; UNIVERSITY pp.122-124 | Strengthened the answer to the question's SECTION-key wording: a/b involve TAKES and cannot be SECTION-only keys; c already follows from one teacher per SecId. Added the explicit room/term/time combination. |
+| 3.17 / 127 | Nested job history, all fields, Figure 3.5 notation | 3.17; nested text and sample table; Fig.3.5 p.97 | Changed to the book's brace-around-multivalued-attribute notation. Company/date, position/month/year, pay/allowances/duration/grade all present. No unsupported position/salary pairing invented. |
+| 3.18 / 127 | Alternative design using entity and relationship types | 3.18; five types, keys, q18 | All 3.17 fields retained, owners and return employment distinguished. Artificial local IDs and salary minimum explicitly assumed. |
+| 3.19 / 127-128 | Precise requirements extracted from AIRLINE diagram | 3.19; eight-type inventory, eleven-relationship table, q19a-c | Tables were substantially correct. Added CAN_LAND, TYPE, ASSIGNED to the visual set. Optional actual events versus mandatory scheduled airport and aircraft assignment checked directly. |
+| 3.20 / 127 | General database-environment types, relationships, ER drawing | 3.20; ten types, fourteen relationships, q20/q20b/q20c; Ch1/2 supplement | Expanded the narrow six-type baseline to include catalog, people and roles, hosts, modules, tools, development, and operation. Explicitly bounded organizational inventory with declared assumptions; not a universal vendor architecture. |
+| 3.21 / 127-128 | State/member/bill/voting information, complete supplied domains, sponsors, diagram, assumptions | 3.21; attribute/domain/example tables; q21 | Added all five regions, four party categories, Yes/No bill result, first-election date meaning. Existing four vote states and sponsorship separation retained. Missing rows are not Absent votes. |
+| 3.22 / 128-129 | Teams, players including nonparticipants, game-specific positions/result, chosen sport and assumptions | 3.22; q22; scores and appearance tables | Direct answer. APPEARANCE owns positions; COMPETES owns score/result. One-season roster and participating-team/roster consistency are explicit. |
+| 3.23 / 129-130 | All a-f BANK requirements | 3.23; type list, q23, five-row relationship table, updates | Added explicit justification from single/double lines and 1:N/M:N labels, not just final min-max values. All attributes and three part-f changes retained. |
+| 3.24 / 130 | Bounds on all three links, assumptions, HAS_PHONE redundancy | 3.24; q24; concrete derived pairs | Direct conditional answer. Maximum six follows only when HAS_PHONE equals department-phone composition and each phone has one department. |
+| 3.25 / 130 | Binary bounds, missing assumptions, binary versus ternary ADOPTS, its bounds and reasons | 3.25; q25/q25b; two legal assignment states | Added actual ternary drawing and swapped-course counterexample. Instructor maximum 20 counts triples, not texts or per-course total. Course/text totals are unbounded under the declared subset interpretation. |
+| 3.26 / 131 | Three composite SECTION keys and ER representation with shared components | 3.26; key/assumption table; q26 | Direct conditional answer. Offering key is given; room and teacher keys need no-conflict/no-combined-section assumptions. No reliance on the separate UNIVERSITY SecId design. |
+| 3.27 / 131 | Ratios and assumptions for all ten pairs | 3.27; ten-row table | All pairs and direction checked. Product type versus order-line ITEM explicitly distinguished; maxima do not establish minima. |
+| 3.28 / 131-132 | Thirteen truth judgments and justification from Fig.3.25 | 3.28; label table, q28, paired witnesses | No label changed. Added a true and false legal state for each of ten Maybe statements, including negative f/m and the quantifier in j. Added a cross-movie witness for g. |
+| 3.29 / 132 | Three recent movies, instances of all four types, real relationships | 3.29; 2025 releases, credit table, six relationship sets, q29 | Rechecked official credit sources; replaced a redirected Universal URL. Corrected the false description of Hiccup as a title character. Lead classification is an explicit teaching inference; selected credits are not complete filmographies. |
+| 3.30 / 133 | UML model plus all operations in a-c | 3.30; q30/q30b, class table, new a-c operation-effects table | Operations were present; added inputs/effects/constraints so each subpart has a direct answer. GPA example remains illustrative, not institution policy. |
+
+### Explicit Subparts
+
+| Subpart | Requirement and checked answer |
+|---|---|
+| 3.16(a) | One current Grade per student-section. (Sid,SecId) determines Grade on TAKES; a second conflicting grade fails. |
+| 3.16(b) | No student's simultaneous sections in a term. (Sid,Sem,Year,DaysTime) determines SecId; exact equality and interval overlap are distinguished. |
+| 3.16(c) | No two teachers for the same section. SecId determines instructor, already required by TEACHES. Term and Sid do not strengthen global SecId. |
+| 3.16, final prompt | Additional room/term/time uniqueness is supplied, with no combined sections and exact slot assumptions. |
+| 3.23(a) | BANK, ACCOUNT, LOAN, CUSTOMER are regular. |
+| 3.23(b) | BANK_BRANCH is weak, Branch_no partial, BRANCHES identifying. |
+| 3.23(c) | Same-bank branch-number uniqueness, exactly one bank owner, total branch identification. |
+| 3.23(d) | All five relationships and both ends' min-max pairs, justified by figure line styles and ratios. |
+| 3.23(e) | User requirements include identity, all displayed attributes, ownership, optionality, and joint accounts/loans. |
+| 3.23(f), account | CUSTOMER in A_C becomes (1,N). |
+| 3.23(f), customer loans | CUSTOMER in L_C becomes (0,2). |
+| 3.23(f), branch loans | BANK_BRANCH in LOANS becomes (0,1000); unrelated bounds unchanged. |
+| 3.27(1-5) | Student/card 1:1; student/teacher M:N; room/shared wall M:N; country/current president 1:1 in the assumed model; course/text M:N. |
+| 3.27(6-10) | Product/order M:N; student/class M:N; class/instructor N:1; instructor/shared office N:1; auction listing/bid 1:N. Each has an assumption or alternative. |
+| 3.28(a,d,g) | True, True, False respectively. Total actor participation, maximum two movie leads, and permitted producer/actor overlap across movies justify them. |
+| 3.28(b,c,e,f,h,i,j,k,l,m) | All Maybe; ten paired legal states give both truth values. The verifier asserts each individual claim on those states, not only general schema validity. |
+| 3.30(a) | computeGPA and add/drop majors/minors; grade/credit calculation and the two associations. |
+| 3.30(b) | add/delete course and hire/terminate instructor; OFFERS/EMPLOYS with dependent-link checks. |
+| 3.30(c) | assign/change grade; existing enrollment and authorized instructor; one current Grade. |
+
+### Laboratory Requirements
+
+| Lab / printed page | Conceptual requirements checked | Remaining requirement |
+|---|---|---|
+| 3.31 / 133 | UNIVERSITY six types, nine relationships, all keys/attributes, Grade/CStartDate, 3.16 constraints; q31a/b. Fig.3.20 versus prose HAS minimum conflict is disclosed; figure variant used. | Enter and verify a model in a data-modeling application. Not performed. |
+| 3.32 / 133 | Employee/customer IDs, names and ZIP; part ID/name/price/stock; order ID/three dates; one employee/customer, one-or-more parts and quantity; q32. Multi-owner ORDER_LINE preserves each order-part pair. | Enter and verify the MAIL_ORDER model in an application. Not performed. |
+| 3.33 / 133-134 | Movie title/year key, length **in minutes** (added), company, genres, directors, actors/roles, plot, zero-or-more quotes linked to the speaking actor's appearance; person keys and overlap; q33. | Enter and verify the MOVIE model in an application. Not performed. |
+| 3.34 / 134 | Author/reviewer identities and fields; paper metadata and multiple authors; contact-author subset; 2-4 reviews; all four 1-10 scores; acceptance/rejection recommendation; two audiences' comments; q34. Completed-review check now requires both comments. | Enter and verify the CONFERENCE_REVIEW model in an application. Not performed. |
+| 3.35 / 134 | Full AIRLINE inventories/three diagrams in 3.19 referenced explicitly; dated owner identity q35; optional actual departure and required assignment checked. | Rebuild and verify Fig.3.21 in an application. Not performed. |
+
+### External Evidence for 3.29
+
+Official pages were opened during this audit on 2026-09-12:
+
+- [Warner Bros./DC Superman](https://www.superman.com/home/): James Gunn directs;
+  Gunn/Peter Safran produce; David Corenswet and Rachel Brosnahan are selected
+  performers; 2025 release and Superman/Clark Kent character identification.
+- [Universal film page](https://www.universalpicturesathome.com/movies/how-to-train-your-dragon-2025)
+  and [Universal final home-release press release](https://www.universalpicturesathome.com/press-release/how-to-train-your-dragon-2025-press-release):
+  Dean DeBlois directs; Mason Thames plays Hiccup, Nico Parker plays Astrid;
+  final ordinary producer credits identify Marc Platt and Adam Siegel.
+- [Disney Snow White](https://movies.disney.com/snow-white-2025): Marc Webb directs;
+  Marc Platt/Jared LeBoff produce; selected cast includes Rachel Zegler and
+  Gal Gadot; the page identifies Zegler as Snow White and the 2025 release.
+
+The previous Universal video URL redirected to a theme-park page and no longer
+supported producer claims. It was replaced, not silently treated as still verified.
+Advance publicity and final ordinary/executive producer credit categories are not
+merged. The three selected lead roles are justified teaching classifications, not
+a claim that the official sources label exactly those people as the only leads.
+
+### Verification
+
+Environment: Windows PowerShell; Python 3.12.9; SQLite 3.45.3; Node 24.15.0;
+nbformat 5.10.4; Pillow 12.1.1; resvg-py 0.5.0; markdown-it-py 4.0.0;
+PyMuPDF 1.27.2.2; Beautiful Soup 4.14.3; Poppler 26.07.0. Rendering used the
+installed Google Chrome through the bundled Playwright runtime. SQLite is recorded
+as an environment fact; no new SQL lab was introduced by the answer audit.
+
+Commands were run from the course root:
+
+| Command | Final result |
+|---|---|
+| `python -X utf8 private_references/ch03_solutions/build.py` | PASS: 35 answers, 31 original figures, 38 Markdown-only notebook cells. |
+| `python -X utf8 private_references/ch03_solutions/verify.py` | PASS: 18 tests, including all ten Maybe pairs, the cross-movie g counterexample, domains, ternary information loss, AIRLINE relationship coverage, source identity, manifests, and review completion fields. |
+| `node private_references/ch03_solutions/render.cjs` | PASS: widths 1440 and 390; 35 headings, 31 loaded images, no horizontal overflow/broken images; all 31 SVGs have no detected text overlaps or out-of-bounds text. |
+| `python -X utf8 private_references/ch03_solutions/export_pdf.py` | PASS: 56 pages, all source HTML text tokens retained, 31 embedded figures, metadata/bounds checks. All pages rendered with Poppler. |
+| `python -X utf8 maintenance/course_repository/build_course_repository.py --verify` | PASS: 8 public-path files; three teaching notebooks checked and executed. No teaching notebook/PDF changed. |
+| `python -X utf8 -m unittest discover -s maintenance/course_repository -p 'test_*.py'` | PASS: 48 tests. |
+| `git check-ignore -v` on private answers, photographed Chapter3.pdf, and Ch5 notebook | PASS: all remain ignored under existing rules. |
+| `git diff --check` | PASS; only the repository's existing LF-to-CRLF notices were emitted. |
+| `git ls-remote origin refs/heads/main` | Remote remains `23b5c8c766d2a107d3280cf15255a8355a98b868`; no push occurred. |
+
+The final PDF is `Intro DB/ch03_answer.pdf`: 56 A4 pages, 2,060,908 bytes.
+SHA256: `79ecb018e4646c4ebe0ed83eae85376b4a69b22c0c9254e56c8e0015d0736c87`.
+Its source-notebook SHA256, also recorded in PDF metadata and repository config:
+`a6765354e870481bc7088a5e7ee9a52a3d8baf644378bc8b74ed086a0d9e37b3`.
+Maintained `solutions.md` SHA256:
+`4d26d19027f1b7d46adce199c35030ffc710531b461db433fbf4a600b4d5a5ce`.
+
+All five overview sheets covering all 56 final pages were visually inspected.
+PDF pages 4, 20, 32, 38, 44, and 53 were additionally inspected at readable
+resolution for the corrected comparison, long environment diagram, ternary
+diagram, full witness table, UML labels, and conference constraints. No clipping,
+overlapping labels, missing text, or broken figures was found. Some whitespace
+remains to keep complete figures and tables together. Dense UML content may
+require zoom for classroom projection; this is an answer reference, not a slide deck.
+Final QA renders are under the ignored `qa/pdf/79ecb018e4/` directory.
+
+The public PDF has no embedded attachments, private paths, scans, publisher
+solution material, or extra chapters. Only the authorized original answers are
+included. The private sources, intermediate HTML/notebook, and QA outputs stay
+local. PDF timestamps prevent a promise of byte-identical re-export; the reviewed
+file's recorded hash identifies this particular final output.
+
+No final automated check failed. The five modeling-application tasks were not
+executed and are not counted as passed tests. Image counts verify presence,
+source hashes verify identity, paired data examples check consequences, and
+visual inspection checks layout. None alone establishes pedagogical suitability.
+
+### Changed Files and Boundaries
+
+- Ignored maintained answers: `private_references/ch03_solutions/solutions.md`,
+  `build.py`, `verify.py`, `export_pdf.py`, and `README.md`.
+- Regenerated ignored outputs: figures, HTML, notebook, manifest, and QA renders.
+- Local public-path output: `Intro DB/ch03_answer.pdf` only. No textbook pages,
+  copied publisher diagrams, private records, or official solutions are embedded.
+- Repository maintenance: this report, current status in `PROJECT.md`, a pointer
+  in the build README, answer PDF/source hashes in
+  `repository_config.json`, and the expected figure count in its layout test.
+- Original ignored maintained sources remain ignored. A public clone can verify
+  the published PDF but cannot rebuild it without the instructor's private sources.
+- No stage, commit, push, remote change, pre-existing-file deletion, or history
+  rewrite in this audit. The report was consolidated into this already tracked
+  file; no Git ignore rule was changed to expose a new report or private source.
+
+Final Git state: `main...origin/main`, six intentional modified tracked files
+(answer PDF, PROJECT, build README, this report, repository config, layout test),
+none staged. The ignored maintained-answer edits are additional local changes
+and therefore do not appear in ordinary `git status`.
+
+### Limits and Next Action
+
+Five modeling-application deliverables remain unperformed. Open designs, the
+UNIVERSITY figure/prose conflict, simplified current-state assumptions, and the
+selected nonexhaustive movie instance are explicitly stated, not resolved by fiat.
+No institutional grading, software requirement, or course workload was changed.
+
+Primary next action: after instructor authorization, commit and push the corrected
+answer PDF and its intentional maintenance records. The old public version contains
+the confirmed wrong-target answer to 3.5. Completion means the remote commit and
+downloaded answer PDF match the audited local hash. Tool-based lab completion is
+a separate remaining task and must not be concealed by that publication.
+
+The sections below preserve earlier release evidence and hashes. The current
+requirements audit above supersedes their answer-completeness claims.
+
 ## Photographed Source Corrections and Private Worked Answers
 
 Date: 2026-09-10. Current version: `2026.09.10-ch03-photograph-checked`.

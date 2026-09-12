@@ -23,12 +23,32 @@ published chapter checks do not skip missing published sources.
 For local preparation only, `build_course_repository.py --include-unreleased --verify`
 uses all existing local sources. This flag does not change Git ignore rules.
 
+## Local Answer Audit, September 12
+
+After baseline `23b5c8c`, the instructor approved checking every photographed
+Ch3 question and subpart. The revised local answer PDF has 56 A4 pages,
+31 original figures, and 2,060,908 bytes. Its SHA256 is
+`79ecb018e4646c4ebe0ed83eae85376b4a69b22c0c9254e56c8e0015d0736c87`;
+input notebook SHA256 is
+`a6765354e870481bc7088a5e7ee9a52a3d8baf644378bc8b74ed086a0d9e37b3`.
+
+The wrong-target answer to 3.5 and other omissions were corrected. All written
+requirements for 3.1-3.30 were checked; 3.31-3.35 provide conceptual answers but
+their modeling-application tasks remain uncompleted. Eighteen local answer tests,
+48 repository tests, full text/image export checks, and desktop/mobile rendering
+passed. See [the question-by-question record](ch03_er_release.md#2026-09-12-answer-requirements-audit).
+The audit itself updated local files without committing or pushing. The instructor
+subsequently explicitly authorized commit and push of this audited version to
+`origin/main`. This commit records that authorization; the PDF hash above is
+unchanged. Private sources remain ignored; public chapter selection and course
+policy are unchanged.
+
 The remainder is the historical full local-build description. Its counts of
 17 notebooks/19 files and earlier tracking statements do not describe the
 current GitHub release. Historical audit records remain as provenance, not
 links promising that unreleased files exist in a fresh checkout.
 
-### Chapter 3 Answer PDF, September 12
+### Initial Chapter 3 Answer PDF Publication, September 12
 
 After baseline `7f3cc1a`, the instructor explicitly authorized publishing
 `Intro DB/ch03_answer.pdf`, with commit and push. This supersedes the earlier

@@ -5,8 +5,8 @@
   "published_pdf_chapters": ["ch01", "ch02", "ch03"],
   "published_answer_pdfs": {
     "ch03_answer.pdf": {
-      "notebook_sha256": "4876675ec8f86767444cefe713ee7aecb68edecaab076e8b89e95cab49686ee8",
-      "pdf_sha256": "7a099ed4ecc169bb7c7f3a31fa029787760e62cd8ae2ec7588e7446cf08066e9"
+      "notebook_sha256": "a6765354e870481bc7088a5e7ee9a52a3d8baf644378bc8b74ed086a0d9e37b3",
+      "pdf_sha256": "79ecb018e4646c4ebe0ed83eae85376b4a69b22c0c9254e56c8e0015d0736c87"
     }
   },
   "instructor": "WenYi Lee",

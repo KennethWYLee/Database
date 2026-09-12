@@ -533,7 +533,7 @@ class RepositoryLayoutTests(unittest.TestCase):
             self.assertEqual(pdf.embfile_count(), 0)
             text = "\n".join(page.get_text() for page in pdf)
             self.assertEqual(re.findall(r"(?m)^3\.(\d+)\. ", text), [str(i) for i in range(1, 36)])
-            self.assertEqual(sum(len(page.get_image_info()) for page in pdf), 26)
+            self.assertEqual(sum(len(page.get_image_info()) for page in pdf), 31)
             self.assertIn("not an official publisher solution manual", " ".join(text.split()))
             self.assertNotRegex(text, r"(?i)private_references|C:[/\\]|file:///|attachment:")
         wrong = copy.deepcopy(config)
