@@ -3,9 +3,30 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-09-12
+- 最後更新日期：2026-09-13
 
 ## 最新範圍與授課順序
+
+2026-09-13 Ch4解答發布：教師明確同意分享ch04_answer.pdf，並授權commit/push。
+本次只公開已查核的62頁、47圖原創解答PDF及必要閱讀連結、發布設定與紀錄；
+不公開ch04.ipynb、翻拍課本或private_references中的維護來源、HTML與notebook。
+此項取代下方Ch4 PDF「僅本機、未授權發布」的限制，其他私人來源限制不變。
+解答可獨立於教學notebook發布，仍須明列檔名並驗證PDF及來源notebook的SHA256。
+4.28-4.33建模軟體未執行的限制不變；發布授權不代表教師已逐題審閱或六題實驗已完成。
+發布查核與重建限制見maintenance/course_repository/README.md的Ch4發布紀錄。
+
+2026-09-12 Ch4解答：教師要求沿用Ch3方式提供answer PDF，未授權本次commit/push。
+本機Intro DB/ch04_answer.pdf含翻拍本4.1-4.33英文原創解答、47圖、62頁，
+維護來源與逐題查核在private_references/ch04_solutions，均維持Git忽略。
+已逐張閱讀Chapter4.pdf全部20張翻拍跨頁；翻拍缺pp.138-139，改以完整同版
+教科書pp.108-109補查。4.16、4.18、4.25與4.26(a)存在跨來源差異，依翻拍題目。
+另明示BANK圖號錯植、Figure4.9研究生predicate與正文差異，以及UML composition用語。
+已通過26項本機測試、重建一致性、PDF文字/47圖完整性及全62頁排版檢查。
+4.28-4.33有概念模型與例子，但未操作ERwin/Rational Rose，六題軟體實驗仍未完成。
+此份不是出版社官方解答，不代表ch04教學notebook已重寫完成，也不變更課綱與評量。
+公開範圍仍為Ch1-Ch3及已核准Ch3解答，未解除Ch4忽略、未更動既有公開教材。
+PDF及來源hash、已知限制與逐題定位見private_references/ch04_solutions/source_audit.md。
+本份解答下一步為教師確認開放設計題的明示假設，確認前不自動發布。
 
 2026-09-12後續解答查核：教師同意逐題對照翻拍Ch3；查核階段僅修正及驗證本機，
 未commit/push。修正3.5答錯比較對象、3.21指定domain遺漏及其他不完整說明；

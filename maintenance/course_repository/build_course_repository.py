@@ -279,8 +279,9 @@ def validate_config(config: dict) -> None:
         raise ValueError("Published PDFs must refer to published notebook chapters")
     supplements = config.get("published_answer_pdfs", {})
     for name, record in supplements.items():
-        if name not in {chapter + "_answer.pdf" for chapter in published or []}:
-            raise ValueError("Answer PDFs must refer to published notebook chapters")
+        # Explicitly approved answer PDFs may precede their teaching notebooks.
+        if not re.fullmatch(r"ch[0-9]{2}_answer\.pdf", name):
+            raise ValueError("Answer PDFs must use a chapter answer filename without directories")
         for field in ("notebook_sha256", "pdf_sha256"):
             if not re.fullmatch(r"[0-9a-f]{64}", record.get(field, "")):
                 raise ValueError("Answer PDF publication requires source and output hashes")

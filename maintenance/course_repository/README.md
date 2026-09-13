@@ -4,7 +4,7 @@
 
 The public `Intro DB/` contains `syllabus.md`, `ch01.ipynb`, `ch02.ipynb`,
 `ch03.ipynb`, their three matching PDFs, and the separately authorized
-`ch03_answer.pdf`. Other notebooks, their chapter sources, and the SQLite package
+`ch03_answer.pdf` and `ch04_answer.pdf`. Other notebooks, their chapter sources, and the SQLite package
 are ignored and kept locally. The semester scope has not changed.
 `published_chapters` in `repository_config.json` controls default builds.
 The manifest and default verification cover only that published selection.
@@ -22,6 +22,69 @@ Tests that require absent unreleased source files explicitly skip those cases;
 published chapter checks do not skip missing published sources.
 For local preparation only, `build_course_repository.py --include-unreleased --verify`
 uses all existing local sources. This flag does not change Git ignore rules.
+
+## Chapter 4 Answer PDF Publication, September 13
+
+After baseline `2567b88`, the instructor explicitly authorized sharing the existing
+Ch4 answer PDF, with commit and push to `origin/main`. Only this original answer
+PDF and publication metadata are added. The teaching notebooks remain Ch1-Ch3;
+Ch4's teaching notebook and all private sources stay ignored. No course scope,
+schedule or assessment policy changes in this release.
+
+`Intro DB/ch04_answer.pdf` has 62 A4 pages, 47 original figures, and 2,535,179 bytes.
+PDF SHA256: `ca511017ec15e6409ac2e2460673d840b34795e0c250e492c240445600be8930`.
+Source notebook SHA256: `b0ada4fc8aa67fd2898e9dd00c69f5fa4e06ed3b3df4452d5149b9a3236fcc28`.
+This release keeps the reviewed PDF bytes unchanged. Source reading and all-page
+visual inspection were completed September12; publication checks do not claim a
+new textbook audit. Questions4.1-4.33 follow the photographed edition. These are
+original answers, not the publisher's solution manual. No full question statements
+or photographed figures are embedded. The six labs4.28-4.33 have conceptual answers
+but their ERwin/Rational Rose tasks remain unperformed.
+
+The configuration's `published_answer_pdfs` is an independent explicit allow-list:
+an answer PDF can be published without its teaching notebook. Safe filenames and
+both source/output hashes remain mandatory. Public-clone tests inspect answer
+numbering, figures, metadata, external-path leakage and absence of embedded files.
+A public clone can verify this approved export, but cannot rebuild it without
+the ignored `private_references/ch04_solutions` maintained sources.
+
+Publication checks passed September13:
+
+- 26 local answer tests, including a fresh-process deterministic source rebuild.
+- Default course build: 9 published files, 3 executed notebooks; manifest,
+  content and PDF provenance passed. Existing teaching files remained unchanged.
+- 50 repository tests, including independent answer release, unsafe-filename and
+  missing-hash rejection, source/output hash mismatch detection, PDF numbering,
+  figure counts, and confirmation that private sources are not tracked.
+- A new directory exported from the staged Git index passed the default build
+  and three focused answer-publication tests without any private source files.
+  This checks the distributed files, not only the instructor's complete archive.
+- The PDF hash matches the reviewed September12 export; no PDF regeneration or
+  new visual-layout change was needed. The newly published path and root README
+  link are explicit; no textbook scan, private source or Ch4 teaching notebook
+  was added to Git. Publication is not an assertion of instructor review.
+
+Commands, from the course root unless otherwise indicated:
+
+```powershell
+python private_references/ch04_solutions/verify.py
+python maintenance/course_repository/build_course_repository.py --verify
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+git checkout-index --all --prefix=<new-local-validation-directory>/
+```
+
+In that staged-file export, run the same build command; from its
+`maintenance/course_repository` directory, run:
+
+```powershell
+python -m unittest test_repository_layout.RepositoryLayoutTests.test_authorized_answer_pdf test_repository_layout.RepositoryLayoutTests.test_answer_release_is_independent_of_teaching_notebook test_repository_layout.RepositoryLayoutTests.test_answer_release_rejects_unsafe_names_and_missing_hashes
+```
+
+The detailed September12 question-level audit remains local at
+`private_references/ch04_solutions/source_audit.md`. The instructor authorized
+commit and push of this release to the existing `origin/main`; the Git history
+records the resulting publication commit. No history rewrite or visibility
+change is part of this action.
 
 ## Local Answer Audit, September 12
 

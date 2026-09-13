@@ -442,7 +442,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
         self.assertEqual(builder.expected_files(config),
                          {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb",
-                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_answer.pdf"})
+                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_answer.pdf", "ch04_answer.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
         import subprocess
         allowed = {"Intro DB/" + name for name in builder.expected_files(config)}
@@ -455,11 +455,11 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(subprocess.check_output(["git", "ls-files", "maintenance/student_sqlite_package",
                          "private_references", "Database pdfs"], cwd=builder.COURSE_ROOT, text=True), "")
         ignored = subprocess.check_output(["git", "check-ignore", "--no-index", "--",
-            "Intro DB/ch05.ipynb", "Intro DB/ch08.ipynb", "Intro DB/under_revision/ch03.ipynb",
+            "Intro DB/ch04.ipynb", "Intro DB/ch05.ipynb", "Intro DB/ch08.ipynb", "Intro DB/under_revision/ch03.ipynb",
             "maintenance/chapters/ch05_relational_model/student_guide.md",
             "maintenance/student_sqlite_package/output/sqlite_course_package.zip"],
             cwd=builder.COURSE_ROOT, text=True).splitlines()
-        self.assertEqual(len(ignored), 5)
+        self.assertEqual(len(ignored), 6)
 
     def test_build_preserves_syllabus_and_existing_files_on_failure(self):
         with tempfile.TemporaryDirectory(prefix="db_layout_") as directory:
@@ -523,23 +523,54 @@ class RepositoryLayoutTests(unittest.TestCase):
     def test_authorized_answer_pdf(self):
         import fitz
         config = builder.load_json(builder.CONFIG_PATH)
-        self.assertEqual(set(config["published_answer_pdfs"]), {"ch03_answer.pdf"})
-        record = config["published_answer_pdfs"]["ch03_answer.pdf"]
-        path = builder.safe_target("ch03_answer.pdf")
-        self.assertEqual(builder.sha256(path), record["pdf_sha256"])
-        with fitz.open(path) as pdf:
-            self.assertEqual(pdf.metadata["author"], "WenYi Lee")
-            self.assertEqual(pdf.metadata["subject"], "Notebook SHA256: " + record["notebook_sha256"])
-            self.assertEqual(pdf.embfile_count(), 0)
-            text = "\n".join(page.get_text() for page in pdf)
-            self.assertEqual(re.findall(r"(?m)^3\.(\d+)\. ", text), [str(i) for i in range(1, 36)])
-            self.assertEqual(sum(len(page.get_image_info()) for page in pdf), 31)
-            self.assertIn("not an official publisher solution manual", " ".join(text.split()))
-            self.assertNotRegex(text, r"(?i)private_references|C:[/\\]|file:///|attachment:")
-        wrong = copy.deepcopy(config)
-        wrong["published_answer_pdfs"]["ch03_answer.pdf"]["pdf_sha256"] = "0" * 64
-        with self.assertRaisesRegex(RuntimeError, "Answer PDF differs"):
-            builder.verify_content(wrong)
+        self.assertEqual(set(config["published_answer_pdfs"]), {"ch03_answer.pdf", "ch04_answer.pdf"})
+        home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
+        for chapter, questions, images, pages in [(3, 35, 31, 56), (4, 33, 47, 62)]:
+            name = f"ch{chapter:02d}_answer.pdf"
+            with self.subTest(answer=name):
+                record = config["published_answer_pdfs"][name]
+                path = builder.safe_target(name)
+                self.assertIn(f"(Intro%20DB/{name})", home)
+                self.assertEqual(builder.sha256(path), record["pdf_sha256"])
+                with fitz.open(path) as pdf:
+                    self.assertEqual(len(pdf), pages)
+                    self.assertEqual(pdf.metadata["author"], "WenYi Lee")
+                    self.assertEqual(pdf.metadata["subject"], "Notebook SHA256: " + record["notebook_sha256"])
+                    self.assertEqual(pdf.embfile_count(), 0)
+                    text = "\n".join(page.get_text() for page in pdf)
+                    self.assertEqual(re.findall(rf"(?m)^{chapter}\.(\d+)\. ", text),
+                                     [str(i) for i in range(1, questions + 1)])
+                    self.assertEqual(sum(len(page.get_image_info()) for page in pdf), images)
+                    self.assertIn("not an official publisher solution manual", " ".join(text.split()))
+                    self.assertNotRegex(text, r"(?i)private_references|C:[/\\]|file:///|attachment:")
+                for field in ("pdf_sha256", "notebook_sha256"):
+                    wrong = copy.deepcopy(config)
+                    wrong["published_answer_pdfs"][name][field] = "0" * 64
+                    with self.assertRaisesRegex(RuntimeError, "Answer PDF differs"):
+                        builder.verify_content(wrong)
+
+    def test_answer_release_is_independent_of_teaching_notebook(self):
+        config = builder.load_json(builder.CONFIG_PATH)
+        builder.validate_config(config)
+        self.assertIn("ch04_answer.pdf", builder.expected_files(config))
+        self.assertNotIn("ch04.ipynb", builder.expected_files(config))
+        self.assertNotIn("ch04.pdf", builder.expected_files(config))
+        self.assertNotIn("ch04", [c["id"] for c in builder.all_chapters(config)])
+
+    def test_answer_release_rejects_unsafe_names_and_missing_hashes(self):
+        original = builder.load_json(builder.CONFIG_PATH)
+        record = original["published_answer_pdfs"]["ch04_answer.pdf"]
+        for name in ("../ch04_answer.pdf", "folder/ch04_answer.pdf", "folder\\ch04_answer.pdf",
+                     "C:/ch04_answer.pdf", "ch04.pdf", "book.pdf"):
+            config = copy.deepcopy(original)
+            config["published_answer_pdfs"][name] = record
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "chapter answer filename"):
+                builder.validate_config(config)
+        for field in ("pdf_sha256", "notebook_sha256"):
+            config = copy.deepcopy(original)
+            config["published_answer_pdfs"]["ch04_answer.pdf"].pop(field)
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "source and output hashes"):
+                builder.validate_config(config)
 
 
 if __name__ == "__main__":
