@@ -1,5 +1,419 @@
 # Ch3 ER Teaching Release
 
+## Publication Authorization (2026-09-14)
+
+The instructor requested commit and push for the accumulated local revisions:
+Ch3 diagrams and explanations, weak-entity bullet points, Ch3/Ch4 answer PDF
+corrections, their maintained code, configuration, tests and records (15 tracked
+files). This supersedes the no-publication authorization in the historical entries
+below. `git fetch origin` completed; HEAD and origin/main both pointed to
+`71f53bc67e0b5c72d12bc58949b14a00a266f8fd` with zero divergence before staging.
+`git diff --check` passed, with only Git line-ending conversion warnings.
+Previously verified artifacts are retained without PDF regeneration. Private
+sources, ignored content and other chapter releases are excluded. The actual
+commit and remote synchronization result is reported after the Git operations.
+
+## Weak Entity Key Points (2026-09-14)
+
+The instructor requested key points instead of long prose. Section 12 now uses
+short English bullet points with concrete identifiers and bold reading cues.
+All eleven Section 12 tables, all 45 notebook attachments, the existing examples,
+identification conditions and participation distinctions are retained. Scope,
+assessment, practice requirements and technical claims are unchanged.
+
+Maintained changes in this revision: `student_guide.md` (Section 12 only),
+`export_chapter_pdfs.py`, `test_ch03_er.py`, `PROJECT.md` and this record.
+The exporter now keeps the first explanatory list, as well as paragraphs, with
+its diagram. The symbol table and order-item reading steps remain grouped.
+Only `Intro DB/ch03.ipynb` and `Intro DB/ch03.pdf` were regenerated with changes.
+Ch1, Ch2, the syllabus and both answer PDFs retain their starting content.
+
+### Checks and Outputs
+
+- Ran `python -X utf8 maintenance/course_repository/build_course_repository.py`.
+- Ran `python -X utf8 maintenance/course_repository/export_chapter_pdfs.py --chapters ch03`.
+- Ran `python -m unittest discover -s maintenance/course_repository -p 'test_*.py'`:
+  all 77 tests passed, including list/figure same-page checks and retention of
+  eleven tables. Nine reading blocks start with lists of at most six points,
+  each at most 35 words.
+- Ran `python -X utf8 maintenance/course_repository/verify_first_meeting.py`:
+  all three public notebook fresh-kernel checks completed; exit code 0. A Windows
+  ZeroMQ/Tornado callback nevertheless emitted `zmq.error.ZMQError: not a socket`
+  while publishing idle status to an already closed socket. This was not a
+  diagnostic-free run; no environment changes were made for this formatting task.
+- Ran `node maintenance/course_repository/render_first_meeting.cjs`:
+  1440/390-width checks passed, with all 45 images loaded and no document overflow.
+- Ran the build command again with `--verify`: manifest, content and all-notebook
+  execution checks passed. Environment: Python 3.12.9; SQLite 3.45.3.
+- Export text coverage, image bounds, blank-page and image-pixel checks passed.
+  PDF remains 57 pages / 45 images; notebook remains 138 Markdown cells.
+  Visually reviewed all changed pages 24-36, with enlarged page 24/27 and mobile
+  figure checks. Pages 1-23 and 37-57 are pixel-identical to the previous export.
+
+Current notebook SHA256:
+`002903085b2dc98c40f10b005ade963e1828a65fc1724da759d4a42361f8f227`.
+Current PDF SHA256:
+`41a5c280f03723578701efd1fde566a926d41f2f811b4ecdce5214e7427ed095`.
+PDF size is 1,778,518 bytes; its notebook provenance hash matches.
+
+This was a wording/layout revision, not another full textbook source audit.
+The previous Section 3.5 source check and its limits remain applicable.
+Dense diagrams need zoom on phones; wide Markdown tables intentionally scroll
+horizontally. No classroom projection or student comprehension test occurred.
+All pre-existing uncommitted work was preserved. HEAD remains
+`71f53bc67e0b5c72d12bc58949b14a00a266f8fd`; no staging, commit, push or remote
+operation was performed. Primary next action: instructor review of page 27 to
+confirm the bullet explanations support oral teaching before extending the style.
+
+## Weak Entity Explanation (2026-09-14)
+
+The instructor reported that the weak-entity explanation was still difficult to
+understand. This local revision focuses on Section 12 and its existing examples;
+it does not claim to rewrite every explanation in Ch3 or another chapter.
+All fifteen previously modified tracked files were preserved. HEAD remains
+`71f53bc67e0b5c72d12bc58949b14a00a266f8fd`; no staging, commit, push or remote
+operation was authorized or performed.
+
+### Instruction and Source
+
+- Start with two different courses that both have section 1. Show individual
+  courses/sections and their ownership links before defining textbook terms.
+- Keep the same three records while contrasting section number alone, course
+  alone, and both together. State the uniqueness rules explicitly, including
+  the absence of another identifying attribute, rather than inferring a key
+  from the small current sample.
+- Associate each term with COURSE, SECTION, SectionNo or HAS_SECTION. Explain
+  that CourseCode belongs to COURSE and is supplied through the relationship,
+  not silently treated as SECTION's own attribute.
+- Place the ER diagram and a six-row symbol explanation on the same PDF page.
+  Distinguish the double rectangle from the double connecting line, and clarify
+  that the latter does not mean two owners.
+- Add a declared alternative with global SectionId values Q01-Q03. Preserve the
+  same course ownership and local numbering rule. SECTION becomes regular but
+  participation remains required; the new diagram retains the double connecting
+  line, not the weak rectangle or identifying diamond.
+- Rewrite order-item, access-card, nested-owner, two-owner and contact-choice
+  explanations using actual input identifiers and explicit traversal steps.
+  Keep the order-item diagram with its three reading steps in the PDF.
+
+The primary source checked for this revision was Elmasri and Navathe,
+*Fundamentals of Database Systems*, seventh edition, Section 3.5, printed page 79
+(full-PDF zero-based page 109); Section 3.6, printed page 80 (PDF page 110), was
+also read for relationship refinement. The classroom photographed copy uses
+different pagination, with Section 3.5 on printed page 109. The maintained
+textbook-reading section preserves that distinction. The new examples and
+artwork are original teaching adaptations. This is not a fresh complete
+photographed-chapter or whole-textbook audit.
+
+### Artifacts and Pages
+
+| Current PDF page | Content to inspect |
+| --- | --- |
+| 24-25 | Concrete question, three input records, individual-object picture and candidate lookup table |
+| 26 | Textbook terms explained using those same objects |
+| 27 | Weak-entity ER diagram, six symbol explanations and identification versus participation |
+| 28 | Same sections with global IDs; ordinary ER symbols but required ownership remains |
+| 30 | Order-item diagram and three-step explanation using O10 / 1 |
+| 32-35 | Access-card contrast, nested-owner traversal and explicit two-owner example |
+
+`Intro DB/ch03.ipynb` contains 138 Markdown cells. Its 45 image attachments consist
+of 23 ER-diagram compositions, 17 table compositions and 5 individual-object
+connection diagrams. `ch03.pdf` is 57 pages / 1,704,400 bytes. Section 12 is longer
+because it now supplies worked explanation rather than relying on definition-only
+prose or practice; required submissions, grading and syllabus scope are unchanged.
+Other Ch3 sections retain the preceding revisions; their PDF pages shift.
+
+Changed maintained files: the Ch3 `student_guide.md`; `er_figures.py`;
+`export_chapter_pdfs.py`; `render_first_meeting.cjs`; `verify_first_meeting.py`;
+`test_ch03_er.py`; `test_repository_layout.py`; this record and `PROJECT.md`.
+Only the Ch3 teaching notebook/PDF were regenerated. Ch1, Ch2, syllabus and both
+answer PDFs retain their starting content. Private source and QA ignore rules
+are unchanged.
+
+### Verification
+
+```powershell
+python -X utf8 maintenance/course_repository/build_course_repository.py
+python -X utf8 maintenance/course_repository/export_chapter_pdfs.py --chapters ch03
+python -X utf8 maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+python -X utf8 maintenance/course_repository/build_course_repository.py --verify
+git diff --check
+git status --short --branch
+```
+
+- Python 3.12.9 / SQLite 3.45.3. Three fresh-kernel checks completed. One run
+  emitted a Windows ZeroMQ connection-reset diagnostic but returned success;
+  all notebook/environment checks completed. Ch3 itself has no executable cells.
+- 76 repository tests passed. New checks cover teaching order, exact course/section
+  links, unchanged records in the global-ID comparison, keys and required
+  participation in both diagrams. Existing tests check all PDF/notebook image
+  pixels and text retention; 42 visual/reading groups retain same-page starts.
+  The weak-symbol table is specifically required on its diagram's page.
+- An initial test failure was a pre-existing regex matching `type b` inside
+  `type because`. Word boundaries now reject the prohibited standalone term
+  without rejecting ordinary English; both cases are tested.
+- Desktop 1440 / mobile 390: 45 images loaded, no page overflow or SVG label
+  clipping/overlap. Visually inspected all 57 PDF pages in overview sheets and
+  enlarged pages 27, 28 and 30. The new graphical content was rendered through
+  the existing Python/SVG-to-PNG pipeline, not a downloaded textbook image.
+- Dense diagrams still require zoom on phones. Some pages retain whitespace
+  so that related diagrams and explanations stay together. No classroom
+  projector test or student-comprehension result is claimed.
+
+Final SHA-256:
+
+- Notebook: `062b781e5abbaee9da104e88e25c8a9ddf61da05d1da96ddab88ebe291361b07`.
+- PDF: `ebe0348da3d1242e7ef559b2826432f22c43338a8161ac3b4668fee3d12fee9f`.
+
+Local rendering evidence is in `output/first_meeting` and
+`output/pdf/ch03_ebe0348da3` under this maintenance directory. The earlier 56-page
+export was superseded when the order-item steps were kept with their diagram.
+
+The primary next action is instructor walkthrough of pages 25, 27 and 28 using
+the same section records. Completion means being able to explain why DB101 / 1
+and CS102 / 1 differ, why CourseCode and SectionNo are needed in the first model,
+and why a global SectionId removes weakness without removing required ownership.
+Only then assess whether other sections need the same kind of rewrite.
+
+## Tables and ER Diagrams (2026-09-14)
+
+### Scope and Findings
+
+The instructor identified that tables were being called diagrams and authorized
+local corrections to Ch3. The previous count of 41 image attachments established
+neither 41 ER diagrams nor semantic alignment with the reading instructions.
+In particular, Section 1 discussed boxes/connections without drawing them, and
+Section 13 offered data tables without an ER before/after comparison.
+
+Baseline HEAD remains `71f53bc67e0b5c72d12bc58949b14a00a266f8fd` on `main`.
+Seven tracked files already contained the preceding answer-review changes;
+all were preserved. No staging, commit, push, remote change or history rewrite
+was authorized or performed in this task.
+
+### Changes and Page Locations
+
+| Current PDF page | Maintained correction |
+| --- | --- |
+| 2-3 | Kept the requirement tables; added three actual ER sketches: types, relationship, then maximum ratio and participation. Explicitly labeled them as partial sketches with identification deferred to Section 12. |
+| 4 | Changed the entity-type/state table interpretation to Read the Entity Tables. |
+| 10 | Changed the domain comparison to Read the Domain Tables. |
+| 12 | Changed the enrollment-record interpretation to Read the Enrollment Tables. The individual-object connection diagram remains separate on page 13. |
+| 32-33 | Kept the original data tables and labeled their interpretation Read the Design Tables. Added the ER comparison: TeacherName on SECTION versus Name on independently identified INSTRUCTOR and a TEACHES relationship. SECTION remains weak; the unchanged course owner is explicitly omitted from both close-ups. |
+| 34-35 | Labeled the ternary ER sketch and accompanying tables as Read the Approval Diagram and Tables. They are complementary displays, not two ER diagrams. |
+| 40 | Kept the full campus ER image with its reading heading and first explanatory paragraph on one page. The remaining explanation/inventory continues on page 41. |
+
+The notebook has 132 Markdown cells and 43 image attachments: 22 ER-diagram
+compositions, 17 table compositions and 4 individual-object connection diagrams.
+An image attachment is a file-format property, not a classification of its content.
+No existing table, example record, practice assignment or assessment rule was
+removed or changed. Ch1, Ch2, syllabus and both previously corrected answer PDFs
+remain unchanged from the start of this task.
+
+Maintained sources changed: `maintenance/chapters/ch03_er_model/student_guide.md`,
+`er_figures.py`, `export_chapter_pdfs.py`, `render_first_meeting.cjs`,
+`verify_first_meeting.py`, `test_ch03_er.py`, `test_repository_layout.py`, this
+record and `PROJECT.md`. Regenerated outputs: `Intro DB/ch03.ipynb` and `ch03.pdf`.
+The PDF exporter groups each applicable visual with the following Read heading
+and first paragraph, scoped to the Ch3 teaching export. It does not relocate
+notebook cells or alter the answer exporters. Forty groups were checked in PDF.
+
+### Source and Verification
+
+Targeted primary-source checks used Elmasri and Navathe, *Fundamentals of Database
+Systems*, seventh edition, full local textbook printed pages 75-77, 79-80 and 84
+(zero-based PDF pages 105-107, 109-110, 114). Relevant grounds are Section 3.4.3's
+maximum-ratio/participation conventions, Section 3.5's weak-entity symbols and
+Section 3.6's refinement of attributes into relationships. Campus data and the
+two new diagram compositions are original teaching adaptations, not reproduced
+book artwork. This was not a complete chapter/textbook source audit.
+
+Executed from the course repository:
+
+```powershell
+python maintenance/course_repository/build_course_repository.py --verify
+python -X utf8 maintenance/course_repository/export_chapter_pdfs.py --chapters ch03
+python -X utf8 maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+git diff --check
+git status --short --branch
+```
+
+- Python 3.12.9 / SQLite 3.45.3. All three public notebooks were checked in fresh
+  kernels. Ch3 has no executable cells; its fresh-kernel run is not evidence of
+  additional database/application activity.
+- 74 repository tests passed, including new tests relating reading headings to
+  table/ER content, explicit connections and keys in the two new diagrams, and
+  all 40 PDF reading-group starts sharing a page with the referenced visual.
+- PDF contains 52 pages and all 43 image attachments; text coverage, bounding
+  boxes, nonblank pages, metadata and exact notebook/PDF image-pixel checks passed.
+- Desktop 1440 and mobile 390 previews: all images loaded, no document overflow;
+  SVG text bounds, label overlap and ER-shape containment checks passed.
+- Visually inspected all 52 PDF pages in overview sheets; the two new diagrams
+  at full resolution, the complete-campus PDF page, and the mobile comparison
+  screenshot were additionally inspected. Dense images still require mobile zoom.
+- The initial build correctly rejected the not-yet-regenerated Ch3 PDF as stale.
+  After export, the first preview check exposed an old hard-coded total figure
+  count; it now derives that total from the per-chapter expected counts. That run
+  also emitted a Windows ZeroMQ socket warning. A fresh retry completed with no
+  warning or failure. Final tests and content verification passed.
+
+Final SHA-256:
+
+- Ch3 notebook: `fd0f66bb166daba764e81360aadcb4a256b5f1ec58c50b0816fa75e7c5cf0319`.
+- Ch3 PDF: `c6f29499e05ccdedb09e106d84a1159838ac04f03e57354395ea64b279794c8c`
+  (1,625,124 bytes).
+- Unchanged Ch3 answer: `effd9ad0c59a8a055c218957513443bdc732f78ffafaba177509a335adf9b066`.
+- Unchanged Ch4 answer: `39ea918d092751540690658410e44d67dce868daac7decb1c1c112b99c031adf`.
+
+Local QA is under `output/first_meeting` and `output/pdf/ch03_c6f29499e0` relative
+to this maintenance directory. These generated QA files remain outside publication.
+No claim is made about a live GitHub rendering of this unpublished version,
+independent expert validation or classroom projection testing. Some paragraphs
+continue on the next page; the fix specifically keeps the visual and the beginning
+of its interpretation together without requiring every long discussion to fit.
+
+The primary next action is instructor review of pages 3 and 33 at classroom
+display size. Completion means confirming that each explained box, attribute,
+relationship and constraint can be pointed to directly in the displayed diagram.
+
+## Ch3 and Ch4 Answer Visual Review (2026-09-14)
+
+### Scope and Version
+
+The instructor approved the proposed review of both answer documents. This work
+corrects confirmed figure/text inconsistencies and repeated production labels,
+preserving the solutions, assumptions, question coverage and publication scope.
+Baseline: clean `main`, HEAD `71f53bc67e0b5c72d12bc58949b14a00a266f8fd`, tracking
+`origin/main` at `https://github.com/KennethWYLee/Database.git`. No fetch, staging,
+commit, push, remote change or history rewrite was performed during this review.
+Earlier publication authorization below belongs to the previous teaching update.
+
+### Findings and Corrections
+
+| Document / PDF page | Finding and correction |
+| --- | --- |
+| Both, throughout | Removed generic production prefixes and unnecessary table subtitles. Retained useful ER/EER/UML notation labels. Unlike the teaching notebook, these answer builders did not repeat every image title as an external heading; no such blanket defect is claimed. |
+| Ch3 / 1 | Clarified min-max participation: numerical minima determine optional or required participation. A single connector is not itself an error under the textbook's alternative notation. |
+| Ch3 / 6, Q3.9 | Replaced a repetitive placement-summary image with employee-specific start dates and a department row that cannot hold both dates as one single-valued attribute. Retained the original placement table and explanation. |
+| Ch3 / 54, Q3.35 | Replaced a repeated identity inventory image with allow/reject examples for seat reservations under different and identical full owner identities. Retained the complete identity inventory and conceptual-lab limitation. |
+| Ch4 / 1, 4, Q4.3 | Explained compact property inventories and marked WORKS_FOR, TAKES and ASSISTS as links, not attributes. No relationship semantics changed. |
+| Ch4 / 6, Q4.5 | Separated the STAFF entity name from its property compartment. Specialization predicates remain unchanged. |
+| Ch4 / 20, Q4.18 | Added Address to STAFF, matching the existing answer table's StaffId, Name, Address and Salary inventory. |
+| Private Ch4 README | Corrected an obsolete statement that the answer PDF was unapproved/ignored. The PDF was previously authorized; maintained solution sources remain ignored. This review is local only. |
+
+### Sources and Limits of Source Checking
+
+Read both complete maintained answer texts and their figure/build definitions.
+Checked relevant primary passages in Elmasri and Navathe, *Fundamentals of
+Database Systems*, seventh edition, printed pages 78, 79, 84 and 85 (zero-based
+full-PDF pages 108, 109, 114 and 115), including relationship attribute placement,
+weak entities and Section 3.7.4's alternative min-max notation. This is a full
+two-document figure/text and rendering review with targeted primary-source checks,
+not a new complete textbook or every-exercise source audit. Prior source records
+and open-ended assumptions remain in force.
+
+Private source hashes (SHA-256):
+
+- Photographed Chapter3.pdf: `55366a1faa7718dd1b89bdb95a938db5c5e7b00886f99aeb88a16086409e72c7`.
+- Photographed Chapter4.pdf: `6a89e99b4e81233f0afc673d5a4c80a73492f57bf2628f8123836722736d9c9b`; printed pages 138-139 are absent from this photographed source.
+- Full textbook: `002eceecdb5e47b050e61b30d13a8f207fb44cea4f927b98d864308c026288a5`.
+
+### Maintenance and Reproduction
+
+Modified private maintained sources: Ch3 `build.py`, `solutions.md`, `verify.py`;
+Ch4 `figures.py`, `solutions.md`, `verify.py`, `README.md`. Added ignored local QA
+helpers `answer_visual_review.cjs`, `answer_visual_contacts.py` and
+`verify_answer_pdf_images.py`. Rebuilt figures, notebooks, HTML and PDFs from
+maintained sources rather than editing exports.
+
+Tracked changes: both answer PDFs; shared `teaching_figures.py` and
+`test_repository_layout.py`; the two existing answer export hash entries in
+`repository_config.json`; this record and `PROJECT.md`. The renderer now accepts
+an optional `table_subtitle`, keeping the existing teaching defaults. No allow-list
+expansion or ignore-rule change was made. Private source and QA files remain
+ignored and are not included in the tracked change set.
+
+Commands run from the course repository:
+
+```powershell
+python -X utf8 private_references/ch03_solutions/build.py
+python -X utf8 private_references/ch03_solutions/verify.py
+node private_references/ch03_solutions/render.cjs
+python -X utf8 private_references/ch04_solutions/build.py
+python -X utf8 private_references/ch04_solutions/verify.py
+node private_references/answer_visual_review.cjs
+python private_references/answer_visual_contacts.py
+python -X utf8 private_references/ch03_solutions/export_pdf.py
+python -X utf8 private_references/ch04_solutions/export_pdf.py
+python private_references/verify_answer_pdf_images.py
+python maintenance/course_repository/build_course_repository.py --verify
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+```
+
+Environment: Python 3.12.9, SQLite 3.45.3, Pillow 12.1.1, nbformat 5.10.4,
+PyMuPDF 1.27.2.2, resvg-py 0.5.0, markdown-it-py 4.0.0, Beautiful Soup 4.14.3,
+Node 24.15.0, Chrome 153.0.8010.36 and Poppler 26.07.0; Arial fonts on Windows.
+
+Results:
+
+- Ch3: 19 local tests passed; Ch4: 27 passed, including fresh-process rebuild checks.
+- Repository: 71 tests passed; build, manifest and public-content checks passed;
+  all three public teaching notebooks executed successfully. Their hashes did not
+  change; teaching PDFs and syllabus are unchanged.
+- One initial repository test failed: reusing the existing `subtitle` field for
+  table labels changed an unrelated ER-derived teaching figure. A separate
+  `table_subtitle` field fixed the compatibility issue; a regression test was
+  added and the complete repository test suite passed afterward.
+- Browser widths 1440 and 390: all 31 / 47 images loaded, all 35 / 33 question
+  headings present, no document horizontal overflow. SVG text bounds and
+  text-to-text overlap checks passed across 78 figures; these checks alone do not
+  prove that every possible connector/shape collision is absent.
+- Visually inspected all 78 figures in contact sheets and all 117 PDF pages in
+  page overviews, plus full-size changed pages and selected desktop/mobile views.
+- All 78 embedded PDF images match the generated PNG RGB pixels in source order.
+  All 68 question headings and source HTML word-token multiplicities were retained;
+  no blank pages or out-of-page text/images were detected.
+- PDF author is WenYi Lee; notebook-hash metadata, public hashes, question order,
+  embedded-file and internal-path checks passed. Ignore checks confirmed the
+  private builders, QA helpers and photographed sources remain excluded.
+
+### Outputs
+
+| PDF | Pages | Questions | Figures | Bytes |
+| --- | ---: | ---: | ---: | ---: |
+| Intro DB/ch03_answer.pdf | 55 | 35 | 31 | 2014806 |
+| Intro DB/ch04_answer.pdf | 62 | 33 | 47 | 2442850 |
+
+SHA-256:
+
+- Ch3 PDF: `effd9ad0c59a8a055c218957513443bdc732f78ffafaba177509a335adf9b066`.
+- Ch3 source notebook: `a9e7ea15ddc5662e0cf59ed5fdd9fad3ee0fd24ac25be099161debd597daaabf`.
+- Ch4 PDF: `39ea918d092751540690658410e44d67dce868daac7decb1c1c112b99c031adf`.
+- Ch4 source notebook: `40f74ae7a0a307ee298b16b574801d5bd9811cc0bf58c4d521e2a33579c429b4`.
+
+Detailed local image/page comparisons are stored under each private answer
+directory's `qa/visual-review/pdf-images.json`; PDF overviews are under
+`qa/pdf/effd9ad0c5` and `qa/pdf/39ea918d09`, respectively.
+
+### Remaining Limits and Next Action
+
+Ch3 exercises 3.31-3.35 and Ch4 exercises 4.28-4.33 remain conceptual solutions;
+ERwin and Rational Rose activities were not executed and native model files were
+not produced. Automated checks and self-review are not independent expert
+corroboration or evidence of classroom understanding. Dense diagrams require
+zoom on phones; some narrow table text wraps awkwardly. Some PDF pages retain
+white space to avoid splitting figures. No classroom projector test was done.
+
+The primary next action is instructor review of Ch3 page 6 and Ch4 page 20 at
+classroom display size. This follows the corrected data/diagram inconsistencies
+and should establish whether the displayed records, attributes and conclusions
+can be explained directly and read from the classroom. Completion means the
+instructor confirms that those examples are clear or identifies concrete
+remaining labels/data to correct. No further publication is claimed by this record.
+
 ## 2026-09-14 Publication Authorization
 
 The instructor explicitly requested commit and push after the corrections below.

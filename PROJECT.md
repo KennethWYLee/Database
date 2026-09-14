@@ -7,6 +7,52 @@
 
 ## 最新範圍與授課順序
 
+2026-09-14 本批發布授權：教師要求commit and push，範圍包含累積的Ch3教學圖文、
+weak entity重點式說明、Ch3／Ch4解答修正及相關維護程式與檢查紀錄。
+提交前fetch確認HEAD與origin/main一致；沿用已驗證成品，不重新匯出PDF。
+此授權取代下列本批歷史紀錄中的未授權發布狀態；私人來源與其他章節不加入Git。
+
+2026-09-14 Weak entity重點式文字：依教師要求，第12節改用英文短句與條列，
+保留全部11個表格、圖片、例子及成立條件；圖後的重點說明與圖保持同頁。
+notebook仍為138個Markdown cells／45個附件，PDF仍為57頁；本次僅第24至36頁
+有像素變動，其餘頁面與前版相同。77項測試通過；fresh-kernel檢查完成但出現
+ZeroMQ socket關閉診斷，詳見紀錄。本次未commit/push；下一步先讀第27頁，
+確認條列式講解是否符合課堂使用，再決定是否套用到其他段落。
+詳見[本次紀錄](maintenance/course_repository/ch03_er_release.md#weak-entity-key-points-2026-09-14)。
+
+2026-09-14 Weak entity講解重寫：教師表示文字與圖解仍難理解，本次聚焦Ch3第12節，
+先以同一組COURSE／SECTION資料辨認物件，再介紹owner、partial key及ER符號；
+新增實例連線圖及保留相同課程歸屬、改用全域SectionId的對照。訂單明細、卡片、
+多層及多owner例子改用具體編號逐步說明；未調整課程範圍或增加必交作業。
+目前notebook為138個Markdown cells；45個附件為23組ER圖、17組表格、5組
+個別物件連線圖。PDF57頁，先讀第25、27、28頁；第30頁保留訂單圖與三步讀法。
+76項測試與桌面／手機檢查通過，已檢視57頁；這不代表教師或學生已確認理解。
+本次只更新本機，保留前次所有未提交工作，未commit/push。下一步先用第25至28頁
+確認能解釋「需要owner的身分」與「必須有owner」的差異，再決定是否擴及其他節。
+詳見[本次紀錄](maintenance/course_repository/ch03_er_release.md#weak-entity-explanation-2026-09-14)。
+
+2026-09-14 Ch3表格與示意圖修正：教師授權修正本機教材，未授權本次commit/push。
+原41個圖片附件不代表41張ER圖；現有43個附件包括22組ER圖、17組表格及4組
+個別物件連線圖。新增需求逐步成圖及教師名稱改為授課關係的ER對照，保留原表格；
+四處表格解讀改用Tables標題，混合內容明列Diagram and Tables。notebook現132個
+Markdown cells，PDF現52頁。新圖在第3、33頁；完整校園圖與讀圖首段同在第40頁。
+74項測試、三個全新kernel、桌面／手機預覽及52頁排版檢查通過。來源查核限本次
+涉及的課本符號與設計原則，不是完整章節重審；手機密集圖仍需放大，未測教室投影。
+Ch1、Ch2、課綱與前次修好的兩份解答成品不變。下一步先看第3、33頁，確認圖形
+確實支援課堂逐步講解。詳見
+[本次檢查紀錄](maintenance/course_repository/ch03_er_release.md#tables-and-er-diagrams-2026-09-14)。
+
+2026-09-14 Ch3及Ch4解答圖文檢查：教師同意檢查兩份解答並修正已確認問題，
+本次未授權commit或push。Ch3解答現為55頁／31圖，Ch4為62頁／47圖；保留全部
+35題與33題。移除重複製作標語，Ch3第6、54頁改為具體資料比較，Ch4第4頁
+區分relationship與attribute，第20頁補上Address；補充min-max及簡化圖例說明。
+已檢查117頁排版、78張PDF圖片與生成來源的像素一致性；19項Ch3、27項Ch4及
+71項repository測試通過。此為解答圖文一致性與排版檢查，並非重新逐句查核整本書；
+11題建模工具練習仍只有概念解答，未執行ERwin或Rational Rose。課綱與教學版
+Ch1至Ch3成品未變。下一步先以Ch3第6頁及Ch4第20頁確認課堂講解與投影可讀性。
+完整修正、來源、命令及限制見
+[解答檢查紀錄](maintenance/course_repository/ch03_er_release.md#ch3-and-ch4-answer-visual-review-2026-09-14)。
+
 2026-09-14 Ch3發布授權：教師明確要求commit and push。本次提交包含先前累積的
 圖文一致性修正、14張新增圖表及去除重複標題／圖說，發布現行41圖、48頁版本。
 此項取代下列歷史紀錄中的本機未發布狀態；課綱、解答與未公開章節範圍不變。

@@ -61,11 +61,17 @@ this example.
 **Prediction:** Which of the first two course-section requirements would be lost
 if a drawing showed only two named boxes without a relationship or constraints?
 
-### Read the Diagram
+### Read the ER Steps
 
-The boxes alone name the types but do not express which course owns a section.
-Adding a relationship states the connection. Adding constraints states how many
-owners each section may have. Identification still needs a key analysis.
+The first sketch names COURSE and SECTION without connecting them. The second
+adds the HAS_SECTION diamond and its two connections. The third adds a 1:N
+ratio and a double line on the SECTION side: every section belongs to exactly
+one course, while a course may have zero or many sections.
+
+These are partial sketches, not complete designs. Unshown constraints in the
+first two sketches are not permission to violate the requirements. Section 7
+explains the ratio labels and Section 8 explains the double line. Keys and the
+weak-entity symbols needed to identify SECTION are added in Section 12.
 
 A requirement such as "show all sections taught by I1" is a useful design check:
 the schema must preserve enough information to answer it. Choosing an index is
@@ -93,9 +99,9 @@ separate values for reading, not as a proposed SQL storage format.
 **Prediction:** Adding S104 without changing any attribute definitions changes
 the entity type, the current entity set, or both?
 
-### Read the Diagram
+### Read the Entity Tables
 
-The figure shows the original three students. Adding S104 would make four;
+The current-set table shows the original three students. Adding S104 would make four;
 the type would still describe students using the same properties.
 This is the Ch2 distinction between the
 schema and a state, now applied to entities.
@@ -259,7 +265,7 @@ different from knowing that none exists.
 **Prediction:** Is 5 rejected because it is absent from today's sample?
 Can an unrecorded grade automatically be interpreted as zero?
 
-### Read the Diagram
+### Read the Domain Tables
 
 Five satisfies the declared domain. The displayed rejected values violate
 specific conditions, not merely an observed pattern. An unrecorded grade is
@@ -315,7 +321,7 @@ or the number of current enrollment facts does not determine its degree.
 **Prediction:** How many enrollment instances are shown? How many involve S101?
 Does S103's absence mean that S103 must be deleted from STUDENT?
 
-### Read the Diagram
+### Read the Enrollment Tables
 
 There are three enrollment instances; two involve S101 and none involves S103.
 The requirements allow students with no enrollment, so S103 may remain.
@@ -614,13 +620,13 @@ Check that your two facts involve the same student and different sections.
 
 ## 12. Weak Entities and Partial Keys
 
-A **weak entity type** lacks a complete identifying key of its own.
-An **owner entity type** supplies part of its identification through an
-**identifying relationship**. A **partial key** distinguishes weak entities
-belonging to the same owner or owner combination. Weak types normally have a
-partial key; a later example explains when the owners alone suffice.
+**Which class do you mean by "section 1"?**
 
-For this one-term example, SECTION has no globally unique SectionId:
+- **COURSE:** a subject, such as DB101 or CS102.
+- **SECTION:** one offering of a course. DB101 / 1 and CS102 / 1 are different classes.
+- **Scope:** Fall 2026 only.
+- **Numbering rule:** no repeated SectionNo within one course; reuse across courses is allowed.
+- **No independent ID:** SECTION has no globally unique SectionId and no other identifying attributes of its own.
 
 | Owning COURSE | SectionNo | Section identified |
 |---|---:|---|
@@ -631,34 +637,106 @@ For this one-term example, SECTION has no globally unique SectionId:
 **Prediction:** Are the two occurrences of SectionNo 1 an error?
 Would a second section numbered 1 under DB101 be allowed?
 
-### Read the Diagram
+### Read the Section Instances
 
-SectionNo 1 is allowed under different courses. A second such section under
-DB101 would not be distinguishable by the declared identity.
-COURSE is the owner; SectionNo is the partial key.
+- Follow **Course DB101**: its lines reach DB101 / 1 and DB101 / 2.
+- Follow **Course CS102**: its line reaches CS102 / 1.
+- The two section-1 boxes have different owners. The repeated number is allowed.
 
-The weak type uses a double rectangle. HAS_SECTION uses a double diamond.
-The partial key has a dashed underline. SECTION participates totally in its
-identifying relationship because it cannot be identified without an owner.
+| Information supplied | Sections that match | What is still needed? |
+|---|---|---|
+| SectionNo = 1 | DB101 / 1; CS102 / 1 | Which course? |
+| CourseCode = DB101 | DB101 / 1; DB101 / 2 | Which section number? |
+| CourseCode = DB101 and SectionNo = 1 | DB101 / 1 | Nothing else in this one-term example |
 
-Existence dependence alone is insufficient: an object with its own complete
-key need not be weak even when it must have an owner.
-If we later keep several terms, (course, section number) may no longer distinguish
-all sections. The term must enter the identification, or the requirements must
-provide another complete identifier. The current example deliberately keeps one term.
+- `/` separates the two identifying values; it is not an extra SectionId attribute.
+- These boxes show **individual objects**.
+- The next ER diagram shows **types and rules**, not individual classes.
 
-**Practice:** Add CS102 / 2 and then propose a second DB101 / 2.
-Explain the different outcomes. Next propose a globally unique SectionId and
-identify which weak-entity symbols would no longer describe that revised choice.
-Do not create relational tables yet.
+### From the Example to ER Symbols
+
+- **Why weak?** SECTION's own attributes cannot identify one section across all courses.
+- **How to identify it:** choose COURSE, then use SectionNo within that course.
+- **Not a quality judgment:** weak does not mean unimportant or poorly recorded.
+
+| Textbook term | Meaning in this example |
+|---|---|
+| Weak entity type: SECTION | No complete key of its own; needs the course's identity |
+| Owner entity type: COURSE | Supplies the course identity, such as DB101 |
+| Partial key: SectionNo | Distinguishes sections of the same course, such as 1 versus 2 |
+| Identifying relationship: HAS_SECTION | Connects each section to the course used to identify it |
+
+- These are declared rules, not a conclusion drawn only from three sample rows.
+- A partial key normally distinguishes objects within one owner or owner combination.
+- Exception: owners alone may suffice in some designs; see Section 12.4.
+
+**Prediction:** In the next diagram, which attribute identifies the course?
+Which attribute finishes the identification of a section within that course?
+
+### Read the Weak-Entity Diagram
+
+1. **CourseCode:** identify COURSE, such as DB101.
+2. **HAS_SECTION:** follow the connection to that course's sections.
+3. **SectionNo:** choose 1 within DB101 to identify DB101 / 1. CS102 plus 1 identifies a different section.
+
+| Where to point in the diagram | What that visible symbol tells you |
+|---|---|
+| Solid underline under CourseCode | CourseCode identifies a COURSE without another owner's identity. |
+| Dashed underline under SectionNo | SectionNo identifies a SECTION only after its course is fixed. |
+| Double rectangle around SECTION | SECTION needs an owner's identity; it has no complete key of its own. |
+| Double diamond around HAS_SECTION | This relationship supplies the owner used in SECTION's identification. |
+| Double connecting line from HAS_SECTION to SECTION | Every section must be connected to its owner course. It does not mean two courses. |
+| 1 near COURSE and N near SECTION | One course can have many sections; each section has at most one course. With required participation, each section has exactly one. |
+
+- **Double rectangle:** identification needs an owner's identity.
+- **Double connecting line:** participation is required.
+- **CourseCode stays on COURSE:** HAS_SECTION supplies the owner; do not copy CourseCode into a SECTION oval.
+
+### Give the Same Sections a Global Identifier
+
+- **Change:** give each section a globally unique SectionId.
+- **Keep:** the same three classes, their course ownership and local numbering rule.
+- **Separate design:** do not silently add these IDs to the original weak-entity example.
+
+| New SectionId | CourseCode | SectionNo |
+|---|---|---:|
+| Q01 | DB101 | 1 |
+| Q02 | DB101 | 2 |
+| Q03 | CS102 | 1 |
+
+**Prediction:** Does Q01 alone identify one section? Must it still belong to a
+course? Which answer changes whether SECTION is weak?
+
+### Read the Global-ID Diagram
+
+- **Q01 alone** identifies the first section: SectionId is a complete key.
+- **SECTION is now regular (strong):** point to its single rectangle.
+- **SectionId has a solid underline;** HAS_SECTION is an ordinary diamond.
+- **Course ownership is still required:** Q01 belongs to DB101; the connecting line stays double.
+- **SectionNo loses the partial-key mark:** its local numbering rule still applies.
+
+| Question | Original design | Design with SectionId |
+|---|---|---|
+| What identifies this section? | Owner DB101 together with SectionNo 1 | Q01 alone |
+| Must the section have a course? | Yes | Yes |
+| Is SECTION weak? | Yes: no complete key of its own | No: SectionId is a complete key |
+
+- **Key distinction:** needing an owner's identity is not the same as requiring an owner.
+- **Another example:** access cards in Section 12.2.
+- **Multiple terms:** (course, section number) may repeat. Include the term or provide another complete ID.
+
+**Practice:**
+
+- Original design: add CS102 / 2, then propose a second DB101 / 2. Explain the different outcomes.
+- Global-ID design: point to the changed symbols. Do not create relational tables yet.
 
 ### 12.1. Order Items: the Same Number under Different Owners
 
-Consider orders for a fictional campus store. OrderId identifies an order.
-Each order numbers its items from 1. LineNo is unique within that order;
-an item has no separate ItemId. Quantity is recorded but does not identify an item.
-Product is the recorded product name in this small example, not a separate
-product entity or an identifier for the order item.
+- **Example:** orders at a fictional campus store.
+- **OrderId:** identifies an order.
+- **LineNo:** starts at 1 and is unique within its order. There is no separate ItemId.
+- **Product and Quantity:** describe an item; neither identifies it.
+- Product is a name attribute here, not a separate product entity.
 
 | OrderId | LineNo | Product | Quantity |
 |---|---:|---|---:|
@@ -671,41 +749,46 @@ quantity, and line number match?
 
 ### Read the Order Item Diagram
 
-They are different order items because their owners differ. Follow three steps:
-identify the order, find LineNo within that order, then read the item's properties.
-The full identifying information is (OrderId, LineNo). LineNo is only a partial key.
-A fourth item with O10 / 1 would violate the stated identification rule.
-The Product and Quantity ovals both attach to ORDER_ITEM. The table's OrderId
-comes from the owning ORDER; it is not an extra attribute oval on ORDER_ITEM.
+- **O10 / 1:** first item of order O10.
+- **O20 / 1:** first item of a different order, O20.
+- Both describe Notebook, quantity 2. Item number 1 alone does not identify the order item.
 
-The double rectangle marks ORDER_ITEM; the double diamond marks CONTAINS.
-Every item must participate in CONTAINS, but an order may have no items while
-being prepared. That optional order participation is an explicit example rule.
+1. Find OrderId = O10. In the diagram, OrderId belongs to ORDER.
+2. Follow CONTAINS to the items of that order. The table gives O10 / 1 and O10 / 2.
+3. Use LineNo = 1 to select O10 / 1. Read Product = Notebook and Quantity = 2.
+
+- **Complete identification:** OrderId plus LineNo. LineNo is only a partial key.
+- **Duplicate identity:** changing Product or Quantity does not create a new O10 / 1.
+- **Attribute ovals:** Product and Quantity attach to ORDER_ITEM; OrderId stays on ORDER.
+- **Owner connection:** CONTAINS supplies the order; do not copy OrderId into an ORDER_ITEM oval.
+- **Weak-entity symbols:** double rectangle for ORDER_ITEM; double diamond for CONTAINS.
+- **Participation:** every item needs an order. An order may have no items while being prepared, under this example's rule.
 
 ### Worked Example: Find the Owner Before the Item
 
-Use exactly the three order items above. Compare the candidates remaining
-when an item is described by its line number, its product and quantity,
-its owner, or its owner together with its line number.
+- Keep the same three order items.
+- Compare descriptions using LineNo, Product and Quantity, owner, or owner plus LineNo.
+- Count which items still match each description.
 
 **Prediction:** Can the description "Notebook, quantity 2, line 1" distinguish
 O10 / 1 from O20 / 1?
 
 ### Read the Item Lookup
 
-It cannot: both items have those three properties. Owner O10 removes O20 / 1
-from consideration; LineNo 1 then distinguishes O10 / 1 from O10 / 2.
-That is why the owner's identity and partial key are needed together.
-Changing Quantity on a proposed second O10 / 1 would not create a new identity.
+- **Same properties:** O10 / 1 and O20 / 1 both match Notebook, quantity 2, line 1.
+- **Choose owner O10:** exclude O20 / 1.
+- **Choose LineNo 1:** select O10 / 1 rather than O10 / 2.
+- **Conclusion:** use the owner's identity and partial key together. A quantity change does not create a new identity.
 
 **Practice:** Add O20 / 2, then try adding another O10 / 2 with a different quantity.
 Explain why changing Quantity cannot repair a duplicate identity.
 
 ### 12.2. A Required Owner Does Not Automatically Make an Entity Weak
 
-Now consider campus access cards. CardId is unique across all issued cards.
-Each card must belong to exactly one student; a student may have zero or several
-cards. This is a separate variant from the earlier one-card maximum example.
+- **CardId:** unique across all issued campus cards.
+- **Each card:** belongs to exactly one student.
+- **Each student:** may have zero or several cards.
+- This variant differs from the earlier one-card maximum example.
 
 | CardId | StudentId |
 |---|---|
@@ -717,21 +800,20 @@ cards. This is a separate variant from the earlier one-card maximum example.
 
 ### Read the Card Diagram
 
-CARD is a regular, or strong, entity type: CardId identifies a card independently.
-Use a single rectangle and an ordinary relationship diamond. The double
-participation line still applies to CARD because ownership is required.
-
-Compare K10 with order item O10 / 1. K10 is already globally identifying.
-The value 1 alone cannot identify an order item. The decisive question is
-identification, not whether one object depends on another object's existence.
+- **K10 alone identifies a card:** StudentId is not needed to select it.
+- **Solid CardId underline and single CARD rectangle:** CARD is regular (strong).
+- **Double connecting line at CARD:** a student owner is required.
+- **Ordinary HOLDS diamond:** ownership does not supply CARD's identity.
+- **Contrast:** K10 identifies a card; line number 1 alone cannot identify an order item.
 
 **Practice:** Remove the global CardId rule and number cards only within each
 student. State the new identifying combination and which symbols must change.
 
 ### 12.3. A Weak Entity Can Own Another Weak Entity
 
-Extend the order example to record notes about individual items. NoteNo is unique
-within one order item; it may repeat for another item. ITEM_NOTE has no global ID.
+- Add notes to the existing order items.
+- **NoteNo:** unique within one item; it may repeat for another item.
+- **ITEM_NOTE:** has no global ID.
 
 | OrderId | LineNo | NoteNo | Note text |
 |---|---:|---:|---|
@@ -743,24 +825,32 @@ within one order item; it may repeat for another item. ITEM_NOTE has no global I
 
 ### Read the Nested Owner Diagram
 
-No: both have (1,1). Identify ORDER with OrderId, then ORDER_ITEM with its owner's
-identity plus LineNo, then ITEM_NOTE with that item's identity plus NoteNo.
-The complete combination is (OrderId, LineNo, NoteNo).
+- **Not enough:** Gift wrap and No wrap both have LineNo 1 and NoteNo 1.
+- **Different owners:** one belongs to O10; the other belongs to O20.
+- **Find Gift wrap:** follow ORDER O10, then ORDER_ITEM 1, then ITEM_NOTE 1.
 
-ORDER_ITEM is both a weak entity and an owner of ITEM_NOTE. Both weak types
-participate totally in their own identifying relationships. A parent item can
-have zero notes; requiring a note's owner does not require every item to have notes.
-This diagram shows identifying attributes only. Product, Quantity, and the
-note text are omitted here to focus on the chain of owners.
+| Stop along the diagram | Information chosen so far | Notes still matching in the input table |
+|---|---|---|
+| ORDER | O10 | Gift wrap; Blue ink |
+| ORDER_ITEM | O10 / 1 | Gift wrap |
+| ITEM_NOTE | O10 / 1 / 1 | Gift wrap |
+
+- **Full identity:** (OrderId, LineNo, NoteNo), not just the nearest two numbers.
+- **Why keep NoteNo?** More notes are allowed; adding note 2 must not change note 1's identity.
+- **ORDER_ITEM has two roles:** weak entity and owner of ITEM_NOTE.
+- **Required participation:** each weak object needs its own identifying relationship.
+- **Optional notes:** an item may have no notes; a note must still have an item.
+- **Diagram scope:** identifying attributes only. Product, Quantity and note text are omitted.
 
 **Practice:** Add note 2 to O10 / 1. Compare its identity with note 2 on O20 / 1.
 Check every level rather than looking only at the nearest partial key.
 
 ### 12.4. Two Owners Can Be Needed Together
 
-For fictional internship interviews, STUDENT has StudentId and COMPANY has CompanyId.
-A student may interview at several companies, and a company may interview several
-students. VisitNo numbers interviews within one student-company pair.
+- **Example:** fictional internship interviews.
+- **Owners:** STUDENT has StudentId; COMPANY has CompanyId.
+- A student may visit several companies; a company may interview several students.
+- **VisitNo:** numbers interviews within one student-company pair.
 
 | StudentId | CompanyId | VisitNo |
 |---|---|---:|
@@ -772,40 +862,40 @@ students. VisitNo numbers interviews within one student-company pair.
 
 ### Read the Two-Owner Diagram
 
-Neither works: the first combination repeats across the first two rows and the
-second repeats across the first and third. The complete identity is
-(StudentId, CompanyId, VisitNo). INTERVIEW is weak and has two owner types.
-VisitNo distinguishes interviews only after both owners have been fixed.
+- **StudentId plus VisitNo is insufficient:** S101's visit 1 could be at C1 or C2.
+- **CompanyId plus VisitNo is insufficient:** C1's visit 1 could involve S101 or S102.
+- **Choose both owners:** student S101 and company C1. Then choose visit 1.
 
-The identifying relationship has three participants: STUDENT, COMPANY, and
-INTERVIEW. The double line is on INTERVIEW's participation. This is an original
-illustration of the multiple-owner idea in Section 3.9.1, not a copy of its job-offer example.
+1. Left: StudentId identifies STUDENT. Right: CompanyId identifies COMPANY.
+2. Both connect to the identifying relationship ARRANGES.
+3. Follow the double line to INTERVIEW; use VisitNo within that owner pair.
+
+- **Full identity:** (StudentId, CompanyId, VisitNo).
+- **Three participants:** STUDENT, COMPANY and INTERVIEW. Required participation is shown at INTERVIEW.
+- This original example illustrates Section 3.9.1's multiple-owner idea; it is not the book's job-offer example.
 
 **Practice:** Add a second visit for S101 at C1. Explain why another first visit
 for S101 at C1 would be a duplicate, even if its interview location changed.
 
-A weak type normally has a partial key, but not every representation needs one.
-If exactly one interview were allowed for each student-company pair, those two
-owners alone could identify it. In that alternative design, VisitNo is unnecessary.
-If repeated visits are allowed, the pair alone is insufficient.
+- **Usual design:** repeated visits need VisitNo within the student-company pair.
+- **Alternative rule:** exactly one interview per pair lets the two owners identify it alone.
+- A weak type normally has a partial key, but this alternative does not need VisitNo.
 
 ### Choosing between an Attribute and a Weak Entity
 
-Suppose only a list of phone labels and numbers is needed for each student.
-A multivalued composite Contact attribute may be enough. If each contact must
-also participate in a verification relationship with a staff member, representing
-CONTACT as an entity lets that independent relationship be drawn explicitly.
-With a label unique only within its student, CONTACT can be weak.
+- **Only labels and numbers:** a multivalued composite Contact attribute may suffice.
+- **Separate staff verification:** a CONTACT entity can participate in that relationship.
+- **Local contact label, no independent key:** CONTACT can be weak within its student.
 
 **Prediction:** Does being multivalued alone force Contact to be a weak entity?
 
 ### Check the Design Choice
 
-No. Both representations can describe several contacts. The separate verification
-relationship is a concrete reason to choose an entity representation.
-For example, S101's "home" contact and S102's "home" contact remain distinct through
-their owners. If no independent contact relationship is needed, the complex
-attribute may be sufficient. This is a design choice based on requirements.
+- **Several contacts alone:** requires multiple values, not necessarily an entity type.
+- **Staff verification:** a CONTACT entity can participate in that separate relationship.
+- **No global ContactId:** (S101, home) and (S102, home) identify different contacts through their owners.
+- **Only labels and numbers:** the multivalued composite attribute may suffice.
+- Choose from the required facts, not from the word "contact."
 
 **Practice:** Give CONTACT a globally unique ContactId instead. Explain why it
 can then be regular even though every contact still belongs to a student.
@@ -824,9 +914,9 @@ of the teacher for every section.
 **Prediction:** Do two sections with teacher name Morgan prove that the same
 instructor teaches both?
 
-### Read the Diagram
+### Read the Design Tables
 
-No. Name equality is not a guaranteed identity rule. Read the figure from top
+No. Name equality is not a guaranteed identity rule. Read the tables from top
 to bottom. The first table describes the two DB101 sections. The next table
 records an independently identified instructor, I1, whose name is Morgan.
 The final table explicitly assigns I1 to those same two sections. Those supplied
@@ -847,6 +937,28 @@ already have an instructor.
 about sections and room sharing. Then state the extra information that would
 justify treating ROOM as an entity rather than a simple label.
 
+### Compare the ER Designs
+
+Use the same two DB101 sections and the independently identified instructor I1.
+The first close-up puts TeacherName on SECTION. The second separates INSTRUCTOR
+from SECTION and connects them through TEACHES. Both keep SECTION weak; its
+unchanged COURSE owner and HAS_SECTION relationship are omitted here.
+
+**Prediction:** In the revised diagram, where does Morgan belong? Which connection
+records that I1 teaches DB101 / 1 and DB101 / 2?
+
+### Read the ER Comparison
+
+Morgan is a value of Name on INSTRUCTOR, whose key is InstructorId. The two
+assignments in the preceding table are instances of the TEACHES diamond.
+The 1:N ratio and the double line at SECTION require exactly one instructor
+per section; an instructor may teach zero or many sections.
+
+TeacherName is removed from SECTION in this revised design. Repeated names did
+not establish I1's identity: the supplied identity and assignment facts did.
+SectionNo remains a partial key, so the unchanged course owner is still needed
+to distinguish sections. The two panels are schema close-ups, not two data rows.
+
 ## 14. A Fact That Needs Three Participants
 
 A **ternary relationship** has three participating roles. APPROVES records that
@@ -866,7 +978,7 @@ knows the course. Those would be different facts.
 **Prediction:** The pairs S101-I1, S101-CS102, and I1-CS102 each occur somewhere
 in the records. Does that prove approval (S101, I1, CS102) is recorded?
 
-### Read the Diagrams
+### Read the Approval Diagram and Tables
 
 Record 1 supplies S101-I1. Record 2 supplies S101-CS102.
 Record 3 supplies I1-CS102. No record supplies all three together.

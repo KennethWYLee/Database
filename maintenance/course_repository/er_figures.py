@@ -49,6 +49,27 @@ add("requirements", "1. From Requirements to a Diagram", "Start with facts and r
             panel("Conceptual decision", ["Object or rule", "ER representation"],
                   [["COURSE and SECTION", "Entity types"],
                    ["One owner per section", "Relationship and constraints"]])])
+
+nodes, edges, notes = [], [], []
+for stage, y in enumerate((110, 390, 670), 1):
+    c, s, r = f"c{stage}", f"s{stage}", f"r{stage}"
+    nodes += [node(c, "COURSE", "entity", 190, y),
+              node(s, "SECTION", "entity", 1010, y)]
+    if stage > 1:
+        nodes.append(node(r, "HAS_SECTION", "relationship", 600, y))
+        edges += [edge(c, r), edge(r, s, total=stage == 3)]
+    if stage == 3:
+        notes += [(350, y-25, "1"), (820, y-25, "N")]
+    notes.append((65, y-95, (
+        "1. Name the two entity types; the connection is not drawn yet.",
+        "2. Add the relationship; its permitted counts are not shown yet.",
+        "3. Show one course per section; a course may have zero or many sections."
+    )[stage-1]))
+add("requirements_steps", "1. From Requirements to a Diagram",
+    "Build the connection in three steps",
+    "These are partial sketches. Keys and weak-entity identification are added in Section 12.",
+    780, nodes, edges, notes)
+
 add("entities", "2. Entity, Entity Type, and Entity Set", "One entity is not the whole entity type",
     "STUDENT is the type; S101 identifies one entity. Adding a fourth student changes the set, not the type definition.",
     panels=[panel("Type description", ["Type", "Properties"], [["STUDENT", "StudentId, Name, Phone"]]),
@@ -133,7 +154,7 @@ add("grade", "11. Attributes of a Relationship", "A grade belongs to a particula
      node("q", "SECTION", "entity", 1010, 240), node("g", "Grade", "attribute", 600, 35)],
     [edge("s", "e"), edge("e", "q"), edge("e", "g")],
     [(350, 210, "M"), (820, 210, "N")])
-add("weak", "12. Weak Entities and Partial Keys", "A section needs its owner to be identified",
+add("weak", "12. Weak Entities and Partial Keys / ### From the Example to ER Symbols", "A section needs its owner to be identified",
     "Within Fall 2026, COURSE plus SectionNo identifies SECTION. SectionNo alone can repeat across courses.",
     390,
     [node("c", "COURSE", "entity", 190, 245), node("h", "HAS_SECTION", "identifying", 600, 245),
@@ -152,6 +173,26 @@ add("refinement", "13. Refine a Design from Its Requirements", "Replace an entit
                   [[i, f"{c} / {n}"] for i, c, n in TEACHES if c == "DB101"],
                   "The example confirms that I1 teaches both sections. Other sections are outside this comparison.")],
     stacked=True)
+add("refinement_er", "13. Refine a Design from Its Requirements / ### Compare the ER Designs",
+    "From a teacher-name attribute to an instructor relationship",
+    "Name remains an instructor attribute; TEACHES records who teaches each section. The owner COURSE and HAS_SECTION are unchanged and omitted from both close-ups.",
+    820,
+    [node("before", "SECTION", "weak", 600, 220),
+     node("teacher", "TeacherName", "attribute", 330, 85, 250),
+     node("bn", "SectionNo", "attribute", 870, 85, key="partial"),
+     node("i", "INSTRUCTOR", "entity", 190, 640),
+     node("iid", "InstructorId", "attribute", 190, 445, 235, key="full"),
+     node("name", "Name", "attribute", 455, 445),
+     node("t", "TEACHES", "relationship", 600, 640),
+     node("s", "SECTION", "weak", 1010, 640),
+     node("sn", "SectionNo", "attribute", 1010, 445, key="partial")],
+    [edge("before", "teacher"), edge("before", "bn"),
+     edge("i", "iid"), edge("i", "name"), edge("i", "t"),
+     edge("t", "s", True), edge("s", "sn")],
+    [(65, 0, "Before: a name on SECTION does not identify an instructor."),
+     (65, 350, "After: identify INSTRUCTOR independently and record TEACHES."),
+     (350, 610, "1"), (820, 610, "N"),
+     (65, 770, "Both panels keep SECTION weak; its course owner is outside this close-up.")])
 add("ternary", "14. A Fact That Needs Three Participants", "One approval names a student, instructor, and course",
     "APPROVES is ternary. Each line connects a participating type to the same diamond; it is not a sequence.",
     450,
@@ -218,6 +259,20 @@ UNIVERSITY_RELATIONSHIPS = (
 WEAK_HEADING = "12. Weak Entities and Partial Keys / ### "
 TERNARY_HEADING = "14. A Fact That Needs Three Participants / ### "
 UNIVERSITY_HEADING = "16. Section 3.10: A UNIVERSITY Database / ### "
+
+add("section_global_id", WEAK_HEADING + "Give the Same Sections a Global Identifier",
+    "An independent SectionId changes identification, not required ownership",
+    "This alternative design keeps the same courses and sections. The local section-number rule remains; it is not drawn as an independent key oval.",
+    390,
+    [node("c", "COURSE", "entity", 190, 265),
+     node("r", "HAS_SECTION", "relationship", 600, 265),
+     node("s", "SECTION", "entity", 1010, 265),
+     node("cid", "CourseCode", "attribute", 190, 45, 235, key="full"),
+     node("sid", "SectionId", "attribute", 785, 45, key="full"),
+     node("no", "SectionNo", "attribute", 1080, 45)],
+    [edge("c", "cid"), edge("c", "r"), edge("r", "s", True),
+     edge("s", "sid"), edge("s", "no")],
+    [(350, 235, "1"), (820, 235, "N")])
 
 add("order_items", WEAK_HEADING + "12.1. Order Items: the Same Number under Different Owners",
     "An item number identifies an item only within its order",
@@ -375,6 +430,13 @@ def instance_figure(name, section, title, conclusion, left, right, links):
                for a, b in links])
     FIGURES["opening_ch03_" + name].update(kind="network", graph=graph)
 
+
+instance_figure("section_owners", "12. Weak Entities and Partial Keys",
+    "Two different courses can each have a section 1",
+    "These are two individual courses and three individual sections, not ER type symbols. Each section label includes its course so the two occurrences of 1 remain distinguishable.",
+    ["Course DB101", "Course CS102"],
+    [f"Section {c} / {n}" for c, n in SECTIONS],
+    [("Course " + c, f"Section {c} / {n}") for c, n in SECTIONS])
 
 instance_figure("enrollment_links",
     "6. Relationships Connect Entities / ### Worked Example: Trace the Three Enrollments",

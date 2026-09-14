@@ -42,7 +42,7 @@ class ERChapterTests(unittest.TestCase):
             if index < 17:
                 self.assertIn("**Prediction:**", section)
                 self.assertRegex(section, r"(?m)^### (Read|Check) ")
-        self.assertEqual(len(FIGURES), 41)
+        self.assertEqual(len(FIGURES), 45)
         for figure in FIGURES.values():
             for heading in figure["heading"].split(" / "):
                 self.assertEqual(self.guide.count(heading + "\n"), 1)
@@ -164,8 +164,131 @@ class ERChapterTests(unittest.TestCase):
         with fitz.open(builder.safe_target("ch03.pdf")) as pdf:
             exported = [pixels(pdf.extract_image(info[0])["image"])
                         for page in pdf for info in page.get_images(full=True)]
-        self.assertEqual(len(original), 41)
+        self.assertEqual(len(original), 45)
         self.assertEqual(Counter(exported), Counter(original))
+
+    def test_reading_labels_match_the_visual_content(self):
+        cells = builder.build_notebook(self.chapter)["cells"]
+        expected = {
+            "Read the ER Steps": ("requirements_steps", "er"),
+            "Read the Entity Tables": ("entities", "tables"),
+            "Read the Domain Tables": ("domains", "tables"),
+            "Read the Enrollment Tables": ("relationships", "tables"),
+            "Read the Design Tables": ("refinement", "tables"),
+            "Read the ER Comparison": ("refinement_er", "er"),
+            "Read the Section Instances": ("section_owners", "network"),
+            "Read the Weak-Entity Diagram": ("weak", "er"),
+            "Read the Global-ID Diagram": ("section_global_id", "er"),
+        }
+        seen = set()
+        for i, cell in enumerate(cells):
+            heading = "".join(cell["source"]).splitlines()[0]
+            names = list(cells[i-1].get("attachments", {})) if i else []
+            if re.fullmatch(r"### Read the (?:.* )?Diagram", heading):
+                self.assertEqual(len(names), 1)
+                self.assertEqual(FIGURES[names[0][:-4]]["kind"], "er", heading)
+            if heading.removeprefix("### ") in expected:
+                title = heading.removeprefix("### ")
+                name, kind = expected[title]
+                self.assertEqual(names, ["opening_ch03_" + name + ".png"])
+                self.assertEqual(FIGURES["opening_ch03_" + name]["kind"], kind)
+                seen.add(title)
+            if heading == "### Read the Approval Diagram and Tables":
+                self.assertEqual(names, ["opening_ch03_pairs.png"])
+                self.assertIn("opening_ch03_ternary.png", cells[i-2]["attachments"])
+        self.assertEqual(seen, set(expected))
+
+    def test_weak_example_starts_with_objects_before_terms_and_symbols(self):
+        weak = self.guide.split("## 12. Weak Entities and Partial Keys", 1)[1].split("## 13.", 1)[0]
+        self.assertLess(weak.index('Which class do you mean'), weak.index('Weak entity type: SECTION'))
+        self.assertLess(weak.index('### Read the Section Instances'), weak.index('### From the Example to ER Symbols'))
+        for value in ('DB101 / 1; CS102 / 1', 'DB101 / 1; DB101 / 2',
+                      'Double rectangle around SECTION', 'Double diamond around HAS_SECTION',
+                      'does not mean two courses', 'no other identifying attributes of its own'):
+            self.assertIn(value, weak)
+        self.assertIn('not a conclusion drawn only from three sample', weak)
+        graph = FIGURES['opening_ch03_section_owners']['graph']
+        starts = {(x+w, y+h/2): label for x,y,w,h,label in graph['nodes']}
+        ends = {(x, y+h/2): label for x,y,w,h,label in graph['nodes']}
+        self.assertEqual({(starts[x1,y1], ends[x2,y2]) for x1,y1,x2,y2,*_ in graph['edges']},
+                         {('Course '+c, f'Section {c} / {n}') for c,n in SECTIONS})
+
+    def test_global_identifier_changes_weakness_but_not_owner_requirement(self):
+        original = FIGURES['opening_ch03_weak']['diagram']
+        revised = FIGURES['opening_ch03_section_global_id']['diagram']
+        before = {n['id']: n for n in original['nodes']}
+        after = {n['id']: n for n in revised['nodes']}
+        self.assertEqual(before['s']['kind'], 'weak')
+        self.assertEqual(before['h']['kind'], 'identifying')
+        self.assertEqual(before['no']['key'], 'partial')
+        self.assertEqual(after['s']['kind'], 'entity')
+        self.assertEqual(after['r']['kind'], 'relationship')
+        self.assertEqual(after['sid']['key'], 'full')
+        self.assertIsNone(after['no']['key'])
+        self.assertTrue(next(e['total'] for e in original['edges'] if (e['a'],e['b']) == ('h','s')))
+        self.assertTrue(next(e['total'] for e in revised['edges'] if (e['a'],e['b']) == ('r','s')))
+        soup = BeautifulSoup(MarkdownIt('commonmark').enable('table').render(self.guide), 'html.parser')
+        table = next(t for t in soup.find_all('table') if 'New SectionId' in t.get_text())
+        rows = [[td.get_text() for td in tr.find_all('td')] for tr in table.select('tbody tr')]
+        self.assertEqual(rows, [['Q01','DB101','1'], ['Q02','DB101','2'], ['Q03','CS102','1']])
+        self.assertEqual(len({r[0] for r in rows}), 3)
+        self.assertEqual([(r[1],int(r[2])) for r in rows], list(SECTIONS))
+
+    def test_new_er_steps_and_refinement_have_the_explained_connections(self):
+        steps = FIGURES["opening_ch03_requirements_steps"]["diagram"]
+        self.assertEqual({(e["a"], e["b"], e["total"]) for e in steps["edges"]},
+                         {("c2", "r2", False), ("r2", "s2", False),
+                          ("c3", "r3", False), ("r3", "s3", True)})
+        refinement = FIGURES["opening_ch03_refinement_er"]["diagram"]
+        links = {(e["a"], e["b"]): e for e in refinement["edges"]}
+        self.assertIn(("before", "teacher"), links)
+        self.assertNotIn(("s", "teacher"), links)
+        self.assertIn(("i", "name"), links)
+        self.assertIn(("i", "iid"), links)
+        self.assertIn(("i", "t"), links)
+        self.assertTrue(links["t", "s"]["total"])
+        nodes = {n["id"]: n for n in refinement["nodes"]}
+        self.assertEqual(nodes["iid"]["key"], "full")
+        for node_id in ("before", "s"):
+            self.assertEqual(nodes[node_id]["kind"], "weak")
+        for node_id in ("bn", "sn"):
+            self.assertEqual(nodes[node_id]["key"], "partial")
+        self.assertIn("omitted from both close-ups", FIGURES["opening_ch03_refinement_er"]["conclusion"])
+
+    def test_pdf_reading_starts_share_a_page_with_the_referenced_visual(self):
+        import export_chapter_pdfs as exporter
+        exporter.OUT.mkdir(parents=True, exist_ok=True)
+        exporter.make_html("ch03")
+        soup = BeautifulSoup((exporter.OUT / "ch03.html").read_text(encoding="utf-8"), "html.parser")
+        with fitz.open(builder.safe_target("ch03.pdf")) as pdf:
+            pages = [" ".join(p.get_text().split()) for p in pdf]
+            for group in soup.select(".visual-reading"):
+                title = group.select_one(".figure-cell h3").get_text()
+                first_block = group.find(["p", "ul", "ol"], recursive=False)
+                matching = [i for i, text in enumerate(pages) if title in text]
+                self.assertEqual(len(matching), 1, title)
+                points = first_block.find_all("li") if first_block.name in {"ul", "ol"} else [first_block]
+                for point in points:
+                    beginning = " ".join(point.get_text().split())[:75]
+                    self.assertIn(beginning, pages[matching[0]], title)
+                self.assertTrue(pdf[matching[0]].get_images(), title)
+                if title == "A section needs its owner to be identified":
+                    self.assertIn('Where to point in the diagram', pages[matching[0]])
+                    self.assertIn('1 near COURSE and N near SECTION', pages[matching[0]])
+
+    def test_weak_entity_explanations_use_short_points_without_losing_tables(self):
+        section = self.guide.split("## 12. Weak Entities and Partial Keys", 1)[1].split("## 13.", 1)[0]
+        soup = BeautifulSoup(MarkdownIt("commonmark").enable("table").render(section), "html.parser")
+        readings = [h for h in soup.find_all("h3") if h.get_text().startswith(("Read ", "Check "))]
+        self.assertEqual(len(readings), 9)
+        for heading in readings:
+            block = heading.find_next_sibling()
+            self.assertIn(block.name, {"ul", "ol"}, heading.get_text())
+            points = block.find_all("li", recursive=False)
+            self.assertLessEqual(len(points), 6)
+            for point in points:
+                self.assertLessEqual(len(point.get_text(" ", strip=True).split()), 35, point.get_text())
+        self.assertEqual(len(soup.find_all("table")), 11)
 
     def test_worked_examples_include_prediction_and_explanation(self):
         sections = builder.split_guide(self.guide, True)
@@ -434,7 +557,10 @@ class ERChapterTests(unittest.TestCase):
             self.assertEqual(tuple(original[k] for k in keys) == tuple(other[k] for k in keys), collision)
 
     def test_language_and_public_boundary(self):
-        self.assertNotRegex(self.guide, r"(?i)type\s*b|\b\d+\s*(?:minutes?|mins?)\b|[\u3400-\u9fff\ufffd]")
+        prohibited = r"(?i)\btype\s*b\b|\b\d+\s*(?:minutes?|mins?)\b|[\u3400-\u9fff\ufffd]"
+        self.assertNotRegex(self.guide, prohibited)
+        self.assertNotRegex("a strong entity type because it has its own key", prohibited)
+        self.assertRegex("Type B", prohibited)
         self.assertNotRegex(self.guide, r"(?i)C:[/\\]|private_references|maintenance/|answer key|API[_ -]?KEY")
         self.assertIn("All campus records are synthetic", self.guide)
         self.assertIn("Fall 2026 only", self.guide)

@@ -40,6 +40,11 @@ const verified = JSON.parse(fs.readFileSync(path.join(output, 'verification.json
         }
         if (name === 'ch03') {
           for (const [label, heading] of [
+            ['requirements-steps', 'Build the connection in three steps'],
+            ['refinement-er', 'From a teacher-name attribute to an instructor relationship'],
+            ['section-owners', 'Two different courses can each have a section 1'],
+            ['weak-symbols', 'A section needs its owner to be identified'],
+            ['section-global-id', 'An independent SectionId changes identification, not required ownership'],
             ['entities', '2. Entity, Entity Type, and Entity Set'],
             ['weak', '12.1. Order Items: the Same Number under Different Owners'],
             ['enrollment-lines', 'Worked Example: Trace the Three Enrollments'],

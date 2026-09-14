@@ -51,6 +51,30 @@ def make_html(chapter, notebook_path=None):
     content = "".join(body)
     soup = BeautifulSoup(content, "html.parser")
     assert len(soup.find_all("img")) == images
+    if chapter == "ch03":
+        # Keep each visual with the start of its interpretation in the print export.
+        for visual in list(soup.select("section.figure-cell")):
+            following = visual.find_next_sibling("section")
+            if following is None:
+                continue
+            heading = following.find("h3", recursive=False)
+            if heading is None or not heading.get_text().startswith("Read "):
+                continue
+            first_block = heading.find_next_sibling()
+            if first_block is None or first_block.name not in {"p", "ul", "ol"}:
+                continue
+            group = soup.new_tag("div", attrs={"class": "visual-reading"})
+            visual.wrap(group)
+            group.append(heading.extract())
+            group.append(first_block.extract())
+            if heading.get_text() == "Read the Weak-Entity Diagram":
+                legend = following.find("table", recursive=False)
+                if legend is not None:
+                    group.append(legend.extract())
+            if heading.get_text() == "Read the Order Item Diagram":
+                steps = following.find("ol", recursive=False)
+                if steps is not None and steps.name == "ol":
+                    group.append(steps.extract())
     for node in soup.select("h1,h2,h3,h4,p,li,th,td,pre"):
         if not node.find("img"):
             node["data-text-check"] = "true"
@@ -74,6 +98,8 @@ def make_html(chapter, notebook_path=None):
     .closing-section{break-inside:avoid}
     .figure-cell h3{margin-top:0}.figure-cell p{margin:5pt 0}
     img{display:block;max-width:100%;width:auto;height:auto;max-height:213mm;margin:0 auto;object-fit:contain}
+    .visual-reading{break-inside:avoid}
+    .visual-reading img{max-height:180mm}
     """
     target = OUT / (chapter + ".html")
     target.write_text('<!doctype html><html lang="en"><meta charset="utf-8">'

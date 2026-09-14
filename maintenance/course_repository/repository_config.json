@@ -5,12 +5,12 @@
   "published_pdf_chapters": ["ch01", "ch02", "ch03"],
   "published_answer_pdfs": {
     "ch03_answer.pdf": {
-      "notebook_sha256": "a6765354e870481bc7088a5e7ee9a52a3d8baf644378bc8b74ed086a0d9e37b3",
-      "pdf_sha256": "79ecb018e4646c4ebe0ed83eae85376b4a69b22c0c9254e56c8e0015d0736c87"
+      "notebook_sha256": "a9e7ea15ddc5662e0cf59ed5fdd9fad3ee0fd24ac25be099161debd597daaabf",
+      "pdf_sha256": "effd9ad0c59a8a055c218957513443bdc732f78ffafaba177509a335adf9b066"
     },
     "ch04_answer.pdf": {
-      "notebook_sha256": "b0ada4fc8aa67fd2898e9dd00c69f5fa4e06ed3b3df4452d5149b9a3236fcc28",
-      "pdf_sha256": "ca511017ec15e6409ac2e2460673d840b34795e0c250e492c240445600be8930"
+      "notebook_sha256": "40f74ae7a0a307ee298b16b574801d5bd9811cc0bf58c4d521e2a33579c429b4",
+      "pdf_sha256": "39ea918d092751540690658410e44d67dce868daac7decb1c1c112b99c031adf"
     }
   },
   "instructor": "WenYi Lee",

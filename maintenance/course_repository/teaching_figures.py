@@ -325,8 +325,13 @@ def render(name):
         parts, y = [], 45
     else:
         title, height = _paragraph(45, 48, data["title"], 1110, 32, weight=700)
-        parts = [title, _text(45, height + 80, "Original teaching illustration | Read with the worked example", 20, "#48616c")]
+        subtitle = data.get("table_subtitle", "Original teaching illustration | Read with the worked example")
+        parts = [title]
+        if subtitle:
+            parts.append(_text(45, height + 80, subtitle, 20, "#48616c"))
         y = height + 115
+        if not subtitle:
+            y -= 45
     if data["kind"] == "network":
         graph = data["graph"]
         for edge in graph["edges"]:

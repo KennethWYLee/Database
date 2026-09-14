@@ -505,11 +505,26 @@ class RepositoryLayoutTests(unittest.TestCase):
             self.assertEqual(build.call_args.args[0]["id"], "ch01")
             self.assertEqual(unpublished.read_bytes(), b"local unfinished work")
 
+    def test_table_illustration_label_is_optional(self):
+        import teaching_figures as figures
+        data = dict(title="Table example", kind="tables", arrows=False,
+                    panels=[figures.panel("", ["StudentId"], [["S1"]])],
+                    conclusion="One student is represented.", subtitle="Unrelated ER subtitle")
+        with patch.dict(figures.FIGURES, {"audit_table": data}):
+            default = figures.render("audit_table")
+            self.assertIn("Original teaching illustration", default)
+            self.assertNotIn("Unrelated ER subtitle", default)
+            with patch.dict(data, table_subtitle=""):
+                simplified = figures.render("audit_table")
+                self.assertNotIn("Original teaching illustration", simplified)
+                self.assertIn("StudentId", simplified)
+                self.assertIn("S1", simplified)
+
     def test_pdf_provenance_and_figures(self):
         import fitz
         config = builder.load_json(builder.CONFIG_PATH)
         self.assertEqual(config["published_pdf_chapters"], ["ch01", "ch02", "ch03"])
-        for chapter, images in [("ch01", 5), ("ch02", 6), ("ch03", 41)]:
+        for chapter, images in [("ch01", 5), ("ch02", 6), ("ch03", 45)]:
             with fitz.open(builder.safe_target(chapter + ".pdf")) as pdf:
                 self.assertGreater(len(pdf), 0)
                 self.assertEqual(pdf.metadata["author"], "WenYi Lee")
@@ -525,7 +540,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         config = builder.load_json(builder.CONFIG_PATH)
         self.assertEqual(set(config["published_answer_pdfs"]), {"ch03_answer.pdf", "ch04_answer.pdf"})
         home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
-        for chapter, questions, images, pages in [(3, 35, 31, 56), (4, 33, 47, 62)]:
+        for chapter, questions, images, pages in [(3, 35, 31, 55), (4, 33, 47, 62)]:
             name = f"ch{chapter:02d}_answer.pdf"
             with self.subTest(answer=name):
                 record = config["published_answer_pdfs"][name]
