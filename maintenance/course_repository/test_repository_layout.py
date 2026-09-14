@@ -509,7 +509,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         import fitz
         config = builder.load_json(builder.CONFIG_PATH)
         self.assertEqual(config["published_pdf_chapters"], ["ch01", "ch02", "ch03"])
-        for chapter, images in [("ch01", 5), ("ch02", 6), ("ch03", 27)]:
+        for chapter, images in [("ch01", 5), ("ch02", 6), ("ch03", 41)]:
             with fitz.open(builder.safe_target(chapter + ".pdf")) as pdf:
                 self.assertGreater(len(pdf), 0)
                 self.assertEqual(pdf.metadata["author"], "WenYi Lee")

@@ -320,9 +320,13 @@ def render(name):
     if data["kind"] == "er":
         from er_figures import render_er
         return render_er(data, _paragraph, _font)
-    title, height = _paragraph(45, 48, data["title"], 1110, 32, weight=700)
-    parts = [title, _text(45, height + 80, "Original teaching illustration | Read with the worked example", 20, "#48616c")]
-    y = height + 115
+    outside = data.get("text_outside_image", False)
+    if outside:
+        parts, y = [], 45
+    else:
+        title, height = _paragraph(45, 48, data["title"], 1110, 32, weight=700)
+        parts = [title, _text(45, height + 80, "Original teaching illustration | Read with the worked example", 20, "#48616c")]
+        y = height + 115
     if data["kind"] == "network":
         graph = data["graph"]
         for edge in graph["edges"]:
@@ -350,20 +354,24 @@ def render(name):
         bottom = y + 365
     else:
         count = len(data["panels"])
+        stacked = data.get("stacked", False)
         gap = 65 if data["arrows"] else 32
-        width = (1110 - gap * (count - 1)) / count
+        width = 1110 if stacked else (1110 - gap * (count - 1)) / count
         title_height = max(len(_lines(p["title"], width, 25, 700)) * 25 * 1.35 for p in data["panels"])
         bottom = y
         for index, p in enumerate(data["panels"]):
-            x = 45 + index * (width + gap)
-            content, end = _panel(x, y, width, p, COLORS[index % len(COLORS)], title_height)
+            x = 45 if stacked else 45 + index * (width + gap)
+            top = bottom + 40 if stacked and index else y
+            content, end = _panel(x, top, width, p, COLORS[index % len(COLORS)], title_height)
             parts.append(content)
             bottom = max(bottom, end)
             if data["arrows"] and index < count - 1 and (data["arrows"] is True or index in data["arrows"]):
                 parts.append(f'<path d="M {x+width+8} {y+125} L {x+width+gap-12} {y+125}" fill="none" stroke="#48616c" stroke-width="3" marker-end="url(#tip)"/>')
-    conclusion, used = _paragraph(45, bottom + 65, data["conclusion"], 1110, 25, weight=600)
-    parts.extend([f'<line x1="45" y1="{bottom+30}" x2="1155" y2="{bottom+30}" stroke="#9eafb8"/>', conclusion])
-    total = int(bottom + used + 90)
+    total = int(bottom + 35)
+    if not outside:
+        conclusion, used = _paragraph(45, bottom + 65, data["conclusion"], 1110, 25, weight=600)
+        parts.extend([f'<line x1="45" y1="{bottom+30}" x2="1155" y2="{bottom+30}" stroke="#9eafb8"/>', conclusion])
+        total = int(bottom + used + 90)
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="{total}" viewBox="0 0 1200 {total}" role="img">
 <title>{escape(data['title'])}</title><desc>{escape(data['conclusion'])}</desc>
 <defs><marker id="tip" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 Z" fill="#48616c"/></marker></defs>

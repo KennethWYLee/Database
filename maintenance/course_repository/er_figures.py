@@ -4,6 +4,11 @@ import math
 
 FIGURES = {}
 STUDENTS = ("S101", "S102", "S103")
+STUDENT_PROFILES = (
+    ("S101", "Alex", "Lin", ("02-0000-0101", "02-0000-0102")),
+    ("S102", "Blair", "Wu", ("02-0000-0201",)),
+    ("S103", "Casey", "Chen", ()),
+)
 SECTIONS = (("DB101", 1), ("DB101", 2), ("CS102", 1))
 ENROLLMENTS = (("S101", "DB101", 1, 80), ("S101", "CS102", 1, 90),
                ("S102", "DB101", 1, 70))
@@ -24,10 +29,11 @@ def edge(a, b, total=False, points=None):
     return dict(a=a, b=b, total=total, points=points)
 
 
-def add(name, section, title, conclusion, height=None, nodes=(), edges=(), notes=(), panels=()):
+def add(name, section, title, conclusion, height=None, nodes=(), edges=(), notes=(), panels=(), *, stacked=False):
     FIGURES["opening_ch03_" + name] = dict(
         heading="## " + section, title=title, conclusion=conclusion,
-        kind="er" if height else "tables", arrows=False, panels=panels,
+        kind="er" if height else "tables", arrows=False, panels=panels, stacked=stacked,
+        text_outside_image=True,
         diagram=dict(height=height, nodes=list(nodes), edges=list(edges), notes=list(notes)))
 
 
@@ -44,11 +50,13 @@ add("requirements", "1. From Requirements to a Diagram", "Start with facts and r
                   [["COURSE and SECTION", "Entity types"],
                    ["One owner per section", "Relationship and constraints"]])])
 add("entities", "2. Entity, Entity Type, and Entity Set", "One entity is not the whole entity type",
-    "STUDENT is the type; S101 is one entity; these three students form the displayed current set.",
+    "STUDENT is the type; S101 identifies one entity. Adding a fourth student changes the set, not the type definition.",
     panels=[panel("Type description", ["Type", "Properties"], [["STUDENT", "StudentId, Name, Phone"]]),
-            panel("Current illustrative set", ["StudentId", "Name"],
-                  [["S101", "Alex Lin"], ["S102", "Blair Wu"], ["S103", "Casey Chen"]],
-                  "Adding S104 changes the set, not the type definition.")])
+            panel("Current illustrative set: three students", ["StudentId", "Name", "Phone"],
+                  [[sid, f"{given} {family}", "; ".join(phones) or "None recorded"]
+                   for sid, given, family, phones in STUDENT_PROFILES],
+                  "Phone may have several recorded values. None recorded does not mean the student owns no phone. The numbers are invented.")],
+    stacked=True)
 add("attributes", "3. Attributes Describe an Entity", "Different attribute properties use different symbols",
     "Name has components; Phone can have several values; EnrollmentCount is calculated from enrollments.",
     500,
@@ -72,13 +80,13 @@ add("keys", "4. Keys Identify Entities", "One composite key is not two separate 
 add("domains", "5. Domains and Missing Values", "Allowed values are not just the observed values",
     "Under this example's rule, 5 is allowed even though only 2 and 3 occur in the current courses.",
     panels=[panel("Course rule", ["Attribute", "Allowed values"],
-                  [["Credits", "Whole numbers from 1 through 6"]]),
+                  [["Credits", "Whole numbers from 1 through 6"]], "Currently observed values: 2 and 3."),
             panel("Check proposed values", ["Value", "Decision"],
                   [["5", "Allowed"], ["2.5", "Reject: not whole"], ["7", "Reject: above 6"]])])
 add("relationships", "6. Relationships Connect Entities", "An enrollment connects a student to a section",
     "The three rows describe three relationship instances, not three relationship types.",
-    panels=[panel("ENROLLS_IN instances", ["Student", "Section (course / number)"],
-                  [[s, f"{c} / {n}"] for s, c, n, _ in ENROLLMENTS]),
+    panels=[panel("ENROLLS_IN instances", ["Student", "Section (course / number)", "Grade"],
+                  [[s, f"{c} / {n}", str(g)] for s, c, n, g in ENROLLMENTS]),
             panel("Count participation", ["Student", "Enrollment count"],
                   [[s, str(sum(r[0] == s for r in ENROLLMENTS))] for s in STUDENTS])])
 nodes, edges, notes = [], [], []
@@ -112,7 +120,7 @@ add("minmax", "9. Read Min-Max Labels Carefully", "Place this notation beside th
     [(330, 85, "(0,N)"), (780, 85, "(1,1)"),
      (65, 260, "Min-max replaces the maximum-ratio and single/double-line convention here.")])
 add("roles", "10. Recursive Relationships and Roles", "One entity type can participate twice",
-    "MENTORS is binary: one student plays mentor and another plays mentee. The roles distinguish the two.",
+    "MENTORS is binary because it has two roles: mentor and mentee. These counts alone do not forbid self-mentoring.",
     460,
     [node("s", "STUDENT", "entity", 310, 220), node("m", "MENTORS", "relationship", 855, 220)],
     [edge("s", "m", points=[(310, 45), (855, 45)]),
@@ -135,12 +143,15 @@ add("weak", "12. Weak Entities and Partial Keys", "A section needs its owner to 
     [edge("c", "h"), edge("h", "s", True), edge("c", "id"), edge("s", "no")],
     [(345, 210, "1"), (815, 210, "N")])
 add("refinement", "13. Refine a Design from Its Requirements", "Replace an entity reference with a relationship",
-    "Use INSTRUCTOR and TEACHES when instructor identity and name are needed. A teacher name alone need not identify a person.",
+    "The same two sections remain. Name describes INSTRUCTOR; TEACHES records assignments. Matching names alone do not establish identity.",
     panels=[panel("Initial description", ["Section", "Teacher name"],
                   [["DB101 / 1", "Morgan"], ["DB101 / 2", "Morgan"]]),
-            panel("Refined facts", ["Instructor", "Section taught"],
-                  [[i, f"{c} / {n}"] for i, c, n in TEACHES],
-                  "Name remains an attribute of INSTRUCTOR.")])
+            panel("INSTRUCTOR: identity checked separately", ["InstructorId", "Name"],
+                  [["I1", "Morgan"]], "The example supplies I1's identity independently of the repeated name."),
+            panel("TEACHES: assignments for the same two sections", ["InstructorId", "Section taught"],
+                  [[i, f"{c} / {n}"] for i, c, n in TEACHES if c == "DB101"],
+                  "The example confirms that I1 teaches both sections. Other sections are outside this comparison.")],
+    stacked=True)
 add("ternary", "14. A Fact That Needs Three Participants", "One approval names a student, instructor, and course",
     "APPROVES is ternary. Each line connects a participating type to the same diamond; it is not a sequence.",
     450,
@@ -149,9 +160,12 @@ add("ternary", "14. A Fact That Needs Three Participants", "One approval names a
     [edge("s", "a"), edge("a", "i"), edge("a", "c")])
 add("pairs", "14. A Fact That Needs Three Participants", "Three pairwise facts do not prove a three-way fact",
     "All three pairs for (S101, I1, CS102) appear, but that approval is absent from the supplied records.",
-    panels=[panel("Recorded approvals", ["Student", "Instructor", "Course"], [list(r) for r in APPROVALS]),
+    panels=[panel("Recorded approvals", ["Record", "Student", "Instructor", "Course"],
+                  [[str(index), *r] for index, r in enumerate(APPROVALS, 1)],
+                  "Record numbers label these example rows; they are not an added identifying attribute."),
             panel("Pairs for the missing triple", ["Pair", "Seen in record"],
-                  [["S101 + I1", "1"], ["S101 + CS102", "2"], ["I1 + CS102", "3"]])])
+                  [["S101 + I1", "1"], ["S101 + CS102", "2"], ["I1 + CS102", "3"]])],
+    stacked=True)
 
 # A compact complete core schema uses a deliberately smaller attribute inventory.
 add("complete", "15. Assemble the Campus Diagram", "The core campus ER schema for Fall 2026",
@@ -207,14 +221,15 @@ UNIVERSITY_HEADING = "16. Section 3.10: A UNIVERSITY Database / ### "
 
 add("order_items", WEAK_HEADING + "12.1. Order Items: the Same Number under Different Owners",
     "An item number identifies an item only within its order",
-    "O10 / 1 and O20 / 1 are distinct items. Quantity describes an item but is not its partial key.",
-    430,
+    "O10 / 1 and O20 / 1 are distinct items. Product and Quantity describe an item; neither is its partial key.",
+    470,
     [node("o", "ORDER", "entity", 190, 225), node("r", "CONTAINS", "identifying", 600, 225),
      node("i", "ORDER_ITEM", "weak", 1010, 225),
      node("oid", "OrderId", "attribute", 190, 35, key="full"),
      node("line", "LineNo", "attribute", 1010, 35, key="partial"),
-     node("qty", "Quantity", "attribute", 1010, 405)],
-    [edge("o", "r"), edge("r", "i", True), edge("o", "oid"), edge("i", "line"), edge("i", "qty")],
+     node("product", "Product", "attribute", 750, 405), node("qty", "Quantity", "attribute", 1050, 405)],
+    [edge("o", "r"), edge("r", "i", True), edge("o", "oid"), edge("i", "line"),
+     edge("i", "product"), edge("i", "qty")],
     [(350, 200, "1"), (820, 200, "N")])
 add("strong_card", WEAK_HEADING + "12.2. A Required Owner Does Not Automatically Make an Entity Weak",
     "CARD has its own key even when ownership is required",
@@ -228,7 +243,7 @@ add("strong_card", WEAK_HEADING + "12.2. A Required Owner Does Not Automatically
     [(350, 205, "1"), (820, 205, "N")])
 add("nested_weak", WEAK_HEADING + "12.3. A Weak Entity Can Own Another Weak Entity",
     "Follow identification through every owner",
-    "A note is identified by OrderId, LineNo, and NoteNo. ORDER_ITEM is both weak and an owner.",
+    "A note is identified by OrderId, LineNo, and NoteNo. ORDER_ITEM is both weak and an owner. Only identifying attributes are shown.",
     920,
     [node("o", "ORDER", "entity", 700, 65), node("id", "OrderId", "attribute", 250, 65, key="full"),
      node("r", "CONTAINS", "identifying", 700, 260),
@@ -243,10 +258,12 @@ add("two_owners", WEAK_HEADING + "12.4. Two Owners Can Be Needed Together",
     "Fix both owners, then use VisitNo. StudentId or CompanyId plus VisitNo alone is insufficient.",
     650,
     [node("s", "STUDENT", "entity", 190, 120), node("c", "COMPANY", "entity", 1010, 120),
+     node("sid", "StudentId", "attribute", 190, 15, key="full"),
+     node("cid", "CompanyId", "attribute", 1010, 15, key="full"),
      node("r", "ARRANGES", "identifying", 600, 120),
      node("i", "INTERVIEW", "weak", 600, 365),
      node("v", "VisitNo", "attribute", 600, 575, key="partial")],
-    [edge("s", "r"), edge("c", "r"), edge("r", "i", True), edge("i", "v")])
+    [edge("s", "sid"), edge("c", "cid"), edge("s", "r"), edge("c", "r"), edge("r", "i", True), edge("i", "v")])
 
 add("ternary_one", TERNARY_HEADING + "14.1. Section 3.9.2: Fix Two Participants before Reading a 1",
     "Fix student and course: at most one instructor",
@@ -267,10 +284,12 @@ add("ternary_count", TERNARY_HEADING + "14.2. Section 3.9.2: Count All Participa
 add("ternary_checks", TERNARY_HEADING + "14.3. Use Both Checks When Both Rules Are Required",
     "Test the same proposed addition against two different rules",
     "Each row starts from the original three approvals. Only (S103, I2, DB101) passes both rules.",
-    panels=[panel("Pair rule", ["Addition", "One instructor per pair?"],
-                  [["S101, I2, DB101", "No"], ["S103, I1, DB101", "Yes"], ["S103, I2, DB101", "Yes"]]),
-            panel("Participation rule", ["Instructor's new count", "At most two?"],
-                  [["I2: 2", "Yes"], ["I1: 3", "No"], ["I2: 2", "Yes"]])])
+    panels=[panel("One row contains both checks for the same addition",
+                  ["Proposed addition", "One instructor per student-course pair?", "At most two approvals per instructor?", "Passes both?"],
+                  [["S101, I2, DB101", "No: I1 already approves this pair", "Yes: I2 goes from 1 to 2", "No"],
+                   ["S103, I1, DB101", "Yes: a new pair", "No: I1 goes from 2 to 3", "No"],
+                   ["S103, I2, DB101", "Yes: a new pair", "Yes: I2 goes from 1 to 2", "Yes"]],
+                  "Start each check from records 1-3: (S101, I1, DB101); (S101, I2, CS102); (S102, I1, CS102).")])
 
 add("university_section", UNIVERSITY_HEADING + "16.1. Identify the Entities and Attributes",
     "In Section 3.10, SECTION has a globally unique SecId",
@@ -306,12 +325,154 @@ for name, section, title, rules, conclusion in (
 add("university_conflicts", UNIVERSITY_HEADING + "16.4. Some Uniqueness Rules Need More Than a SecId Oval",
     "Different section IDs do not prevent other conflicts",
     "Each pair has different SecId values but violates its named extra rule. The three cases are checked independently.",
-    panels=[panel("Proposed sections", ["Case", "SecId pair", "Repeated combination"],
-                  [["A", "Q101 / Q102", "Course, term, SecNo"],
-                   ["B", "Q201 / Q202", "Term, room, time"],
-                   ["C", "Q301 / Q302", "Term, instructor, time"]]),
-            panel("Reason to reject", ["Case", "Conflict"],
-                  [["A", "Duplicate local number"], ["B", "Room already occupied"], ["C", "Instructor already teaching"]])])
+    panels=[panel("Each row is one independent proposed pair",
+                  ["Case / SecId pair", "Values shared by both sections", "Reason to reject"],
+                  [["A: Q101 / Q102", "DB101; Fall 2026; SecNo 1", "Duplicate local section number"],
+                   ["B: Q201 / Q202", "Fall 2026; room A/201; Thu-P5", "Room occupied at the same time"],
+                   ["C: Q301 / Q302", "Fall 2026; instructor I1; Thu-P5", "Instructor teaching at the same time"]],
+                  "Other fields can differ to isolate each rule. Case C assumes combined sections are not permitted. Time equality does not detect every possible overlap.")])
+# Worked illustrations accompany the existing scope; they add no assignments.
+add("contact", "3. Attributes Describe an Entity / ### Worked Example: Two Contacts for One Student",
+    "Several values can each have meaningful components",
+    "One Contact value is a Label-PhoneNumber pair. The double oval permits several such pairs for one student.",
+    430,
+    [node("s", "STUDENT", "entity", 600, 335),
+     node("contact", "Contact", "multi", 600, 175),
+     node("label", "Label", "attribute", 300, 25),
+     node("number", "PhoneNumber", "attribute", 900, 25)],
+    [edge("s", "contact"), edge("contact", "label"), edge("contact", "number")],
+    [(65, 425, "Attribute close-up: StudentId and other profile attributes are omitted.")])
+
+add("key_lookup", "4. Keys Identify Entities / ### Worked Example: Find One Room",
+    "How many rooms match the information supplied?",
+    "Building and RoomNo work together. The stated rule, not this small sample alone, guarantees that Location is a key.",
+    panels=[panel("Use the three rooms A/101, A/102, B/101", ["Information supplied", "Matching rooms", "Count"],
+                  [["RoomNo = 101", "A/101; B/101", "2"],
+                   ["Building = A", "A/101; A/102", "2"],
+                   ["Building = A and RoomNo = 101", "A/101", "1"]])])
+
+add("missing_values", "5. Domains and Missing Values / ### Worked Example: Missing Is Not Zero",
+    "Similar empty entries can have different meanings",
+    "Do not replace missing information with zero or with a claim that no value exists. First establish what is known.",
+    panels=[panel("Separate fictional cases", ["Recorded information", "Known situation", "What it means"],
+                  [["Grade = 0", "A marked assessment earned zero.", "Known numeric value"],
+                   ["Grade not recorded", "Marking is unfinished.", "Unknown grade, not a zero"],
+                   ["ParkingPermitNo absent", "The person confirms having no permit.", "Not applicable"],
+                   ["ParkingPermitNo absent", "Nobody has checked whether a permit exists.", "Unknown whether a value exists"]],
+                  "This is a conceptual comparison of meanings, not SQL storage or SQL NULL evaluation.")])
+
+
+def instance_figure(name, section, title, conclusion, left, right, links):
+    """Use the existing network renderer for labeled objects, not ER types."""
+    add(name, section, title, conclusion)
+    left_positions = {label: 50 + 150 * i for i, label in enumerate(left)}
+    right_positions = {label: 50 + 150 * i for i, label in enumerate(right)}
+    graph = dict(
+        directed=False, height=50 + 150 * max(len(left), len(right)),
+        nodes=[(65, y, 310, 80, label) for label, y in left_positions.items()] +
+              [(825, y, 310, 80, label) for label, y in right_positions.items()],
+        edges=[(375, left_positions[a]+40, 825, right_positions[b]+40, "", 0, 0)
+               for a, b in links])
+    FIGURES["opening_ch03_" + name].update(kind="network", graph=graph)
+
+
+instance_figure("enrollment_links",
+    "6. Relationships Connect Entities / ### Worked Example: Trace the Three Enrollments",
+    "M:N: follow each recorded enrollment line",
+    "These boxes are individual objects, not ER type symbols. Each line is one enrollment; Grade is omitted in this connection-only view.",
+    ["Student " + s for s in STUDENTS],
+    ["Section CS102 / 1", "Section DB101 / 1", "Section DB101 / 2"],
+    [("Student " + s, f"Section {c} / {n}") for s, c, n, _ in ENROLLMENTS])
+
+instance_figure("one_to_one",
+    "7. Maximum Cardinality / ### Worked Example: One Card or Several Sections",
+    "1:1: no object has more than one HOLDS line",
+    "Objects, not ER type symbols. This separate variant allows at most one card per student and at most one student per card; it does not require a line.",
+    ["Student S101", "Student S102", "Student S103"], ["Card K10", "Card K11"],
+    [("Student S101", "Card K10"), ("Student S102", "Card K11")])
+instance_figure("one_to_many",
+    "7. Maximum Cardinality / ### Worked Example: One Card or Several Sections",
+    "1:N: I1 has two lines; each section has one",
+    "Objects, not ER type symbols. I1 teaching two sections is allowed. A second instructor on either section would violate its maximum of one.",
+    ["Instructor I1", "Instructor I2"],
+    ["Section DB101 / 1", "Section DB101 / 2", "Section CS102 / 1"],
+    [("Instructor " + i, f"Section {c} / {n}") for i, c, n in TEACHES])
+
+add("participation_changes", "8. Total and Partial Participation / ### Worked Example: Change One Fact at a Time",
+    "A minimum and a maximum reject different changes",
+    "Each proposal starts from the original three assignments. A section's owner course remains present; the table checks TEACHES only.",
+    panels=[panel("Original: I1 teaches DB101/1 and DB101/2; I2 teaches CS102/1",
+                  ["Isolated proposal", "Count to inspect", "TEACHES decision"],
+                  [["Add I3 without an assignment", "I3: 0 sections", "Allowed: instructor minimum is 0"],
+                   ["Remove I1's DB101/2 assignment; keep the section", "DB101/2: 0 instructors", "Reject: section minimum is 1"],
+                   ["Also assign I2 to DB101/1", "DB101/1: 2 instructors", "Reject: section maximum is 1"],
+                   ["Replace I1 with I2 on DB101/2", "DB101/2: 1 instructor; I2: 2 sections", "Allowed: exactly one per section"]])])
+
+add("notation_counts", "9. Read Min-Max Labels Carefully / ### Worked Example: Count First, Then Choose the Label",
+    "The same TEACHES counts, written in two notations",
+    "For a binary relationship, maximum-ratio labels refer across the connection. A min-max pair is placed beside the entity being counted.",
+    panels=[panel("Original assignments", ["Object inspected", "Observed count", "Permitted range"],
+                  [["Instructor I1", "2 sections", "0 or more"],
+                   ["Section DB101 / 1", "1 instructor", "Exactly 1"]]),
+            panel("Translate the same rules", ["Rule", "Maximum-ratio notation", "Min-max notation"],
+                  [["An instructor may teach many sections", "N near SECTION; single line at INSTRUCTOR", "(0,N) near INSTRUCTOR"],
+                   ["A section needs exactly one instructor", "1 near INSTRUCTOR; double line at SECTION", "(1,1) near SECTION"]])], stacked=True)
+
+instance_figure("mentor_roles",
+    "10. Recursive Relationships and Roles / ### Worked Example: Follow the Named Roles",
+    "Read each line from mentor role to mentee role",
+    "Both columns use the same STUDENT set. Repeating S101 does not create a second student. The named roles, not an arrow, determine each fact.",
+    ["Mentor S101", "Mentor S102", "Mentor S103"],
+    ["Mentee S101", "Mentee S102", "Mentee S103"],
+    [("Mentor S101", "Mentee S102"), ("Mentor S101", "Mentee S103")])
+
+add("grade_matrix", "11. Attributes of a Relationship / ### Worked Example: Read a Grade at the Intersection",
+    "Choose a student AND a section before reading Grade",
+    "S101's row contains 80 and 90. DB101/1's column contains 80 and 70. Neither participant alone determines Grade in this M:N example.",
+    panels=[panel("The original three enrollment facts", ["Student", "DB101 / 1", "CS102 / 1", "DB101 / 2"],
+                  [[s, *[str(next((g for sid, c, n, g in ENROLLMENTS if sid == s and (c, n) == section), "No enrollment"))
+                         for section in (("DB101", 1), ("CS102", 1), ("DB101", 2))]] for s in STUDENTS],
+                  "No enrollment means no relationship instance. It is different from an existing enrollment whose grade is unknown.")])
+
+add("weak_lookup", WEAK_HEADING + "Worked Example: Find the Owner Before the Item",
+    "Repeated properties do not make two order items identical",
+    "Start with the owner, then use its partial key. Quantity and Product describe the chosen item; they do not repair a duplicated identity.",
+    panels=[panel("Compare the same three order items", ["Information supplied", "Matching items", "Result"],
+                  [["LineNo = 1", "O10/1; O20/1", "Two different owners"],
+                   ["Product = Notebook; Quantity = 2", "O10/1; O20/1", "Same properties, different items"],
+                   ["OrderId = O10", "O10/1; O10/2", "Owner alone is insufficient"],
+                   ["OrderId = O10; LineNo = 1", "O10/1", "One identified item"]])])
+
+add("ternary_states", TERNARY_HEADING + "Worked Example: Two Approval Sets with the Same Pairs",
+    "Pairwise information cannot distinguish these two states",
+    "State B adds (S101, I1, CS102), but introduces no new pair. Keeping only the pairs loses whether that three-way approval is present.",
+    panels=[panel("Compare against the original three approvals", ["Information retained", "State A: original", "State B: add one approval"],
+                  [["Approval instances", "3", "4"],
+                   ["Student-instructor pairs", "S101/I1; S101/I2; S102/I1", "Same three pairs"],
+                   ["Student-course pairs", "S101/DB101; S101/CS102; S102/CS102", "Same three pairs"],
+                   ["Instructor-course pairs", "I1/DB101; I2/CS102; I1/CS102", "Same three pairs"],
+                   ["Is (S101, I1, CS102) recorded?", "No", "Yes"]],
+                  "Use the core APPROVES rules here. The later one-instructor-per-pair and two-approval limits are not imposed.")])
+
+add("university_staff_facts", UNIVERSITY_HEADING + "Worked Example: A Chair Is Not Every Employee",
+    "Read CHAIR and EMPLOYS as separate facts",
+    "I3 works in D1 but chairs no department. That satisfies both rules: employment is required, chairing is optional for an instructor.",
+    panels=[panel("Synthetic organization snapshot", ["Relationship", "Recorded facts", "What to count"],
+                  [["ADMINS", "C-A / D1; C-A / D2", "One college per department"],
+                   ["DEAN", "C-A / I1", "One dean for C-A"],
+                   ["CHAIR", "D1 / I1; D2 / I2", "One chair per department; none for I3"],
+                   ["EMPLOYS", "D1 / I1; D2 / I2; D1 / I3", "One employing department per instructor"]],
+                  "Organization facts only. The date of each CHAIR appointment and other attributes are omitted in this relationship-only view.")])
+
+add("university_enrollment_change", UNIVERSITY_HEADING + "Worked Example: Five Distinct Students Become Four",
+    "Removing one TAKES fact can violate a minimum",
+    "After U5 leaves, Q101 still has its SecId, course, and instructor, but its four TAKES instances violate this UNIVERSITY model's minimum of five.",
+    panels=[panel("Q101 remains a section of DB101 taught by I1", ["State", "Distinct students taking Q101", "Count and check"],
+                  [["Before U5 leaves", "U1; U2; U3; U4; U5", "5: meets minimum 5"],
+                   ["After U5 leaves", "U1; U2; U3; U4", "4: below minimum 5"],
+                   ["Keep U5 in STUDENT, but not in TAKES", "U1; U2; U3; U4", "Still 4: entity presence is not enrollment"]],
+                  "Five copies of the U1/Q101 fact would still represent one distinct relationship instance, not five students.")])
+
 for name, data in FIGURES.items():
     if name.startswith("opening_ch03_university_"):
         data["subtitle"] = "Original teaching layout | Textbook Section 3.10"
@@ -331,9 +492,13 @@ def boundary(n, target):
 
 def render_er(data, paragraph, font):
     """Render Chen shapes with explicitly routed, undirected lines."""
-    title, used = paragraph(45, 48, data["title"], 1110, 32, weight=700)
-    offset = used + 135
-    parts = [title, paragraph(45, used + 85, data.get("subtitle", "Original synthetic campus example"), 1110, 20)[0]]
+    outside = data.get("text_outside_image", False)
+    if outside:
+        parts, offset = [], 50
+    else:
+        title, used = paragraph(45, 48, data["title"], 1110, 32, weight=700)
+        offset = used + 135
+        parts = [title, paragraph(45, used + 85, data.get("subtitle", "Original synthetic campus example"), 1110, 20)[0]]
     d = data["diagram"]
     nodes = {n["id"]: n for n in d["nodes"]}
     for link in d["edges"]:
@@ -375,8 +540,10 @@ def render_er(data, paragraph, font):
     for x, y, label in d["notes"]:
         parts.append(paragraph(x, y+offset, label, min(1110, 1170-x), 22)[0])
     bottom = offset + d["height"]
-    conclusion, used = paragraph(45, bottom+60, data["conclusion"], 1110, 25, weight=600)
-    parts.append(f'<line x1="45" y1="{bottom+25}" x2="1155" y2="{bottom+25}" stroke="#9eafb8"/>')
-    parts.append(conclusion)
-    height = int(bottom + used + 90)
+    height = int(bottom + 35)
+    if not outside:
+        conclusion, used = paragraph(45, bottom+60, data["conclusion"], 1110, 25, weight=600)
+        parts.append(f'<line x1="45" y1="{bottom+25}" x2="1155" y2="{bottom+25}" stroke="#9eafb8"/>')
+        parts.append(conclusion)
+        height = int(bottom + used + 90)
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="{height}" viewBox="0 0 1200 {height}" role="img"><title>{escape(data["title"])}</title><desc>{escape(data["conclusion"])}</desc><rect width="1200" height="{height}" fill="#fafcfc"/>{"".join(parts)}</svg>'

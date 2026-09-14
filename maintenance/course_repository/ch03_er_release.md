@@ -1,5 +1,371 @@
 # Ch3 ER Teaching Release
 
+## 2026-09-14 Publication Authorization
+
+The instructor explicitly requested commit and push after the corrections below.
+This commit includes the accumulated Ch3 diagram/data corrections, fourteen new
+worked figures and removal of duplicated labels, with the current 41-image,
+48-page export. The hashes in the next entry remain unchanged. Earlier statements
+of local-only work describe their respective editing stages, not this authorization.
+Before staging, `git fetch origin` succeeded and `HEAD...origin/main` reported
+0/0 at baseline `99462b4`. The default build/manifest/public-content verification
+was rerun successfully. Only the twelve intentional tracked Ch3 material,
+renderer, test and record files are included; no ignored source, textbook,
+private record, answer change or additional chapter is part of the commit.
+The target is the existing `origin/main`; no history rewrite or remote change
+is authorized or needed. Git history records the resulting publication commit.
+
+## 2026-09-14 Remove Duplicated Figure Titles and Captions
+
+The instructor supplied a screenshot of the room-lookup example showing the
+same title twice. The generated notebook cell contained a heading and caption,
+while its PNG also painted the same heading and conclusion. The previous tests
+did not detect this visual duplication. This local formatting correction keeps
+the existing source/content decisions and all prior uncommitted work.
+
+All 41 Ch3 figures now use `text_outside_image`: the image contains the figure
+body, while the notebook/PDF supplies one visible, searchable title and one
+caption. Repeated image titles, conclusions, and generic illustration subtitles
+are removed. Internal panel titles, table values, diagram symbols, notes about
+omitted attributes, and connections remain. SVG accessibility title/description
+and notebook alternative text are retained; they are not second visible headings.
+
+The option defaults off in the shared renderer and is enabled only for Ch3.
+Ch1 and Ch2 notebook hashes remain unchanged. No change to chapter coverage,
+assignments, practice, prose explanations, source assertions, syllabus, answers,
+public selection or ignore rules is included. No new textbook audit is claimed.
+
+Maintained changes in this correction: `er_figures.py`, `teaching_figures.py`,
+`test_ch03_er.py`, `PROJECT.md`, and this record. Derived artifacts rebuilt:
+`Intro DB/ch03.ipynb` and `Intro DB/ch03.pdf`. Earlier uncommitted corrections
+to other files remain intact. Git HEAD remains `99462b4` on `main`; there was
+no staging, commit, push, remote change or deletion.
+
+Current notebook: 128 Markdown cells, 41 PNGs, no executable cells.
+Notebook SHA256: `56292c5f23cc8488316cfaaaeb3de31a7b80b59f3c6ae1ebd06e8905cf15e729`.
+Current PDF: 48 pages, 41 images, 1,540,664 bytes.
+PDF SHA256: `299660532d91f7db220c3f3bc6e7535bb47c070c6eae72a81188cbbb7b083c0f`.
+This supersedes the preceding 54-page export and its page-location list.
+The room-lookup example is now on PDF page8; the grade matrix is on page22,
+enrollment lines on page11, and weak-item lookup on page25.
+
+Verification, using the environment documented in the preceding entry:
+
+- All 70 repository tests passed, including 34 Ch3 tests. Three new tests check
+  exactly one external heading/caption, no painted duplicate, preservation of
+  all figure-body words compared with the previous renderer mode, and searchable
+  PDF titles occurring once. Other tests retain symbol, endpoint and data checks.
+- All 41 PDF images match the current notebook images in RGB pixel content.
+- Three fresh-kernel notebook checks, the 9-file manifest, public boundaries and
+  default build verification passed. Ch3 itself still contains no executable lab.
+- All 48 PDF pages were rendered and inspected in four overviews; page8's corrected
+  room figure and page20's role diagram/table were inspected at full page size.
+- Desktop1440/mobile390 previews passed with no broken images, page overflow or
+  detected figure-text overlap. Mobile wide tables still scroll horizontally;
+  dense pictures still require zoom. Real classroom projection remains untested.
+- `git diff --check` passed; line-ending conversion notices are not content failures.
+
+```powershell
+python maintenance/course_repository/build_course_repository.py
+python maintenance/course_repository/export_chapter_pdfs.py --chapters ch03
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+python maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
+python maintenance/course_repository/build_course_repository.py --verify
+git diff --check
+git status --short --branch
+```
+
+Primary next action: check page8 against the supplied screenshot to confirm that
+one heading, one table and one caption meet the instructor's intended presentation,
+then continue the previously recommended three-example classroom review. The new
+evidence was visual duplication, not a gap requiring further teaching content.
+
+## 2026-09-14 More Worked Figures for Classroom Explanation
+
+This local revision continues the uncommitted corrections below, on `main` at
+`99462b47cac70829b9dd45330a2c54c4953a4deb`, tracking `origin/main`. The instructor
+reports primarily explaining pictures and tables, with little use of Practice.
+The current request authorizes more explained illustrations, not Git publication,
+removal of practice, or changes to scope, grading, or required submissions.
+
+### Result
+
+Ch3 retains the existing 27 figures and adds 14 figures in 13 worked examples.
+Each new example supplies concrete inputs, a checkable prediction, a displayed
+figure or table, and an explanation with actual values before its Practice text.
+Five new images are diagrams (four object-connection views and one ER attribute
+close-up); nine are comparison tables. Additional Markdown tables explain
+attribute changes, counts, role participation, and missing versus zero grades.
+The contact prediction was clarified to count entities, values, and components
+separately; M:N is expanded before the first new figure uses the abbreviation.
+
+The current notebook has 128 Markdown cells and 41 embedded PNG figures; it
+contains no student-executable code. The PDF has 54 pages and 41 matching images.
+The 42-page/27-figure export recorded below is the preceding local version.
+No new textbook topics, SQL prerequisites, required activities, or assignments
+were added. Ch1, Ch2, the syllabus, answer PDFs, ignore rules and public selection
+are unchanged. Other chapters have not received this visual expansion.
+
+### Sources and Example Checks
+
+Concepts were checked in the local searchable *Fundamentals of Database Systems*,
+7th edition, Elmasri/Navathe, `private_references/book_Fundamental of Database Systems.pdf`.
+Its SHA256 remains `002eceecdb5e47b050e61b30d13a8f207fb44cea4f927b98d864308c026288a5`.
+Page numbers in this table are that PDF's printed page numbers, not the photographed
+edition's numbers used in the student reading list. For example, printed p.79
+is PDF page110 and corresponds to photographed p.109. Section numbers identify
+the same concepts across the two paginations. The existing photographed-source
+audit remains in force; this is not another complete chapter-by-chapter book audit.
+
+| Figure suffix after opening_ch03_ | Source concept / local printed pages | Original teaching evidence checked |
+|---|---|---|
+| contact | 3.3.1, pp.65-67; notation in 3.3.2, p.68 | One student, two component pairs; double Contact oval plus component ovals. Replaces, rather than duplicates, the bare Phone variant. |
+| key_lookup | 3.3.2, p.68 | A/101, A/102, B/101 produce lookup counts 2, 2, 1. The requirement supplies the key guarantee. |
+| missing_values | 3.3.1, p.66 | Known zero, unfinished grade, confirmed no permit, and unchecked permit status remain separate meanings. |
+| enrollment_links | 3.4, pp.74-78 | All three ENROLLMENTS facts become exact endpoint pairs; unconnected S103 and DB101/2 remain visible. Grade omission is explicit. |
+| one_to_one | 3.4.3, pp.76-77 | S101/K10 and S102/K11, with S103 unconnected. Separate one-card variant, not the later multiple-card variant. |
+| one_to_many | 3.4.3, pp.76-77 | The three TEACHES facts give I1 two sections and I2 one, with one instructor per section. |
+| participation_changes | 3.4.3, pp.77-78 | Independent proposed states produce allowed/rejected/rejected/allowed; 0 violates a section minimum and 2 violates its maximum. |
+| notation_counts | 3.7.4, p.84; Figure3.14, p.83 | Counts 2 and 1; opposite-side maximum labels versus same-side min-max, for the same binary requirements. |
+| mentor_roles | 3.4.2, p.75 | One STUDENT set appears in two roles; the two lines match exactly S101/S102 and S101/S103. |
+| grade_matrix | 3.4.4, p.78 | Matrix contains exactly 80, 90 and 70 at the supplied pairs, with six nonexistent enrollments. Unknown and zero are separate later states. |
+| weak_lookup | 3.5, p.79 | Owner-free descriptions each leave two matching items; owner O10 plus LineNo1 leaves one. Product/Quantity do not identify an item. |
+| ternary_states | 3.9.1, pp.89-91 | Adding S101/I1/CS102 changes three triples to four but all three pair sets remain identical. Later variant constraints are explicitly excluded. |
+| university_staff_facts | 3.10, pp.92-94, Figure3.20 | Four sets of organization facts distinguish required employment from optional chairing; omitted attributes are identified. |
+| university_enrollment_change | 3.10, pp.93-94 | Five distinct TAKES facts become four while section and student entities remain; repeated copies do not increase set cardinality. |
+
+These tables and drawings are original adaptations with synthetic records, not
+copied textbook artwork or solutions to newly released assessment questions.
+The source HAS prose/figure discrepancy remains explicit and unchanged.
+
+### Files and Verification
+
+Maintained files changed in this expansion:
+
+- `maintenance/chapters/ch03_er_model/student_guide.md`: explained examples and tables.
+- `maintenance/course_repository/er_figures.py`: fourteen figures; reuse of the existing network and ER renderers.
+- `maintenance/course_repository/test_ch03_er.py`: eight new checks, including independent count calculations and rendered endpoint-to-record checks.
+- `maintenance/course_repository/test_repository_layout.py` and `verify_first_meeting.py`: current expected figure totals.
+- `maintenance/course_repository/render_first_meeting.cjs`: screenshots of new worked examples at desktop/mobile widths.
+- `PROJECT.md` and this record: decisions, source scope, checks and limits.
+
+Derived files rebuilt: `Intro DB/ch03.ipynb`, `Intro DB/ch03.pdf`. Prior uncommitted
+changes to `teaching_figures.py` and `export_chapter_pdfs.py` were preserved; this
+expansion did not further change them. Temporary HTML, figures, page renders,
+manifests and QA JSON remain ignored under `maintenance/course_repository/output/`.
+
+Final notebook SHA256: `d9e1ffdf7057c54c654bc35bf12aced7562566c5ad286dc91c03ec6d1cf99482`.
+Final PDF SHA256: `88f0a5eb23168374e5b0a72d622d90b2c70f1c001c3c89e3afb70caf0f61395b`.
+PDF size: 2,324,836 bytes. Metadata records the matching notebook SHA256.
+
+Commands run from the course root:
+
+```powershell
+python maintenance/course_repository/build_course_repository.py
+python maintenance/course_repository/export_chapter_pdfs.py --chapters ch03
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+python maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
+python maintenance/course_repository/build_course_repository.py --verify
+git diff --check
+git status --short --branch
+```
+
+- 67 repository tests passed, including 31 Ch3 tests. The tests check actual graph
+  endpoints, example counts, unchanged pair sets, matrix entries/absences, headings,
+  explanations, public boundaries, and PDF/notebook RGB pixel equality for all 41 images.
+- Three fresh kernels passed Ch1-Ch3 verification; Ch3 has zero code cells, so this
+  is notebook/environment verification, not a claim of executing a Ch3 SQL lab.
+- The default build verified 9 public files, the manifest, source/output correspondence,
+  relative links and all three notebooks. Ch1/Ch2 notebook hashes remain unchanged.
+- Desktop1440/mobile390 previews have no broken images, page overflow, or reported
+  figure-text overlap. All fourteen new figures were visually read at full size.
+- All 54 PDF pages were rendered and inspected in five overviews. After the final
+  two wording changes, only page06 and page12 PNGs changed; both were reread at
+  full page size. Page25's grade matrix was also read at full size. The other 52
+  page PNGs matched the already inspected version byte for byte.
+- English-only text, absence of time allocation and internal paths, separated
+  answer publications, and unchanged public chapter selection passed existing checks.
+
+Environment: Python3.12.9, SQLite3.45.3, Pillow12.1.1, nbformat5.10.4,
+PyMuPDF1.27.2.2, resvg-py0.5.0, markdown-it-py4.0.0, BeautifulSoup4.14.3;
+Chrome153.0.8010.36, Node24.15.0, Poppler26.07.0. Arial supplies figure text.
+
+Intermediate failures are not hidden: verification initially rejected a stale
+PDF after the first notebook build, then passed after regeneration. One newly
+written test incorrectly parsed the phrase "Still 4" as an integer; its assertion
+was corrected to test that exact display label, while a separate assertion counts
+the displayed distinct participants. An earlier fresh-kernel run completed but
+logged a ZMQ shutdown callback error; the final repeated run completed without
+that message. No dependency changes were made to suppress it.
+
+### Limits and Primary Next Action
+
+This is a targeted source/content/build/render check by the same assistant, not
+independent expert or instructor review. Count calculations use a different
+check from figure construction but share the stated synthetic inputs. Tests do
+not establish classroom comprehension. Dense images need zoom on mobile;
+Markdown tables use horizontal scrolling. Real classroom projection, GitHub's
+live rendering of this unpushed revision, and student learning outcomes were not tested.
+
+Primary next action: the instructor should review the enrollment-line picture,
+Grade matrix and weak-item lookup using the classroom display. They directly test
+the requested change from practice-dependent explanation to visual explanation.
+Completion means the instructor can explain the data, rule and conclusion from
+those displays without requiring students to finish Practice first. No additional
+content expansion is the priority before this feedback. No staging, commit, push,
+remote change or destructive operation occurred; prior local work is preserved.
+
+## 2026-09-14 Local Diagram Corrections
+
+Baseline: `99462b47cac70829b9dd45330a2c54c4953a4deb`, clean `main`, tracking
+`origin/main`. The instructor approved the corrections identified after using
+Ch3 in class. This approval is for local editing and verification, not staging,
+commit, push, or a change to the public release allow-list.
+
+### Result and Scope
+
+The existing 14 Ch3 tests passed on the flawed version. They did not establish
+that every declared property appeared in a figure, that a before/after example
+retained its names and objects, or that corresponding checks occupied one row.
+Those gaps are now tested against the actual figure definitions and artifacts.
+
+The chapter still contains 27 figures and covers the same textbook sections.
+Eleven embedded PNGs changed; the other sixteen remain byte-identical to the
+baseline notebook. Ch1, Ch2, the syllabus, answer PDFs, private source files,
+ignore rules and grading policy are unchanged. PDF pagination changed from
+41 to 42 pages because of the expanded tables, not an added teaching topic.
+
+Maintained sources changed:
+
+- `maintenance/chapters/ch03_er_model/student_guide.md`: explanations of Phone,
+  the hypothetical fourth student, recursive roles, Product, omitted attributes,
+  the same-section refinement and the combined check table.
+- `maintenance/course_repository/er_figures.py`: the eleven changes below.
+- `maintenance/course_repository/teaching_figures.py`: an opt-in full-width,
+  vertically stacked table layout. Existing side-by-side rendering is unchanged.
+- `maintenance/course_repository/test_ch03_er.py`: nine new tests, including
+  figure/prose data agreement, semantic counterexamples and PDF pixel retention.
+- `maintenance/course_repository/render_first_meeting.cjs`: table-text overlap
+  checks as well as ER labels; screenshots target both headings and the actual
+  following figures at desktop and mobile widths.
+- `maintenance/course_repository/export_chapter_pdfs.py`: `--chapters ch03`
+  regenerates only the selected approved teaching PDF, without rewriting others.
+- `PROJECT.md` and this record: local state, results and limitations.
+
+Derived artifacts rebuilt: `Intro DB/ch03.ipynb` and `Intro DB/ch03.pdf`.
+The builder's manifest, previews, rendered PNGs and machine-readable QA results
+remain in ignored `maintenance/course_repository/output/`.
+
+### Figure-by-Figure Check
+
+Names below are the suffixes of `opening_ch03_`. Checks compare the figure,
+the stated example and surrounding prose; they are not a new full-textbook audit.
+
+| Section / figure | Result in this version |
+|---|---|
+| 1 / requirements | Retained. Requirements, types and connection decisions agree; identification is explicitly left for key analysis. |
+| 2 / entities | Corrected. All declared properties appear. Three students have 2, 1 and 0 recorded phone values; data match Section 3. Adding S104 is hypothetical, not a fourth displayed row. |
+| 3 / attributes | Retained. Composite Name, multivalued Phone, derived EnrollmentCount and underlined StudentId agree with the profile. |
+| 4 / keys | Retained. Only composite Location is underlined; neither component is independently unique. |
+| 5 / domains | Clarified. Observed values 2 and 3 now appear in the figure; 5, 2.5 and 7 have the stated outcomes. |
+| 6 / relationships | Completed. Grade is retained from the input; three enrollment instances give student counts 2, 1 and 0. The input rows and grouped counts are not one-to-one rows. |
+| 7 / cardinality | Retained. Maximum ratios match all three variants; keys and minimum constraints are explicitly deferred. |
+| 8 / participation | Retained. SECTION has required TEACHES participation; the ratio also limits it to one instructor. |
+| 9 / minmax | Retained. Counts are beside the entity being counted; the single lines use the explicitly stated alternative notation. |
+| 10 / roles | Corrected. Binary means two roles, not necessarily distinct students. Self-mentoring remains a separate business-rule question. |
+| 11 / grade | Retained. Grade attaches to ENROLLS_IN; values 80/90 and 80/70 support both counterexamples. |
+| 12 / weak | Retained. SECTION uses its owner and SectionNo within Fall 2026; symbols and total participation agree. |
+| 12.1 / order_items | Completed. Product and Quantity are non-key attributes of ORDER_ITEM. OrderId belongs to ORDER; LineNo is the partial key. |
+| 12.2 / strong_card | Retained. CardId is an independent key; required ownership does not make CARD weak. The multiple-card variant is explicitly distinguished. |
+| 12.3 / nested_weak | Clarified. Only identifying attributes are shown; Product, Quantity and note text are expressly omitted. Owner-chain identification is unchanged. |
+| 12.4 / two_owners | Completed. StudentId and CompanyId are drawn as full keys; VisitNo remains partial within the fixed pair. |
+| 13 / refinement | Corrected. Three stacked tables preserve Morgan, independent I1 identification and exactly the same two DB101 sections. CS102 is explicitly outside this comparison. |
+| 14 / ternary | Retained. Three types connect to one APPROVES relationship; it is not a process sequence. |
+| 14 / pairs | Clarified. Visible record numbers now support the pair references; they are row labels, not a new ER key. The missing triple remains absent. |
+| 14.1 / ternary_one | Retained. A fixed student-course pair permits at most one instructor; this is not an instructor-wide count. |
+| 14.2 / ternary_count | Retained. (0,2) counts all approvals per instructor; the alternative pair restriction is not implied. |
+| 14.3 / ternary_checks | Corrected. One table keeps each addition, pair test, before/after participation count and combined decision together. Each starts from the original three approvals. |
+| 15 / complete | Retained. The declared core attribute inventory and all relationship endpoints agree; crossing lines do not define new junctions. |
+| 16.1 / university_section | Retained. Globally unique SecId makes SECTION regular; SecNo is not underlined, and CRoom has Bldg/RoomNo components. |
+| 16.2 / university_organization | Retained. Five relationships use the specified min-max counts; the source HAS prose/figure discrepancy remains explicit. |
+| 16.3 / university_teaching | Retained. Four relationships agree with the requirements, including five distinct students per section. Attribute attachment is a stated assembly step, not silently complete in these close-ups. |
+| 16.4 / university_conflicts | Corrected. Each case keeps its actual shared values and rejection reason in the same row. Independent cases, the no-combined-section assumption and limits of time equality are stated. |
+
+The conceptual basis remains Elmasri/Navathe, *Fundamentals of Database Systems*,
+7th edition, Sections 3.3-3.7, 3.9.1-3.9.2 and 3.10 as located in the earlier
+photographed-source audit. These corrections preserve those definitions and
+the approved synthetic requirements. No additional textbook question, UML topic,
+relational mapping exercise or SQL task was introduced.
+
+### Verification
+
+Environment: Python 3.12.9, SQLite 3.45.3, Pillow 12.1.1, nbformat 5.10.4,
+PyMuPDF 1.27.2.2, resvg-py 0.5.0, markdown-it-py 4.0.0, BeautifulSoup 4.14.3,
+Node 24.15.0, Chrome 153.0.8010.36, Poppler 26.07.0.
+
+Commands from the course root:
+
+```powershell
+python -m unittest discover -s maintenance/course_repository -p test_ch03_er.py -v
+python maintenance/course_repository/build_course_repository.py
+python maintenance/course_repository/export_chapter_pdfs.py --chapters ch03
+python -X utf8 maintenance/course_repository/verify_first_meeting.py
+node maintenance/course_repository/render_first_meeting.cjs
+python -m unittest discover -s maintenance/course_repository -p 'test_*.py'
+python -X utf8 maintenance/course_repository/build_course_repository.py --verify
+git diff --check
+git status --short --branch
+```
+
+- All 59 repository tests passed, including 23 Ch3 tests. The first focused run
+  had 22 tests; exact PDF pixel matching was subsequently made a maintained test.
+- Seven new content checks were also run with the baseline figure definitions
+  loaded from `git show HEAD:maintenance/course_repository/er_figures.py` in
+  memory. All seven detected the old omissions or conflicting presentation.
+  No baseline file was restored, overwritten or committed for this check.
+- Maintained-source rebuilds equal the current notebooks. Three fresh kernels
+  loaded the published chapters. Ch3 contains only Markdown cells, so this is
+  notebook-loading verification, not a claim of new SQL execution.
+- The nine-file manifest and PDF notebook-hash provenance passed. The output
+  still contains only the previously approved teaching chapters and answer PDFs.
+- Ten main previews at widths 1440 and 390 had no page/text overflow or broken
+  images. All 38 published figures were checked for SVG bounds; Ch3 text overlap
+  checks include table text. No tested geometry failures were reported.
+- All 42 PDF pages were rendered with Poppler and inspected in overview sheets.
+  Changed figures were inspected at full figure resolution; PDF pages 4, 18,
+  24, 29 and 40 were additionally inspected at readable page resolution.
+- PDF text-token coverage, all 27 image bounds and image counts passed.
+  Decoded RGB pixels of all 27 PDF images exactly match the notebook attachments.
+- Chapter 1/2 outputs and both answer PDFs remain unchanged in the Git diff.
+  No source textbook, private record or unapproved chapter was added to Git.
+
+Notebook SHA256: `ee6e998965be30bff797ebf7a719b0a3dca2a0619f8e5ae6ac1cb8ade0675f8a`.
+PDF SHA256: `7c2a44b4b58910d2012e0f70cd091913cbacd8d160904db9d4e5f2d92cb95e0b`.
+PDF: 42 A4 pages, 27 figures, 1,556,295 bytes. PDF timestamps can change across
+re-exports; notebook equality and image-pixel preservation are separately checked.
+
+### Limits and Next Action
+
+This corrects the identified figure/data inconsistencies; it is not independent
+instructor review or a fresh sentence-by-sentence audit of the whole chapter.
+The same agent performed the edits and review. Independent data reconstructions,
+counterexamples and baseline-failure checks improve coverage but do not replace
+external review or establish student understanding.
+
+Dense PNG tables shrink on a 390-pixel phone display and need zooming. The preview
+check establishes absence of clipping and page overflow, not comfortable reading
+of every figure at that size. Real classroom projection has not been tested.
+Some PDF whitespace keeps complete figures/tables together. The older figure
+title/caption repetition is retained; removing it is outside this correction.
+
+Primary next action: the instructor reviews PDF pages 4, 18, 24, 29 and 40 for
+classroom explanation. The expected outcome is confirmation that the repaired
+columns, same-object comparisons and per-case conclusions can be explained
+directly from the figures. Completion means accepting those displays or naming
+a concrete remaining defect. Commit/push requires a new explicit instruction.
+
 ## Publication Authorization After the Audit
 
 On 2026-09-12, after receiving the completed audit below, the instructor explicitly

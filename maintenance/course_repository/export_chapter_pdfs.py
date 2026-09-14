@@ -1,4 +1,5 @@
 """Export the published notebooks without executing or modifying their cells."""
+import argparse
 import base64
 from collections import Counter
 import html
@@ -123,9 +124,14 @@ def verify_pdf(item):
 
 
 def main():
-    OUT.mkdir(parents=True, exist_ok=True)
     config = builder.load_json(builder.CONFIG_PATH)
-    items = [make_html(ch) for ch in config["published_pdf_chapters"]]
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--chapters", nargs="+", choices=config["published_pdf_chapters"],
+                        default=config["published_pdf_chapters"],
+                        help="export only these published chapters (default: all)")
+    args = parser.parse_args()
+    OUT.mkdir(parents=True, exist_ok=True)
+    items = [make_html(ch) for ch in dict.fromkeys(args.chapters)]
     (OUT / "inputs.json").write_text(json.dumps(items, indent=2), encoding="utf-8")
     subprocess.run(["node", str(builder.SOURCE_DIR / "print_chapter_pdfs.cjs")], check=True)
     results = [verify_pdf(item) for item in items]

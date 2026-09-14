@@ -15,6 +15,11 @@ current state. Here you will design a conceptual schema from stated requirements
 You need no SQL, Python, drawing application, or database installation.
 Paper is enough for the drawing exercises.
 
+The worked examples explain the figures and tables step by step. They show
+the data, what to look for, and the conclusion, without requiring you to complete
+a practice task first. Practice provides additional variations; submit only
+the work the instructor assigns.
+
 By the end, you should be able to identify entities and attributes, justify keys,
 read and draw relationship constraints, identify weak entities, and explain why
 a three-part fact may need a ternary relationship. You should also be able to
@@ -80,13 +85,19 @@ STUDENT is the type. S101, S102, and S103 are three entities in its current set.
 StudentId is an attribute; S101 is an attribute value used here to identify one
 entity. The person is not the same thing as the identifier string.
 
+The example displays all three listed properties: StudentId, Name, and Phone.
+S101 has two recorded phone values, S102 has one, and S103 has none recorded.
+The invented phone strings are the same ones used in Section 3. Semicolons
+separate values for reading, not as a proposed SQL storage format.
+
 **Prediction:** Adding S104 without changing any attribute definitions changes
 the entity type, the current entity set, or both?
 
 ### Read the Diagram
 
-The displayed set grows from three students to four. The type still describes
-students using the same properties. This is the Ch2 distinction between the
+The figure shows the original three students. Adding S104 would make four;
+the type would still describe students using the same properties.
+This is the Ch2 distinction between the
 schema and a state, now applied to entities.
 
 A rectangle in an ER schema names an entity type, not one particular student.
@@ -142,6 +153,34 @@ Count S101's two enrollment facts in Section 6: the derived value is 2.
 If one enrollment is removed, this count becomes 1. Its value depends on the
 current relationship set, not on the number of phones.
 
+### Worked Example: Two Contacts for One Student
+
+Keep the same invented numbers for S101, but now label each contact:
+
+| Student | Label | PhoneNumber |
+|---|---|---|
+| S101 | home | 02-0000-0101 |
+| S101 | mobile | 02-0000-0102 |
+
+Both rows describe the same student. Each row supplies one Contact value with
+two components. This contact-list variant replaces the bare Phone list; it does
+not require two redundant lists in the core design.
+
+**Prediction:** How many student entities, Contact values, and components per
+Contact value are shown?
+
+### Read the Contact Example
+
+There is one student with two Contact values. The home value contains Label
+and PhoneNumber; the mobile value contains those same two components.
+The double oval expresses several values. The component ovals express the
+structure of each value. Neither property implies the other.
+
+| If the requirements change | Symbol that changes | What stays the same |
+|---|---|---|
+| Keep at most one labeled contact | Contact becomes a single oval. | Each value still has Label and PhoneNumber. |
+| Keep several numbers but no labels or components | Use a double Phone oval with no component ovals. | Several values are still allowed. |
+
 **Practice:** Draw Contact for two invented (Label, PhoneNumber) pairs.
 Then change the requirements so that only one phone may be recorded per student.
 Check which multiplicity symbol changes; composite structure and multiplicity
@@ -182,6 +221,21 @@ An entity type may have more than one independent key if the requirements
 guarantee each. This ER presentation does not select a "primary key";
 that choice belongs to the relational model and mapping chapters.
 
+### Worked Example: Find One Room
+
+Use the same three rooms: A/101, A/102, and B/101. Read each lookup in the
+next table independently. A slash separates Building and RoomNo for reading.
+
+**Prediction:** How many rooms remain when only 101 is supplied? How many remain
+when both A and 101 are supplied?
+
+### Read the Room Lookup
+
+RoomNo 101 leaves two candidates. Building A also leaves two. Together A and
+101 leave exactly one. This shows why both components are needed in this
+example. The rule that room numbers are unique within buildings establishes
+the guarantee for future states; three rows alone cannot establish that rule.
+
 **Practice:** Suppose rooms receive a new RoomId unique across all buildings,
 while the Location rule remains. Draw both valid keys. Check that you have not
 turned two independent keys into one larger composite key.
@@ -214,6 +268,21 @@ not evidence of a score of zero.
 "No phone recorded" likewise does not prove that a student owns no phone.
 A conceptual explanation can distinguish reasons for missing information.
 The later SQL chapter will discuss what SQL NULL operations actually do.
+
+### Worked Example: Missing Is Not Zero
+
+Compare four separate fictional cases. A recorded grade of zero is known data.
+An unfinished grade and two absent permit numbers require different explanations.
+
+**Prediction:** Which case supports a numeric zero? Which case establishes that
+no permit exists, rather than leaving that question unanswered?
+
+### Read the Missing-Value Cases
+
+Only the marked assessment supports Grade = 0. Unfinished marking does not.
+A confirmed absence of a permit makes its number inapplicable. An unchecked
+permit status leaves open whether a number exists. The table supplies these
+reasons explicitly; an empty entry by itself does not distinguish them.
 
 **Practice:** Check proposed Credits values 1, 6, 0, and 3.5 against both
 conditions. For an absent advisor name, write two different possible reasons
@@ -251,6 +320,34 @@ Does S103's absence mean that S103 must be deleted from STUDENT?
 There are three enrollment instances; two involve S101 and none involves S103.
 The requirements allow students with no enrollment, so S103 may remain.
 The relationship set is separate from the entity set.
+
+### Worked Example: Trace the Three Enrollments
+
+The next picture draws the same three enrollment facts as lines between
+individual objects. These labeled boxes are not entity-type rectangles in
+an ER schema. Grade is deliberately left out of this connection-only view.
+One student may attend several sections, and one section may contain several
+students. This is a **many-to-many (M:N)** relationship; Section 7 compares it
+with the other maximum-cardinality patterns.
+
+**Prediction:** Count the lines touching S101, S103, and DB101 / 1.
+
+### Read the Enrollment Lines
+
+S101 touches two lines, S103 touches none, and DB101 / 1 touches two.
+The unconnected student and DB101 / 2 still exist. A student can share a section
+with another student while also attending another section: this is an allowed
+M:N state. The requirements, not this picture alone, define the maximum ratio.
+
+| Isolated change to the original facts | All enrollment instances | S101 count | S103 count |
+|---|---:|---:|---:|
+| No change | 3 | 2 | 0 |
+| Remove S101's CS102 / 1 enrollment | 2 | 1 | 0 |
+| Instead add S103's DB101 / 2 enrollment | 4 | 2 | 1 |
+
+The second row also explains a derived attribute: S101's EnrollmentCount
+changes from 2 to 1 without changing S101's identity or recorded phones.
+The third row starts from the original three facts, not from the second row.
 
 **Practice:** Add an enrollment linking S103 to DB101 / 2, with the grade not
 yet known. Recount instances and each student's participation. Check that you
@@ -291,6 +388,29 @@ Section 12 explains identification; Section 15 combines the symbols.
 A small state with one instructor and one section does not prove
 the relationship is 1:1; permitted future states matter.
 
+### Worked Example: One Card or Several Sections
+
+Compare two separate snapshots. In the card variant, S101 holds K10 and S102
+holds K11; S103 holds no card. In the teaching snapshot, I1 teaches DB101 / 1
+and DB101 / 2, while I2 teaches CS102 / 1. Each line represents one recorded fact.
+
+**Prediction:** Which objects have two lines? Would adding S102-K10 pass the
+card maximum? Would adding I2-DB101 / 1 pass the teaching maximum?
+
+### Read the Two Snapshots
+
+Only I1 has two lines. Both proposed additions fail: K10 would have two students,
+and DB101 / 1 would have two instructors. I1's two sections are allowed.
+
+| Pattern | Follow one object on the left | Then follow one object on the right |
+|---|---|---|
+| HOLDS, 1:1 variant | S101 has one card; at most one is allowed. | K10 has one student; at most one is allowed. |
+| TEACHES, 1:N | I1 has two sections; several are allowed. | DB101 / 1 has one instructor; at most one is allowed. |
+| ENROLLS_IN, M:N | S101 has two sections; several are allowed. | DB101 / 1 has two students; several are allowed. |
+
+Zero lines is not decided by a maximum alone. These snapshots show permitted
+counts; the next section supplies minimum participation requirements.
+
 **Practice:** For a team-teaching variant, allow several instructors per section
 while each instructor may still teach several sections. Redraw only the maximum
 ratio. Check your drawing using two instructors connected to the same section.
@@ -319,6 +439,24 @@ every current state. It merely permits one. Total participation does not by
 itself make an entity weak: a CARD with its own globally unique CardNo can
 require an owner without depending on the owner's key for identification.
 
+### Worked Example: Change One Fact at a Time
+
+Begin with the original assignments: I1 teaches DB101 / 1 and DB101 / 2;
+I2 teaches CS102 / 1. Test each proposal separately against those facts.
+Keep all three sections and their owning courses unless the proposal says otherwise.
+
+**Prediction:** Which proposal fails because a count becomes zero? Which fails
+because a count becomes two? Does changing a teacher necessarily break the rule?
+
+### Read the Assignment Changes
+
+Removing DB101 / 2's only teaching assignment gives it zero instructors and
+fails the minimum. Adding I2 to DB101 / 1 without removing I1 gives that section
+two instructors and fails the maximum. Replacing I1 with I2 on DB101 / 2 leaves
+one instructor there, so it passes this relationship's constraints. Adding I3
+without any assignment also passes because instructors may teach none.
+These are checks of completed proposed states, not a lesson about SQL update order.
+
 **Practice:** Change the rule to require every instructor to teach at least
 one section, without changing the maximum counts. Mark the line that changes.
 Then decide whether adding I3 alone would still be legal and cite the new rule.
@@ -344,6 +482,22 @@ It says nothing about ENROLLS_IN or the number of students.
 Do not copy the positions of 1 and N from the maximum-ratio diagram into
 min-max pairs. The two notations place their counts differently.
 UML also has its own placement convention; do not silently mix it into this ER diagram.
+
+### Worked Example: Count First, Then Choose the Label
+
+Inspect I1 and DB101 / 1 in the unchanged teaching snapshot. I1 has two
+TEACHES instances. DB101 / 1 has one. The next table translates the same
+requirements between the two binary notations.
+
+**Prediction:** Is (1,1) placed beside INSTRUCTOR or SECTION when one section
+must have exactly one instructor?
+
+### Read the Notation Comparison
+
+Place (1,1) beside SECTION: that is the entity whose participation is counted.
+In maximum-ratio notation, the corresponding upper-bound 1 is near INSTRUCTOR,
+across the relationship from the section being inspected. The SECTION double
+line supplies the minimum. Do not move labels without translating their meaning.
 
 **Practice:** An instructor must teach at least one and at most three sections.
 Write the new pair beside INSTRUCTOR and test counts 0, 1, 3, and 4.
@@ -375,6 +529,32 @@ not two different student types.
 
 If the application forbids self-mentoring or cycles, write those as additional
 rules. The displayed min-max constraints alone do not prohibit either.
+Two roles do not by themselves require two different students. For example,
+(S101, S101) would use S101 in both roles; forbidding it needs a separate rule.
+
+### Worked Example: Follow the Named Roles
+
+Display the same three students twice, once for each role. The two recorded
+facts remain S101 mentoring S102 and S101 mentoring S103. A repeated StudentId
+refers to the same student, not to a second entity.
+
+**Prediction:** Does S101 appear as a mentee in either fact? If the first pair
+were reversed, whose mentor participation would increase?
+
+### Read the Role Columns
+
+S101 has two participations as mentor and zero as mentee. Replacing the first
+fact with S102 mentoring S101 would give S102 one mentor participation and
+S101 one mentee participation. The order of the named roles changes the meaning.
+
+| Student | Mentor participations in the original facts | Mentee participations in the original facts |
+|---|---:|---:|
+| S101 | 2 | 0 |
+| S102 | 0 | 1 |
+| S103 | 0 | 1 |
+
+This is one STUDENT set participating in two roles of one binary relationship,
+not two entity types and not a ternary relationship.
 
 **Practice:** Add S102 as mentor of S103 and inspect S103's mentee participation
 count. Separately consider S101 mentoring S101. Identify which question can be
@@ -403,6 +583,29 @@ The argument depends on these M:N facts. It does not establish that every
 relationship attribute must always remain on a relationship: under suitable
 1:N or 1:1 constraints, an attribute can be placed on an entity without losing
 which relationship instance it describes.
+
+### Worked Example: Read a Grade at the Intersection
+
+Arrange the original three facts with students on rows and sections on columns.
+The entries show grades only where an enrollment exists. This display is for
+reasoning; it is not a proposed relational schema.
+
+**Prediction:** Read S101's row and then DB101 / 1's column. Does either contain
+only one grade that could describe all its enrollments?
+
+### Read the Grade Matrix
+
+S101's row has 80 and 90. DB101 / 1's column has 80 and 70. Choose both a row
+and a column to locate a grade: S102 together with DB101 / 1 gives 70.
+Putting just one grade on either entity would lose which enrollment it describes.
+
+| State of S103 and DB101 / 2 | Relationship instance exists? | Grade information |
+|---|---|---|
+| Original facts | No | No grade for this nonexistent enrollment |
+| Separate variant: S103 enrolls, marking unfinished | Yes | Unknown, not zero |
+| Same variant after a recorded grade of 0 | Yes | Known grade of 0 |
+
+These three situations must not be represented as though they meant the same thing.
 
 **Practice:** Suppose each enrollment records a submission status, such as
 "submitted" or "not submitted." Place the attribute and construct two facts
@@ -454,6 +657,8 @@ Do not create relational tables yet.
 Consider orders for a fictional campus store. OrderId identifies an order.
 Each order numbers its items from 1. LineNo is unique within that order;
 an item has no separate ItemId. Quantity is recorded but does not identify an item.
+Product is the recorded product name in this small example, not a separate
+product entity or an identifier for the order item.
 
 | OrderId | LineNo | Product | Quantity |
 |---|---:|---|---:|
@@ -470,10 +675,28 @@ They are different order items because their owners differ. Follow three steps:
 identify the order, find LineNo within that order, then read the item's properties.
 The full identifying information is (OrderId, LineNo). LineNo is only a partial key.
 A fourth item with O10 / 1 would violate the stated identification rule.
+The Product and Quantity ovals both attach to ORDER_ITEM. The table's OrderId
+comes from the owning ORDER; it is not an extra attribute oval on ORDER_ITEM.
 
 The double rectangle marks ORDER_ITEM; the double diamond marks CONTAINS.
 Every item must participate in CONTAINS, but an order may have no items while
 being prepared. That optional order participation is an explicit example rule.
+
+### Worked Example: Find the Owner Before the Item
+
+Use exactly the three order items above. Compare the candidates remaining
+when an item is described by its line number, its product and quantity,
+its owner, or its owner together with its line number.
+
+**Prediction:** Can the description "Notebook, quantity 2, line 1" distinguish
+O10 / 1 from O20 / 1?
+
+### Read the Item Lookup
+
+It cannot: both items have those three properties. Owner O10 removes O20 / 1
+from consideration; LineNo 1 then distinguishes O10 / 1 from O10 / 2.
+That is why the owner's identity and partial key are needed together.
+Changing Quantity on a proposed second O10 / 1 would not create a new identity.
 
 **Practice:** Add O20 / 2, then try adding another O10 / 2 with a different quantity.
 Explain why changing Quantity cannot repair a duplicate identity.
@@ -527,6 +750,8 @@ The complete combination is (OrderId, LineNo, NoteNo).
 ORDER_ITEM is both a weak entity and an owner of ITEM_NOTE. Both weak types
 participate totally in their own identifying relationships. A parent item can
 have zero notes; requiring a note's owner does not require every item to have notes.
+This diagram shows identifying attributes only. Product, Quantity, and the
+note text are omitted here to focus on the chain of owners.
 
 **Practice:** Add note 2 to O10 / 1. Compare its identity with note 2 on O20 / 1.
 Check every level rather than looking only at the nearest partial key.
@@ -601,9 +826,13 @@ instructor teaches both?
 
 ### Read the Diagram
 
-No. Name equality is not a guaranteed identity rule. The refined example explicitly
-assigns I1 to both DB101 sections; I2 teaches CS102 / 1. Those assignments, not
-the repeated name alone, establish who teaches what.
+No. Name equality is not a guaranteed identity rule. Read the figure from top
+to bottom. The first table describes the two DB101 sections. The next table
+records an independently identified instructor, I1, whose name is Morgan.
+The final table explicitly assigns I1 to those same two sections. Those supplied
+identity and assignment facts, not the repeated name alone, establish who teaches
+what. The name is still present on INSTRUCTOR. Other sections, including
+CS102 / 1, are outside this two-section comparison.
 
 Use singular nouns for types, descriptive verbs for relationships, and role names
 where needed. A noun in a requirement is a candidate for analysis, not an automatic
@@ -651,6 +880,25 @@ way: additional constraints or a different conceptual representation may allow i
 The diamond has three undirected connections. It describes a simultaneous fact,
 not a flow from student to instructor to course. Repeated approvals for the same
 triple at different times would require an extended model.
+
+### Worked Example: Two Approval Sets with the Same Pairs
+
+Call the original three approvals state A. For state B, retain all of them
+and add (S101, I1, CS102). Compare the full three-part facts and then the pairs
+that can be read from each state. This comparison uses the core rules, before
+the extra restrictions introduced in Sections 14.1-14.3.
+
+**Prediction:** Does adding that approval create any new student-instructor,
+student-course, or instructor-course pair?
+
+### Read the Two Approval States
+
+No new pair appears. S101/I1 already occurs in record 1; S101/CS102 in record 2;
+I1/CS102 in record 3. Yet state A has three approvals and state B has four.
+The two states answer the question about (S101, I1, CS102) differently.
+The pairwise lists alone cannot tell which answer is correct.
+This is a counterexample under these requirements, not a claim that every
+ternary relationship in every model must be stored in one particular way.
 
 **Practice:** Add exactly the missing approval to the complete recorded set.
 Check whether any new pairwise combination appears. Compare the two full sets
@@ -731,6 +979,8 @@ separately against the original three records, not after the preceding addition.
 The first fails the pair rule but leaves I2 with two approvals.
 The second uses a new pair but gives I1 three approvals.
 The third uses a new pair and leaves I2 with two approvals, so it passes both.
+Each figure row keeps the proposed addition, both checks, and the combined
+decision together. The count is recomputed from the original records each time.
 
 A pair-based restriction and a participation bound must both be retained when
 both are requirements. We show the two diagrams separately and state their
@@ -886,6 +1136,23 @@ the prose version would instead use (1,1). Do not silently merge the two.
 A student with no department passes the figure's version and fails the prose version.
 For this exercise, identify which version you are checking.
 
+### Worked Example: A Chair Is Not Every Employee
+
+Use the invented C-A, D1, D2, I1, I2, and I3 snapshot just described.
+The next table lists the organization facts explicitly. It leaves out appointment
+dates and other attributes to isolate the relationships being counted.
+
+**Prediction:** I3 appears in EMPLOYS but not CHAIR. Which minimum must I3 satisfy?
+Does I3 have to become a chair to satisfy it?
+
+### Read the Organization Facts
+
+I3 must have one employing department and does: D1. I3 may chair zero departments,
+so the absent CHAIR fact is permitted. D1 and D2 must each have a chair, and
+the table supplies I1 and I2 respectively. Count both directions separately.
+The sample chooses chairs who work in their departments, but CHAIR and EMPLOYS
+do not by themselves enforce that cross-relationship condition.
+
 **Practice:** Give I3 no department. Test EMPLOYS without confusing it with CHAIR.
 Then redraw HAS for the prose requirement and state the one changed minimum.
 Attach a start date to a CHAIR instance, not to all of an instructor's roles.
@@ -920,6 +1187,22 @@ relationship types in Figure 3.20. Combine repeated entity types into six
 rectangles to assemble the complete design. Add the attribute inventory, Grade
 on TAKES, and CStartDate on CHAIR. These original layouts explain the source
 without reproducing its page image.
+
+### Worked Example: Five Distinct Students Become Four
+
+Keep Q101's identity, course DB101, and instructor I1 fixed. Initially U1 through
+U5 take Q101. Now remove only the U5/Q101 TAKES fact; U5 can remain a student.
+
+**Prediction:** Does keeping U5 in STUDENT keep Q101's TAKES count at five?
+
+### Read the Enrollment Change
+
+No. The count is four because only U1 through U4 still participate in TAKES
+with Q101. The student entity set and the relationship set answer different
+questions. Duplicating U1/Q101 on paper cannot create another distinct student
+or another distinct instance of the same relationship fact.
+The earlier core would allow a section with four enrollments, because it has
+no minimum of five. The change in outcome comes from the different requirements.
 
 **Practice:** Compare the state with four students against the earlier core's
 ENROLLS_IN rule. Explain why it is legal there but not in this UNIVERSITY example.

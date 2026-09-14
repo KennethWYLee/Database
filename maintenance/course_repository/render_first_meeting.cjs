@@ -40,12 +40,24 @@ const verified = JSON.parse(fs.readFileSync(path.join(output, 'verification.json
         }
         if (name === 'ch03') {
           for (const [label, heading] of [
+            ['entities', '2. Entity, Entity Type, and Entity Set'],
             ['weak', '12.1. Order Items: the Same Number under Different Owners'],
+            ['enrollment-lines', 'Worked Example: Trace the Three Enrollments'],
+            ['contact-example', 'Worked Example: Two Contacts for One Student'],
+            ['grade-matrix', 'Worked Example: Read a Grade at the Intersection'],
+            ['changed-assignment', 'Worked Example: Change One Fact at a Time'],
+            ['two-states', 'Worked Example: Two Approval Sets with the Same Pairs'],
+            ['refinement', '13. Refine a Design from Its Requirements'],
             ['ternary', '14.1. Section 3.9.2: Fix Two Participants before Reading a 1'],
-            ['university', '16. Section 3.10: A UNIVERSITY Database']
+            ['both-checks', '14.3. Use Both Checks When Both Rules Are Required'],
+            ['university', '16. Section 3.10: A UNIVERSITY Database'],
+            ['conflicts', '16.4. Some Uniqueness Rules Need More Than a SecId Oval']
           ]) {
             await page.getByRole('heading', {name: heading, exact: true}).scrollIntoViewIfNeeded();
             await page.screenshot({path: path.join(output, `ch03-${width}-${label}.png`)});
+            const diagram = page.getByRole('heading', {name: heading, exact: true}).locator('xpath=following::img[1]');
+            await diagram.evaluate(image => image.scrollIntoView({block: 'start'}));
+            await page.screenshot({path: path.join(output, `ch03-${width}-${label}-figure.png`)});
           }
         }
         await page.close();
@@ -81,13 +93,13 @@ const verified = JSON.parse(fs.readFileSync(path.join(output, 'verification.json
               failures.push({figure: svg.parentElement.id, text: text.textContent, type: 'outside ER shape'});
           }
         }
-        if (svg.querySelector('.er-node')) {
+        if (svg.querySelector('.er-node') || svg.parentElement.id.startsWith('opening_ch03_')) {
           const labels = Array.from(svg.querySelectorAll('text'));
           for (let i=0; i<labels.length; i++) for (let j=i+1; j<labels.length; j++) {
             const a=labels[i].getBBox(), b=labels[j].getBBox();
             if (a.x < b.x+b.width && a.x+a.width > b.x && a.y < b.y+b.height && a.y+a.height > b.y)
               failures.push({figure: svg.parentElement.id, text: labels[i].textContent,
-                other: labels[j].textContent, type: 'overlapping ER labels'});
+                other: labels[j].textContent, type: 'overlapping figure text'});
           }
         }
       }
