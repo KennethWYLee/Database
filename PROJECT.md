@@ -3,9 +3,45 @@
 本檔只記錄資料庫管理課程的事實、固定決策、權威文件、核准用語、限制與
 未解問題。通用工作規則見 `AGENTS.md`；`CLAUDE.md` 是其位元一致鏡像。
 
-- 最後更新日期：2026-09-14
+- 最後更新日期：2026-09-17
 
 ## 最新範圍與授課順序
+
+2026-09-17 Ch3新版PDF發布授權：教師要求commit and push，並明確同意
+ch03_redesigned.pdf加入Git。本次僅新增公開output/pdf/ch03_redesigned.pdf，
+以精確路徑加入.gitignore例外並在README提供入口；原ch03.pdf及notebook不變。
+以.gitattributes將此PDF明確標為binary，避免文字換行轉換並保留原始位元。
+發布沿用已驗證70頁成品，SHA256為
+`b54e5d862a921a15d2f7145e48c8e9d89544359f2c8f081de9502b33e1907bc7`。
+維護來源、詳細查核、48頁備份與其他output仍留本機，不擴大其公開範圍。
+本次授權取代下方新版PDF尚未授權發布的歷史狀態；不代表notebook已同步。
+提交前fetch確認HEAD與origin/main一致，重新執行23項檢查；發布不重建或改寫PDF。
+主要下一步仍為依序審閱第53-59頁借閱案例及四類錯誤，確認課堂講解是否順暢。
+
+2026-09-16 Ch3觀念查核與整合案例：教師確認圖表式方向，要求先核對課本ER觀念，
+再支援三種預計考試方向：依描述畫ERD、依描述修正錯誤ERD、依ERD解釋關係。
+新版課堂PDF現70頁，58組向量圖、67個表格；補強8頁觀念及14頁案例，不改配分、
+週次或必交作業。範圍仍為3.1-3.7、3.9.1-3.9.2、3.10；3.8 UML與Ch4 EER分開。
+已建立逐項來源與頁碼對照，不宣稱整本書或所有習題逐句查核；正式集合符號
+在本份圖解教材中保留概念說明，不以完整數學推導取代圖解。
+原57頁Intro DB/ch03.pdf及notebook不變，先前48頁重設草稿另行備份。
+23項檢查通過，70頁均已render檢視；修正連線穿過無關學生框及比率標籤貼線。
+新來源、查核與PDF仍依既有ignore僅留本機；本次未stage、commit或push。
+下一步優先看第53-59頁借閱案例，確認能從R1-R5逐項畫出完整ERD並解釋四類錯誤，
+再決定是否同步notebook及發布。這項新考試方向要求取代下方只看弱實體的建議。
+詳見[觀念對照](maintenance/course_repository/ch03_redesign/concept_coverage.md)與
+[重設紀錄](maintenance/course_repository/ch03_redesign/README.md)。
+
+2026-09-16 Ch3課堂版重新設計：教師回報文字過多、重點不明，指定參考IoT的
+Week2_main_layout_sample.pdf並先保留舊版。原Intro DB/ch03.pdf與notebook均未
+覆寫，另備份原PDF；新版在output/pdf/ch03_redesigned.pdf，目前48頁，英文重點、
+向量ER圖與小表格，每頁收束一個結論。原教學範圍、評量及完整練習不變，詳細
+閱讀與練習仍留原notebook。維護來源在maintenance/course_repository/ch03_redesign/，
+來源與新版PDF依既有ignore規則只留本機，不自動發布，也未commit/push。
+12項新版檢查通過並檢視48頁；沒有實際投影或學生理解測試，不宣稱一堂能教完。
+下一步優先依序看第19至22頁，確認重複編號、owner查找與ER符號能順暢講解，
+再決定是否替換公開PDF或同步notebook。此次課堂回報取代先前只審第27頁的建議。
+詳見[重設紀錄](maintenance/course_repository/ch03_redesign/README.md)。
 
 2026-09-14 本批發布授權：教師要求commit and push，範圍包含累積的Ch3教學圖文、
 weak entity重點式說明、Ch3／Ch4解答修正及相關維護程式與檢查紀錄。

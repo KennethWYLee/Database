@@ -1,6 +1,7 @@
 # This course archive is private by default. Add reviewed public files explicitly.
 /*
 !/.gitignore
+!/.gitattributes
 !/AGENTS.md
 !/CLAUDE.md
 !/PROJECT.md
@@ -17,6 +18,13 @@
 !/Intro DB/ch03_answer.pdf
 !/Intro DB/ch04_answer.pdf
 # Other notebooks and under_revision stay local until explicitly released.
+
+# Approved Ch3 visual teaching PDF; other outputs and backups stay local.
+!/output/
+/output/*
+!/output/pdf/
+/output/pdf/*
+!/output/pdf/ch03_redesigned.pdf
 
 !/maintenance/
 /maintenance/*
