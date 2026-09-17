@@ -442,7 +442,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
         self.assertEqual(builder.expected_files(config),
                          {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb",
-                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_answer.pdf", "ch04_answer.pdf"})
+                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_redesigned.pdf", "ch03_answer.pdf", "ch04_answer.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
         import subprocess
         allowed = {"Intro DB/" + name for name in builder.expected_files(config)}

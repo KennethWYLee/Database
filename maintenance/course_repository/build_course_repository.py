@@ -765,6 +765,7 @@ def expected_files(config: dict) -> set[str]:
     files = {"syllabus.md", *(notebook_relative(chapter) for chapter in all_chapters(config))}
     files.update(chapter + ".pdf" for chapter in config.get("published_pdf_chapters", []))
     files.update(config.get("published_answer_pdfs", {}))
+    files.update(config.get("published_supplemental_pdfs", []))
     if any(not c.get("prescribed_textbook") for c in all_chapters(config)):
         files.add("under_revision/README.md")
     return files

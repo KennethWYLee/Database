@@ -31,7 +31,7 @@ released when ready.
 
 PDF copies: [Ch1](Intro%20DB/ch01.pdf) | [Ch2](Intro%20DB/ch02.pdf) | [Ch3](Intro%20DB/ch03.pdf).
 
-Ch3 visual teaching edition: [Diagrams and worked ERD examples (PDF)](output/pdf/ch03_redesigned.pdf).
+Ch3 visual teaching edition: [Diagrams and worked ERD examples (PDF)](Intro%20DB/ch03_redesigned.pdf).
 The original Ch3 PDF and notebook remain available above.
 
 Ch3 exercise answers: [Questions 3.1-3.35 (PDF)](Intro%20DB/ch03_answer.pdf).

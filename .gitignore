@@ -15,16 +15,12 @@
 !/Intro DB/ch01.pdf
 !/Intro DB/ch02.pdf
 !/Intro DB/ch03.pdf
+!/Intro DB/ch03_redesigned.pdf
 !/Intro DB/ch03_answer.pdf
 !/Intro DB/ch04_answer.pdf
 # Other notebooks and under_revision stay local until explicitly released.
 
-# Approved Ch3 visual teaching PDF; other outputs and backups stay local.
-!/output/
-/output/*
-!/output/pdf/
-/output/pdf/*
-!/output/pdf/ch03_redesigned.pdf
+# Outputs and backups stay local; the approved visual PDF is in Intro DB.
 
 !/maintenance/
 /maintenance/*

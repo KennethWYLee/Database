@@ -3,6 +3,7 @@
   "repository_version": "2026.09.10-public-ch01-ch03",
   "published_chapters": ["ch01", "ch02", "ch03"],
   "published_pdf_chapters": ["ch01", "ch02", "ch03"],
+  "published_supplemental_pdfs": ["ch03_redesigned.pdf"],
   "published_answer_pdfs": {
     "ch03_answer.pdf": {
       "notebook_sha256": "a9e7ea15ddc5662e0cf59ed5fdd9fad3ee0fd24ac25be099161debd597daaabf",
