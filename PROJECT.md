@@ -7,6 +7,30 @@
 
 ## 最新範圍與授課順序
 
+2026-09-17 教師進一步授權Ch4教材commit/push。本次發布範圍為
+`Intro DB/ch04_redesigned.pdf`、首頁入口、公開allow-list、課程檔案清單及相應測試。
+PDF內容維持已驗證的43頁，SHA256為
+e593c6a054ae9870eb88949a6aad939ef5d5390e9b4a516035ac41b78f4d15f5。
+維護來源、QA、課本及舊Ch4 notebook仍保持本機ignored，不隨本次提交公開。
+下段的「未授權發布」狀態已由本次授權取代；實際同步結果以Git紀錄為準。
+發布檢查修正獨立PDF被誤認為notebook匯出的既有問題，29項課程測試通過；
+PDF統一以Git binary處理，不更改PDF內容。
+
+2026-09-17 教師要求依Ch3目前做法完成Ch4教學。新增本機審閱版
+`Intro DB/ch04_redesigned.pdf`：43頁英文、27幅向量圖、55張小表格，涵蓋核准的
+4.1-4.7；以背景、規則、圖、資料及錯／對比較連續說明。維護來源及逐節來源對照在
+`maintenance/course_repository/ch04_redesign/`，QA在對應output/ch04_redesign。
+Ch3各版本、notebook與既有Ch4解答均未改；課綱、配分及週次未改。本次沒有新增
+notebook或SQL作業；舊under_revision/ch04.ipynb不是現用課本的EER教材。
+43頁建置、資料與圖形限制檢查、文字邊界／重疊檢查及Poppler渲染通過，已看全部
+頁面總覽與複雜圖放大。大學案例明確縮小至教學／研究角色與三個關係，並非完整
+複製Figure 4.9；UML圖採OMG 2.5.1空心三角與明示限制，課本差異已標示。
+教材尚待教師審閱，不能宣稱已經課堂驗證。新PDF、來源與QA維持ignored，未更動
+公開allow-list，未commit/push。主要下一步改為審閱14-20頁的shared subclass與
+category比較；原因是本次已完成Ch4客觀製作檢查，現在需確認BOTH與EITHER的圖例
+能清楚講解。完成條件：能從資料解釋P1為何不能當assistant，以及partial category
+為何允許未選入OWNER的P2。下方製作Ch4前的建議保留為歷史紀錄。
+
 2026-09-17 教師要求將新版Ch3 PDF移到課程資料夾。目前正式路徑為
 Intro DB/ch03_redesigned.pdf，與原ch03.pdf並列；README、.gitignore、PDF產生程式
 及課程建置檔案清單已同步，舊output/pdf路徑不保留第二份現行檔。

@@ -442,7 +442,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
         self.assertEqual(builder.expected_files(config),
                          {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb",
-                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_redesigned.pdf", "ch03_answer.pdf", "ch04_answer.pdf"})
+                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_redesigned.pdf", "ch04_redesigned.pdf", "ch03_answer.pdf", "ch04_answer.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
         import subprocess
         allowed = {"Intro DB/" + name for name in builder.expected_files(config)}
@@ -571,6 +571,21 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertNotIn("ch04.ipynb", builder.expected_files(config))
         self.assertNotIn("ch04.pdf", builder.expected_files(config))
         self.assertNotIn("ch04", [c["id"] for c in builder.all_chapters(config)])
+
+    def test_standalone_teaching_pdfs_do_not_require_notebooks(self):
+        import fitz
+        config = builder.load_json(builder.CONFIG_PATH)
+        home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertEqual(set(config["published_supplemental_pdfs"]),
+                         {"ch03_redesigned.pdf", "ch04_redesigned.pdf"})
+        for name, pages in [("ch03_redesigned.pdf", 60), ("ch04_redesigned.pdf", 43)]:
+            self.assertIn(f"(Intro%20DB/{name})", home)
+            self.assertFalse(builder.safe_target(name).with_suffix(".ipynb").exists())
+            with fitz.open(builder.safe_target(name)) as pdf:
+                self.assertEqual(len(pdf), pages)
+                self.assertEqual(pdf.metadata["author"], config["instructor"])
+                self.assertEqual(pdf.embfile_count(), 0)
+        builder.verify_content(config)
 
     def test_answer_release_rejects_unsafe_names_and_missing_hashes(self):
         original = builder.load_json(builder.CONFIG_PATH)

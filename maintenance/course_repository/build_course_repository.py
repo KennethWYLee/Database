@@ -870,6 +870,11 @@ def verify_content(config: dict) -> None:
                     if (not len(pdf) or sha256(path) != answer["pdf_sha256"] or
                             pdf.metadata.get("subject") != "Notebook SHA256: " + answer["notebook_sha256"]):
                         errors.append(f"Answer PDF differs from approved export: {relative}")
+                elif relative in config.get("published_supplemental_pdfs", []):
+                    # Standalone teaching PDFs are not notebook exports.
+                    if (not len(pdf) or pdf.metadata.get("author") != config["instructor"] or
+                            pdf.embfile_count()):
+                        errors.append(f"Invalid standalone teaching PDF: {relative}")
                 elif not len(pdf) or pdf.metadata.get("subject") != "Notebook SHA256: " + sha256(path.with_suffix(".ipynb")):
                     errors.append(f"Missing pages or stale notebook PDF: {relative}; rerun export_chapter_pdfs.py")
             continue
