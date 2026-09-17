@@ -7,6 +7,174 @@
 
 ## 最新範圍與授課順序
 
+2026-09-17 教師要求重新編排、減量及聚焦，並明確保留圖書館案例。
+目前ch03_redesigned.pdf為60頁，取代以下93頁版本的現行狀態；歷次紀錄保留。
+順序：1–11實體與屬性、12–21關係與限制、22–26weak entity、27–32圖書館、
+33–38三元關係、39–57UNIVERSITY、58–60總結。圖書館接續weak entity，依序呈現
+背景需求、COPY／LOAN資料、完整ERD、錯圖、四項修正及修正後總圖。
+標題改為明確概念與案例名称，每頁加單元標示；弱實體先固定COURSE／SECTION，
+再用ORDER_ITEM比較同三筆資料。33頁移出課堂PDF，但93頁原稿及全部來源保留；
+移出同名教師、巢狀備註、多owner面試、CONTACT深化與重複表格／練習等。
+新增classroom.py維護選頁、順序、標題及必要銜接；不得再宣稱刪減後包含所有
+先前延伸概念。34項檢查通過；60頁render、五張總覽及23、25、28頁放大檢視。
+正文共7,093字，最多157字／頁，未縮字級；原ch03.pdf及notebook不變。
+PDF SHA256：e65c7bab2325cd6d6a0abeeebfd085bbca3d5edca1035aa9308a24920d545b1d。
+詳細範圍及限制見maintenance/course_repository/ch03_redesign/classroom_reduction_review.md。
+本次未commit/push，未更改課綱或評量政策。下一步先連讀22–32頁，確認弱實體
+到圖書館案例的銜接清楚，能用資料指出owner、partial key及各項錯圖的修正理由。
+
+2026-09-17 教師要求ORDER_ITEM錯圖／修正圖各有獨立資料表，並延伸至重點entity。
+新增15頁表格對照，現93頁；原78頁正文與圖形像素不變，僅頁碼順延。ORDER_ITEM
+現32頁ERD、33頁表格；同三筆資料比較ItemID單獨識別與OrderId + ItemID。
+保留ItemID命名，不因截圖舊LineNo而改回；owner欄表示關係中的識別參照，不表示
+一律新增ER屬性或開始SQL mapping。Wrong指錯誤key／屬性位置／限制，不把合法
+重複值說成錯誤資料。Grade、StartDate及contact verification分開標示entity與
+relationship資料；其餘新增頁涵蓋STUDENT、ROOM、SECTION、CARD、ITEM_NOTE、
+INTERVIEW、CONTACT、INSTRUCTOR、COPY、LOAN。既有UNIVERSITY各entity表保留。
+54項檢查通過；93頁render、八張總覽及23、33、41頁放大檢視；原PDF與notebook
+雜湊不變。11,337字，最多160字／頁，未縮字級。PDF SHA256：
+3653394e12dc4896cd486311c99035e6b86df9bd3707087a56ce3a2921ad8272。
+maintained source新增entity_records.py；逐項紀錄、頁碼及來源限制見
+maintenance/course_repository/ch03_redesign/entity_records_review.md。
+未commit/push。下一步先連讀32–33頁，能用同三筆明細說明key主張錯在哪，以及
+owner如何區分兩個ItemID 1；不更動課綱、考試政策或新增必交練習。
+
+2026-09-17 教師指出INTERVIEW等範例背景不清，要求全份檢查。已讀完整78頁，
+修正39頁，保留39頁；不增加頁數或縮小字級。新增情境先說用途、人物與編號，
+改規則先明示：任職1:N/M:N、卡片數量、不同校園資料集及各項獨立變體。
+第29頁先講商品包裝備註及每項內編號，三筆資料對照weak owner；第30頁先講
+職涯中心記錄面試、學生／公司及每組內VisitNo，再看表與ERD。第38頁APPROVES
+現已改成指定批准的逐列比對，不再使用State A/B。此紀錄取代下方「尚未實作」狀態。
+50項檢查通過；78頁render、七張總覽及28–30、38頁放大檢視。原PDF與notebook
+雜湊不變，未commit/push。全份仍78頁、9,554字（抽取英文空白分詞），最多160字／頁。
+PDF SHA256：ebfb5396f84d4df1b636c85c2a433079458e23a273004f360b88f36c684480ff。
+完整逐頁紀錄見maintenance/course_repository/ch03_redesign/context_review.md。
+本次不是全書逐句來源查核，也未做學生理解實測。下一步先連讀29–30頁，確認能
+說清楚記錄用途、各編號意思與完整識別組合，不需自行補背景；既有進階內容省略
+及1:1屬性移置未涵蓋仍保留，30頁不再延伸無partial key的另一種變體。
+
+2026-09-17 教師核准將訂單明細範例欄位LineNo改名為ItemID（大小寫固定）。
+適用於ch03_redesigned第27–29頁的表格、ERD、說明及後續同一案例；ItemID仍為
+同一訂單內唯一的partial key，不是全域識別碼；完整識別為OrderId + ItemID。
+原版PDF、notebook及歷史紀錄不回溯改寫。本次未commit/push。
+
+2026-09-17 UNIVERSITY依教師新指示改為圖書館案例的需求／錯圖／修正形式。
+現78頁：41背景；42–43需求R1–R9；44完整錯誤關係圖；45–53原資料；54–59六組
+錯圖與修正（SecId、TEACHES、Grade、至少五人、CHAIR可選角色、SECS多班別）；
+60以教科書Figure 3.20重繪關係正解，61保留排課反例。正解沿用課本全部九種關係、
+key與min-max；為可讀性省略多數非key實體屬性橢圓，但完整屬性值保留於資料表。
+HAS以圖的(0,1)為準，正文差異仍明示。原三張局部說明保留來源但不再輸出。
+47項檢查通過；78頁render，檢視需求、六組比較及總圖；67個保留頁正文像素不變。
+原ch03.pdf與notebook不變；本次未commit/push。APPROVES的先前討論尚未在本次
+UNIVERSITY修改中實作。下一步先檢閱54–59頁，能用每張表解釋錯誤及修正符號。
+完整紀錄與新版hash見maintenance/course_repository/ch03_redesign/README.md。
+
+2026-09-17 教師要求UNIVERSITY先講背景、完整ERD及每張表的範例資料，再談重點。
+新版72頁：41背景；42橫式完整關係圖（六種實體、九種關係、全部key及兩個關係
+屬性，其餘實體屬性於資料表呈現）；43–47全部實體欄位資料；48–51全部關係資料；
+52–55保留辨識班別、組織職務、人數限制、排課衝突四個討論。新增university.py
+維護同一組虛構資料；原67頁中的42、45、46、48、49頁移出課堂PDF，核心說明
+併入資料頁，原稿仍保留於OPTIONAL_PAGES。新增10頁、移除5頁，未增加必交作業。
+重讀教科書3.10（完整書PDF123–125／印刷92–94及圖3.20）；HAS依圖的(0,1)，
+學生U2可尚無系所，明示正文要求一系所與圖不同。排課反例改為新增Q103–Q105，
+不得暗中更改Q101、Q102；每個提案分別判斷。所有身份、聯繫資料及成績均為虛構。
+44項檢查通過（含4項保留進階來源檢查），72頁render；檢視41–60頁總覽及重點
+放大頁；59個保留頁正文像素不變。原ch03.pdf和notebook不變，未commit/push。
+PDF SHA256：7c034722452c18dcff72cd26895b458a8486545b68f1919a5eca18d14c763bf1。
+依本次新回饋，下一步先讀41–55頁：能以同一組資料將Q101連到DB101、D1、I1及
+五位學生，再解釋四項重點。尚未做實際投影或學生理解測試；詳細紀錄見
+maintenance/course_repository/ch03_redesign/README.md。以下為歷次版本紀錄。
+
+2026-09-17 教師要求刪除較不重要或使APPROVES主線複雜的slides。課堂版由74縮為
+67頁，移除舊39–42、44–45、69頁：三元weak／人工ID替代、特殊binary重建、
+eligibility、三元總筆數限制、兩限制同時檢查、重複三元讀圖。來源保留為
+OPTIONAL_PAGES且備份完整74頁，不再輸出於課堂PDF；不得再宣稱這些概念已涵蓋。
+APPROVES現34–39頁依序為背景、完整圖、參與者、三筆紀錄、pair不足、三元1。
+一般weak entity、binary min-max、畫ERD與改錯案例仍保留。課末摘要、selected來源
+範圍與目前觀念頁碼已同步；原ch03.pdf和notebook不變，未更改正式評量政策。
+40項檢查通過（36項目前成品／通用、4項保留進階來源），67頁render並檢視變動
+銜接頁；65個保留頁正文像素不變。未commit/push。PDF SHA256：
+0e03a54205bcee53baf464afb6198ac219df7e6480b361985d627783c845ee9d。
+下一步先以34–39頁確認同一組資料能講清楚三元關係及1，不再同時切換多種進階規則。
+刪減清單與檢查紀錄見maintenance/course_repository/ch03_redesign/README.md。
+
+2026-09-17 教師要求APPROVES先說背景、完整ERD與對應資料，再逐步討論細節。
+新版PDF現74頁：34背景、35完整APPROVES案例ERD（含三個key及Name/Title）、
+36學生／教師／課程資料、37原三筆批准紀錄及逐列讀法；38–45接續討論。
+案例是教師批准學生修讀課程的原創教學情境，不代表校規；批准不等於選課或成績。
+表示法變化保留原資料，新增限制的案例明示資料重設，後續限制檢查明示回到state A。
+40項檢查通過、74頁render，重點頁檢視；64個原頁正文像素不變，七個原頁修改、
+新增三頁。原ch03.pdf及notebook仍保留，未commit/push；目前來源範圍與1:1屬性移置
+未明示的限制不變。PDF SHA256：5a6007a80558a67bb0739aff8f1aa9698836060e882fe7cbec5bd8ed966d4e33。
+下一步依本次回饋改為先讀34–37頁，能將每筆批准讀成完整句子並對應ERD，再討論38頁。
+詳見maintenance/course_repository/ch03_redesign/README.md最新紀錄。
+
+2026-09-17 教師回報抽象結論不利課堂討論，要求全份改成具體問題、錯誤ERD或
+相似圖比較。已檢視71頁、調整55頁，未增加頁數或縮小字級；第27頁說明LineNo
+是訂單內明細編號而非產線，使用同一表格比較錯誤完整key與正確partial key圖。
+第28–30頁以卡片、兩筆備註、面試查找銜接；其他頁把問題連到具體資料和符號。
+37項檢查通過，71頁重新render並檢視總覽及八個放大頁；原ch03.pdf和notebook
+保持不變，未commit/push。逐頁紀錄見maintenance/course_repository/ch03_redesign/
+discussion_review.md；本次不是全書來源重查，1:1屬性移置的既有未涵蓋項仍保留。
+新版PDF SHA256：bd3cf347718f1f41ee76746379b55dbd74267ffd304146aa60421593498fcf1c。
+新課堂回饋使下一步改為連讀27–30頁：能以兩筆明細說明錯誤key與修正符號，
+再區分有全域ID的卡片和需要多層owner的備註。未增加必交練習或更動評量政策。
+
+2026-09-17 教師要求全份範例檢視：已讀新版PDF全部71頁，補強21頁且未增加頁數。
+第23、25頁直接放入同一組三筆CourseCode／SectionNo資料；第24頁區分合法的
+跨課程重複編號、錯誤的完整key主張，以及同課程不同班別重複編號的非法新增。
+後續案例優先採「具體資料、判斷、理由、對應ER符號」，保留相同資料以比較觀點。
+新增同名學生、任職限制、三元辨識、跨學期與借閱讀圖等範例；33項檢查通過，
+71頁重新render、檢視六份總覽與重點頁。原ch03.pdf及notebook保持不變，未commit/push。
+逐頁結果見maintenance/course_repository/ch03_redesign/example_review.md；此為教材
+範例檢查，不宣稱重新逐句查完教科書。下一步先以23–25頁確認能從資料說明
+合法重複、錯誤判斷、非法新增與ER符號，再繼續閱讀後續案例。
+
+2026-09-17 教師確認圖解方向：後續ERD範例優先保留相同實體、版面與既有資料，
+逐次改變一項限制或屬性位置，再用具體資料指出意義的差別；區分兩種合法畫法
+與不符合需求的錯誤畫法，不只重複相似圖片。本次先實作StartDate的接續比較，
+不宣稱其餘全部案例已重寫。
+
+2026-09-17 在第21頁1:N StartDate後新增第22頁M:N比較：保留原兩筆任職資料，
+加入I1／D2及不同日期，用兩張ERD比較EMPLOYS屬性與不適用的INSTRUCTOR屬性。
+依課本3.4.4核對；30項檢查通過，71頁均重新render，檢視新增頁及相鄰頁。
+原70頁正文像素保持不變，只有頁尾頁碼更新；weak entity現從第23頁開始。
+已同步觀念對照頁碼；原ch03.pdf及notebook不变。本次未commit/push。
+下一步比較21–22頁，確認能用I1與D1的兩個日期說明為何M:N需要任職配對。
+
+2026-09-17 Ch3弱實體段落銜接：第22–25頁以同一組三個班別，依序說明課程
+代碼與班別編號的差異、owner加partial key的辨識、ER符號及新增全域ID的反例。
+第26–30頁補上與主例子的連接，不改案例規則或教學範圍。已重查課本3.5、
+檢視九頁並通過29項檢查；仍70頁，原ch03.pdf及notebook不變。累積相對已發布
+版僅第6、14、17、19、21–30頁改變。未commit/push。下一步先連續閱讀22–25頁，
+確認同一班別的辨認方式與ER符號能連貫說明，再讀延伸例子。
+
+2026-09-17 Ch3第21頁重寫：依教師要求，以兩張ERD及I1／I2的日期表對照
+StartDate放在EMPLOYS或INSTRUCTOR，限定每位教師恰有一個現職系所；說明
+經過時間可由日期計算。移除成績、系主任與任職歷史岔題；1:1屬性移置規則
+不再於此PDF明示，已如實更新觀念對照。28項檢查通過並檢視第21頁，仍70頁；
+累積修改僅第6、14、17、19、21頁，原ch03.pdf及notebook不變。未commit/push。
+
+2026-09-17 Ch3第19頁釐清：依教師註解，新增英文表格對照mentor／mentee的
+參與次數與可連結人數，明示(min,max)不能套用先前M:N的對側讀法，並用
+S101指導S102及S103說明。27項檢查通過並檢視該頁，仍70頁；累積修改僅
+第6、14、17、19頁，其餘與已發布版本像素一致。本次未commit/push。
+
+2026-09-17 Ch3第17頁補充：依教師要求，以英文表格解釋partial／單線允許
+教師不授課、total／雙線要求每班有教師；說明partial不要求一定有人未授課，
+並區分雙線的最低參與要求與1的最高人數限制。26項檢查通過並檢視該頁；
+相較已發布版本僅第6、14、17頁改變，仍70頁。本次未commit/push。
+
+2026-09-17 Ch3第14頁補充：在STUDENT／ENROLLS_IN／SECTION圖下新增兩句英文，
+說明一位學生可選幾個section看N、一個section可有幾位學生看M。
+25項檢查通過，已檢視第14頁；相較GitHub版本僅第6、14頁像素改變，仍70頁。
+前次第6頁簡化保留，本次未commit/push。
+
+2026-09-17 Ch3第6頁簡化：依教師要求移除退選與狀態比較，只保留兩張表格：
+S101的兩筆選課紀錄，以及Student／EnrollmentCount的單列S101／2。
+維護來源重建後仍為70頁，24項檢查通過，像素比對僅第6頁改變；原ch03.pdf及
+notebook不變。本次只更新本機，未commit/push，GitHub仍為下方已發布版本。
+
 2026-09-17 Ch3新版PDF發布授權：教師要求commit and push，並明確同意
 ch03_redesigned.pdf加入Git。本次僅新增公開output/pdf/ch03_redesigned.pdf，
 以精確路徑加入.gitignore例外並在README提供入口；原ch03.pdf及notebook不變。
