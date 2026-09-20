@@ -1,13 +1,33 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.20-public-ch01-ch03",
+  "repository_version": "2026.09.20-answers-ch02-ch07",
   "published_chapters": ["ch01", "ch02", "ch03"],
   "published_pdf_chapters": ["ch01", "ch02", "ch03"],
   "published_supplemental_pdfs": ["ch03_redesigned.pdf"],
   "published_answer_pdfs": {
+    "ch02_answer.pdf": {
+      "notebook_sha256": "5f3fc5eecd8e4155c5acede056fa0d5c7a5ffb7b50eef7d2a6ae811367087044",
+      "pdf_sha256": "b5237616028a651d9fcbf491d1046d7dad8b2c62a253e2218892519321596ecd"
+    },
     "ch03_answer.pdf": {
       "notebook_sha256": "a9e7ea15ddc5662e0cf59ed5fdd9fad3ee0fd24ac25be099161debd597daaabf",
       "pdf_sha256": "effd9ad0c59a8a055c218957513443bdc732f78ffafaba177509a335adf9b066"
+    },
+    "ch04_answer.pdf": {
+      "notebook_sha256": "40f74ae7a0a307ee298b16b574801d5bd9811cc0bf58c4d521e2a33579c429b4",
+      "pdf_sha256": "39ea918d092751540690658410e44d67dce868daac7decb1c1c112b99c031adf"
+    },
+    "ch05_answer.pdf": {
+      "notebook_sha256": "27fc212034a6e62d3bdfcaab1a6d839f9fcc42079bee2f0d57993e559eb11f74",
+      "pdf_sha256": "854f6e4298cb49556432a3b6eb8d4881d5d742dab73b79ea3d2f0f4c23779234"
+    },
+    "ch06_answer.pdf": {
+      "notebook_sha256": "7ac58b50793e1b5bfe123e32a7e489d342aa2b680c46ce9986d7597040416bd5",
+      "pdf_sha256": "2c4e88f7a00a268e23f9586e46f25a5af4d9174d4c3e0f300d260d52b8854d93"
+    },
+    "ch07_answer.pdf": {
+      "notebook_sha256": "f4b8539431c09028f073d5e202d7cc6c86f16e6ee1d15dc0e564e2d9b6ae77ef",
+      "pdf_sha256": "53faa9399ff90b498155383945dfcaed2e0a01d37881f99543ae8e3f5a778853"
     }
   },
   "instructor": "WenYi Lee",
