@@ -1,5 +1,125 @@
-databases/
+# This course archive is private by default. Add reviewed public files explicitly.
+/*
+!/.gitignore
+!/.gitattributes
+!/AGENTS.md
+!/CLAUDE.md
+!/PROJECT.md
+!/README.md
+!/Intro DB/
+/Intro DB/*
+!/Intro DB/syllabus.md
+!/Intro DB/ch01.ipynb
+!/Intro DB/ch02.ipynb
+!/Intro DB/ch03.ipynb
+!/Intro DB/ch01.pdf
+!/Intro DB/ch02.pdf
+!/Intro DB/ch03.pdf
+!/Intro DB/ch03_redesigned.pdf
+!/Intro DB/ch03_answer.pdf
+# Other notebooks and under_revision stay local until explicitly released.
+
+# Outputs and backups stay local; the approved visual PDF is in Intro DB.
+
+!/maintenance/
+/maintenance/*
+!/maintenance/README.md
+!/maintenance/COURSE_PLAN.md
+!/maintenance/database_chapter_teaching_material_prompt.md
+!/maintenance/structure_migration_review.md
+!/maintenance/archive/
+/maintenance/archive/*
+!/maintenance/archive/README.md
+!/maintenance/archive/COURSES.md
+!/maintenance/archive/course_home.md
+!/maintenance/course_material_integration_report.md
+!/maintenance/pre_instructor_review_audit.md
+
+!/maintenance/chapters/
+/maintenance/chapters/*
+!/maintenance/chapters/ch01_database_introduction/
+!/maintenance/chapters/ch01_database_introduction/student_guide.md
+!/maintenance/chapters/ch02_database_architecture/
+!/maintenance/chapters/ch02_database_architecture/student_guide.md
+!/maintenance/chapters/ch03_er_model/
+/maintenance/chapters/ch03_er_model/*
+!/maintenance/chapters/ch03_er_model/student_guide.md
+!/maintenance/chapters/ch05_relational_model/
+!/maintenance/chapters/ch05_relational_model/student_guide.md
+!/maintenance/chapters/ch08_relational_algebra/
+!/maintenance/chapters/ch08_relational_algebra/student_guide.md
+!/maintenance/chapters/ch02_relational_model/
+!/maintenance/chapters/ch02_relational_model/**
+!/maintenance/chapters/ch03_introduction_to_sql/
+!/maintenance/chapters/ch03_introduction_to_sql/**
+!/maintenance/chapters/ch04_intermediate_sql/
+!/maintenance/chapters/ch04_intermediate_sql/**
+!/maintenance/chapters/ch05_advanced_sql/
+!/maintenance/chapters/ch05_advanced_sql/**
+!/maintenance/chapters/ch06_er_design/
+!/maintenance/chapters/ch06_er_design/**
+!/maintenance/chapters/ch07_normalization/
+!/maintenance/chapters/ch07_normalization/**
+!/maintenance/chapters/ch14_indexing/
+!/maintenance/chapters/ch14_indexing/**
+!/maintenance/chapters/ch15_query_processing/
+!/maintenance/chapters/ch15_query_processing/**
+!/maintenance/chapters/ch16_query_optimization/
+!/maintenance/chapters/ch16_query_optimization/**
+!/maintenance/chapters/ch17_transactions/
+!/maintenance/chapters/ch17_transactions/**
+!/maintenance/chapters/ch18_concurrency_control/
+!/maintenance/chapters/ch18_concurrency_control/**
+!/maintenance/chapters/ch19_recovery_system/
+!/maintenance/chapters/ch19_recovery_system/**
+
+!/maintenance/student_sqlite_package/
+/maintenance/student_sqlite_package/*
+!/maintenance/student_sqlite_package/build_package.py
+!/maintenance/student_sqlite_package/package_files.json
+!/maintenance/student_sqlite_package/README.md
+!/maintenance/student_sqlite_package/run_labs.py
+!/maintenance/student_sqlite_package/student_README.md
+!/maintenance/student_sqlite_package/output/
+/maintenance/student_sqlite_package/output/*
+!/maintenance/student_sqlite_package/output/sqlite_course_package.zip
+
+!/maintenance/course_repository/
+/maintenance/course_repository/*
+!/maintenance/course_repository/README.md
+!/maintenance/course_repository/build_course_repository.py
+!/maintenance/course_repository/export_chapter_pdfs.py
+!/maintenance/course_repository/print_chapter_pdfs.cjs
+!/maintenance/course_repository/repository_config.json
+!/maintenance/course_repository/notebook_figures.py
+!/maintenance/course_repository/teaching_figures.py
+!/maintenance/course_repository/opening_figures.py
+!/maintenance/course_repository/er_figures.py
+!/maintenance/course_repository/test_ch03_er.py
+!/maintenance/course_repository/ch03_er_release.md
+!/maintenance/course_repository/first_meeting_release.md
+!/maintenance/course_repository/verify_first_meeting.py
+!/maintenance/course_repository/test_second_meeting.py
+!/maintenance/course_repository/render_first_meeting.cjs
+!/maintenance/course_repository/verify_teaching_figures.py
+!/maintenance/course_repository/render_teaching_figures.cjs
+!/maintenance/course_repository/visual_teaching_review.md
+!/maintenance/course_repository/simple_examples.py
+!/maintenance/course_repository/all_chapters_teaching_review.md
+!/maintenance/course_repository/full_source_audit.md
+!/maintenance/course_repository/textbook_material_correspondence.md
+!/maintenance/course_repository/test_repository_layout.py
+!/maintenance/course_repository/review_notebook.py
+/maintenance/course_repository/output/
+
 **/__pycache__/
 **/*.pyc
 **/*.db
-.DS_Store
+**/.ipynb_checkpoints/
+
+# Current textbook Chapters 1-3 only; keep other maintained material local.
+/maintenance/chapters/*
+!/maintenance/chapters/ch01_database_introduction/
+!/maintenance/chapters/ch02_database_architecture/
+!/maintenance/chapters/ch03_er_model/
+/maintenance/student_sqlite_package/
