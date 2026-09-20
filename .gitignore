@@ -17,6 +17,11 @@
 !/Intro DB/ch03.pdf
 !/Intro DB/ch03_redesigned.pdf
 !/Intro DB/ch03_answer.pdf
+!/Intro DB/ch02_answer.pdf
+!/Intro DB/ch04_answer.pdf
+!/Intro DB/ch05_answer.pdf
+!/Intro DB/ch06_answer.pdf
+!/Intro DB/ch07_answer.pdf
 # Other notebooks and under_revision stay local until explicitly released.
 
 # Outputs and backups stay local; the approved visual PDF is in Intro DB.
@@ -87,6 +92,7 @@
 !/maintenance/course_repository/
 /maintenance/course_repository/*
 !/maintenance/course_repository/README.md
+!/maintenance/course_repository/photographed_answer_release.md
 !/maintenance/course_repository/build_course_repository.py
 !/maintenance/course_repository/export_chapter_pdfs.py
 !/maintenance/course_repository/print_chapter_pdfs.cjs
