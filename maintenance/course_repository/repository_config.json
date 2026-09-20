@@ -1,17 +1,13 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.10-public-ch01-ch03",
+  "repository_version": "2026.09.20-public-ch01-ch03",
   "published_chapters": ["ch01", "ch02", "ch03"],
   "published_pdf_chapters": ["ch01", "ch02", "ch03"],
-  "published_supplemental_pdfs": ["ch03_redesigned.pdf", "ch04_redesigned.pdf"],
+  "published_supplemental_pdfs": ["ch03_redesigned.pdf"],
   "published_answer_pdfs": {
     "ch03_answer.pdf": {
       "notebook_sha256": "a9e7ea15ddc5662e0cf59ed5fdd9fad3ee0fd24ac25be099161debd597daaabf",
       "pdf_sha256": "effd9ad0c59a8a055c218957513443bdc732f78ffafaba177509a335adf9b066"
-    },
-    "ch04_answer.pdf": {
-      "notebook_sha256": "40f74ae7a0a307ee298b16b574801d5bd9811cc0bf58c4d521e2a33579c429b4",
-      "pdf_sha256": "39ea918d092751540690658410e44d67dce868daac7decb1c1c112b99c031adf"
     }
   },
   "instructor": "WenYi Lee",

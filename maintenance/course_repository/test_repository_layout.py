@@ -442,7 +442,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
         self.assertEqual(builder.expected_files(config),
                          {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb",
-                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_redesigned.pdf", "ch04_redesigned.pdf", "ch03_answer.pdf", "ch04_answer.pdf"})
+                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_redesigned.pdf", "ch03_answer.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
         import subprocess
         allowed = {"Intro DB/" + name for name in builder.expected_files(config)}
@@ -456,10 +456,16 @@ class RepositoryLayoutTests(unittest.TestCase):
                          "private_references", "Database pdfs"], cwd=builder.COURSE_ROOT, text=True), "")
         ignored = subprocess.check_output(["git", "check-ignore", "--no-index", "--",
             "Intro DB/ch04.ipynb", "Intro DB/ch05.ipynb", "Intro DB/ch08.ipynb", "Intro DB/under_revision/ch03.ipynb",
+            "Intro DB/ch04_redesigned.pdf", "Intro DB/ch04_answer.pdf",
+            "output/pdf/instructor_preparation/ch01_preparation.pdf",
+            "output/pdf/instructor_preparation/ch19_preparation.pdf",
             "maintenance/chapters/ch05_relational_model/student_guide.md",
             "maintenance/student_sqlite_package/output/sqlite_course_package.zip"],
             cwd=builder.COURSE_ROOT, text=True).splitlines()
-        self.assertEqual(len(ignored), 6)
+        self.assertEqual(len(ignored), 10)
+        home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertNotIn("ch04_redesigned.pdf", home)
+        self.assertNotIn("ch04_answer.pdf", home)
 
     def test_build_preserves_syllabus_and_existing_files_on_failure(self):
         with tempfile.TemporaryDirectory(prefix="db_layout_") as directory:
@@ -538,9 +544,9 @@ class RepositoryLayoutTests(unittest.TestCase):
     def test_authorized_answer_pdf(self):
         import fitz
         config = builder.load_json(builder.CONFIG_PATH)
-        self.assertEqual(set(config["published_answer_pdfs"]), {"ch03_answer.pdf", "ch04_answer.pdf"})
+        self.assertEqual(set(config["published_answer_pdfs"]), {"ch03_answer.pdf"})
         home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
-        for chapter, questions, images, pages in [(3, 35, 31, 55), (4, 33, 47, 62)]:
+        for chapter, questions, images, pages in [(3, 35, 31, 55)]:
             name = f"ch{chapter:02d}_answer.pdf"
             with self.subTest(answer=name):
                 record = config["published_answer_pdfs"][name]
@@ -565,7 +571,9 @@ class RepositoryLayoutTests(unittest.TestCase):
                         builder.verify_content(wrong)
 
     def test_answer_release_is_independent_of_teaching_notebook(self):
-        config = builder.load_json(builder.CONFIG_PATH)
+        config = copy.deepcopy(builder.load_json(builder.CONFIG_PATH))
+        record = config["published_answer_pdfs"].pop("ch03_answer.pdf")
+        config["published_answer_pdfs"]["ch04_answer.pdf"] = record
         builder.validate_config(config)
         self.assertIn("ch04_answer.pdf", builder.expected_files(config))
         self.assertNotIn("ch04.ipynb", builder.expected_files(config))
@@ -577,8 +585,8 @@ class RepositoryLayoutTests(unittest.TestCase):
         config = builder.load_json(builder.CONFIG_PATH)
         home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertEqual(set(config["published_supplemental_pdfs"]),
-                         {"ch03_redesigned.pdf", "ch04_redesigned.pdf"})
-        for name, pages in [("ch03_redesigned.pdf", 60), ("ch04_redesigned.pdf", 43)]:
+                         {"ch03_redesigned.pdf"})
+        for name, pages in [("ch03_redesigned.pdf", 60)]:
             self.assertIn(f"(Intro%20DB/{name})", home)
             self.assertFalse(builder.safe_target(name).with_suffix(".ipynb").exists())
             with fitz.open(builder.safe_target(name)) as pdf:
@@ -589,7 +597,7 @@ class RepositoryLayoutTests(unittest.TestCase):
 
     def test_answer_release_rejects_unsafe_names_and_missing_hashes(self):
         original = builder.load_json(builder.CONFIG_PATH)
-        record = original["published_answer_pdfs"]["ch04_answer.pdf"]
+        record = original["published_answer_pdfs"]["ch03_answer.pdf"]
         for name in ("../ch04_answer.pdf", "folder/ch04_answer.pdf", "folder\\ch04_answer.pdf",
                      "C:/ch04_answer.pdf", "ch04.pdf", "book.pdf"):
             config = copy.deepcopy(original)
@@ -598,7 +606,7 @@ class RepositoryLayoutTests(unittest.TestCase):
                 builder.validate_config(config)
         for field in ("pdf_sha256", "notebook_sha256"):
             config = copy.deepcopy(original)
-            config["published_answer_pdfs"]["ch04_answer.pdf"].pop(field)
+            config["published_answer_pdfs"]["ch03_answer.pdf"].pop(field)
             with self.subTest(field=field), self.assertRaisesRegex(ValueError, "source and output hashes"):
                 builder.validate_config(config)
 

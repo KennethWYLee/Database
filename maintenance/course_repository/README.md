@@ -3,12 +3,23 @@
 ## Current Publication: Chapters 1-3
 
 The public `Intro DB/` contains `syllabus.md`, `ch01.ipynb`, `ch02.ipynb`,
-`ch03.ipynb`, their three matching PDFs, and the separately authorized
-`ch03_answer.pdf` and `ch04_answer.pdf`. Other notebooks, their chapter sources, and the SQLite package
+`ch03.ipynb`, their three matching PDFs, `ch03_redesigned.pdf`, and
+`ch03_answer.pdf`. Other notebooks, their chapter sources, and the SQLite package
 are ignored and kept locally. The semester scope has not changed.
 `published_chapters` in `repository_config.json` controls default builds.
 The manifest and default verification cover only that published selection.
 Known unreleased local files are preserved, not deleted or silently published.
+
+On September 20 the instructor limited current public materials to Chapters 1-3.
+The Ch4 teaching and answer PDFs were removed from the public tree and allow-list;
+local originals and instructor preparation PDFs remain private. Earlier public
+commits are unchanged, so previously published Ch4 files remain in Git history.
+The publication sections below are historical records, not current authorization.
+Notebook checkouts use LF line endings so their bytes match the source hashes
+embedded in the existing PDFs on Windows as well as other platforms.
+Release verification: 69 repository tests ran, 65 passed and 4 explicitly skipped
+cases requiring absent local material. Ch1-3 notebook/PDF bytes and the syllabus
+match the previous public commit; no teaching material was regenerated.
 
 ```powershell
 python maintenance/course_repository/build_course_repository.py --verify

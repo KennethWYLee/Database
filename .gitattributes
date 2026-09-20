@@ -1,2 +1,3 @@
 /output/pdf/ch03_redesigned.pdf binary
 *.pdf binary
+*.ipynb text eol=lf

@@ -26,19 +26,15 @@ ER and EER are required. Follow the syllabus for selected sections and examinati
 
 One notebook per chapter; the instructor sets stopping points. GitHub displays saved
 outputs. Use the textbook for chapters whose revised notebooks are not yet available.
-Only Ch1, Ch2, and Ch3 notebooks are currently published. Later chapters will be
-released when ready.
+Only Ch1, Ch2, and Ch3 teaching materials and the Ch3 exercise answers are
+currently published. Later chapters and instructor preparation notes remain private.
 
 PDF copies: [Ch1](Intro%20DB/ch01.pdf) | [Ch2](Intro%20DB/ch02.pdf) | [Ch3](Intro%20DB/ch03.pdf).
 
 Ch3 visual teaching edition: [Diagrams and worked ERD examples (PDF)](Intro%20DB/ch03_redesigned.pdf).
 The original Ch3 PDF and notebook remain available above.
 
-Ch4 visual teaching edition: [Enhanced ER modeling (PDF)](Intro%20DB/ch04_redesigned.pdf).
-Covers textbook sections 4.1-4.7 with diagrams, example data, and model comparisons.
-
 Ch3 exercise answers: [Questions 3.1-3.35 (PDF)](Intro%20DB/ch03_answer.pdf).
-Ch4 exercise answers: [Questions 4.1-4.33 (PDF)](Intro%20DB/ch04_answer.pdf).
 
 Local and GitHub tracked paths are identical on `main`.
 Preparation and build records are in [maintenance](maintenance/README.md).
