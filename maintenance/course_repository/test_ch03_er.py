@@ -150,6 +150,8 @@ class ERChapterTests(unittest.TestCase):
             for first, second in zip(rows, rows[1:]):
                 self.assertLessEqual(float(first.get("y")) + float(first.get("height")), float(second.get("y")))
 
+    @unittest.skipUnless(builder.safe_target("ch03.ipynb").exists() and builder.safe_target("ch03.pdf").exists(),
+                         "The Ch3 notebook/PDF export was retired; source checks remain active.")
     def test_pdf_retains_the_current_notebook_figure_pixels(self):
         notebook = json.loads(builder.safe_target("ch03.ipynb").read_text(encoding="utf-8"))
         self.assertEqual(notebook, builder.build_notebook(self.chapter))
@@ -255,6 +257,7 @@ class ERChapterTests(unittest.TestCase):
             self.assertEqual(nodes[node_id]["key"], "partial")
         self.assertIn("omitted from both close-ups", FIGURES["opening_ch03_refinement_er"]["conclusion"])
 
+    @unittest.skipUnless(builder.safe_target("ch03.pdf").exists(), "The Ch3 notebook PDF was retired.")
     def test_pdf_reading_starts_share_a_page_with_the_referenced_visual(self):
         import export_chapter_pdfs as exporter
         exporter.OUT.mkdir(parents=True, exist_ok=True)
@@ -435,6 +438,7 @@ class ERChapterTests(unittest.TestCase):
             removed = words(" ".join((data["title"], subtitle, data["conclusion"])))
             self.assertEqual(current + removed, previous, name)
 
+    @unittest.skipUnless(builder.safe_target("ch03.pdf").exists(), "The Ch3 notebook PDF was retired.")
     def test_pdf_retains_searchable_figure_titles_once(self):
         with fitz.open(builder.safe_target("ch03.pdf")) as pdf:
             text = " ".join(" ".join(page.get_text().split()) for page in pdf)

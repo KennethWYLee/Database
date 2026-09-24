@@ -108,8 +108,10 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertNotIn("*Database System Concepts*", syllabus)
         self.assertNotRegex(syllabus, r"[\u3400-\u9fff\ufffd]")
         self.assertNotRegex(syllabus, r"(?i)\btype\s*b\b|\b\d+\s*(?:minutes?|mins?)\b")
-        for chapter_id in ("ch01", "ch02", "ch03"):
+        for chapter_id in ("ch01", "ch02"):
             self.assertIn(f"({chapter_id}.ipynb)", syllabus)
+        self.assertIn("(ch03_redesigned.pdf)", syllabus)
+        self.assertNotIn("(ch03.ipynb)", syllabus)
 
     def test_textbook_details_and_updated_travel(self):
         syllabus = (builder.PREVIEW_DIR / "syllabus.md").read_text(encoding="utf-8")
@@ -439,10 +441,10 @@ class RepositoryLayoutTests(unittest.TestCase):
 
     def test_published_chapters_exclude_local_material(self):
         config = builder.load_json(builder.CONFIG_PATH)
-        self.assertEqual(config["published_chapters"], ["ch01", "ch02", "ch03"])
+        self.assertEqual(config["published_chapters"], ["ch01", "ch02"])
         self.assertEqual(builder.expected_files(config),
-                         {"syllabus.md", "ch01.ipynb", "ch02.ipynb", "ch03.ipynb",
-                          "ch01.pdf", "ch02.pdf", "ch03.pdf", "ch03_redesigned.pdf",
+                         {"syllabus.md", "ch01.ipynb", "ch02.ipynb",
+                          "ch01.pdf", "ch02.pdf", "ch03_redesigned.pdf",
                           "ch02_answer.pdf", "ch03_answer.pdf", "ch04_answer.pdf",
                           "ch05_answer.pdf", "ch06_answer.pdf", "ch07_answer.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
@@ -453,7 +455,9 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(tracked, allowed)
         sources = set(subprocess.check_output(["git", "ls-files", "maintenance/chapters"],
                       cwd=builder.COURSE_ROOT, text=True).splitlines())
-        self.assertEqual(sources, {c["guide_source"] for c in builder.all_chapters(config)})
+        expected_sources = {c["guide_source"] for c in builder.all_chapters(config)}
+        expected_sources.add("maintenance/chapters/ch03_er_model/student_guide.md")
+        self.assertEqual(sources, expected_sources)
         self.assertEqual(subprocess.check_output(["git", "ls-files", "maintenance/student_sqlite_package",
                          "private_references", "Database pdfs"], cwd=builder.COURSE_ROOT, text=True), "")
         ignored = subprocess.check_output(["git", "check-ignore", "--no-index", "--",
@@ -531,8 +535,8 @@ class RepositoryLayoutTests(unittest.TestCase):
     def test_pdf_provenance_and_figures(self):
         import fitz
         config = builder.load_json(builder.CONFIG_PATH)
-        self.assertEqual(config["published_pdf_chapters"], ["ch01", "ch02", "ch03"])
-        for chapter, images in [("ch01", 5), ("ch02", 6), ("ch03", 45)]:
+        self.assertEqual(config["published_pdf_chapters"], ["ch01", "ch02"])
+        for chapter, images in [("ch01", 5), ("ch02", 6)]:
             with fitz.open(builder.safe_target(chapter + ".pdf")) as pdf:
                 self.assertGreater(len(pdf), 0)
                 self.assertEqual(pdf.metadata["author"], "WenYi Lee")

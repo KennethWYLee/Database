@@ -20,19 +20,16 @@ shows results and is not a first-day programming requirement.
 **Ch1-2 → Ch3-9 → Ch14-19.** Next class: Ch3, the ER model.
 ER and EER are required. Follow the syllabus for selected sections and examination scope.
 
-| Available Notebook | Scheduled Meeting |
+| Available Material | Scheduled Meeting |
 |---|---|
-| [Ch3: Data Modeling Using the Entity-Relationship (ER) Model](Intro%20DB/ch03.ipynb) | Week 2, September 17; diagrams and drawing practice |
+| [Ch3: ER diagrams and worked examples (PDF)](Intro%20DB/ch03_redesigned.pdf) | Week 2, September 17; diagrams and drawing practice |
 
-One notebook per chapter; the instructor sets stopping points. GitHub displays saved
-outputs. Use the textbook for chapters whose revised notebooks are not yet available.
+Ch1 and Ch2 use notebooks with saved outputs. Ch3 uses the diagram-based PDF above.
+The instructor sets stopping points. Use the textbook for later chapters.
 Only Ch1, Ch2, and Ch3 teaching materials are currently published.
 Exercise answers are released separately below; instructor preparation notes remain private.
 
-PDF copies: [Ch1](Intro%20DB/ch01.pdf) | [Ch2](Intro%20DB/ch02.pdf) | [Ch3](Intro%20DB/ch03.pdf).
-
-Ch3 visual teaching edition: [Diagrams and worked ERD examples (PDF)](Intro%20DB/ch03_redesigned.pdf).
-The original Ch3 PDF and notebook remain available above.
+Notebook PDF copies: [Ch1](Intro%20DB/ch01.pdf) | [Ch2](Intro%20DB/ch02.pdf).
 
 ## Exercise Answers
 

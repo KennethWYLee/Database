@@ -1,8 +1,8 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.20-answers-ch02-ch07",
-  "published_chapters": ["ch01", "ch02", "ch03"],
-  "published_pdf_chapters": ["ch01", "ch02", "ch03"],
+  "repository_version": "2026.09.24-ch03-diagram-only",
+  "published_chapters": ["ch01", "ch02"],
+  "published_pdf_chapters": ["ch01", "ch02"],
   "published_supplemental_pdfs": ["ch03_redesigned.pdf"],
   "published_answer_pdfs": {
     "ch02_answer.pdf": {
