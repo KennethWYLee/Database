@@ -444,14 +444,14 @@ class RepositoryLayoutTests(unittest.TestCase):
         self.assertEqual(config["published_chapters"], ["ch01", "ch02"])
         self.assertEqual(builder.expected_files(config),
                          {"syllabus.md", "ch01.ipynb", "ch02.ipynb",
-                          "ch01.pdf", "ch02.pdf", "ch03_redesigned.pdf",
+                          "ch01.pdf", "ch02.pdf", "ch03_redesigned.pdf", "DB_ch04_中文導覽.pdf",
                           "ch02_answer.pdf", "ch03_answer.pdf", "ch04_answer.pdf",
                           "ch05_answer.pdf", "ch06_answer.pdf", "ch07_answer.pdf"})
         self.assertEqual(len(builder.all_chapters(dict(config, include_unreleased=True))), 17)
         import subprocess
         allowed = {"Intro DB/" + name for name in builder.expected_files(config)}
-        tracked = set(subprocess.check_output(["git", "ls-files", "Intro DB"],
-                      cwd=builder.COURSE_ROOT, text=True).splitlines())
+        tracked = set(subprocess.check_output(["git", "-c", "core.quotepath=false", "ls-files", "Intro DB"],
+                      cwd=builder.COURSE_ROOT, encoding="utf-8").splitlines())
         self.assertEqual(tracked, allowed)
         sources = set(subprocess.check_output(["git", "ls-files", "maintenance/chapters"],
                       cwd=builder.COURSE_ROOT, text=True).splitlines())
@@ -463,12 +463,13 @@ class RepositoryLayoutTests(unittest.TestCase):
         ignored = subprocess.check_output(["git", "check-ignore", "--no-index", "--",
             "Intro DB/ch04.ipynb", "Intro DB/ch05.ipynb", "Intro DB/ch08.ipynb", "Intro DB/under_revision/ch03.ipynb",
             "Intro DB/ch04_redesigned.pdf", "Intro DB/ch08_answer.pdf",
+            "Intro DB/DB_ch05_中文導覽.pdf", "Intro DB/DB_ch03_中文導覽.pdf",
             "output/pdf/instructor_preparation/ch01_preparation.pdf",
             "output/pdf/instructor_preparation/ch19_preparation.pdf",
             "maintenance/chapters/ch05_relational_model/student_guide.md",
             "maintenance/student_sqlite_package/output/sqlite_course_package.zip"],
             cwd=builder.COURSE_ROOT, text=True).splitlines()
-        self.assertEqual(len(ignored), 10)
+        self.assertEqual(len(ignored), 12)
         home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertNotIn("ch04_redesigned.pdf", home)
         self.assertIn("ch04_answer.pdf", home)
@@ -594,8 +595,8 @@ class RepositoryLayoutTests(unittest.TestCase):
         config = builder.load_json(builder.CONFIG_PATH)
         home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertEqual(set(config["published_supplemental_pdfs"]),
-                         {"ch03_redesigned.pdf"})
-        for name, pages in [("ch03_redesigned.pdf", 60)]:
+                         {"ch03_redesigned.pdf", "DB_ch04_中文導覽.pdf"})
+        for name, pages in [("ch03_redesigned.pdf", 60), ("DB_ch04_中文導覽.pdf", 37)]:
             self.assertIn(f"(Intro%20DB/{name})", home)
             self.assertFalse(builder.safe_target(name).with_suffix(".ipynb").exists())
             with fitz.open(builder.safe_target(name)) as pdf:
@@ -603,6 +604,11 @@ class RepositoryLayoutTests(unittest.TestCase):
                 self.assertEqual(pdf.metadata["author"], config["instructor"])
                 self.assertEqual(pdf.embfile_count(), 0)
         builder.verify_content(config)
+
+    def test_ch04_chinese_guide_matches_approved_release(self):
+        path = builder.safe_target("DB_ch04_中文導覽.pdf")
+        self.assertEqual(builder.sha256(path),
+                         "1ccb016b90a7e61908dc64907ccd819769af347b8a9ac86fabcec9b6ea6abe55")
 
     def test_answer_release_rejects_unsafe_names_and_missing_hashes(self):
         original = builder.load_json(builder.CONFIG_PATH)

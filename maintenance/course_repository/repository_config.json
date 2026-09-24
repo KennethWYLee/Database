@@ -1,9 +1,9 @@
 {
   "repository_name": "Database Management",
-  "repository_version": "2026.09.24-ch03-diagram-only",
+  "repository_version": "2026.09.24-ch04-chinese-guide",
   "published_chapters": ["ch01", "ch02"],
   "published_pdf_chapters": ["ch01", "ch02"],
-  "published_supplemental_pdfs": ["ch03_redesigned.pdf"],
+  "published_supplemental_pdfs": ["ch03_redesigned.pdf", "DB_ch04_中文導覽.pdf"],
   "published_answer_pdfs": {
     "ch02_answer.pdf": {
       "notebook_sha256": "5f3fc5eecd8e4155c5acede056fa0d5c7a5ffb7b50eef7d2a6ae811367087044",

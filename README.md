@@ -23,10 +23,12 @@ ER and EER are required. Follow the syllabus for selected sections and examinati
 | Available Material | Scheduled Meeting |
 |---|---|
 | [Ch3: ER diagrams and worked examples (PDF)](Intro%20DB/ch03_redesigned.pdf) | Week 2, September 17; diagrams and drawing practice |
+| [Ch4: EER Chinese guide (PDF)](Intro%20DB/DB_ch04_中文導覽.pdf) | Weeks 3-4; diagrams, examples, and counterexamples |
 
 Ch1 and Ch2 use notebooks with saved outputs. Ch3 uses the diagram-based PDF above.
 The instructor sets stopping points. Use the textbook for later chapters.
-Only Ch1, Ch2, and Ch3 teaching materials are currently published.
+Ch1-3 teaching materials and the Ch4 Chinese guide are currently published.
+Other Chinese guides remain private.
 Exercise answers are released separately below; instructor preparation notes remain private.
 
 Notebook PDF copies: [Ch1](Intro%20DB/ch01.pdf) | [Ch2](Intro%20DB/ch02.pdf).
