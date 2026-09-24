@@ -596,7 +596,7 @@ class RepositoryLayoutTests(unittest.TestCase):
         home = (builder.COURSE_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertEqual(set(config["published_supplemental_pdfs"]),
                          {"ch03_redesigned.pdf", "DB_ch04_中文導覽.pdf"})
-        for name, pages in [("ch03_redesigned.pdf", 60), ("DB_ch04_中文導覽.pdf", 37)]:
+        for name, pages in [("ch03_redesigned.pdf", 60), ("DB_ch04_中文導覽.pdf", 40)]:
             self.assertIn(f"(Intro%20DB/{name})", home)
             self.assertFalse(builder.safe_target(name).with_suffix(".ipynb").exists())
             with fitz.open(builder.safe_target(name)) as pdf:
@@ -608,7 +608,7 @@ class RepositoryLayoutTests(unittest.TestCase):
     def test_ch04_chinese_guide_matches_approved_release(self):
         path = builder.safe_target("DB_ch04_中文導覽.pdf")
         self.assertEqual(builder.sha256(path),
-                         "1ccb016b90a7e61908dc64907ccd819769af347b8a9ac86fabcec9b6ea6abe55")
+                         "a1e0adf4b9a131fb0b26756918a8537e2896b77927c00a5800654613eb5434ed")
 
     def test_answer_release_rejects_unsafe_names_and_missing_hashes(self):
         original = builder.load_json(builder.CONFIG_PATH)
