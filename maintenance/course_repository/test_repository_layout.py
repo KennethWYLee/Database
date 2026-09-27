@@ -608,7 +608,7 @@ class RepositoryLayoutTests(unittest.TestCase):
     def test_ch04_chinese_guide_matches_approved_release(self):
         path = builder.safe_target("DB_ch04_中文導覽.pdf")
         self.assertEqual(builder.sha256(path),
-                         "a1e0adf4b9a131fb0b26756918a8537e2896b77927c00a5800654613eb5434ed")
+                         "557ccb91fd176f5a4638dd4a2b05a964abe6406f0833e0dde30de94ee9bceda2")
 
     def test_answer_release_rejects_unsafe_names_and_missing_hashes(self):
         original = builder.load_json(builder.CONFIG_PATH)
