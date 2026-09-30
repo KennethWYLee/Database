@@ -1,6 +1,6 @@
 # Database Management | Fall 2026
 
-Revised: September 10, 2026
+Revised: September 30, 2026
 
 **Instructor:** WenYi Lee\
 **Students:** Second-year Information Management students\
@@ -18,22 +18,33 @@ through diagrams and small examples.
 
 ## Course Materials
 
-Start with this syllabus, [Ch1](ch01.ipynb), and [Ch2](ch02.ipynb).
-Then follow Ch3-9 and Ch14-19 in order. Use [Ch3 diagrams and examples](ch03_redesigned.pdf).
-Teaching materials are currently published through Ch3; exercise answers are listed separately.
-GitHub displays saved outputs; use Python 3 with SQLite 3.39+ to run examples.
-Unreleased chapters use the textbook; previous materials under revision are not assigned.
+Use the Chinese guides alongside the textbook. Each chapter develops concepts
+through complete cases, diagrams, examples, counterexamples, and corrections.
+
+| Chapter | Chinese Guide | Pages |
+|---|---|---:|
+| Ch1: Databases and Database Users | [Ch1 中文導覽](DB_ch01_中文導覽.pdf) | 15 |
+| Ch2: Database System Concepts and Architecture | [Ch2 中文導覽](DB_ch02_中文導覽.pdf) | 15 |
+| Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽.pdf) | 46 |
+| Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽.pdf) | 40 |
+| Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽.pdf) | 33 |
+
+GitHub provides these five guides and this syllabus. Earlier notebooks, English
+teaching PDFs, and separate exercise answers are archived references, not the
+current course materials. Later Chinese guides are released separately by the instructor.
+Follow Ch1-9 and Ch14-19 in syllabus order; only taught selections are required.
 
 ## Weekly Schedule
 
 Chapter numbers refer to the textbook above; only taught selections are required.
+Ch4 is complete; Week 4 is dedicated to Ch5.
 
 | Week | Date | Chapters / Sections | Topic |
 |---:|---|---|---|
 | 1 | 2026-09-10 | Ch1: Databases and Database Users (selected)<br>Ch2: Database System Concepts and Architecture (selected) | Syllabus, database concepts, schemas, and architecture. |
 | 2 | 2026-09-17 | Ch3: Data Modeling Using the Entity-Relationship (ER) Model (3.1-3.7, 3.9-3.10) | ER design, weak entities, ternary constraints, and the UNIVERSITY example. |
-| 3 | 2026-09-24 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.1-4.4) | Inheritance, specialization, generalization, constraints, shared subclasses, and categories. |
-| 4 | 2026-10-01 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.5-4.7)<br>Ch5: The Relational Data Model and Relational Database Constraints | EER design, UML, abstraction, ontology concepts; relational tables, keys, and constraints. |
+| 3 | 2026-09-24 | Ch4: The Enhanced Entity-Relationship (EER) Model (4.1-4.7) | Inheritance, EER constraints and design, UML, abstraction, and ontology concepts. |
+| 4 | 2026-10-01 | Ch5: The Relational Data Model and Relational Database Constraints (5.1-5.3) | Relational tables, keys, integrity constraints, and update violations. |
 | 5 | 2026-10-08 | Ch6: Basic SQL | Create tables; query and update data. |
 | 6 | 2026-10-15 | Ch1-6 (taught selections) | Written Exam 1: introduction, ER/EER, relational model, and basic SQL. |
 | 7 | 2026-10-22 | Ch7: More SQL: Complex Queries, Triggers, Views, and Schema Modification (selected) | Joins, NULL, aggregation, subqueries, views, schema changes, and a simple trigger. |
@@ -70,7 +81,7 @@ Make-up eligibility, scope, and grading will be announced; no additional assessm
 
 ## Essential Notes
 
-- English course materials; AI only when permitted. Verify and explain submitted work.
+- Chinese guides support the English textbook and terminology. AI only when permitted; verify and explain submitted work.
 - Written exams are individual and AI-free; other permitted resources will be announced.
 - Travel: November 1-8, 2026; in-person classes resume November 12.
 - Final exam: December 24 (Week 16). Make-up: January 7 (Week 18). No new content in Weeks 16-18.
