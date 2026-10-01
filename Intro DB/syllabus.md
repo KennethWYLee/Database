@@ -27,7 +27,7 @@ through complete cases, diagrams, examples, counterexamples, and corrections.
 | Ch2: Database System Concepts and Architecture | [Ch2 中文導覽](DB_ch02_中文導覽.pdf) | 15 |
 | Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽.pdf) | 46 |
 | Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽.pdf) | 40 |
-| Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽.pdf) | 33 |
+| Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽.pdf) | 34 |
 
 GitHub provides these five guides and this syllabus. Earlier notebooks, English
 teaching PDFs, and separate exercise answers are archived references, not the
