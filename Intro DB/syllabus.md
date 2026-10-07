@@ -28,7 +28,7 @@ through complete cases, diagrams, examples, counterexamples, and corrections.
 | Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽_withClaude.pdf) | 46 |
 | Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽_withClaude.pdf) | 40 |
 | Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽_withClaude.pdf) | 35 |
-| Ch6: Basic SQL | [Ch6 中文導覽](DB_ch06_中文導覽_withClaude.pdf) | 52 |
+| Ch6: Basic SQL | [Ch6 中文導覽](DB_ch06_中文導覽_withClaude.pdf) | 53 |
 
 The current guides use the `_withClaude` filename suffix. GitHub provides these
 six revised guides and this syllabus. Earlier notebooks, English
