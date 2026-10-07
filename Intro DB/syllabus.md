@@ -1,6 +1,6 @@
 # Database Management | Fall 2026
 
-Revised: September 30, 2026
+Revised: October 7, 2026
 
 **Instructor:** WenYi Lee\
 **Students:** Second-year Information Management students\
@@ -28,8 +28,9 @@ through complete cases, diagrams, examples, counterexamples, and corrections.
 | Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽.pdf) | 46 |
 | Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽.pdf) | 40 |
 | Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽.pdf) | 34 |
+| Ch6: Basic SQL | [Ch6 中文導覽](DB_ch06_中文導覽.pdf) | 41 |
 
-GitHub provides these five guides and this syllabus. Earlier notebooks, English
+GitHub provides these six guides and this syllabus. Earlier notebooks, English
 teaching PDFs, and separate exercise answers are archived references, not the
 current course materials. Later Chinese guides are released separately by the instructor.
 Follow Ch1-9 and Ch14-19 in syllabus order; only taught selections are required.

@@ -1,4 +1,4 @@
-# Public student release: five Chinese guides and the syllabus only.
+# Public student release: six Chinese guides and the syllabus only.
 /*
 !/.gitignore
 !/.gitattributes
@@ -10,3 +10,4 @@
 !/Intro DB/DB_ch03_中文導覽.pdf
 !/Intro DB/DB_ch04_中文導覽.pdf
 !/Intro DB/DB_ch05_中文導覽.pdf
+!/Intro DB/DB_ch06_中文導覽.pdf
