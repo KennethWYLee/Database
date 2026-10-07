@@ -23,14 +23,15 @@ through complete cases, diagrams, examples, counterexamples, and corrections.
 
 | Chapter | Chinese Guide | Pages |
 |---|---|---:|
-| Ch1: Databases and Database Users | [Ch1 中文導覽](DB_ch01_中文導覽.pdf) | 15 |
-| Ch2: Database System Concepts and Architecture | [Ch2 中文導覽](DB_ch02_中文導覽.pdf) | 15 |
-| Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽.pdf) | 46 |
-| Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽.pdf) | 40 |
-| Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽.pdf) | 34 |
-| Ch6: Basic SQL | [Ch6 中文導覽](DB_ch06_中文導覽.pdf) | 41 |
+| Ch1: Databases and Database Users | [Ch1 中文導覽](DB_ch01_中文導覽_withClaude.pdf) | 16 |
+| Ch2: Database System Concepts and Architecture | [Ch2 中文導覽](DB_ch02_中文導覽_withClaude.pdf) | 16 |
+| Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽_withClaude.pdf) | 46 |
+| Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽_withClaude.pdf) | 40 |
+| Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽_withClaude.pdf) | 35 |
+| Ch6: Basic SQL | [Ch6 中文導覽](DB_ch06_中文導覽_withClaude.pdf) | 52 |
 
-GitHub provides these six guides and this syllabus. Earlier notebooks, English
+The current guides use the `_withClaude` filename suffix. GitHub provides these
+six revised guides and this syllabus. Earlier notebooks, English
 teaching PDFs, and separate exercise answers are archived references, not the
 current course materials. Later Chinese guides are released separately by the instructor.
 Follow Ch1-9 and Ch14-19 in syllabus order; only taught selections are required.
