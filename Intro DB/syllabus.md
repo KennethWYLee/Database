@@ -1,6 +1,6 @@
 # Database Management | Fall 2026
 
-Revised: October 9, 2026
+Revised: October 13, 2026
 
 **Instructor:** WenYi Lee\
 **Students:** Second-year Information Management students\
@@ -23,12 +23,12 @@ through complete cases, diagrams, examples, counterexamples, and corrections.
 
 | Chapter | Chinese Guide | Pages |
 |---|---|---:|
-| Ch1: Databases and Database Users | [Ch1 中文導覽](DB_ch01_中文導覽_withClaude.pdf) | 16 |
-| Ch2: Database System Concepts and Architecture | [Ch2 中文導覽](DB_ch02_中文導覽_withClaude.pdf) | 16 |
-| Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽_withClaude.pdf) | 46 |
-| Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽_withClaude.pdf) | 40 |
-| Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽_withClaude.pdf) | 35 |
-| Ch6: Basic SQL | [Ch6 中文導覽](DB_ch06_中文導覽_withClaude.pdf) | 81 |
+| Ch1: Databases and Database Users | [Ch1 中文導覽](DB_ch01_中文導覽_withClaude.pdf) | 20 |
+| Ch2: Database System Concepts and Architecture | [Ch2 中文導覽](DB_ch02_中文導覽_withClaude.pdf) | 20 |
+| Ch3: Entity-Relationship Model | [Ch3 中文導覽](DB_ch03_中文導覽_withClaude.pdf) | 54 |
+| Ch4: Enhanced Entity-Relationship Model | [Ch4 中文導覽](DB_ch04_中文導覽_withClaude.pdf) | 46 |
+| Ch5: Relational Model and Constraints | [Ch5 中文導覽](DB_ch05_中文導覽_withClaude.pdf) | 43 |
+| Ch6: Basic SQL | [Ch6 中文導覽](DB_ch06_中文導覽_withClaude.pdf) | 83 |
 
 The current guides use the `_withClaude` filename suffix. GitHub provides these
 six revised guides and this syllabus. Earlier notebooks, English
